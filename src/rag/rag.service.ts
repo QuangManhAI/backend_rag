@@ -15,7 +15,7 @@ Your mission is to provide rigorous, truthful, and accurate technical answers ba
 CRITICAL OPERATIONAL RULES:
 1. STRICT FACTUAL GROUNDING: Rely SOLELY on facts explicitly stated in the provided excerpts. Never extrapolate or utilize parametric memory for experimental numbers, hyperparameters, or author claims.
 2. MISSING INFORMATION PROTOCOL: If the provided excerpts do not contain the answer, state: "The provided literature does not contain sufficient details regarding [aspect]."
-3. MANDATORY CITATIONS: Every substantive technical claim, architectural detail, and performance metric must cite the exact paper using \`[Paper: {paper_id}]\`.
+3. MANDATORY CITATIONS: Cite each technique using \`[Paper: {paper_id}]\` matching the exact Paper ID in the excerpt header (e.g. [Paper: 2301.02419] or [Paper: openreview_TTMyoOdB9hZ]). Never cite internal bibliography numbers like [98] or [101] from inside the excerpt text.
 4. PRESERVE LATEX: Keep mathematical formulas intact using $...$ or $$...$$.
 5. DIRECT & CONCISE: Answer directly without conversational pleasantries.`;
 
@@ -76,7 +76,7 @@ export class RagService {
     );
 
     // 7. Extract Unique Citations ([Paper: {paper_id}])
-    const citations = this.extractCitations(answer);
+    const citations = this.extractCitations(answer, topChunks);
 
     const latency_ms = Date.now() - startTime;
     this.logger.log(`RAG pipeline completed in ${latency_ms}ms with ${citations.length} citations.`);
@@ -91,18 +91,38 @@ export class RagService {
   }
 
   /**
-   * Extract citations supporting [Paper: {id}], [Paper ID: {id}], and backticked variants.
+   * Extract citations supporting [Paper: {id}], [Paper ID: {id}], arXiv IDs, and candidate chunk IDs.
+   * Filters out pure integer bibliography numbers (e.g. [98], [101]).
    */
-  public extractCitations(text: string): string[] {
-    const citationRegex = /`?\[(?:(?:Paper(?:\s*ID)?|arXiv)\s*:?\s*)?([a-zA-Z0-9._\/-]+)\]`?/gi;
-    const matches = Array.from(text.matchAll(citationRegex));
+  public extractCitations(text: string, candidateChunks?: GroundedChunkResult[]): string[] {
     const unique = new Set<string>();
+    const knownIds = new Set(candidateChunks?.map((c) => c.paper_id.trim()) || []);
 
-    for (const match of matches) {
+    // 1. Explicit tags: [Paper: {id}], [Paper ID: {id}], [arXiv: {id}]
+    const explicitRegex = /`?\[(?:Paper(?:\s*ID)?|arXiv)\s*:\s*([^\]]+)\]`?/gi;
+    for (const match of text.matchAll(explicitRegex)) {
       if (match[1]) {
         const id = match[1].trim();
-        // Ignore generic labels or URLs
-        if (id && !/^(?:citation|http|https|figure|table)/i.test(id)) {
+        if (id && !/^\d{1,4}$/.test(id) && !/^(?:citation|http|figure|table)/i.test(id)) {
+          unique.add(id);
+        }
+      }
+    }
+
+    // 2. Direct IDs: [2301.02419], [openreview_*], [cvf_*], or known chunk IDs
+    const directRegex = /`?\[([a-zA-Z0-9._\/-]+)\]`?/gi;
+    for (const match of text.matchAll(directRegex)) {
+      if (match[1]) {
+        const id = match[1].trim();
+        // Ignore bare bibliography numbers like [98], [101], [1]
+        if (/^\d{1,4}$/.test(id)) continue;
+
+        if (
+          /^\d{4}\.\d{4,5}(?:v\d+)?$/i.test(id) ||
+          /^openreview_/i.test(id) ||
+          /^cvf_/i.test(id) ||
+          knownIds.has(id)
+        ) {
           unique.add(id);
         }
       }

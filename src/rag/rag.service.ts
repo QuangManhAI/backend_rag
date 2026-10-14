@@ -91,16 +91,20 @@ export class RagService {
   }
 
   /**
-   * Extract citations using regex [Paper: {paper_id}].
+   * Extract citations supporting [Paper: {id}], [Paper ID: {id}], and backticked variants.
    */
   public extractCitations(text: string): string[] {
-    const citationRegex = /\[Paper:\s*([^\]]+)\]/g;
+    const citationRegex = /`?\[(?:(?:Paper(?:\s*ID)?|arXiv)\s*:?\s*)?([a-zA-Z0-9._\/-]+)\]`?/gi;
     const matches = Array.from(text.matchAll(citationRegex));
     const unique = new Set<string>();
 
     for (const match of matches) {
       if (match[1]) {
-        unique.add(match[1].trim());
+        const id = match[1].trim();
+        // Ignore generic labels or URLs
+        if (id && !/^(?:citation|http|https|figure|table)/i.test(id)) {
+          unique.add(id);
+        }
       }
     }
 

@@ -19,9 +19,11 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "download:model": "ts-node scripts/download-model.ts",
-    "sync:r2": "ts-node scripts/sync-r2.ts"
+    "sync:r2": "ts-node scripts/sync-r2.ts",
+    "inspect:r2": "ts-node scripts/inspect-r2.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1152.0",
     "@lancedb/lancedb": "^0.40.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.0",

@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
+import { Injectable, OnModuleInit, OnModuleDestroy, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -6,7 +6,7 @@ import type { Llama, LlamaModel, LlamaContext } from 'node-llama-cpp';
 import { detectGpu, GpuInfo } from '../utils/gpu.util';
 
 @Injectable()
-export class LlmService implements OnModuleInit {
+export class LlmService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(LlmService.name);
   private llama: Llama | null = null;
   private model: LlamaModel | null = null;
@@ -136,5 +136,24 @@ export class LlmService implements OnModuleInit {
 
   getGpuStatus(): GpuInfo | null {
     return this.gpuInfo;
+  }
+
+  async onModuleDestroy(): Promise<void> {
+    try {
+      if (this.context && typeof this.context.dispose === 'function') {
+        await this.context.dispose();
+        this.context = null;
+      }
+      if (this.model && typeof this.model.dispose === 'function') {
+        await this.model.dispose();
+        this.model = null;
+      }
+      if (this.llama && typeof (this.llama as any).dispose === 'function') {
+        await (this.llama as any).dispose();
+        this.llama = null;
+      }
+    } catch (e) {
+      this.logger.warn(`Error during LLM teardown: ${(e as Error).message}`);
+    }
   }
 }

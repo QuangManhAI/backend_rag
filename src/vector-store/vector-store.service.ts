@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit, Logger, BadRequestException } from '@nestjs/common';
+import { Injectable, OnModuleInit, OnModuleDestroy, Logger, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as lancedb from '@lancedb/lancedb';
 import * as path from 'path';
@@ -6,7 +6,7 @@ import * as fs from 'fs';
 import { ScientificChunk } from '../types/scientific-rag';
 
 @Injectable()
-export class VectorStoreService implements OnModuleInit {
+export class VectorStoreService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(VectorStoreService.name);
   private db: lancedb.Connection | null = null;
   private table: lancedb.Table | null = null;
@@ -137,5 +137,17 @@ export class VectorStoreService implements OnModuleInit {
 
   isReady(): boolean {
     return this.table !== null;
+  }
+
+  async onModuleDestroy(): Promise<void> {
+    try {
+      if (this.db && typeof (this.db as any).close === 'function') {
+        await (this.db as any).close();
+        this.db = null;
+        this.table = null;
+      }
+    } catch (e) {
+      this.logger.warn(`Error during LanceDB teardown: ${(e as Error).message}`);
+    }
   }
 }

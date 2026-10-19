@@ -1,0 +1,254 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.0.3 Chrome/140.0.7339.249 Electron/38.7.0 Safari/537.36" version="29.0.3">
+  <diagram id="03-kien-truc-microservice-dich" name="03 Kiến trúc microservice đích">
+    <mxGraphModel dx="790" dy="544" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1020" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="v1" value="&lt;b&gt;③ Kiến trúc microservice đích (gRPC-first)&lt;/b&gt;" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=22;" parent="1" vertex="1">
+          <mxGeometry x="40" y="15" width="1720" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="v2" value="Theo MICROSERVICE_ARCHITECTURE.md §4.1, §4.3, §4.7 · khung nét đứt = profile Docker Compose (bật / tắt riêng) · chỉ gateway nói HTTP, bên trong sử dụng gRPC" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=13;fontColor=#555555;" parent="1" vertex="1">
+          <mxGeometry x="39" y="50" width="1720" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="v3" value="&lt;b&gt;Frontend&lt;/b&gt;&lt;br&gt;Next.js&lt;br&gt;(proxy server-side)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="30" y="330" width="150" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="v4" value="profile core — luôn bật" style="rounded=1;whiteSpace=wrap;html=1;arcSize=2;verticalAlign=top;align=left;spacingLeft=12;spacingTop=4;fontStyle=1;fontSize=13;dashed=1;fillColor=#f3f9f1;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="210" y="90" width="1250" height="630" as="geometry" />
+        </mxCell>
+        <mxCell id="v5" value="&lt;b&gt;Nginx&lt;/b&gt; :443&lt;br&gt;HTTPS · HTTP/2&lt;br&gt;rate limit theo IP&lt;br&gt;không buffer SSE" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+          <mxGeometry x="235" y="330" width="140" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="v6" value="&lt;b&gt;gateway&lt;/b&gt; (HTTP)&lt;br&gt;REST + SSE · Swagger&lt;br&gt;verify JWT · validate DTO&lt;br&gt;ánh xạ lỗi gRPC → HTTP&lt;br&gt;health tổng hợp&lt;br&gt;giữ /api/rag/* cũ&lt;br&gt;&lt;i&gt;Redis: rate limit, cache&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry x="415" y="300" width="190" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="v7" value="&lt;b&gt;auth&lt;/b&gt; :50051&lt;br&gt;đăng ký · đăng nhập · JWT&lt;br&gt;&lt;i&gt;MongoDB auth_db · Redis&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="670" y="120" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="v8" value="&lt;b&gt;paper&lt;/b&gt; :50056&lt;br&gt;metadata paper · yêu cầu nạp&lt;br&gt;&lt;i&gt;MongoDB paper_db → Kafka&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="670" y="220" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="v9" value="&lt;b&gt;rag&lt;/b&gt; :50053 — điều phối&lt;br&gt;cache → retrieval → prompt&lt;br&gt;→ llm (stream) → citation&lt;br&gt;→ lưu chat → phát sự kiện&lt;br&gt;&lt;i&gt;Redis: cache ans:&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry x="670" y="330" width="200" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="v10" value="&lt;b&gt;chat&lt;/b&gt; :50052&lt;br&gt;phiên chat · tin nhắn · cursor&lt;br&gt;&lt;i&gt;MongoDB chat_db&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="670" y="490" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="v11" value="&lt;b&gt;retrieval&lt;/b&gt; :50054&lt;br&gt;mở rộng query&lt;br&gt;→ embed (worker pool)&lt;br&gt;→ tìm vector → rerank&lt;br&gt;&lt;i&gt;Redis: cache emb:&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry x="960" y="330" width="200" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="v12" value="Kho dữ liệu&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=2;verticalAlign=top;align=left;spacingLeft=12;spacingTop=4;fontStyle=1;fontSize=13;dashed=1;fillColor=#fffcf2;strokeColor=#d6b656;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1235" y="100" width="210" height="350" as="geometry" />
+        </mxCell>
+        <mxCell id="v13" value="&lt;b&gt;MongoDB&lt;/b&gt; (rs0)&lt;br&gt;mỗi service 1 database:&lt;br&gt;auth · chat · paper · analytics" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="1250" y="130" width="180" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="v14" value="&lt;b&gt;Redis&lt;/b&gt;&lt;br&gt;cache emb: · ans:&lt;br&gt;rate limit · refresh token" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="1250" y="245" width="180" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="v15" value="&lt;b&gt;Qdrant&lt;/b&gt;&lt;br&gt;scientific_chunks_v1&lt;br&gt;vector store chính" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="1250" y="350" width="180" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="v17" value="profile llm — chạy cùng máy HOẶC máy B (đổi LLM_GRPC_URL)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=2;verticalAlign=top;align=left;spacingLeft=12;spacingTop=4;fontStyle=1;fontSize=13;dashed=1;fillColor=#f7f2f9;strokeColor=#9673a6;" parent="1" vertex="1">
+          <mxGeometry x="900" y="745" width="560" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="v18" value="&lt;b&gt;llm&lt;/b&gt; :50055&lt;br&gt;node-llama-cpp · Qwen GGUF&lt;br&gt;hàng đợi giới hạn · stream token&lt;br&gt;CPU / Vulkan / CUDA" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry x="1060" y="790" width="250" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="v19" value="profile kafka — bật khi demo luồng bất đồng bộ" style="rounded=1;whiteSpace=wrap;html=1;arcSize=2;verticalAlign=top;align=left;spacingLeft=12;spacingTop=4;fontStyle=1;fontSize=13;dashed=1;fillColor=#eef7fb;strokeColor=#10739e;" parent="1" vertex="1">
+          <mxGeometry x="210" y="745" width="670" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="v20" value="&lt;b&gt;Kafka&lt;/b&gt; (KRaft)&lt;br&gt;chat.events&lt;br&gt;paper.ingest.requested&lt;br&gt;paper.ingested" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#b1ddf0;strokeColor=#10739e;" parent="1" vertex="1">
+          <mxGeometry x="240" y="808" width="190" height="102" as="geometry" />
+        </mxCell>
+        <mxCell id="v21" value="&lt;b&gt;worker-analytics&lt;/b&gt; — đọc sự kiện, ghi MongoDB analytics_db" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#b1ddf0;strokeColor=#10739e;" parent="1" vertex="1">
+          <mxGeometry x="480" y="808" width="370" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="v22" value="&lt;b&gt;worker-ingest&lt;/b&gt; — chunk paper → gọi retrieval.UpsertChunks + paper.UpsertPapers" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#b1ddf0;strokeColor=#10739e;" parent="1" vertex="1">
+          <mxGeometry x="480" y="860" width="370" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="v23" value="profile observability — bật khi đo performance" style="rounded=1;whiteSpace=wrap;html=1;arcSize=2;verticalAlign=top;align=left;spacingLeft=12;spacingTop=4;fontStyle=1;fontSize=13;dashed=1;fillColor=#f7f7f7;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry x="1490" y="90" width="290" height="835" as="geometry" />
+        </mxCell>
+        <mxCell id="v24" value="&lt;b&gt;OTel Collector&lt;/b&gt;&lt;br&gt;nhận trace + metric (OTLP)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#eeeeee;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry x="1515" y="140" width="240" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="v25" value="&lt;b&gt;Jaeger&lt;/b&gt;&lt;br&gt;xem trace" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#eeeeee;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry x="1515" y="260" width="110" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="v26" value="&lt;b&gt;Prometheus&lt;/b&gt;&lt;br&gt;lưu metrics" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#eeeeee;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry x="1645" y="260" width="110" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="v27" value="&lt;b&gt;Grafana&lt;/b&gt;&lt;br&gt;p95 · TTFT · tokens/s&lt;br&gt;hàng đợi LLM · cache hit…" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#eeeeee;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry x="1515" y="380" width="240" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="v28" value="&lt;b&gt;k6&lt;/b&gt; (chạy từ máy host)&lt;br&gt;bắn tải để đo trước / sau" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#f5f5f5;strokeColor=#999999;" parent="1" vertex="1">
+          <mxGeometry x="1515" y="500" width="240" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="v29" value="Mọi service Node gửi trace + metric về OTel Collector (không vẽ mũi tên để đỡ rối).&lt;br&gt;1 request = 1 trace đi xuyên qua mọi service." style="whiteSpace=wrap;html=1;fontSize=11;align=left;spacingLeft=8;spacingRight=8;shape=note;size=14;fillColor=#fffbe6;strokeColor=#b3a369;" parent="1" vertex="1">
+          <mxGeometry x="1515" y="600" width="240" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="e30" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#333333;strokeWidth=1.5;exitX=0.2;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="v24" target="v25" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e31" value="scrape" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#333333;strokeWidth=1.5;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.8;entryY=1;entryDx=0;entryDy=0;" parent="1" source="v26" target="v24" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e32" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#333333;strokeWidth=1.5;exitX=0.2;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" source="v27" target="v25" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e33" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#333333;strokeWidth=1.5;exitX=0.8;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" source="v27" target="v26" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e34" value="HTTPS&lt;br&gt;HTTP/2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#3d6fb6;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="v3" target="v5" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e35" value="HTTP/1.1&lt;br&gt;+ SSE" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#3d6fb6;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="v5" target="v6" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e36" value="gRPC" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#2d7600;strokeWidth=2;exitX=1;exitY=0.1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="v6" target="v7" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="628" y="316" />
+              <mxPoint x="628" y="160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e37" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#2d7600;strokeWidth=2;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="v6" target="v8" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="642" y="340" />
+              <mxPoint x="642" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e38" value="gRPC&lt;br&gt;(stream)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#2d7600;strokeWidth=2;strokeWidth=3;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3846;entryDx=0;entryDy=0;" parent="1" source="v6" target="v9" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e39" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#2d7600;strokeWidth=2;exitX=1;exitY=0.85;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="v6" target="v10" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="642" y="436" />
+              <mxPoint x="642" y="530" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e40" value="Search" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#2d7600;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="v9" target="v11" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e41" value="Generate · stream token" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#2d7600;strokeWidth=2;strokeWidth=3;exitX=1;exitY=0.85;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="v9" target="v18" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="890" y="440.5" />
+              <mxPoint x="890" y="845" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e42" value="AppendMessages" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#2d7600;strokeWidth=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="v9" target="v10" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e43" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#8a8a8a;strokeWidth=1.5;dashed=1;dashPattern=2 3;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="v11" target="v15" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e45" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#10739e;strokeWidth=2;dashed=1;exitX=0;exitY=0.85;exitDx=0;exitDy=0;entryX=0.3;entryY=0;entryDx=0;entryDy=0;" parent="1" source="v9" target="v20" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="655" y="440.5" />
+              <mxPoint x="655" y="792" />
+              <mxPoint x="297" y="792" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e46" value="chat.events" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#10739e;strokeWidth=2;dashed=1;exitX=0.3;exitY=1;exitDx=0;exitDy=0;entryX=0.7;entryY=0;entryDx=0;entryDy=0;" parent="1" source="v10" target="v20" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="730" y="782" />
+              <mxPoint x="373" y="782" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e47" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#10739e;strokeWidth=2;dashed=1;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="v20" target="v21" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e48" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#10739e;strokeWidth=2;dashed=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="v20" target="v22" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="v49" value="&lt;b&gt;Chú thích:&lt;/b&gt;" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="40" y="960" width="80" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="v50" value="" style="rounded=1;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+          <mxGeometry x="125" y="962" width="30" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="v51" value="Cửa vào HTTP" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="161" y="960" width="90" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="v52" value="" style="rounded=1;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="265" y="962" width="30" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="v53" value="Service gRPC" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="301" y="960" width="90" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="v54" value="" style="rounded=1;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+          <mxGeometry x="405" y="962" width="30" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="v55" value="LLM" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="441" y="960" width="30" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="v56" value="" style="rounded=1;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="485" y="962" width="30" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="v57" value="Kho dữ liệu" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="521" y="960" width="83" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="v58" value="" style="rounded=1;html=1;fillColor=#b1ddf0;strokeColor=#10739e;" parent="1" vertex="1">
+          <mxGeometry x="618" y="962" width="30" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="v59" value="Kafka / worker" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="654" y="960" width="103" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="v60" value="" style="rounded=1;html=1;fillColor=#eeeeee;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry x="771" y="962" width="30" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="v61" value="Quan sát" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="807" y="960" width="63" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="l62" value="" style="html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;verticalAlign=bottom;strokeColor=#3d6fb6;strokeWidth=2;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="884" y="971" as="sourcePoint" />
+            <mxPoint x="928" y="971" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="v63" value="HTTP / SSE" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="934" y="960" width="76" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="l64" value="" style="html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;verticalAlign=bottom;strokeColor=#2d7600;strokeWidth=2;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1024" y="971" as="sourcePoint" />
+            <mxPoint x="1068" y="971" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="v65" value="gRPC (đồng bộ)" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="1074" y="960" width="103" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="l66" value="" style="html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;verticalAlign=bottom;strokeColor=#10739e;strokeWidth=2;dashed=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1191" y="971" as="sourcePoint" />
+            <mxPoint x="1235" y="971" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="v67" value="Kafka (bất đồng bộ)" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="1241" y="960" width="136" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="l68" value="" style="html=1;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;verticalAlign=bottom;strokeColor=#8a8a8a;strokeWidth=1.5;dashed=1;dashPattern=2 3;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1391" y="971" as="sourcePoint" />
+            <mxPoint x="1435" y="971" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="v69" value="truy cập dữ liệu" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="1441" y="960" width="116" height="22" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -2,6 +2,10 @@
 /dist
 /node_modules
 /build
+/models
+/model
+/data
+*.gguf
 
 # Logs
 logs

@@ -17,21 +17,27 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "download:model": "ts-node scripts/download-model.ts",
+    "sync:r2": "ts-node scripts/sync-r2.ts",
+    "inspect:r2": "ts-node scripts/inspect-r2.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1152.0",
     "@lancedb/lancedb": "^0.40.0",
     "@nestjs/common": "^11.0.1",
-    "@nestjs/config": "^12.0.1",
+    "@nestjs/config": "^4.0.0",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/swagger": "^11.4.7",
     "@xenova/transformers": "^2.17.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "node-llama-cpp": "^3.22.1",
     "openai": "^7.32.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -43,6 +49,7 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.0",
     "@types/supertest": "^7.0.0",
+    "@types/swagger-ui-express": "^4.1.8",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",

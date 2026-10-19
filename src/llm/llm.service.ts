@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import * as path from 'path';
 import * as fs from 'fs';
 import type { Llama, LlamaModel, LlamaContext } from 'node-llama-cpp';
-import { detectGpu, GpuInfo } from '../utils/gpu.util';
+import { detectGpu, GpuInfo, updateGpuInfoFromLlama } from '../utils/gpu.util';
 
 @Injectable()
 export class LlmService implements OnModuleInit {
@@ -18,12 +18,12 @@ export class LlmService implements OnModuleInit {
 
   async onModuleInit(): Promise<void> {
     this.gpuInfo = detectGpu();
-    this.logger.log(`GPU Detection Status: ${this.gpuInfo.details} (Backend: ${this.gpuInfo.type})`);
+    this.logger.log(`Initial GPU Detection Status: ${this.gpuInfo.details} (Backend: ${this.gpuInfo.type})`);
 
     const modelPath =
       this.configService.get<string>('LLM_MODEL_PATH') ||
       this.configService.get<string>('MODEL_PATH') ||
-      'models/qwen2.5-7b-instruct-q4_k_m/qwen2.5-7b-instruct-q4_k_m.gguf';
+      'models/qwen2.5-0.5b-instruct-q4_k_m/qwen2.5-0.5b-instruct-q4_k_m.gguf';
 
     const resolvedPath = this.resolveModelPath(modelPath);
 
@@ -35,7 +35,7 @@ export class LlmService implements OnModuleInit {
     }
 
     try {
-      this.logger.log(`Loading local Qwen2.5-7B GGUF model from: ${resolvedPath}...`);
+      this.logger.log(`Loading local Qwen2.5 GGUF model from: ${resolvedPath}...`);
       const nodeLlamaCpp = await (Function('return import("node-llama-cpp")')() as Promise<any>);
       this.chatSessionClass = nodeLlamaCpp.LlamaChatSession;
 
@@ -43,9 +43,17 @@ export class LlmService implements OnModuleInit {
         gpu: this.gpuInfo.nodeLlamaGpuOption,
       });
 
-      const gpuLayers = this.gpuInfo.hasGpu
+      const activeGpuBackend = this.llama?.gpu;
+      const hasHardwareGpu = Boolean(activeGpuBackend);
+      const gpuLayers = hasHardwareGpu
         ? Number(this.configService.get<string>('GPU_LAYERS') || 99)
         : 0;
+
+      this.gpuInfo = updateGpuInfoFromLlama(this.gpuInfo, activeGpuBackend, gpuLayers);
+
+      this.logger.log(
+        `Active node-llama-cpp GPU backend: ${String(activeGpuBackend).toUpperCase()}, offloading ${gpuLayers} layers`,
+      );
 
       this.model = await this.llama!.loadModel({
         modelPath: resolvedPath,
@@ -66,7 +74,7 @@ export class LlmService implements OnModuleInit {
       });
 
       this.logger.log(
-        `Qwen2.5-7B GGUF Model loaded successfully with ${gpuLayers} GPU layers on ${this.gpuInfo.type.toUpperCase()}.`,
+        `Qwen2.5 GGUF Model loaded successfully with ${gpuLayers} GPU layers on ${this.gpuInfo.type.toUpperCase()}.`,
       );
     } catch (error) {
       this.logger.error(
@@ -80,7 +88,9 @@ export class LlmService implements OnModuleInit {
     const candidates = [
       path.isAbsolute(modelPath) ? modelPath : path.resolve(process.cwd(), modelPath),
       path.resolve(process.cwd(), '..', modelPath),
+      path.resolve(process.cwd(), 'models/qwen2.5-0.5b-instruct-q4_k_m/qwen2.5-0.5b-instruct-q4_k_m.gguf'),
       path.resolve(process.cwd(), 'models/qwen2.5-7b-instruct-q4_k_m/qwen2.5-7b-instruct-q4_k_m.gguf'),
+      path.resolve(process.cwd(), '../models/qwen2.5-0.5b-instruct-q4_k_m/qwen2.5-0.5b-instruct-q4_k_m.gguf'),
       path.resolve(process.cwd(), '../models/qwen2.5-7b-instruct-q4_k_m/qwen2.5-7b-instruct-q4_k_m.gguf'),
       'C:\\document\\Study documents\\Uth-Data-Mining\\models\\qwen2.5-7b-instruct-q4_k_m\\qwen2.5-7b-instruct-q4_k_m.gguf',
     ];

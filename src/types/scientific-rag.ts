@@ -107,6 +107,7 @@ export interface GroundedChunkResult {
   title: string;
   authors: string[];
   section_title: string;
+  section_type?: string;
   text: string;
   similarity_score: number;
   authority_score?: number;

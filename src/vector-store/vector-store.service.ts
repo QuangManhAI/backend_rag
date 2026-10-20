@@ -135,6 +135,41 @@ export class VectorStoreService implements OnModuleInit, OnModuleDestroy {
     return results as unknown as ScientificChunk[];
   }
 
+  /**
+   * Retrieve all text chunks associated with a specific paper ID.
+   */
+  async getPaperChunks(paperId: string): Promise<ScientificChunk[]> {
+    if (!this.table) {
+      await this.initLanceDb();
+    }
+    if (!this.table) return [];
+
+    try {
+      const sanitizedId = paperId.replace(/'/g, "''");
+      const results = await this.table
+        .query()
+        .where(`paper_id = '${sanitizedId}'`)
+        .select([
+          'chunk_id',
+          'paper_id',
+          'title',
+          'authors',
+          'primary_category',
+          'section_title',
+          'section_type',
+          'text',
+          'context_text',
+          'word_count',
+        ])
+        .limit(50)
+        .toArray();
+      return results as unknown as ScientificChunk[];
+    } catch (err) {
+      this.logger.warn(`Failed to retrieve chunks for paper ${paperId}: ${(err as Error).message}`);
+      return [];
+    }
+  }
+
   isReady(): boolean {
     return this.table !== null;
   }

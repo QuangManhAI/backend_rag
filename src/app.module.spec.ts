@@ -5,6 +5,8 @@ import { EmbeddingModule } from './embedding/embedding.module';
 import { LlmModule } from './llm/llm.module';
 import { MiningModule } from './mining/mining.module';
 import { VectorStoreModule } from './vector-store/vector-store.module';
+import { WorldModule } from './world/world.module';
+import { PapersModule } from './papers/papers.module';
 
 describe('Modules Compilation & Dependency Injection', () => {
   it('should compile AppModule with all submodules', async () => {
@@ -33,5 +35,7 @@ describe('Modules Compilation & Dependency Injection', () => {
     expect(new LlmModule()).toBeDefined();
     expect(new MiningModule()).toBeDefined();
     expect(new VectorStoreModule()).toBeDefined();
+    expect(new WorldModule()).toBeDefined();
+    expect(new PapersModule()).toBeDefined();
   });
 });

@@ -88,6 +88,31 @@ describe('RagController', () => {
     });
   });
 
+  describe('chatStream', () => {
+    it('should stream SSE events to response', async () => {
+      const dto: QueryDto = {
+        query: 'How does LoRA work?',
+        top_k: 5,
+        use_authority_boost: true,
+        expand_query: false,
+      };
+
+      const writes: string[] = [];
+      const mockRes: any = {
+        setHeader: jest.fn(),
+        write: jest.fn((chunk: string) => writes.push(chunk)),
+        end: jest.fn(),
+      };
+
+      await controller.chatStream(dto, mockRes);
+      expect(mockRes.setHeader).toHaveBeenCalledWith('Content-Type', 'text/event-stream');
+      expect(mockRes.end).toHaveBeenCalled();
+      expect(writes.some((w) => w.includes('"phase"'))).toBe(true);
+      expect(writes.some((w) => w.includes('"retrieval"'))).toBe(true);
+      expect(writes.some((w) => w.includes('"done"'))).toBe(true);
+    });
+  });
+
   describe('getHealth', () => {
     it('should return ok status with components ready when vectorStore and llm are ready', () => {
       vectorStoreService.isReady.mockReturnValue(true);

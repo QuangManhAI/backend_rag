@@ -1,0 +1,278 @@
+{
+  "title": "RAG Runtime & Load Benchmark",
+  "base_url": "http://localhost:3000",
+  "scenarios": [
+    {
+      "config": {
+        "name": "Scenario-A-Smoke",
+        "concurrency": 1,
+        "total_requests": 3,
+        "is_streaming": true
+      },
+      "duration_ms": 0,
+      "aggregated_metrics": {
+        "scenario": "Scenario-A-Smoke",
+        "concurrency_level": 1,
+        "duration_ms": 0,
+        "total_requests": 3,
+        "successful_requests": 3,
+        "failed_requests": 0,
+        "timeout_requests": 0,
+        "aborted_requests": 0,
+        "success_rate": 100,
+        "error_rate": 0,
+        "timeout_rate": 0,
+        "throughput": {
+          "started_rps": 3,
+          "completed_rps": 3,
+          "successful_rps": 3
+        },
+        "total_latency": {
+          "count": 3,
+          "min": 106.73,
+          "max": 118.05,
+          "mean": 111.51,
+          "p50": 109.74,
+          "p90": 116.39,
+          "p95": 117.22,
+          "p99": 117.88
+        },
+        "ttft": {
+          "count": 3,
+          "min": 76.77,
+          "max": 89.54,
+          "mean": 82.27,
+          "p50": 80.51,
+          "p90": 87.73,
+          "p95": 88.64,
+          "p99": 89.36
+        },
+        "completion_time": {
+          "count": 3,
+          "min": 106.73,
+          "max": 118.05,
+          "mean": 111.51,
+          "p50": 109.74,
+          "p90": 116.39,
+          "p95": 117.22,
+          "p99": 117.88
+        },
+        "status_codes": {
+          "200": 3
+        },
+        "server_timings_avg": {
+          "embed_ms": 16.67,
+          "route_ms": 10,
+          "search_ms": 25,
+          "rerank_ms": 5.67,
+          "llm_ms": 29.33,
+          "total_ms": 111.67
+        }
+      }
+    },
+    {
+      "config": {
+        "name": "Scenario-B-Baseline",
+        "concurrency": 1,
+        "total_requests": 10,
+        "is_streaming": true
+      },
+      "duration_ms": 0,
+      "aggregated_metrics": {
+        "scenario": "Scenario-B-Baseline",
+        "concurrency_level": 1,
+        "duration_ms": 0,
+        "total_requests": 10,
+        "successful_requests": 10,
+        "failed_requests": 0,
+        "timeout_requests": 0,
+        "aborted_requests": 0,
+        "success_rate": 100,
+        "error_rate": 0,
+        "timeout_rate": 0,
+        "throughput": {
+          "started_rps": 10,
+          "completed_rps": 10,
+          "successful_rps": 10
+        },
+        "total_latency": {
+          "count": 10,
+          "min": 106.96,
+          "max": 124.37,
+          "mean": 115.52,
+          "p50": 115.54,
+          "p90": 123.97,
+          "p95": 124.17,
+          "p99": 124.33
+        },
+        "ttft": {
+          "count": 10,
+          "min": 79.71,
+          "max": 85.26,
+          "mean": 82.49,
+          "p50": 82.16,
+          "p90": 84.62,
+          "p95": 84.94,
+          "p99": 85.2
+        },
+        "completion_time": {
+          "count": 10,
+          "min": 106.96,
+          "max": 124.37,
+          "mean": 115.52,
+          "p50": 115.54,
+          "p90": 123.97,
+          "p95": 124.17,
+          "p99": 124.33
+        },
+        "status_codes": {
+          "200": 10
+        },
+        "server_timings_avg": {
+          "embed_ms": 17.9,
+          "route_ms": 10.2,
+          "search_ms": 23.5,
+          "rerank_ms": 6.4,
+          "llm_ms": 33.1,
+          "total_ms": 115.4
+        }
+      }
+    },
+    {
+      "config": {
+        "name": "Scenario-C-Concurrency-1",
+        "concurrency": 1,
+        "total_requests": 6,
+        "is_streaming": true
+      },
+      "duration_ms": 0,
+      "aggregated_metrics": {
+        "scenario": "Scenario-C-Concurrency-1",
+        "concurrency_level": 1,
+        "duration_ms": 0,
+        "total_requests": 6,
+        "successful_requests": 6,
+        "failed_requests": 0,
+        "timeout_requests": 0,
+        "aborted_requests": 0,
+        "success_rate": 100,
+        "error_rate": 0,
+        "timeout_rate": 0,
+        "throughput": {
+          "started_rps": 6,
+          "completed_rps": 6,
+          "successful_rps": 6
+        },
+        "total_latency": {
+          "count": 6,
+          "min": 109.14,
+          "max": 122.55,
+          "mean": 114.99,
+          "p50": 114.53,
+          "p90": 119.23,
+          "p95": 120.89,
+          "p99": 122.22
+        },
+        "ttft": {
+          "count": 6,
+          "min": 78.72,
+          "max": 89.09,
+          "mean": 83.73,
+          "p50": 83.8,
+          "p90": 88.54,
+          "p95": 88.81,
+          "p99": 89.03
+        },
+        "completion_time": {
+          "count": 6,
+          "min": 109.14,
+          "max": 122.55,
+          "mean": 114.99,
+          "p50": 114.53,
+          "p90": 119.23,
+          "p95": 120.89,
+          "p99": 122.22
+        },
+        "status_codes": {
+          "200": 6
+        },
+        "server_timings_avg": {
+          "embed_ms": 18.17,
+          "route_ms": 9.83,
+          "search_ms": 24.67,
+          "rerank_ms": 6,
+          "llm_ms": 31,
+          "total_ms": 115
+        }
+      }
+    },
+    {
+      "config": {
+        "name": "Scenario-C-Concurrency-2",
+        "concurrency": 2,
+        "total_requests": 6,
+        "is_streaming": true
+      },
+      "duration_ms": 0,
+      "aggregated_metrics": {
+        "scenario": "Scenario-C-Concurrency-2",
+        "concurrency_level": 2,
+        "duration_ms": 0,
+        "total_requests": 6,
+        "successful_requests": 6,
+        "failed_requests": 0,
+        "timeout_requests": 0,
+        "aborted_requests": 0,
+        "success_rate": 100,
+        "error_rate": 0,
+        "timeout_rate": 0,
+        "throughput": {
+          "started_rps": 6,
+          "completed_rps": 6,
+          "successful_rps": 6
+        },
+        "total_latency": {
+          "count": 6,
+          "min": 103.9,
+          "max": 122.62,
+          "mean": 113.18,
+          "p50": 111.62,
+          "p90": 121.14,
+          "p95": 121.88,
+          "p99": 122.47
+        },
+        "ttft": {
+          "count": 6,
+          "min": 75.96,
+          "max": 85.23,
+          "mean": 81.62,
+          "p50": 82.59,
+          "p90": 84.98,
+          "p95": 85.11,
+          "p99": 85.21
+        },
+        "completion_time": {
+          "count": 6,
+          "min": 103.9,
+          "max": 122.62,
+          "mean": 113.18,
+          "p50": 111.62,
+          "p90": 121.14,
+          "p95": 121.88,
+          "p99": 122.47
+        },
+        "status_codes": {
+          "200": 6
+        },
+        "server_timings_avg": {
+          "embed_ms": 16.33,
+          "route_ms": 9.83,
+          "search_ms": 24.5,
+          "rerank_ms": 5.67,
+          "llm_ms": 31.67,
+          "total_ms": 113.33
+        }
+      }
+    }
+  ]
+}

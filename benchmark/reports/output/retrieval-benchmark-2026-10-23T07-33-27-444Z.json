@@ -1,0 +1,3357 @@
+{
+  "config": {
+    "dataset_path": "C:\\Users\\ASUS\\Music\\TS_backend_rag\\benchmark\\datasets\\samples\\sample_evaluation.jsonl",
+    "k_values": [
+      1,
+      3,
+      5,
+      10
+    ],
+    "top_k": 10,
+    "nprobe": 2,
+    "use_authority_boost": true,
+    "expand_query": false,
+    "adapter_type": "MockRetrievalAdapter"
+  },
+  "duration_ms": 2,
+  "results": [
+    {
+      "query_id": "eval_001",
+      "query": "How does low-rank adaptation LoRA reduce the number of trainable parameters in large language models?",
+      "category": "cs.LG",
+      "answerable": true,
+      "pre_rerank_chunks": [
+        {
+          "chunk_id": "2106.09685_abs",
+          "paper_id": "2106.09685",
+          "score": 0.88
+        },
+        {
+          "chunk_id": "2106.09685_sec4",
+          "paper_id": "2106.09685",
+          "score": 0.82
+        },
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "score": 0.2
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "score": 0.18000000000000002
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "score": 0.16000000000000003
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "score": 0.14
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "score": 0.12
+        }
+      ],
+      "post_rerank_chunks": [
+        {
+          "chunk_id": "2106.09685_abs",
+          "paper_id": "2106.09685",
+          "final_score": 0.898,
+          "similarity_score": 0.88,
+          "authority_score": 1
+        },
+        {
+          "chunk_id": "2106.09685_sec4",
+          "paper_id": "2106.09685",
+          "final_score": 0.847,
+          "similarity_score": 0.82,
+          "authority_score": 1
+        },
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "final_score": 0.17,
+          "similarity_score": 0.2,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "final_score": 0.153,
+          "similarity_score": 0.18,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "final_score": 0.136,
+          "similarity_score": 0.16,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "final_score": 0.119,
+          "similarity_score": 0.14,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "final_score": 0.102,
+          "similarity_score": 0.12,
+          "authority_score": 0
+        }
+      ],
+      "timings": {
+        "embed_ms": 1,
+        "route_ms": 1,
+        "search_ms": 2,
+        "rerank_ms": 1,
+        "total_ms": 0
+      },
+      "pre_rerank_metrics": {
+        "query_id": "eval_001",
+        "category": "cs.LG",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_precision": {
+          "1": 1,
+          "3": 0.3333333333333333,
+          "5": 0.2,
+          "10": 0.1
+        },
+        "paper_mrr": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_ndcg": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_hit_rate": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_recall": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_precision": {
+          "1": 1,
+          "3": 0.3333333333333333,
+          "5": 0.2,
+          "10": 0.1
+        },
+        "chunk_mrr": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_ndcg": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_hit_rate": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "retrieved_paper_count": 6,
+        "retrieved_chunk_count": 7,
+        "is_empty_retrieval": false
+      },
+      "post_rerank_metrics": {
+        "query_id": "eval_001",
+        "category": "cs.LG",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_precision": {
+          "1": 1,
+          "3": 0.3333333333333333,
+          "5": 0.2,
+          "10": 0.1
+        },
+        "paper_mrr": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_ndcg": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_hit_rate": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_recall": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_precision": {
+          "1": 1,
+          "3": 0.3333333333333333,
+          "5": 0.2,
+          "10": 0.1
+        },
+        "chunk_mrr": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_ndcg": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_hit_rate": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "retrieved_paper_count": 6,
+        "retrieved_chunk_count": 7,
+        "is_empty_retrieval": false
+      }
+    },
+    {
+      "query_id": "eval_002",
+      "query": "What is the rank parameter r in LoRA decomposition and what values are commonly tested?",
+      "category": "cs.LG",
+      "answerable": true,
+      "pre_rerank_chunks": [
+        {
+          "chunk_id": "2106.09685_abs",
+          "paper_id": "2106.09685",
+          "score": 0.88
+        },
+        {
+          "chunk_id": "2106.09685_sec4",
+          "paper_id": "2106.09685",
+          "score": 0.82
+        },
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "score": 0.2
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "score": 0.18000000000000002
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "score": 0.16000000000000003
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "score": 0.14
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "score": 0.12
+        }
+      ],
+      "post_rerank_chunks": [
+        {
+          "chunk_id": "2106.09685_abs",
+          "paper_id": "2106.09685",
+          "final_score": 0.898,
+          "similarity_score": 0.88,
+          "authority_score": 1
+        },
+        {
+          "chunk_id": "2106.09685_sec4",
+          "paper_id": "2106.09685",
+          "final_score": 0.847,
+          "similarity_score": 0.82,
+          "authority_score": 1
+        },
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "final_score": 0.17,
+          "similarity_score": 0.2,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "final_score": 0.153,
+          "similarity_score": 0.18,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "final_score": 0.136,
+          "similarity_score": 0.16,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "final_score": 0.119,
+          "similarity_score": 0.14,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "final_score": 0.102,
+          "similarity_score": 0.12,
+          "authority_score": 0
+        }
+      ],
+      "timings": {
+        "embed_ms": 1,
+        "route_ms": 1,
+        "search_ms": 2,
+        "rerank_ms": 1,
+        "total_ms": 0
+      },
+      "pre_rerank_metrics": {
+        "query_id": "eval_002",
+        "category": "cs.LG",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_precision": {
+          "1": 1,
+          "3": 0.3333333333333333,
+          "5": 0.2,
+          "10": 0.1
+        },
+        "paper_mrr": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_ndcg": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_hit_rate": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_recall": {
+          "1": 0,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_precision": {
+          "1": 0,
+          "3": 0.3333333333333333,
+          "5": 0.2,
+          "10": 0.1
+        },
+        "chunk_mrr": {
+          "1": 0,
+          "3": 0.5,
+          "5": 0.5,
+          "10": 0.5
+        },
+        "chunk_ndcg": {
+          "1": 0,
+          "3": 0.6309297535714575,
+          "5": 0.6309297535714575,
+          "10": 0.6309297535714575
+        },
+        "chunk_hit_rate": {
+          "1": 0,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "retrieved_paper_count": 6,
+        "retrieved_chunk_count": 7,
+        "is_empty_retrieval": false
+      },
+      "post_rerank_metrics": {
+        "query_id": "eval_002",
+        "category": "cs.LG",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_precision": {
+          "1": 1,
+          "3": 0.3333333333333333,
+          "5": 0.2,
+          "10": 0.1
+        },
+        "paper_mrr": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_ndcg": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_hit_rate": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_recall": {
+          "1": 0,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_precision": {
+          "1": 0,
+          "3": 0.3333333333333333,
+          "5": 0.2,
+          "10": 0.1
+        },
+        "chunk_mrr": {
+          "1": 0,
+          "3": 0.5,
+          "5": 0.5,
+          "10": 0.5
+        },
+        "chunk_ndcg": {
+          "1": 0,
+          "3": 0.6309297535714575,
+          "5": 0.6309297535714575,
+          "10": 0.6309297535714575
+        },
+        "chunk_hit_rate": {
+          "1": 0,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "retrieved_paper_count": 6,
+        "retrieved_chunk_count": 7,
+        "is_empty_retrieval": false
+      }
+    },
+    {
+      "query_id": "eval_003",
+      "query": "How does the self-attention mechanism compute queries, keys, and values in Transformer architectures?",
+      "category": "cs.CL",
+      "answerable": true,
+      "pre_rerank_chunks": [
+        {
+          "chunk_id": "1706.03762_abs",
+          "paper_id": "1706.03762",
+          "score": 0.89
+        },
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "score": 0.2
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "score": 0.18000000000000002
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "score": 0.16000000000000003
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "score": 0.14
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "score": 0.12
+        }
+      ],
+      "post_rerank_chunks": [
+        {
+          "chunk_id": "1706.03762_abs",
+          "paper_id": "1706.03762",
+          "final_score": 0.9065,
+          "similarity_score": 0.89,
+          "authority_score": 1
+        },
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "final_score": 0.17,
+          "similarity_score": 0.2,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "final_score": 0.153,
+          "similarity_score": 0.18,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "final_score": 0.136,
+          "similarity_score": 0.16,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "final_score": 0.119,
+          "similarity_score": 0.14,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "final_score": 0.102,
+          "similarity_score": 0.12,
+          "authority_score": 0
+        }
+      ],
+      "timings": {
+        "embed_ms": 1,
+        "route_ms": 1,
+        "search_ms": 2,
+        "rerank_ms": 1,
+        "total_ms": 0
+      },
+      "pre_rerank_metrics": {
+        "query_id": "eval_003",
+        "category": "cs.CL",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_precision": {
+          "1": 1,
+          "3": 0.3333333333333333,
+          "5": 0.2,
+          "10": 0.1
+        },
+        "paper_mrr": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_ndcg": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_hit_rate": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 6,
+        "retrieved_chunk_count": 6,
+        "is_empty_retrieval": false
+      },
+      "post_rerank_metrics": {
+        "query_id": "eval_003",
+        "category": "cs.CL",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_precision": {
+          "1": 1,
+          "3": 0.3333333333333333,
+          "5": 0.2,
+          "10": 0.1
+        },
+        "paper_mrr": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_ndcg": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_hit_rate": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 6,
+        "retrieved_chunk_count": 6,
+        "is_empty_retrieval": false
+      }
+    },
+    {
+      "query_id": "eval_004",
+      "query": "What is the scaled dot-product formula for attention with dimension d_k?",
+      "category": "cs.CL",
+      "answerable": true,
+      "pre_rerank_chunks": [
+        {
+          "chunk_id": "1706.03762_abs",
+          "paper_id": "1706.03762",
+          "score": 0.89
+        },
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "score": 0.2
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "score": 0.18000000000000002
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "score": 0.16000000000000003
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "score": 0.14
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "score": 0.12
+        }
+      ],
+      "post_rerank_chunks": [
+        {
+          "chunk_id": "1706.03762_abs",
+          "paper_id": "1706.03762",
+          "final_score": 0.9065,
+          "similarity_score": 0.89,
+          "authority_score": 1
+        },
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "final_score": 0.17,
+          "similarity_score": 0.2,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "final_score": 0.153,
+          "similarity_score": 0.18,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "final_score": 0.136,
+          "similarity_score": 0.16,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "final_score": 0.119,
+          "similarity_score": 0.14,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "final_score": 0.102,
+          "similarity_score": 0.12,
+          "authority_score": 0
+        }
+      ],
+      "timings": {
+        "embed_ms": 1,
+        "route_ms": 1,
+        "search_ms": 2,
+        "rerank_ms": 1,
+        "total_ms": 0
+      },
+      "pre_rerank_metrics": {
+        "query_id": "eval_004",
+        "category": "cs.CL",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_precision": {
+          "1": 1,
+          "3": 0.3333333333333333,
+          "5": 0.2,
+          "10": 0.1
+        },
+        "paper_mrr": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_ndcg": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_hit_rate": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 6,
+        "retrieved_chunk_count": 6,
+        "is_empty_retrieval": false
+      },
+      "post_rerank_metrics": {
+        "query_id": "eval_004",
+        "category": "cs.CL",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_precision": {
+          "1": 1,
+          "3": 0.3333333333333333,
+          "5": 0.2,
+          "10": 0.1
+        },
+        "paper_mrr": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_ndcg": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_hit_rate": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 6,
+        "retrieved_chunk_count": 6,
+        "is_empty_retrieval": false
+      }
+    },
+    {
+      "query_id": "eval_005",
+      "query": "How does in-context few-shot learning work in GPT-3 without gradient updates?",
+      "category": "cs.CL",
+      "answerable": true,
+      "pre_rerank_chunks": [
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "score": 0.2
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "score": 0.18000000000000002
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "score": 0.16000000000000003
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "score": 0.14
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "score": 0.12
+        }
+      ],
+      "post_rerank_chunks": [
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "final_score": 0.17,
+          "similarity_score": 0.2,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "final_score": 0.153,
+          "similarity_score": 0.18,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "final_score": 0.136,
+          "similarity_score": 0.16,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "final_score": 0.119,
+          "similarity_score": 0.14,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "final_score": 0.102,
+          "similarity_score": 0.12,
+          "authority_score": 0
+        }
+      ],
+      "timings": {
+        "embed_ms": 1,
+        "route_ms": 1,
+        "search_ms": 2,
+        "rerank_ms": 1,
+        "total_ms": 0
+      },
+      "pre_rerank_metrics": {
+        "query_id": "eval_005",
+        "category": "cs.CL",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 5,
+        "retrieved_chunk_count": 5,
+        "is_empty_retrieval": false
+      },
+      "post_rerank_metrics": {
+        "query_id": "eval_005",
+        "category": "cs.CL",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 5,
+        "retrieved_chunk_count": 5,
+        "is_empty_retrieval": false
+      }
+    },
+    {
+      "query_id": "eval_006",
+      "query": "What are the two pre-training tasks used in BERT: Masked Language Model and Next Sentence Prediction?",
+      "category": "cs.CL",
+      "answerable": true,
+      "pre_rerank_chunks": [
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "score": 0.2
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "score": 0.18000000000000002
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "score": 0.16000000000000003
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "score": 0.14
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "score": 0.12
+        }
+      ],
+      "post_rerank_chunks": [
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "final_score": 0.17,
+          "similarity_score": 0.2,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "final_score": 0.153,
+          "similarity_score": 0.18,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "final_score": 0.136,
+          "similarity_score": 0.16,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "final_score": 0.119,
+          "similarity_score": 0.14,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "final_score": 0.102,
+          "similarity_score": 0.12,
+          "authority_score": 0
+        }
+      ],
+      "timings": {
+        "embed_ms": 1,
+        "route_ms": 1,
+        "search_ms": 2,
+        "rerank_ms": 1,
+        "total_ms": 0
+      },
+      "pre_rerank_metrics": {
+        "query_id": "eval_006",
+        "category": "cs.CL",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 5,
+        "retrieved_chunk_count": 5,
+        "is_empty_retrieval": false
+      },
+      "post_rerank_metrics": {
+        "query_id": "eval_006",
+        "category": "cs.CL",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 5,
+        "retrieved_chunk_count": 5,
+        "is_empty_retrieval": false
+      }
+    },
+    {
+      "query_id": "eval_007",
+      "query": "How do deep residual connections address degradation problem in deep convolutional networks?",
+      "category": "cs.CV",
+      "answerable": true,
+      "pre_rerank_chunks": [
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "score": 0.2
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "score": 0.18000000000000002
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "score": 0.16000000000000003
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "score": 0.14
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "score": 0.12
+        }
+      ],
+      "post_rerank_chunks": [
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "final_score": 0.17,
+          "similarity_score": 0.2,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "final_score": 0.153,
+          "similarity_score": 0.18,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "final_score": 0.136,
+          "similarity_score": 0.16,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "final_score": 0.119,
+          "similarity_score": 0.14,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "final_score": 0.102,
+          "similarity_score": 0.12,
+          "authority_score": 0
+        }
+      ],
+      "timings": {
+        "embed_ms": 1,
+        "route_ms": 1,
+        "search_ms": 2,
+        "rerank_ms": 1,
+        "total_ms": 0
+      },
+      "pre_rerank_metrics": {
+        "query_id": "eval_007",
+        "category": "cs.CV",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 5,
+        "retrieved_chunk_count": 5,
+        "is_empty_retrieval": false
+      },
+      "post_rerank_metrics": {
+        "query_id": "eval_007",
+        "category": "cs.CV",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 5,
+        "retrieved_chunk_count": 5,
+        "is_empty_retrieval": false
+      }
+    },
+    {
+      "query_id": "eval_008",
+      "query": "What is the Adam optimization algorithm and how does it combine AdaGrad and RMSProp with momentum?",
+      "category": "cs.LG",
+      "answerable": true,
+      "pre_rerank_chunks": [
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "score": 0.2
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "score": 0.18000000000000002
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "score": 0.16000000000000003
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "score": 0.14
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "score": 0.12
+        }
+      ],
+      "post_rerank_chunks": [
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "final_score": 0.17,
+          "similarity_score": 0.2,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "final_score": 0.153,
+          "similarity_score": 0.18,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "final_score": 0.136,
+          "similarity_score": 0.16,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "final_score": 0.119,
+          "similarity_score": 0.14,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "final_score": 0.102,
+          "similarity_score": 0.12,
+          "authority_score": 0
+        }
+      ],
+      "timings": {
+        "embed_ms": 1,
+        "route_ms": 1,
+        "search_ms": 2,
+        "rerank_ms": 1,
+        "total_ms": 0
+      },
+      "pre_rerank_metrics": {
+        "query_id": "eval_008",
+        "category": "cs.LG",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 5,
+        "retrieved_chunk_count": 5,
+        "is_empty_retrieval": false
+      },
+      "post_rerank_metrics": {
+        "query_id": "eval_008",
+        "category": "cs.LG",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 5,
+        "retrieved_chunk_count": 5,
+        "is_empty_retrieval": false
+      }
+    },
+    {
+      "query_id": "eval_009",
+      "query": "Compare LoRA adapter efficiency with full fine-tuning on downstream tasks",
+      "category": "cs.LG",
+      "answerable": true,
+      "pre_rerank_chunks": [
+        {
+          "chunk_id": "2106.09685_abs",
+          "paper_id": "2106.09685",
+          "score": 0.88
+        },
+        {
+          "chunk_id": "2106.09685_sec4",
+          "paper_id": "2106.09685",
+          "score": 0.82
+        },
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "score": 0.2
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "score": 0.18000000000000002
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "score": 0.16000000000000003
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "score": 0.14
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "score": 0.12
+        }
+      ],
+      "post_rerank_chunks": [
+        {
+          "chunk_id": "2106.09685_abs",
+          "paper_id": "2106.09685",
+          "final_score": 0.898,
+          "similarity_score": 0.88,
+          "authority_score": 1
+        },
+        {
+          "chunk_id": "2106.09685_sec4",
+          "paper_id": "2106.09685",
+          "final_score": 0.847,
+          "similarity_score": 0.82,
+          "authority_score": 1
+        },
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "final_score": 0.17,
+          "similarity_score": 0.2,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "final_score": 0.153,
+          "similarity_score": 0.18,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "final_score": 0.136,
+          "similarity_score": 0.16,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "final_score": 0.119,
+          "similarity_score": 0.14,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "final_score": 0.102,
+          "similarity_score": 0.12,
+          "authority_score": 0
+        }
+      ],
+      "timings": {
+        "embed_ms": 1,
+        "route_ms": 1,
+        "search_ms": 2,
+        "rerank_ms": 1,
+        "total_ms": 0
+      },
+      "pre_rerank_metrics": {
+        "query_id": "eval_009",
+        "category": "cs.LG",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 0.5,
+          "3": 0.5,
+          "5": 0.5,
+          "10": 0.5
+        },
+        "paper_precision": {
+          "1": 1,
+          "3": 0.3333333333333333,
+          "5": 0.2,
+          "10": 0.1
+        },
+        "paper_mrr": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_ndcg": {
+          "1": 1,
+          "3": 0.9173194127129571,
+          "5": 0.9173194127129571,
+          "10": 0.9173194127129571
+        },
+        "paper_hit_rate": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 6,
+        "retrieved_chunk_count": 7,
+        "is_empty_retrieval": false
+      },
+      "post_rerank_metrics": {
+        "query_id": "eval_009",
+        "category": "cs.LG",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 0.5,
+          "3": 0.5,
+          "5": 0.5,
+          "10": 0.5
+        },
+        "paper_precision": {
+          "1": 1,
+          "3": 0.3333333333333333,
+          "5": 0.2,
+          "10": 0.1
+        },
+        "paper_mrr": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_ndcg": {
+          "1": 1,
+          "3": 0.9173194127129571,
+          "5": 0.9173194127129571,
+          "10": 0.9173194127129571
+        },
+        "paper_hit_rate": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 6,
+        "retrieved_chunk_count": 7,
+        "is_empty_retrieval": false
+      }
+    },
+    {
+      "query_id": "eval_010",
+      "query": "What is the multi-head attention projection matrix dimension in encoder-decoder models?",
+      "category": "cs.CL",
+      "answerable": true,
+      "pre_rerank_chunks": [
+        {
+          "chunk_id": "1706.03762_abs",
+          "paper_id": "1706.03762",
+          "score": 0.89
+        },
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "score": 0.2
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "score": 0.18000000000000002
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "score": 0.16000000000000003
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "score": 0.14
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "score": 0.12
+        }
+      ],
+      "post_rerank_chunks": [
+        {
+          "chunk_id": "1706.03762_abs",
+          "paper_id": "1706.03762",
+          "final_score": 0.9065,
+          "similarity_score": 0.89,
+          "authority_score": 1
+        },
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "final_score": 0.17,
+          "similarity_score": 0.2,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "final_score": 0.153,
+          "similarity_score": 0.18,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "final_score": 0.136,
+          "similarity_score": 0.16,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "final_score": 0.119,
+          "similarity_score": 0.14,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "final_score": 0.102,
+          "similarity_score": 0.12,
+          "authority_score": 0
+        }
+      ],
+      "timings": {
+        "embed_ms": 1,
+        "route_ms": 1,
+        "search_ms": 2,
+        "rerank_ms": 1,
+        "total_ms": 0
+      },
+      "pre_rerank_metrics": {
+        "query_id": "eval_010",
+        "category": "cs.CL",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_precision": {
+          "1": 1,
+          "3": 0.3333333333333333,
+          "5": 0.2,
+          "10": 0.1
+        },
+        "paper_mrr": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_ndcg": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_hit_rate": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 6,
+        "retrieved_chunk_count": 6,
+        "is_empty_retrieval": false
+      },
+      "post_rerank_metrics": {
+        "query_id": "eval_010",
+        "category": "cs.CL",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_precision": {
+          "1": 1,
+          "3": 0.3333333333333333,
+          "5": 0.2,
+          "10": 0.1
+        },
+        "paper_mrr": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_ndcg": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "paper_hit_rate": {
+          "1": 1,
+          "3": 1,
+          "5": 1,
+          "10": 1
+        },
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 6,
+        "retrieved_chunk_count": 6,
+        "is_empty_retrieval": false
+      }
+    },
+    {
+      "query_id": "eval_011",
+      "query": "What are the symptoms and incubation period of seasonal influenza virus?",
+      "category": "biomedical",
+      "answerable": false,
+      "pre_rerank_chunks": [
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "score": 0.2
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "score": 0.18000000000000002
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "score": 0.16000000000000003
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "score": 0.14
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "score": 0.12
+        }
+      ],
+      "post_rerank_chunks": [
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "final_score": 0.17,
+          "similarity_score": 0.2,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "final_score": 0.153,
+          "similarity_score": 0.18,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "final_score": 0.136,
+          "similarity_score": 0.16,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "final_score": 0.119,
+          "similarity_score": 0.14,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "final_score": 0.102,
+          "similarity_score": 0.12,
+          "authority_score": 0
+        }
+      ],
+      "timings": {
+        "embed_ms": 1,
+        "route_ms": 1,
+        "search_ms": 2,
+        "rerank_ms": 1,
+        "total_ms": 0
+      },
+      "pre_rerank_metrics": {
+        "query_id": "eval_011",
+        "category": "biomedical",
+        "answerable": false,
+        "skipped": true,
+        "skip_reason": "Unanswerable query (no relevant documents expected)",
+        "paper_recall": {},
+        "paper_precision": {},
+        "paper_mrr": {},
+        "paper_ndcg": {},
+        "paper_hit_rate": {},
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 5,
+        "retrieved_chunk_count": 5,
+        "is_empty_retrieval": false
+      },
+      "post_rerank_metrics": {
+        "query_id": "eval_011",
+        "category": "biomedical",
+        "answerable": false,
+        "skipped": true,
+        "skip_reason": "Unanswerable query (no relevant documents expected)",
+        "paper_recall": {},
+        "paper_precision": {},
+        "paper_mrr": {},
+        "paper_ndcg": {},
+        "paper_hit_rate": {},
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 5,
+        "retrieved_chunk_count": 5,
+        "is_empty_retrieval": false
+      }
+    },
+    {
+      "query_id": "eval_012",
+      "query": "How to prepare authentic Neapolitan pizza dough using high hydration flour?",
+      "category": "cooking",
+      "answerable": false,
+      "pre_rerank_chunks": [
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "score": 0.2
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "score": 0.18000000000000002
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "score": 0.16000000000000003
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "score": 0.14
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "score": 0.12
+        }
+      ],
+      "post_rerank_chunks": [
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "final_score": 0.17,
+          "similarity_score": 0.2,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "final_score": 0.153,
+          "similarity_score": 0.18,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "final_score": 0.136,
+          "similarity_score": 0.16,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "final_score": 0.119,
+          "similarity_score": 0.14,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "final_score": 0.102,
+          "similarity_score": 0.12,
+          "authority_score": 0
+        }
+      ],
+      "timings": {
+        "embed_ms": 1,
+        "route_ms": 1,
+        "search_ms": 2,
+        "rerank_ms": 1,
+        "total_ms": 0
+      },
+      "pre_rerank_metrics": {
+        "query_id": "eval_012",
+        "category": "cooking",
+        "answerable": false,
+        "skipped": true,
+        "skip_reason": "Unanswerable query (no relevant documents expected)",
+        "paper_recall": {},
+        "paper_precision": {},
+        "paper_mrr": {},
+        "paper_ndcg": {},
+        "paper_hit_rate": {},
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 5,
+        "retrieved_chunk_count": 5,
+        "is_empty_retrieval": false
+      },
+      "post_rerank_metrics": {
+        "query_id": "eval_012",
+        "category": "cooking",
+        "answerable": false,
+        "skipped": true,
+        "skip_reason": "Unanswerable query (no relevant documents expected)",
+        "paper_recall": {},
+        "paper_precision": {},
+        "paper_mrr": {},
+        "paper_ndcg": {},
+        "paper_hit_rate": {},
+        "chunk_recall": {},
+        "chunk_precision": {},
+        "chunk_mrr": {},
+        "chunk_ndcg": {},
+        "chunk_hit_rate": {},
+        "retrieved_paper_count": 5,
+        "retrieved_chunk_count": 5,
+        "is_empty_retrieval": false
+      }
+    },
+    {
+      "query_id": "eval_seed_01",
+      "query": "Seed text information about paper 0 section abstract",
+      "category": "cs.LG",
+      "answerable": true,
+      "pre_rerank_chunks": [
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "score": 0.2
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "score": 0.18000000000000002
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "score": 0.16000000000000003
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "score": 0.14
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "score": 0.12
+        }
+      ],
+      "post_rerank_chunks": [
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "final_score": 0.17,
+          "similarity_score": 0.2,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "final_score": 0.153,
+          "similarity_score": 0.18,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "final_score": 0.136,
+          "similarity_score": 0.16,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "final_score": 0.119,
+          "similarity_score": 0.14,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "final_score": 0.102,
+          "similarity_score": 0.12,
+          "authority_score": 0
+        }
+      ],
+      "timings": {
+        "embed_ms": 1,
+        "route_ms": 1,
+        "search_ms": 2,
+        "rerank_ms": 1,
+        "total_ms": 0
+      },
+      "pre_rerank_metrics": {
+        "query_id": "eval_seed_01",
+        "category": "cs.LG",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "retrieved_paper_count": 5,
+        "retrieved_chunk_count": 5,
+        "is_empty_retrieval": false
+      },
+      "post_rerank_metrics": {
+        "query_id": "eval_seed_01",
+        "category": "cs.LG",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "retrieved_paper_count": 5,
+        "retrieved_chunk_count": 5,
+        "is_empty_retrieval": false
+      }
+    },
+    {
+      "query_id": "eval_seed_02",
+      "query": "Seed text information about paper 1 section introduction",
+      "category": "cs.CL",
+      "answerable": true,
+      "pre_rerank_chunks": [
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "score": 0.2
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "score": 0.18000000000000002
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "score": 0.16000000000000003
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "score": 0.14
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "score": 0.12
+        }
+      ],
+      "post_rerank_chunks": [
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "final_score": 0.17,
+          "similarity_score": 0.2,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "final_score": 0.153,
+          "similarity_score": 0.18,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "final_score": 0.136,
+          "similarity_score": 0.16,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "final_score": 0.119,
+          "similarity_score": 0.14,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "final_score": 0.102,
+          "similarity_score": 0.12,
+          "authority_score": 0
+        }
+      ],
+      "timings": {
+        "embed_ms": 1,
+        "route_ms": 1,
+        "search_ms": 2,
+        "rerank_ms": 1,
+        "total_ms": 0
+      },
+      "pre_rerank_metrics": {
+        "query_id": "eval_seed_02",
+        "category": "cs.CL",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "retrieved_paper_count": 5,
+        "retrieved_chunk_count": 5,
+        "is_empty_retrieval": false
+      },
+      "post_rerank_metrics": {
+        "query_id": "eval_seed_02",
+        "category": "cs.CL",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "retrieved_paper_count": 5,
+        "retrieved_chunk_count": 5,
+        "is_empty_retrieval": false
+      }
+    },
+    {
+      "query_id": "eval_seed_03",
+      "query": "Seed text information about paper 2 section method",
+      "category": "cs.CV",
+      "answerable": true,
+      "pre_rerank_chunks": [
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "score": 0.2
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "score": 0.18000000000000002
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "score": 0.16000000000000003
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "score": 0.14
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "score": 0.12
+        }
+      ],
+      "post_rerank_chunks": [
+        {
+          "chunk_id": "irrelevant_10",
+          "paper_id": "irr_10",
+          "final_score": 0.17,
+          "similarity_score": 0.2,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_11",
+          "paper_id": "irr_11",
+          "final_score": 0.153,
+          "similarity_score": 0.18,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_12",
+          "paper_id": "irr_12",
+          "final_score": 0.136,
+          "similarity_score": 0.16,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_13",
+          "paper_id": "irr_13",
+          "final_score": 0.119,
+          "similarity_score": 0.14,
+          "authority_score": 0
+        },
+        {
+          "chunk_id": "irrelevant_14",
+          "paper_id": "irr_14",
+          "final_score": 0.102,
+          "similarity_score": 0.12,
+          "authority_score": 0
+        }
+      ],
+      "timings": {
+        "embed_ms": 1,
+        "route_ms": 1,
+        "search_ms": 2,
+        "rerank_ms": 1,
+        "total_ms": 0
+      },
+      "pre_rerank_metrics": {
+        "query_id": "eval_seed_03",
+        "category": "cs.CV",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "retrieved_paper_count": 5,
+        "retrieved_chunk_count": 5,
+        "is_empty_retrieval": false
+      },
+      "post_rerank_metrics": {
+        "query_id": "eval_seed_03",
+        "category": "cs.CV",
+        "answerable": true,
+        "skipped": false,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_precision": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "chunk_hit_rate": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "retrieved_paper_count": 5,
+        "retrieved_chunk_count": 5,
+        "is_empty_retrieval": false
+      }
+    }
+  ],
+  "pre_rerank_aggregated": {
+    "total_queries": 15,
+    "evaluated_queries": 13,
+    "skipped_queries": 2,
+    "empty_retrieval_count": 0,
+    "empty_retrieval_rate": 0,
+    "k_values": [
+      1,
+      3,
+      5,
+      10
+    ],
+    "paper_recall": {
+      "1": {
+        "mean": 0.4231,
+        "evaluated_count": 13
+      },
+      "3": {
+        "mean": 0.4231,
+        "evaluated_count": 13
+      },
+      "5": {
+        "mean": 0.4231,
+        "evaluated_count": 13
+      },
+      "10": {
+        "mean": 0.4231,
+        "evaluated_count": 13
+      }
+    },
+    "paper_precision": {
+      "1": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      },
+      "3": {
+        "mean": 0.1538,
+        "evaluated_count": 13
+      },
+      "5": {
+        "mean": 0.0923,
+        "evaluated_count": 13
+      },
+      "10": {
+        "mean": 0.0462,
+        "evaluated_count": 13
+      }
+    },
+    "paper_mrr": {
+      "1": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      },
+      "3": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      },
+      "5": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      },
+      "10": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      }
+    },
+    "paper_ndcg": {
+      "1": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      },
+      "3": {
+        "mean": 0.4552,
+        "evaluated_count": 13
+      },
+      "5": {
+        "mean": 0.4552,
+        "evaluated_count": 13
+      },
+      "10": {
+        "mean": 0.4552,
+        "evaluated_count": 13
+      }
+    },
+    "paper_hit_rate": {
+      "1": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      },
+      "3": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      },
+      "5": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      },
+      "10": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      }
+    },
+    "chunk_recall": {
+      "1": {
+        "mean": 0.2,
+        "evaluated_count": 5
+      },
+      "3": {
+        "mean": 0.4,
+        "evaluated_count": 5
+      },
+      "5": {
+        "mean": 0.4,
+        "evaluated_count": 5
+      },
+      "10": {
+        "mean": 0.4,
+        "evaluated_count": 5
+      }
+    },
+    "chunk_precision": {
+      "1": {
+        "mean": 0.2,
+        "evaluated_count": 5
+      },
+      "3": {
+        "mean": 0.1333,
+        "evaluated_count": 5
+      },
+      "5": {
+        "mean": 0.08,
+        "evaluated_count": 5
+      },
+      "10": {
+        "mean": 0.04,
+        "evaluated_count": 5
+      }
+    },
+    "chunk_mrr": {
+      "1": {
+        "mean": 0.2,
+        "evaluated_count": 5
+      },
+      "3": {
+        "mean": 0.3,
+        "evaluated_count": 5
+      },
+      "5": {
+        "mean": 0.3,
+        "evaluated_count": 5
+      },
+      "10": {
+        "mean": 0.3,
+        "evaluated_count": 5
+      }
+    },
+    "chunk_ndcg": {
+      "1": {
+        "mean": 0.2,
+        "evaluated_count": 5
+      },
+      "3": {
+        "mean": 0.3262,
+        "evaluated_count": 5
+      },
+      "5": {
+        "mean": 0.3262,
+        "evaluated_count": 5
+      },
+      "10": {
+        "mean": 0.3262,
+        "evaluated_count": 5
+      }
+    },
+    "chunk_hit_rate": {
+      "1": {
+        "mean": 0.2,
+        "evaluated_count": 5
+      },
+      "3": {
+        "mean": 0.4,
+        "evaluated_count": 5
+      },
+      "5": {
+        "mean": 0.4,
+        "evaluated_count": 5
+      },
+      "10": {
+        "mean": 0.4,
+        "evaluated_count": 5
+      }
+    },
+    "by_category": {
+      "cs.LG": {
+        "query_count": 5,
+        "paper_recall": {
+          "1": 0.5,
+          "3": 0.5,
+          "5": 0.5,
+          "10": 0.5
+        },
+        "paper_mrr": {
+          "1": 0.6,
+          "3": 0.6,
+          "5": 0.6,
+          "10": 0.6
+        },
+        "paper_ndcg": {
+          "1": 0.6,
+          "3": 0.5835,
+          "5": 0.5835,
+          "10": 0.5835
+        }
+      },
+      "cs.CL": {
+        "query_count": 6,
+        "paper_recall": {
+          "1": 0.5,
+          "3": 0.5,
+          "5": 0.5,
+          "10": 0.5
+        },
+        "paper_mrr": {
+          "1": 0.5,
+          "3": 0.5,
+          "5": 0.5,
+          "10": 0.5
+        },
+        "paper_ndcg": {
+          "1": 0.5,
+          "3": 0.5,
+          "5": 0.5,
+          "10": 0.5
+        }
+      },
+      "cs.CV": {
+        "query_count": 2,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        }
+      },
+      "biomedical": {
+        "query_count": 1,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        }
+      },
+      "cooking": {
+        "query_count": 1,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        }
+      }
+    }
+  },
+  "post_rerank_aggregated": {
+    "total_queries": 15,
+    "evaluated_queries": 13,
+    "skipped_queries": 2,
+    "empty_retrieval_count": 0,
+    "empty_retrieval_rate": 0,
+    "k_values": [
+      1,
+      3,
+      5,
+      10
+    ],
+    "paper_recall": {
+      "1": {
+        "mean": 0.4231,
+        "evaluated_count": 13
+      },
+      "3": {
+        "mean": 0.4231,
+        "evaluated_count": 13
+      },
+      "5": {
+        "mean": 0.4231,
+        "evaluated_count": 13
+      },
+      "10": {
+        "mean": 0.4231,
+        "evaluated_count": 13
+      }
+    },
+    "paper_precision": {
+      "1": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      },
+      "3": {
+        "mean": 0.1538,
+        "evaluated_count": 13
+      },
+      "5": {
+        "mean": 0.0923,
+        "evaluated_count": 13
+      },
+      "10": {
+        "mean": 0.0462,
+        "evaluated_count": 13
+      }
+    },
+    "paper_mrr": {
+      "1": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      },
+      "3": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      },
+      "5": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      },
+      "10": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      }
+    },
+    "paper_ndcg": {
+      "1": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      },
+      "3": {
+        "mean": 0.4552,
+        "evaluated_count": 13
+      },
+      "5": {
+        "mean": 0.4552,
+        "evaluated_count": 13
+      },
+      "10": {
+        "mean": 0.4552,
+        "evaluated_count": 13
+      }
+    },
+    "paper_hit_rate": {
+      "1": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      },
+      "3": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      },
+      "5": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      },
+      "10": {
+        "mean": 0.4615,
+        "evaluated_count": 13
+      }
+    },
+    "chunk_recall": {
+      "1": {
+        "mean": 0.2,
+        "evaluated_count": 5
+      },
+      "3": {
+        "mean": 0.4,
+        "evaluated_count": 5
+      },
+      "5": {
+        "mean": 0.4,
+        "evaluated_count": 5
+      },
+      "10": {
+        "mean": 0.4,
+        "evaluated_count": 5
+      }
+    },
+    "chunk_precision": {
+      "1": {
+        "mean": 0.2,
+        "evaluated_count": 5
+      },
+      "3": {
+        "mean": 0.1333,
+        "evaluated_count": 5
+      },
+      "5": {
+        "mean": 0.08,
+        "evaluated_count": 5
+      },
+      "10": {
+        "mean": 0.04,
+        "evaluated_count": 5
+      }
+    },
+    "chunk_mrr": {
+      "1": {
+        "mean": 0.2,
+        "evaluated_count": 5
+      },
+      "3": {
+        "mean": 0.3,
+        "evaluated_count": 5
+      },
+      "5": {
+        "mean": 0.3,
+        "evaluated_count": 5
+      },
+      "10": {
+        "mean": 0.3,
+        "evaluated_count": 5
+      }
+    },
+    "chunk_ndcg": {
+      "1": {
+        "mean": 0.2,
+        "evaluated_count": 5
+      },
+      "3": {
+        "mean": 0.3262,
+        "evaluated_count": 5
+      },
+      "5": {
+        "mean": 0.3262,
+        "evaluated_count": 5
+      },
+      "10": {
+        "mean": 0.3262,
+        "evaluated_count": 5
+      }
+    },
+    "chunk_hit_rate": {
+      "1": {
+        "mean": 0.2,
+        "evaluated_count": 5
+      },
+      "3": {
+        "mean": 0.4,
+        "evaluated_count": 5
+      },
+      "5": {
+        "mean": 0.4,
+        "evaluated_count": 5
+      },
+      "10": {
+        "mean": 0.4,
+        "evaluated_count": 5
+      }
+    },
+    "by_category": {
+      "cs.LG": {
+        "query_count": 5,
+        "paper_recall": {
+          "1": 0.5,
+          "3": 0.5,
+          "5": 0.5,
+          "10": 0.5
+        },
+        "paper_mrr": {
+          "1": 0.6,
+          "3": 0.6,
+          "5": 0.6,
+          "10": 0.6
+        },
+        "paper_ndcg": {
+          "1": 0.6,
+          "3": 0.5835,
+          "5": 0.5835,
+          "10": 0.5835
+        }
+      },
+      "cs.CL": {
+        "query_count": 6,
+        "paper_recall": {
+          "1": 0.5,
+          "3": 0.5,
+          "5": 0.5,
+          "10": 0.5
+        },
+        "paper_mrr": {
+          "1": 0.5,
+          "3": 0.5,
+          "5": 0.5,
+          "10": 0.5
+        },
+        "paper_ndcg": {
+          "1": 0.5,
+          "3": 0.5,
+          "5": 0.5,
+          "10": 0.5
+        }
+      },
+      "cs.CV": {
+        "query_count": 2,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        }
+      },
+      "biomedical": {
+        "query_count": 1,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        }
+      },
+      "cooking": {
+        "query_count": 1,
+        "paper_recall": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_mrr": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        },
+        "paper_ndcg": {
+          "1": 0,
+          "3": 0,
+          "5": 0,
+          "10": 0
+        }
+      }
+    }
+  },
+  "failed_queries": []
+}

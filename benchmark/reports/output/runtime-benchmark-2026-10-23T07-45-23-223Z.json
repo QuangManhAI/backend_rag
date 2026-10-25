@@ -1,0 +1,3414 @@
+{
+  "title": "RAG Runtime & Load Benchmark",
+  "timestamp": "2026-10-23T07:45:23.222Z",
+  "base_url": "http://localhost:3000",
+  "scenarios": [
+    {
+      "config": {
+        "name": "Scenario-A-Smoke",
+        "description": "Quick smoke test verifying API connectivity and response format",
+        "url": "http://localhost:3000/api/v1/rag/chat/stream",
+        "queries": [
+          "How does low-rank adaptation LoRA optimize large models?",
+          "What is the rank parameter r in LoRA decomposition?"
+        ],
+        "concurrency": 1,
+        "total_requests": 3,
+        "warmup_requests": 0,
+        "timeout_ms": 10000,
+        "is_streaming": true
+      },
+      "duration_ms": 278,
+      "warmup_duration_ms": 0,
+      "aggregated_metrics": {
+        "scenario": "Scenario-A-Smoke",
+        "concurrency_level": 1,
+        "duration_ms": 278,
+        "total_requests": 3,
+        "successful_requests": 3,
+        "failed_requests": 0,
+        "timeout_requests": 0,
+        "aborted_requests": 0,
+        "success_rate": 100,
+        "error_rate": 0,
+        "timeout_rate": 0,
+        "throughput": {
+          "started_rps": 10.79,
+          "completed_rps": 10.79,
+          "successful_rps": 10.79
+        },
+        "total_latency": {
+          "count": 3,
+          "min": 91.62,
+          "max": 94.33,
+          "mean": 92.59,
+          "p50": 91.81,
+          "p90": 93.83,
+          "p95": 94.08,
+          "p99": 94.28
+        },
+        "ttft": {
+          "count": 3,
+          "min": 49.67,
+          "max": 52.74,
+          "mean": 50.76,
+          "p50": 49.86,
+          "p90": 52.16,
+          "p95": 52.45,
+          "p99": 52.68
+        },
+        "completion_time": {
+          "count": 3,
+          "min": 91.62,
+          "max": 94.33,
+          "mean": 92.59,
+          "p50": 91.81,
+          "p90": 93.83,
+          "p95": 94.08,
+          "p99": 94.28
+        },
+        "status_codes": {
+          "200": 3
+        },
+        "server_timings_avg": {
+          "embed_ms": 25,
+          "route_ms": 2,
+          "search_ms": 15,
+          "rerank_ms": 3,
+          "llm_ms": 35,
+          "total_ms": 80
+        }
+      },
+      "measurements": [
+        {
+          "request_id": "mock_v7n34b",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-A-Smoke",
+          "concurrency_level": 1,
+          "start_time_ms": 2240.327,
+          "end_time_ms": 2334.6531,
+          "total_latency_ms": 94.33,
+          "ttft_ms": 52.74,
+          "completion_time_ms": 94.33,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_46u2cy",
+          "query": "What is the rank parameter r in LoRA decomposition?",
+          "scenario": "Scenario-A-Smoke",
+          "concurrency_level": 1,
+          "start_time_ms": 2334.8029,
+          "end_time_ms": 2426.4247,
+          "total_latency_ms": 91.62,
+          "ttft_ms": 49.67,
+          "completion_time_ms": 91.62,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_g8732s",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-A-Smoke",
+          "concurrency_level": 1,
+          "start_time_ms": 2426.4835,
+          "end_time_ms": 2518.2898,
+          "total_latency_ms": 91.81,
+          "ttft_ms": 49.86,
+          "completion_time_ms": 91.81,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        }
+      ],
+      "resource_summary": {
+        "start_snapshot": {
+          "label": "start",
+          "timestamp": "2026-10-23T07:45:13.929Z",
+          "memory_mb": {
+            "rss": 398.88,
+            "heap_total": 332.64,
+            "heap_used": 242.86,
+            "external": 11.62
+          },
+          "cpu_usage_us": {
+            "user": 0,
+            "system": 0
+          }
+        },
+        "end_snapshot": {
+          "label": "end",
+          "timestamp": "2026-10-23T07:45:14.207Z",
+          "memory_mb": {
+            "rss": 399.04,
+            "heap_total": 332.64,
+            "heap_used": 243.31,
+            "external": 11.62
+          },
+          "cpu_usage_us": {
+            "user": 0,
+            "system": 0
+          }
+        },
+        "peak_rss_mb": 399.04,
+        "peak_heap_used_mb": 243.31,
+        "delta_rss_mb": 0.16,
+        "delta_heap_used_mb": 0.45,
+        "total_cpu_time_ms": 0
+      },
+      "aborted_early": false
+    },
+    {
+      "config": {
+        "name": "Scenario-B-Baseline",
+        "description": "Low-concurrency baseline measurement with separate warm-up",
+        "url": "http://localhost:3000/api/v1/rag/chat/stream",
+        "queries": [
+          "How does low-rank adaptation LoRA optimize large models?",
+          "What is the rank parameter r in LoRA decomposition?",
+          "How does the self-attention mechanism work in Transformers?",
+          "What is the scaled dot-product formula for attention?",
+          "How do deep residual connections address degradation in deep networks?"
+        ],
+        "concurrency": 1,
+        "total_requests": 10,
+        "warmup_requests": 2,
+        "timeout_ms": 30000,
+        "is_streaming": true
+      },
+      "duration_ms": 958,
+      "warmup_duration_ms": 182,
+      "aggregated_metrics": {
+        "scenario": "Scenario-B-Baseline",
+        "concurrency_level": 1,
+        "duration_ms": 958,
+        "total_requests": 10,
+        "successful_requests": 10,
+        "failed_requests": 0,
+        "timeout_requests": 0,
+        "aborted_requests": 0,
+        "success_rate": 100,
+        "error_rate": 0,
+        "timeout_rate": 0,
+        "throughput": {
+          "started_rps": 10.44,
+          "completed_rps": 10.44,
+          "successful_rps": 10.44
+        },
+        "total_latency": {
+          "count": 10,
+          "min": 90.5,
+          "max": 133.75,
+          "mean": 95.71,
+          "p50": 91.53,
+          "p90": 96.78,
+          "p95": 115.26,
+          "p99": 130.05
+        },
+        "ttft": {
+          "count": 10,
+          "min": 48.72,
+          "max": 51.24,
+          "mean": 49.99,
+          "p50": 50.01,
+          "p90": 50.69,
+          "p95": 50.97,
+          "p99": 51.19
+        },
+        "completion_time": {
+          "count": 10,
+          "min": 90.5,
+          "max": 133.75,
+          "mean": 95.71,
+          "p50": 91.53,
+          "p90": 96.78,
+          "p95": 115.26,
+          "p99": 130.05
+        },
+        "status_codes": {
+          "200": 10
+        },
+        "server_timings_avg": {
+          "embed_ms": 25,
+          "route_ms": 2,
+          "search_ms": 15,
+          "rerank_ms": 3,
+          "llm_ms": 35,
+          "total_ms": 80
+        }
+      },
+      "measurements": [
+        {
+          "request_id": "mock_upb37z",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-B-Baseline",
+          "concurrency_level": 1,
+          "start_time_ms": 2701.0876,
+          "end_time_ms": 2834.8326,
+          "total_latency_ms": 133.75,
+          "ttft_ms": 49.77,
+          "completion_time_ms": 133.75,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_g42o4j",
+          "query": "What is the rank parameter r in LoRA decomposition?",
+          "scenario": "Scenario-B-Baseline",
+          "concurrency_level": 1,
+          "start_time_ms": 2834.8727,
+          "end_time_ms": 2925.8062,
+          "total_latency_ms": 90.93,
+          "ttft_ms": 49.34,
+          "completion_time_ms": 90.93,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_319uh5",
+          "query": "How does the self-attention mechanism work in Transformers?",
+          "scenario": "Scenario-B-Baseline",
+          "concurrency_level": 1,
+          "start_time_ms": 2925.8609,
+          "end_time_ms": 3017.5572,
+          "total_latency_ms": 91.7,
+          "ttft_ms": 50,
+          "completion_time_ms": 91.7,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_2tf9y0",
+          "query": "What is the scaled dot-product formula for attention?",
+          "scenario": "Scenario-B-Baseline",
+          "concurrency_level": 1,
+          "start_time_ms": 3017.7201,
+          "end_time_ms": 3110.3906,
+          "total_latency_ms": 92.67,
+          "ttft_ms": 50.59,
+          "completion_time_ms": 92.67,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_0pbzfl",
+          "query": "How do deep residual connections address degradation in deep networks?",
+          "scenario": "Scenario-B-Baseline",
+          "concurrency_level": 1,
+          "start_time_ms": 3110.5974,
+          "end_time_ms": 3201.0998,
+          "total_latency_ms": 90.5,
+          "ttft_ms": 48.72,
+          "completion_time_ms": 90.5,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_9kb9yi",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-B-Baseline",
+          "concurrency_level": 1,
+          "start_time_ms": 3201.1848,
+          "end_time_ms": 3292.6338,
+          "total_latency_ms": 91.45,
+          "ttft_ms": 49.54,
+          "completion_time_ms": 91.45,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_ukyj0s",
+          "query": "What is the rank parameter r in LoRA decomposition?",
+          "scenario": "Scenario-B-Baseline",
+          "concurrency_level": 1,
+          "start_time_ms": 3292.7319,
+          "end_time_ms": 3384.0331,
+          "total_latency_ms": 91.3,
+          "ttft_ms": 50.1,
+          "completion_time_ms": 91.3,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_tvjien",
+          "query": "How does the self-attention mechanism work in Transformers?",
+          "scenario": "Scenario-B-Baseline",
+          "concurrency_level": 1,
+          "start_time_ms": 3384.0801,
+          "end_time_ms": 3475.8781,
+          "total_latency_ms": 91.8,
+          "ttft_ms": 50.63,
+          "completion_time_ms": 91.8,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_zwvmtr",
+          "query": "What is the scaled dot-product formula for attention?",
+          "scenario": "Scenario-B-Baseline",
+          "concurrency_level": 1,
+          "start_time_ms": 3475.896,
+          "end_time_ms": 3567.2852,
+          "total_latency_ms": 91.39,
+          "ttft_ms": 51.24,
+          "completion_time_ms": 91.39,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_bhfstx",
+          "query": "How do deep residual connections address degradation in deep networks?",
+          "scenario": "Scenario-B-Baseline",
+          "concurrency_level": 1,
+          "start_time_ms": 3567.3078,
+          "end_time_ms": 3658.9151,
+          "total_latency_ms": 91.61,
+          "ttft_ms": 50.01,
+          "completion_time_ms": 91.61,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        }
+      ],
+      "resource_summary": {
+        "start_snapshot": {
+          "label": "start",
+          "timestamp": "2026-10-23T07:45:14.208Z",
+          "memory_mb": {
+            "rss": 399.04,
+            "heap_total": 332.64,
+            "heap_used": 243.04,
+            "external": 11.62
+          },
+          "cpu_usage_us": {
+            "user": 0,
+            "system": 0
+          }
+        },
+        "end_snapshot": {
+          "label": "end",
+          "timestamp": "2026-10-23T07:45:15.348Z",
+          "memory_mb": {
+            "rss": 399.11,
+            "heap_total": 332.89,
+            "heap_used": 243.14,
+            "external": 11.62
+          },
+          "cpu_usage_us": {
+            "user": 0,
+            "system": 0
+          }
+        },
+        "peak_rss_mb": 399.11,
+        "peak_heap_used_mb": 243.14,
+        "delta_rss_mb": 0.07,
+        "delta_heap_used_mb": 0.1,
+        "total_cpu_time_ms": 0
+      },
+      "aborted_early": false
+    },
+    {
+      "config": {
+        "name": "Scenario-C-Concurrency-1",
+        "description": "Concurrency test at concurrency level 1",
+        "url": "http://localhost:3000/api/v1/rag/chat/stream",
+        "queries": [
+          "How does low-rank adaptation LoRA optimize large models?",
+          "What is the rank parameter r in LoRA decomposition?",
+          "How does the self-attention mechanism work in Transformers?",
+          "What is the scaled dot-product formula for attention?",
+          "How do deep residual connections address degradation in deep networks?"
+        ],
+        "concurrency": 1,
+        "total_requests": 6,
+        "warmup_requests": 1,
+        "timeout_ms": 45000,
+        "is_streaming": true
+      },
+      "duration_ms": 550,
+      "warmup_duration_ms": 91,
+      "aggregated_metrics": {
+        "scenario": "Scenario-C-Concurrency-1",
+        "concurrency_level": 1,
+        "duration_ms": 550,
+        "total_requests": 6,
+        "successful_requests": 6,
+        "failed_requests": 0,
+        "timeout_requests": 0,
+        "aborted_requests": 0,
+        "success_rate": 100,
+        "error_rate": 0,
+        "timeout_rate": 0,
+        "throughput": {
+          "started_rps": 10.91,
+          "completed_rps": 10.91,
+          "successful_rps": 10.91
+        },
+        "total_latency": {
+          "count": 6,
+          "min": 88.34,
+          "max": 94.8,
+          "mean": 91.64,
+          "p50": 91.66,
+          "p90": 93.3,
+          "p95": 94.05,
+          "p99": 94.65
+        },
+        "ttft": {
+          "count": 6,
+          "min": 46.75,
+          "max": 50,
+          "mean": 49.26,
+          "p50": 49.72,
+          "p90": 49.89,
+          "p95": 49.94,
+          "p99": 49.99
+        },
+        "completion_time": {
+          "count": 6,
+          "min": 88.34,
+          "max": 94.8,
+          "mean": 91.64,
+          "p50": 91.66,
+          "p90": 93.3,
+          "p95": 94.05,
+          "p99": 94.65
+        },
+        "status_codes": {
+          "200": 6
+        },
+        "server_timings_avg": {
+          "embed_ms": 25,
+          "route_ms": 2,
+          "search_ms": 15,
+          "rerank_ms": 3,
+          "llm_ms": 35,
+          "total_ms": 80
+        }
+      },
+      "measurements": [
+        {
+          "request_id": "mock_2jpubk",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-C-Concurrency-1",
+          "concurrency_level": 1,
+          "start_time_ms": 3750.9892,
+          "end_time_ms": 3842.7328,
+          "total_latency_ms": 91.74,
+          "ttft_ms": 49.71,
+          "completion_time_ms": 91.74,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_ft7vbo",
+          "query": "What is the rank parameter r in LoRA decomposition?",
+          "scenario": "Scenario-C-Concurrency-1",
+          "concurrency_level": 1,
+          "start_time_ms": 3842.7479,
+          "end_time_ms": 3934.327,
+          "total_latency_ms": 91.58,
+          "ttft_ms": 49.73,
+          "completion_time_ms": 91.58,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_0epc62",
+          "query": "How does the self-attention mechanism work in Transformers?",
+          "scenario": "Scenario-C-Concurrency-1",
+          "concurrency_level": 1,
+          "start_time_ms": 3934.3413,
+          "end_time_ms": 4029.1442,
+          "total_latency_ms": 94.8,
+          "ttft_ms": 50,
+          "completion_time_ms": 94.8,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_fx3sxe",
+          "query": "What is the scaled dot-product formula for attention?",
+          "scenario": "Scenario-C-Concurrency-1",
+          "concurrency_level": 1,
+          "start_time_ms": 4029.1591,
+          "end_time_ms": 4117.496,
+          "total_latency_ms": 88.34,
+          "ttft_ms": 46.75,
+          "completion_time_ms": 88.34,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_x5n6wh",
+          "query": "How do deep residual connections address degradation in deep networks?",
+          "scenario": "Scenario-C-Concurrency-1",
+          "concurrency_level": 1,
+          "start_time_ms": 4117.5075,
+          "end_time_ms": 4209.0902,
+          "total_latency_ms": 91.58,
+          "ttft_ms": 49.62,
+          "completion_time_ms": 91.58,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_5tdnzv",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-C-Concurrency-1",
+          "concurrency_level": 1,
+          "start_time_ms": 4209.107,
+          "end_time_ms": 4300.8959,
+          "total_latency_ms": 91.79,
+          "ttft_ms": 49.77,
+          "completion_time_ms": 91.79,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        }
+      ],
+      "resource_summary": {
+        "start_snapshot": {
+          "label": "start",
+          "timestamp": "2026-10-23T07:45:15.349Z",
+          "memory_mb": {
+            "rss": 399.11,
+            "heap_total": 332.89,
+            "heap_used": 243.16,
+            "external": 11.62
+          },
+          "cpu_usage_us": {
+            "user": 0,
+            "system": 0
+          }
+        },
+        "end_snapshot": {
+          "label": "end",
+          "timestamp": "2026-10-23T07:45:15.990Z",
+          "memory_mb": {
+            "rss": 399.11,
+            "heap_total": 332.89,
+            "heap_used": 243.21,
+            "external": 11.62
+          },
+          "cpu_usage_us": {
+            "user": 0,
+            "system": 0
+          }
+        },
+        "peak_rss_mb": 399.11,
+        "peak_heap_used_mb": 243.21,
+        "delta_rss_mb": 0,
+        "delta_heap_used_mb": 0.05,
+        "total_cpu_time_ms": 0
+      },
+      "aborted_early": false
+    },
+    {
+      "config": {
+        "name": "Scenario-C-Concurrency-2",
+        "description": "Concurrency test at concurrency level 2",
+        "url": "http://localhost:3000/api/v1/rag/chat/stream",
+        "queries": [
+          "How does low-rank adaptation LoRA optimize large models?",
+          "What is the rank parameter r in LoRA decomposition?",
+          "How does the self-attention mechanism work in Transformers?",
+          "What is the scaled dot-product formula for attention?",
+          "How do deep residual connections address degradation in deep networks?"
+        ],
+        "concurrency": 2,
+        "total_requests": 6,
+        "warmup_requests": 1,
+        "timeout_ms": 45000,
+        "is_streaming": true
+      },
+      "duration_ms": 533,
+      "warmup_duration_ms": 93,
+      "aggregated_metrics": {
+        "scenario": "Scenario-C-Concurrency-2",
+        "concurrency_level": 2,
+        "duration_ms": 533,
+        "total_requests": 6,
+        "successful_requests": 6,
+        "failed_requests": 0,
+        "timeout_requests": 0,
+        "aborted_requests": 0,
+        "success_rate": 100,
+        "error_rate": 0,
+        "timeout_rate": 0,
+        "throughput": {
+          "started_rps": 11.26,
+          "completed_rps": 11.26,
+          "successful_rps": 11.26
+        },
+        "total_latency": {
+          "count": 6,
+          "min": 90.29,
+          "max": 184.44,
+          "mean": 163.82,
+          "p50": 176.3,
+          "p90": 182.6,
+          "p95": 183.52,
+          "p99": 184.26
+        },
+        "ttft": {
+          "count": 6,
+          "min": 47.98,
+          "max": 141.7,
+          "mean": 124.43,
+          "p50": 140.22,
+          "p90": 141.51,
+          "p95": 141.6,
+          "p99": 141.68
+        },
+        "completion_time": {
+          "count": 6,
+          "min": 90.29,
+          "max": 184.44,
+          "mean": 163.82,
+          "p50": 176.3,
+          "p90": 182.6,
+          "p95": 183.52,
+          "p99": 184.26
+        },
+        "status_codes": {
+          "200": 6
+        },
+        "server_timings_avg": {
+          "embed_ms": 25,
+          "route_ms": 2,
+          "search_ms": 15,
+          "rerank_ms": 3,
+          "llm_ms": 35,
+          "total_ms": 80
+        }
+      },
+      "measurements": [
+        {
+          "request_id": "mock_exybrw",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-C-Concurrency-2",
+          "concurrency_level": 2,
+          "start_time_ms": 4394.3834,
+          "end_time_ms": 4484.6741,
+          "total_latency_ms": 90.29,
+          "ttft_ms": 47.98,
+          "completion_time_ms": 90.29,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_zb9dty",
+          "query": "What is the rank parameter r in LoRA decomposition?",
+          "scenario": "Scenario-C-Concurrency-2",
+          "concurrency_level": 2,
+          "start_time_ms": 4394.4054,
+          "end_time_ms": 4575.1667,
+          "total_latency_ms": 180.76,
+          "ttft_ms": 141.32,
+          "completion_time_ms": 180.76,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_jbtk4b",
+          "query": "How does the self-attention mechanism work in Transformers?",
+          "scenario": "Scenario-C-Concurrency-2",
+          "concurrency_level": 2,
+          "start_time_ms": 4484.7305,
+          "end_time_ms": 4660.4327,
+          "total_latency_ms": 175.7,
+          "ttft_ms": 140.44,
+          "completion_time_ms": 175.7,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_w9j0k1",
+          "query": "What is the scaled dot-product formula for attention?",
+          "scenario": "Scenario-C-Concurrency-2",
+          "concurrency_level": 2,
+          "start_time_ms": 4575.2027,
+          "end_time_ms": 4752.0883,
+          "total_latency_ms": 176.89,
+          "ttft_ms": 135.16,
+          "completion_time_ms": 176.89,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_yk1byp",
+          "query": "How do deep residual connections address degradation in deep networks?",
+          "scenario": "Scenario-C-Concurrency-2",
+          "concurrency_level": 2,
+          "start_time_ms": 4660.5082,
+          "end_time_ms": 4844.9519,
+          "total_latency_ms": 184.44,
+          "ttft_ms": 141.7,
+          "completion_time_ms": 184.44,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_gtjn82",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-C-Concurrency-2",
+          "concurrency_level": 2,
+          "start_time_ms": 4752.1307,
+          "end_time_ms": 4926.9749,
+          "total_latency_ms": 174.84,
+          "ttft_ms": 139.99,
+          "completion_time_ms": 174.84,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        }
+      ],
+      "resource_summary": {
+        "start_snapshot": {
+          "label": "start",
+          "timestamp": "2026-10-23T07:45:15.990Z",
+          "memory_mb": {
+            "rss": 399.11,
+            "heap_total": 332.89,
+            "heap_used": 243.23,
+            "external": 11.62
+          },
+          "cpu_usage_us": {
+            "user": 0,
+            "system": 0
+          }
+        },
+        "end_snapshot": {
+          "label": "end",
+          "timestamp": "2026-10-23T07:45:16.616Z",
+          "memory_mb": {
+            "rss": 399.11,
+            "heap_total": 332.89,
+            "heap_used": 243.28,
+            "external": 11.62
+          },
+          "cpu_usage_us": {
+            "user": 0,
+            "system": 0
+          }
+        },
+        "peak_rss_mb": 399.11,
+        "peak_heap_used_mb": 243.28,
+        "delta_rss_mb": 0,
+        "delta_heap_used_mb": 0.05,
+        "total_cpu_time_ms": 0
+      },
+      "aborted_early": false
+    },
+    {
+      "config": {
+        "name": "Scenario-C-Concurrency-4",
+        "description": "Concurrency test at concurrency level 4",
+        "url": "http://localhost:3000/api/v1/rag/chat/stream",
+        "queries": [
+          "How does low-rank adaptation LoRA optimize large models?",
+          "What is the rank parameter r in LoRA decomposition?",
+          "How does the self-attention mechanism work in Transformers?",
+          "What is the scaled dot-product formula for attention?",
+          "How do deep residual connections address degradation in deep networks?"
+        ],
+        "concurrency": 4,
+        "total_requests": 12,
+        "warmup_requests": 1,
+        "timeout_ms": 45000,
+        "is_streaming": true
+      },
+      "duration_ms": 1108,
+      "warmup_duration_ms": 90,
+      "aggregated_metrics": {
+        "scenario": "Scenario-C-Concurrency-4",
+        "concurrency_level": 4,
+        "duration_ms": 1108,
+        "total_requests": 12,
+        "successful_requests": 12,
+        "failed_requests": 0,
+        "timeout_requests": 0,
+        "aborted_requests": 0,
+        "success_rate": 100,
+        "error_rate": 0,
+        "timeout_rate": 0,
+        "throughput": {
+          "started_rps": 10.83,
+          "completed_rps": 10.83,
+          "successful_rps": 10.83
+        },
+        "total_latency": {
+          "count": 12,
+          "min": 91.45,
+          "max": 374.95,
+          "mean": 322.04,
+          "p50": 366.41,
+          "p90": 373.96,
+          "p95": 374.85,
+          "p99": 374.93
+        },
+        "ttft": {
+          "count": 12,
+          "min": 49.71,
+          "max": 333.21,
+          "mean": 280.39,
+          "p50": 324.81,
+          "p90": 332.39,
+          "p95": 333.18,
+          "p99": 333.2
+        },
+        "completion_time": {
+          "count": 12,
+          "min": 91.45,
+          "max": 374.95,
+          "mean": 322.04,
+          "p50": 366.41,
+          "p90": 373.96,
+          "p95": 374.85,
+          "p99": 374.93
+        },
+        "status_codes": {
+          "200": 12
+        },
+        "server_timings_avg": {
+          "embed_ms": 25,
+          "route_ms": 2,
+          "search_ms": 15,
+          "rerank_ms": 3,
+          "llm_ms": 35,
+          "total_ms": 80
+        }
+      },
+      "measurements": [
+        {
+          "request_id": "mock_g3i65s",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-C-Concurrency-4",
+          "concurrency_level": 4,
+          "start_time_ms": 5017.4088,
+          "end_time_ms": 5108.8611,
+          "total_latency_ms": 91.45,
+          "ttft_ms": 49.71,
+          "completion_time_ms": 91.45,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_bs1ywv",
+          "query": "What is the rank parameter r in LoRA decomposition?",
+          "scenario": "Scenario-C-Concurrency-4",
+          "concurrency_level": 4,
+          "start_time_ms": 5017.438,
+          "end_time_ms": 5200.6245,
+          "total_latency_ms": 183.19,
+          "ttft_ms": 141.48,
+          "completion_time_ms": 183.19,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_xe95j1",
+          "query": "How does the self-attention mechanism work in Transformers?",
+          "scenario": "Scenario-C-Concurrency-4",
+          "concurrency_level": 4,
+          "start_time_ms": 5017.442,
+          "end_time_ms": 5292.9152,
+          "total_latency_ms": 275.47,
+          "ttft_ms": 233.15,
+          "completion_time_ms": 275.47,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_hht7rk",
+          "query": "What is the scaled dot-product formula for attention?",
+          "scenario": "Scenario-C-Concurrency-4",
+          "concurrency_level": 4,
+          "start_time_ms": 5017.4437,
+          "end_time_ms": 5383.877,
+          "total_latency_ms": 366.43,
+          "ttft_ms": 324.7,
+          "completion_time_ms": 366.43,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_11ipre",
+          "query": "How do deep residual connections address degradation in deep networks?",
+          "scenario": "Scenario-C-Concurrency-4",
+          "concurrency_level": 4,
+          "start_time_ms": 5108.9026,
+          "end_time_ms": 5475.5532,
+          "total_latency_ms": 366.65,
+          "ttft_ms": 324.81,
+          "completion_time_ms": 366.65,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_3ttnxp",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-C-Concurrency-4",
+          "concurrency_level": 4,
+          "start_time_ms": 5200.6604,
+          "end_time_ms": 5566.9513,
+          "total_latency_ms": 366.29,
+          "ttft_ms": 325.49,
+          "completion_time_ms": 366.29,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_40vvs8",
+          "query": "What is the rank parameter r in LoRA decomposition?",
+          "scenario": "Scenario-C-Concurrency-4",
+          "concurrency_level": 4,
+          "start_time_ms": 5292.9828,
+          "end_time_ms": 5658.7233,
+          "total_latency_ms": 365.74,
+          "ttft_ms": 324.3,
+          "completion_time_ms": 365.74,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_8v54xz",
+          "query": "How does the self-attention mechanism work in Transformers?",
+          "scenario": "Scenario-C-Concurrency-4",
+          "concurrency_level": 4,
+          "start_time_ms": 5383.9046,
+          "end_time_ms": 5750.2943,
+          "total_latency_ms": 366.39,
+          "ttft_ms": 324.83,
+          "completion_time_ms": 366.39,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_0hbq5g",
+          "query": "What is the scaled dot-product formula for attention?",
+          "scenario": "Scenario-C-Concurrency-4",
+          "concurrency_level": 4,
+          "start_time_ms": 5475.5921,
+          "end_time_ms": 5842.0288,
+          "total_latency_ms": 366.44,
+          "ttft_ms": 324.81,
+          "completion_time_ms": 366.44,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_3py0mc",
+          "query": "How do deep residual connections address degradation in deep networks?",
+          "scenario": "Scenario-C-Concurrency-4",
+          "concurrency_level": 4,
+          "start_time_ms": 5566.9898,
+          "end_time_ms": 5933.6621,
+          "total_latency_ms": 366.67,
+          "ttft_ms": 324.98,
+          "completion_time_ms": 366.67,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_hmdgyl",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-C-Concurrency-4",
+          "concurrency_level": 4,
+          "start_time_ms": 5658.7662,
+          "end_time_ms": 6033.539,
+          "total_latency_ms": 374.77,
+          "ttft_ms": 333.21,
+          "completion_time_ms": 374.77,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_ny690v",
+          "query": "What is the rank parameter r in LoRA decomposition?",
+          "scenario": "Scenario-C-Concurrency-4",
+          "concurrency_level": 4,
+          "start_time_ms": 5750.3368,
+          "end_time_ms": 6125.2854,
+          "total_latency_ms": 374.95,
+          "ttft_ms": 333.16,
+          "completion_time_ms": 374.95,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        }
+      ],
+      "resource_summary": {
+        "start_snapshot": {
+          "label": "start",
+          "timestamp": "2026-10-23T07:45:16.617Z",
+          "memory_mb": {
+            "rss": 399.12,
+            "heap_total": 332.89,
+            "heap_used": 243.3,
+            "external": 11.62
+          },
+          "cpu_usage_us": {
+            "user": 0,
+            "system": 0
+          }
+        },
+        "end_snapshot": {
+          "label": "end",
+          "timestamp": "2026-10-23T07:45:17.814Z",
+          "memory_mb": {
+            "rss": 399.12,
+            "heap_total": 332.89,
+            "heap_used": 243.38,
+            "external": 11.62
+          },
+          "cpu_usage_us": {
+            "user": 0,
+            "system": 0
+          }
+        },
+        "peak_rss_mb": 399.12,
+        "peak_heap_used_mb": 243.38,
+        "delta_rss_mb": 0,
+        "delta_heap_used_mb": 0.08,
+        "total_cpu_time_ms": 0
+      },
+      "aborted_early": false
+    },
+    {
+      "config": {
+        "name": "Scenario-C-Concurrency-8",
+        "description": "Concurrency test at concurrency level 8",
+        "url": "http://localhost:3000/api/v1/rag/chat/stream",
+        "queries": [
+          "How does low-rank adaptation LoRA optimize large models?",
+          "What is the rank parameter r in LoRA decomposition?",
+          "How does the self-attention mechanism work in Transformers?",
+          "What is the scaled dot-product formula for attention?",
+          "How do deep residual connections address degradation in deep networks?"
+        ],
+        "concurrency": 8,
+        "total_requests": 24,
+        "warmup_requests": 1,
+        "timeout_ms": 45000,
+        "is_streaming": true
+      },
+      "duration_ms": 2241,
+      "warmup_duration_ms": 91,
+      "aggregated_metrics": {
+        "scenario": "Scenario-C-Concurrency-8",
+        "concurrency_level": 8,
+        "duration_ms": 2241,
+        "total_requests": 24,
+        "successful_requests": 24,
+        "failed_requests": 0,
+        "timeout_requests": 0,
+        "aborted_requests": 0,
+        "success_rate": 100,
+        "error_rate": 0,
+        "timeout_rate": 0,
+        "throughput": {
+          "started_rps": 10.71,
+          "completed_rps": 10.71,
+          "successful_rps": 10.71
+        },
+        "total_latency": {
+          "count": 24,
+          "min": 92.03,
+          "max": 758.22,
+          "mean": 637.72,
+          "p50": 741.45,
+          "p90": 756.17,
+          "p95": 758.12,
+          "p99": 758.2
+        },
+        "ttft": {
+          "count": 24,
+          "min": 49.85,
+          "max": 716.62,
+          "mean": 595.26,
+          "p50": 699.71,
+          "p90": 714.01,
+          "p95": 716.6,
+          "p99": 716.62
+        },
+        "completion_time": {
+          "count": 24,
+          "min": 92.03,
+          "max": 758.22,
+          "mean": 637.72,
+          "p50": 741.45,
+          "p90": 756.17,
+          "p95": 758.12,
+          "p99": 758.2
+        },
+        "status_codes": {
+          "200": 24
+        },
+        "server_timings_avg": {
+          "embed_ms": 25,
+          "route_ms": 2,
+          "search_ms": 15,
+          "rerank_ms": 3,
+          "llm_ms": 35,
+          "total_ms": 80
+        }
+      },
+      "measurements": [
+        {
+          "request_id": "mock_rue7vn",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 6217.189,
+          "end_time_ms": 6309.2167,
+          "total_latency_ms": 92.03,
+          "ttft_ms": 49.85,
+          "completion_time_ms": 92.03,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_z38nxh",
+          "query": "What is the rank parameter r in LoRA decomposition?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 6217.222,
+          "end_time_ms": 6400.309,
+          "total_latency_ms": 183.09,
+          "ttft_ms": 141.35,
+          "completion_time_ms": 183.09,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_z4aw0s",
+          "query": "How does the self-attention mechanism work in Transformers?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 6217.2261,
+          "end_time_ms": 6500.2723,
+          "total_latency_ms": 283.05,
+          "ttft_ms": 233.96,
+          "completion_time_ms": 283.05,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_dtnbaw",
+          "query": "What is the scaled dot-product formula for attention?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 6217.228,
+          "end_time_ms": 6591.8149,
+          "total_latency_ms": 374.59,
+          "ttft_ms": 332.88,
+          "completion_time_ms": 374.59,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_yhbwdh",
+          "query": "How do deep residual connections address degradation in deep networks?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 6217.2298,
+          "end_time_ms": 6683.4029,
+          "total_latency_ms": 466.17,
+          "ttft_ms": 424.47,
+          "completion_time_ms": 466.17,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_2t2uuq",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 6217.2313,
+          "end_time_ms": 6775.0682,
+          "total_latency_ms": 557.84,
+          "ttft_ms": 516.17,
+          "completion_time_ms": 557.84,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_gg0gh4",
+          "query": "What is the rank parameter r in LoRA decomposition?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 6217.2328,
+          "end_time_ms": 6874.9506,
+          "total_latency_ms": 657.72,
+          "ttft_ms": 616.19,
+          "completion_time_ms": 657.72,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_8os8vk",
+          "query": "How does the self-attention mechanism work in Transformers?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 6217.4308,
+          "end_time_ms": 6966.5887,
+          "total_latency_ms": 749.16,
+          "ttft_ms": 707.65,
+          "completion_time_ms": 749.16,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_3kt3qu",
+          "query": "What is the scaled dot-product formula for attention?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 6309.2612,
+          "end_time_ms": 7058.5017,
+          "total_latency_ms": 749.24,
+          "ttft_ms": 707.43,
+          "completion_time_ms": 749.24,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_ins0a5",
+          "query": "How do deep residual connections address degradation in deep networks?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 6400.4039,
+          "end_time_ms": 7158.5245,
+          "total_latency_ms": 758.12,
+          "ttft_ms": 716.57,
+          "completion_time_ms": 758.12,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_4pu2st",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 6500.3126,
+          "end_time_ms": 7249.966,
+          "total_latency_ms": 749.65,
+          "ttft_ms": 707.99,
+          "completion_time_ms": 749.65,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_77kh4x",
+          "query": "What is the rank parameter r in LoRA decomposition?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 6591.8536,
+          "end_time_ms": 7350.0783,
+          "total_latency_ms": 758.22,
+          "ttft_ms": 707.97,
+          "completion_time_ms": 758.22,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_h7umc2",
+          "query": "How does the self-attention mechanism work in Transformers?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 6683.4429,
+          "end_time_ms": 7441.5323,
+          "total_latency_ms": 758.09,
+          "ttft_ms": 716.6,
+          "completion_time_ms": 758.09,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_cwgxxz",
+          "query": "What is the scaled dot-product formula for attention?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 6775.1064,
+          "end_time_ms": 7526.8073,
+          "total_latency_ms": 751.7,
+          "ttft_ms": 716.62,
+          "completion_time_ms": 751.7,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_7izgq0",
+          "query": "How do deep residual connections address degradation in deep networks?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 6874.9892,
+          "end_time_ms": 7616.5906,
+          "total_latency_ms": 741.6,
+          "ttft_ms": 699.86,
+          "completion_time_ms": 741.6,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_mxfsxe",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 6966.627,
+          "end_time_ms": 7716.6019,
+          "total_latency_ms": 749.97,
+          "ttft_ms": 699.82,
+          "completion_time_ms": 749.97,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_6p4a70",
+          "query": "What is the rank parameter r in LoRA decomposition?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 7058.5428,
+          "end_time_ms": 7808.5434,
+          "total_latency_ms": 750,
+          "ttft_ms": 708.03,
+          "completion_time_ms": 750,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_xm8kim",
+          "query": "How does the self-attention mechanism work in Transformers?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 7158.5545,
+          "end_time_ms": 7899.832,
+          "total_latency_ms": 741.28,
+          "ttft_ms": 699.58,
+          "completion_time_ms": 741.28,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_t1qcsc",
+          "query": "What is the scaled dot-product formula for attention?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 7250.0055,
+          "end_time_ms": 7993.5629,
+          "total_latency_ms": 743.56,
+          "ttft_ms": 700.18,
+          "completion_time_ms": 743.56,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_oh4whs",
+          "query": "How do deep residual connections address degradation in deep networks?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 7350.1179,
+          "end_time_ms": 8083.0202,
+          "total_latency_ms": 732.9,
+          "ttft_ms": 691.71,
+          "completion_time_ms": 732.9,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_6risfb",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 7441.5823,
+          "end_time_ms": 8174.7323,
+          "total_latency_ms": 733.15,
+          "ttft_ms": 692.35,
+          "completion_time_ms": 733.15,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_2l0xgw",
+          "query": "What is the rank parameter r in LoRA decomposition?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 7526.9577,
+          "end_time_ms": 8268.2614,
+          "total_latency_ms": 741.3,
+          "ttft_ms": 699.34,
+          "completion_time_ms": 741.3,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_7z3apt",
+          "query": "How does the self-attention mechanism work in Transformers?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 7616.7202,
+          "end_time_ms": 8358.2311,
+          "total_latency_ms": 741.51,
+          "ttft_ms": 699.6,
+          "completion_time_ms": 741.51,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_1djm1q",
+          "query": "What is the scaled dot-product formula for attention?",
+          "scenario": "Scenario-C-Concurrency-8",
+          "concurrency_level": 8,
+          "start_time_ms": 7716.6303,
+          "end_time_ms": 8458.0199,
+          "total_latency_ms": 741.39,
+          "ttft_ms": 700.05,
+          "completion_time_ms": 741.39,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        }
+      ],
+      "resource_summary": {
+        "start_snapshot": {
+          "label": "start",
+          "timestamp": "2026-10-23T07:45:17.815Z",
+          "memory_mb": {
+            "rss": 399.12,
+            "heap_total": 332.89,
+            "heap_used": 243.4,
+            "external": 11.62
+          },
+          "cpu_usage_us": {
+            "user": 0,
+            "system": 0
+          }
+        },
+        "end_snapshot": {
+          "label": "end",
+          "timestamp": "2026-10-23T07:45:20.147Z",
+          "memory_mb": {
+            "rss": 399.12,
+            "heap_total": 332.89,
+            "heap_used": 243.53,
+            "external": 11.62
+          },
+          "cpu_usage_us": {
+            "user": 0,
+            "system": 0
+          }
+        },
+        "peak_rss_mb": 399.12,
+        "peak_heap_used_mb": 243.53,
+        "delta_rss_mb": 0,
+        "delta_heap_used_mb": 0.13,
+        "total_cpu_time_ms": 0
+      },
+      "aborted_early": false
+    },
+    {
+      "config": {
+        "name": "Scenario-D-Cache-Miss",
+        "description": "Measures latency on distinct novel queries (LRU miss)",
+        "url": "http://localhost:3000/api/v1/rag/chat/stream",
+        "queries": [
+          "Query variant 1 about LoRA math",
+          "Query variant 2 about LoRA scaling",
+          "Query variant 3 about LoRA ranks",
+          "Query variant 4 about LoRA adapters",
+          "Query variant 5 about LoRA weights"
+        ],
+        "concurrency": 1,
+        "total_requests": 5,
+        "warmup_requests": 0,
+        "timeout_ms": 30000,
+        "is_streaming": true
+      },
+      "duration_ms": 466,
+      "warmup_duration_ms": 0,
+      "aggregated_metrics": {
+        "scenario": "Scenario-D-Cache-Miss",
+        "concurrency_level": 1,
+        "duration_ms": 466,
+        "total_requests": 5,
+        "successful_requests": 5,
+        "failed_requests": 0,
+        "timeout_requests": 0,
+        "aborted_requests": 0,
+        "success_rate": 100,
+        "error_rate": 0,
+        "timeout_rate": 0,
+        "throughput": {
+          "started_rps": 10.73,
+          "completed_rps": 10.73,
+          "successful_rps": 10.73
+        },
+        "total_latency": {
+          "count": 5,
+          "min": 83.3,
+          "max": 99.19,
+          "mean": 93.12,
+          "p50": 92.99,
+          "p90": 99.02,
+          "p95": 99.11,
+          "p99": 99.17
+        },
+        "ttft": {
+          "count": 5,
+          "min": 47.81,
+          "max": 56.67,
+          "mean": 50.85,
+          "p50": 50.35,
+          "p90": 54.52,
+          "p95": 55.59,
+          "p99": 56.45
+        },
+        "completion_time": {
+          "count": 5,
+          "min": 83.3,
+          "max": 99.19,
+          "mean": 93.12,
+          "p50": 92.99,
+          "p90": 99.02,
+          "p95": 99.11,
+          "p99": 99.17
+        },
+        "status_codes": {
+          "200": 5
+        },
+        "server_timings_avg": {
+          "embed_ms": 25,
+          "route_ms": 2,
+          "search_ms": 15,
+          "rerank_ms": 3,
+          "llm_ms": 35,
+          "total_ms": 80
+        }
+      },
+      "measurements": [
+        {
+          "request_id": "mock_0t1ghn",
+          "query": "Query variant 1 about LoRA math",
+          "scenario": "Scenario-D-Cache-Miss",
+          "concurrency_level": 1,
+          "start_time_ms": 8458.8582,
+          "end_time_ms": 8550.2147,
+          "total_latency_ms": 91.36,
+          "ttft_ms": 47.81,
+          "completion_time_ms": 91.36,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_eqou7b",
+          "query": "Query variant 2 about LoRA scaling",
+          "scenario": "Scenario-D-Cache-Miss",
+          "concurrency_level": 1,
+          "start_time_ms": 8550.2253,
+          "end_time_ms": 8649.4127,
+          "total_latency_ms": 99.19,
+          "ttft_ms": 56.67,
+          "completion_time_ms": 99.19,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_qi8k76",
+          "query": "Query variant 3 about LoRA ranks",
+          "scenario": "Scenario-D-Cache-Miss",
+          "concurrency_level": 1,
+          "start_time_ms": 8649.4248,
+          "end_time_ms": 8748.1917,
+          "total_latency_ms": 98.77,
+          "ttft_ms": 50.35,
+          "completion_time_ms": 98.77,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_bw4ii4",
+          "query": "Query variant 4 about LoRA adapters",
+          "scenario": "Scenario-D-Cache-Miss",
+          "concurrency_level": 1,
+          "start_time_ms": 8748.203,
+          "end_time_ms": 8841.1932,
+          "total_latency_ms": 92.99,
+          "ttft_ms": 51.29,
+          "completion_time_ms": 92.99,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_0llkyg",
+          "query": "Query variant 5 about LoRA weights",
+          "scenario": "Scenario-D-Cache-Miss",
+          "concurrency_level": 1,
+          "start_time_ms": 8841.2043,
+          "end_time_ms": 8924.5086,
+          "total_latency_ms": 83.3,
+          "ttft_ms": 48.14,
+          "completion_time_ms": 83.3,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        }
+      ],
+      "resource_summary": {
+        "start_snapshot": {
+          "label": "start",
+          "timestamp": "2026-10-23T07:45:20.148Z",
+          "memory_mb": {
+            "rss": 399.12,
+            "heap_total": 332.89,
+            "heap_used": 243.57,
+            "external": 11.62
+          },
+          "cpu_usage_us": {
+            "user": 0,
+            "system": 0
+          }
+        },
+        "end_snapshot": {
+          "label": "end",
+          "timestamp": "2026-10-23T07:45:20.614Z",
+          "memory_mb": {
+            "rss": 399.12,
+            "heap_total": 332.89,
+            "heap_used": 243.59,
+            "external": 11.62
+          },
+          "cpu_usage_us": {
+            "user": 0,
+            "system": 0
+          }
+        },
+        "peak_rss_mb": 399.12,
+        "peak_heap_used_mb": 243.59,
+        "delta_rss_mb": 0,
+        "delta_heap_used_mb": 0.02,
+        "total_cpu_time_ms": 0
+      },
+      "aborted_early": false
+    },
+    {
+      "config": {
+        "name": "Scenario-D-Cache-Hit",
+        "description": "Measures latency on repeated queries with identical text (LRU hit)",
+        "url": "http://localhost:3000/api/v1/rag/chat/stream",
+        "queries": [
+          "How does low-rank adaptation LoRA optimize large models?",
+          "How does low-rank adaptation LoRA optimize large models?",
+          "How does low-rank adaptation LoRA optimize large models?",
+          "How does low-rank adaptation LoRA optimize large models?",
+          "How does low-rank adaptation LoRA optimize large models?"
+        ],
+        "concurrency": 1,
+        "total_requests": 5,
+        "warmup_requests": 1,
+        "timeout_ms": 30000,
+        "is_streaming": true
+      },
+      "duration_ms": 468,
+      "warmup_duration_ms": 91,
+      "aggregated_metrics": {
+        "scenario": "Scenario-D-Cache-Hit",
+        "concurrency_level": 1,
+        "duration_ms": 468,
+        "total_requests": 5,
+        "successful_requests": 5,
+        "failed_requests": 0,
+        "timeout_requests": 0,
+        "aborted_requests": 0,
+        "success_rate": 100,
+        "error_rate": 0,
+        "timeout_rate": 0,
+        "throughput": {
+          "started_rps": 10.68,
+          "completed_rps": 10.68,
+          "successful_rps": 10.68
+        },
+        "total_latency": {
+          "count": 5,
+          "min": 85.65,
+          "max": 99.72,
+          "mean": 93.57,
+          "p50": 91.68,
+          "p90": 99.5,
+          "p95": 99.61,
+          "p99": 99.7
+        },
+        "ttft": {
+          "count": 5,
+          "min": 49.28,
+          "max": 57.93,
+          "mean": 51.48,
+          "p50": 49.98,
+          "p90": 54.85,
+          "p95": 56.39,
+          "p99": 57.62
+        },
+        "completion_time": {
+          "count": 5,
+          "min": 85.65,
+          "max": 99.72,
+          "mean": 93.57,
+          "p50": 91.68,
+          "p90": 99.5,
+          "p95": 99.61,
+          "p99": 99.7
+        },
+        "status_codes": {
+          "200": 5
+        },
+        "server_timings_avg": {
+          "embed_ms": 25,
+          "route_ms": 2,
+          "search_ms": 15,
+          "rerank_ms": 3,
+          "llm_ms": 35,
+          "total_ms": 80
+        }
+      },
+      "measurements": [
+        {
+          "request_id": "mock_3g7psg",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-D-Cache-Hit",
+          "concurrency_level": 1,
+          "start_time_ms": 9016.3684,
+          "end_time_ms": 9116.088,
+          "total_latency_ms": 99.72,
+          "ttft_ms": 57.93,
+          "completion_time_ms": 99.72,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_fy8i9c",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-D-Cache-Hit",
+          "concurrency_level": 1,
+          "start_time_ms": 9116.1005,
+          "end_time_ms": 9207.7322,
+          "total_latency_ms": 91.63,
+          "ttft_ms": 49.96,
+          "completion_time_ms": 91.63,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_lnxp1m",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-D-Cache-Hit",
+          "concurrency_level": 1,
+          "start_time_ms": 9207.7475,
+          "end_time_ms": 9299.4228,
+          "total_latency_ms": 91.68,
+          "ttft_ms": 49.98,
+          "completion_time_ms": 91.68,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_mj4ux1",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-D-Cache-Hit",
+          "concurrency_level": 1,
+          "start_time_ms": 9299.4372,
+          "end_time_ms": 9385.0894,
+          "total_latency_ms": 85.65,
+          "ttft_ms": 50.24,
+          "completion_time_ms": 85.65,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_z3hv8o",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-D-Cache-Hit",
+          "concurrency_level": 1,
+          "start_time_ms": 9385.1043,
+          "end_time_ms": 9484.2669,
+          "total_latency_ms": 99.16,
+          "ttft_ms": 49.28,
+          "completion_time_ms": 99.16,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        }
+      ],
+      "resource_summary": {
+        "start_snapshot": {
+          "label": "start",
+          "timestamp": "2026-10-23T07:45:20.614Z",
+          "memory_mb": {
+            "rss": 399.12,
+            "heap_total": 332.89,
+            "heap_used": 243.61,
+            "external": 11.62
+          },
+          "cpu_usage_us": {
+            "user": 0,
+            "system": 0
+          }
+        },
+        "end_snapshot": {
+          "label": "end",
+          "timestamp": "2026-10-23T07:45:21.173Z",
+          "memory_mb": {
+            "rss": 399.12,
+            "heap_total": 332.89,
+            "heap_used": 243.64,
+            "external": 11.62
+          },
+          "cpu_usage_us": {
+            "user": 15000,
+            "system": 0
+          }
+        },
+        "peak_rss_mb": 399.12,
+        "peak_heap_used_mb": 243.64,
+        "delta_rss_mb": 0,
+        "delta_heap_used_mb": 0.03,
+        "total_cpu_time_ms": 15
+      },
+      "aborted_early": false
+    },
+    {
+      "config": {
+        "name": "Scenario-E-Sustained",
+        "description": "Sustained load monitoring latency stability and queue behavior",
+        "url": "http://localhost:3000/api/v1/rag/chat/stream",
+        "queries": [
+          "How does low-rank adaptation LoRA optimize large models?",
+          "What is the rank parameter r in LoRA decomposition?",
+          "How does the self-attention mechanism work in Transformers?",
+          "What is the scaled dot-product formula for attention?",
+          "How do deep residual connections address degradation in deep networks?"
+        ],
+        "concurrency": 2,
+        "total_requests": 20,
+        "warmup_requests": 2,
+        "timeout_ms": 35000,
+        "is_streaming": true
+      },
+      "duration_ms": 1858,
+      "warmup_duration_ms": 189,
+      "aggregated_metrics": {
+        "scenario": "Scenario-E-Sustained",
+        "concurrency_level": 2,
+        "duration_ms": 1858,
+        "total_requests": 20,
+        "successful_requests": 20,
+        "failed_requests": 0,
+        "timeout_requests": 0,
+        "aborted_requests": 0,
+        "success_rate": 100,
+        "error_rate": 0,
+        "timeout_rate": 0,
+        "throughput": {
+          "started_rps": 10.76,
+          "completed_rps": 10.76,
+          "successful_rps": 10.76
+        },
+        "total_latency": {
+          "count": 20,
+          "min": 91.56,
+          "max": 191.85,
+          "mean": 181.15,
+          "p50": 183.33,
+          "p90": 191.7,
+          "p95": 191.73,
+          "p99": 191.83
+        },
+        "ttft": {
+          "count": 20,
+          "min": 50.45,
+          "max": 149.96,
+          "mean": 139.31,
+          "p50": 141.89,
+          "p90": 149.92,
+          "p95": 149.93,
+          "p99": 149.95
+        },
+        "completion_time": {
+          "count": 20,
+          "min": 91.56,
+          "max": 191.85,
+          "mean": 181.15,
+          "p50": 183.33,
+          "p90": 191.7,
+          "p95": 191.73,
+          "p99": 191.83
+        },
+        "status_codes": {
+          "200": 20
+        },
+        "server_timings_avg": {
+          "embed_ms": 25,
+          "route_ms": 2,
+          "search_ms": 15,
+          "rerank_ms": 3,
+          "llm_ms": 35,
+          "total_ms": 80
+        }
+      },
+      "measurements": [
+        {
+          "request_id": "mock_w7wcx9",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 9674.3965,
+          "end_time_ms": 9765.9535,
+          "total_latency_ms": 91.56,
+          "ttft_ms": 50.45,
+          "completion_time_ms": 91.56,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_2x7ypj",
+          "query": "What is the rank parameter r in LoRA decomposition?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 9674.419,
+          "end_time_ms": 9865.8338,
+          "total_latency_ms": 191.41,
+          "ttft_ms": 149.92,
+          "completion_time_ms": 191.41,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_sq0wwu",
+          "query": "How does the self-attention mechanism work in Transformers?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 9765.9835,
+          "end_time_ms": 9957.7061,
+          "total_latency_ms": 191.72,
+          "ttft_ms": 149.93,
+          "completion_time_ms": 191.72,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_3jdpjp",
+          "query": "What is the scaled dot-product formula for attention?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 9865.8734,
+          "end_time_ms": 10057.7211,
+          "total_latency_ms": 191.85,
+          "ttft_ms": 141.82,
+          "completion_time_ms": 191.85,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_w0ggme",
+          "query": "How do deep residual connections address degradation in deep networks?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 9957.7372,
+          "end_time_ms": 10149.0098,
+          "total_latency_ms": 191.27,
+          "ttft_ms": 149.48,
+          "completion_time_ms": 191.27,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_w2istl",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 10057.7534,
+          "end_time_ms": 10249.3595,
+          "total_latency_ms": 191.61,
+          "ttft_ms": 149.65,
+          "completion_time_ms": 191.61,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_w9b2w6",
+          "query": "What is the rank parameter r in LoRA decomposition?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 10149.0514,
+          "end_time_ms": 10340.7504,
+          "total_latency_ms": 191.7,
+          "ttft_ms": 149.96,
+          "completion_time_ms": 191.7,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_5ju54y",
+          "query": "How does the self-attention mechanism work in Transformers?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 10249.4017,
+          "end_time_ms": 10440.7526,
+          "total_latency_ms": 191.35,
+          "ttft_ms": 148.4,
+          "completion_time_ms": 191.35,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_b9sd2d",
+          "query": "What is the scaled dot-product formula for attention?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 10340.8697,
+          "end_time_ms": 10526.0248,
+          "total_latency_ms": 185.16,
+          "ttft_ms": 149.74,
+          "completion_time_ms": 185.16,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_9s77v0",
+          "query": "How do deep residual connections address degradation in deep networks?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 10440.799,
+          "end_time_ms": 10615.8469,
+          "total_latency_ms": 175.05,
+          "ttft_ms": 133.13,
+          "completion_time_ms": 175.05,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_pelums",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 10526.0711,
+          "end_time_ms": 10707.5404,
+          "total_latency_ms": 181.47,
+          "ttft_ms": 139.92,
+          "completion_time_ms": 181.47,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_zdhupo",
+          "query": "What is the rank parameter r in LoRA decomposition?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 10615.892,
+          "end_time_ms": 10798.8566,
+          "total_latency_ms": 182.96,
+          "ttft_ms": 142.1,
+          "completion_time_ms": 182.96,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_m9lyp7",
+          "query": "How does the self-attention mechanism work in Transformers?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 10707.6035,
+          "end_time_ms": 10893.801,
+          "total_latency_ms": 186.2,
+          "ttft_ms": 141.67,
+          "completion_time_ms": 186.2,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_ytpyii",
+          "query": "What is the scaled dot-product formula for attention?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 10799.0124,
+          "end_time_ms": 10982.4228,
+          "total_latency_ms": 183.41,
+          "ttft_ms": 143.44,
+          "completion_time_ms": 183.41,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_40dd4f",
+          "query": "How do deep residual connections address degradation in deep networks?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 10893.8428,
+          "end_time_ms": 11074.123,
+          "total_latency_ms": 180.28,
+          "ttft_ms": 138.68,
+          "completion_time_ms": 180.28,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_h0c1s6",
+          "query": "How does low-rank adaptation LoRA optimize large models?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 10982.4528,
+          "end_time_ms": 11165.6954,
+          "total_latency_ms": 183.24,
+          "ttft_ms": 141.55,
+          "completion_time_ms": 183.24,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_o4b1zp",
+          "query": "What is the rank parameter r in LoRA decomposition?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 11074.1966,
+          "end_time_ms": 11257.4154,
+          "total_latency_ms": 183.22,
+          "ttft_ms": 141.5,
+          "completion_time_ms": 183.22,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_wq0slf",
+          "query": "How does the self-attention mechanism work in Transformers?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 11165.7267,
+          "end_time_ms": 11348.9837,
+          "total_latency_ms": 183.26,
+          "ttft_ms": 141.97,
+          "completion_time_ms": 183.26,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_h05vnv",
+          "query": "What is the scaled dot-product formula for attention?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 11257.4859,
+          "end_time_ms": 11440.5316,
+          "total_latency_ms": 183.05,
+          "ttft_ms": 141.48,
+          "completion_time_ms": 183.05,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        },
+        {
+          "request_id": "mock_ei4k00",
+          "query": "How do deep residual connections address degradation in deep networks?",
+          "scenario": "Scenario-E-Sustained",
+          "concurrency_level": 2,
+          "start_time_ms": 11349.1225,
+          "end_time_ms": 11532.3836,
+          "total_latency_ms": 183.26,
+          "ttft_ms": 141.5,
+          "completion_time_ms": 183.26,
+          "status_code": 200,
+          "success": true,
+          "is_timeout": false,
+          "is_aborted": false,
+          "token_count": 45,
+          "server_timings": {
+            "embed_ms": 25,
+            "route_ms": 2,
+            "search_ms": 15,
+            "rerank_ms": 3,
+            "llm_ms": 35,
+            "total_ms": 80
+          }
+        }
+      ],
+      "resource_summary": {
+        "start_snapshot": {
+          "label": "start",
+          "timestamp": "2026-10-23T07:45:21.174Z",
+          "memory_mb": {
+            "rss": 399.12,
+            "heap_total": 332.89,
+            "heap_used": 243.66,
+            "external": 11.62
+          },
+          "cpu_usage_us": {
+            "user": 0,
+            "system": 0
+          }
+        },
+        "end_snapshot": {
+          "label": "end",
+          "timestamp": "2026-10-23T07:45:23.222Z",
+          "memory_mb": {
+            "rss": 277.68,
+            "heap_total": 212.89,
+            "heap_used": 203.55,
+            "external": 11.51
+          },
+          "cpu_usage_us": {
+            "user": 204000,
+            "system": 0
+          }
+        },
+        "peak_rss_mb": 399.12,
+        "peak_heap_used_mb": 243.68,
+        "delta_rss_mb": -121.44,
+        "delta_heap_used_mb": -40.11,
+        "total_cpu_time_ms": 204
+      },
+      "aborted_early": false
+    },
+    {
+      "config": {
+        "name": "Scenario-F-Failure-Handling",
+        "description": "Tests resilience against invalid categories, rate limits, and short timeouts",
+        "url": "http://localhost:3000/api/v1/rag/chat/stream",
+        "queries": [
+          "Query with invalid category trigger"
+        ],
+        "category": "INVALID-CATEGORY-!!!",
+        "concurrency": 1,
+        "total_requests": 3,
+        "warmup_requests": 0,
+        "timeout_ms": 5000,
+        "is_streaming": true,
+        "safety_max_consecutive_failures": 10
+      },
+      "duration_ms": 0,
+      "warmup_duration_ms": 0,
+      "aggregated_metrics": {
+        "scenario": "Scenario-F-Failure-Handling",
+        "concurrency_level": 1,
+        "duration_ms": 0,
+        "total_requests": 3,
+        "successful_requests": 0,
+        "failed_requests": 3,
+        "timeout_requests": 0,
+        "aborted_requests": 0,
+        "success_rate": 0,
+        "error_rate": 100,
+        "timeout_rate": 0,
+        "throughput": {
+          "started_rps": 3,
+          "completed_rps": 3,
+          "successful_rps": 0
+        },
+        "total_latency": {
+          "count": 1,
+          "min": 0.01,
+          "max": 0.01,
+          "mean": 0.01,
+          "p50": 0.01,
+          "p90": 0.01,
+          "p95": 0.01,
+          "p99": 0.01
+        },
+        "ttft": {
+          "count": 0,
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "p50": 0,
+          "p90": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "completion_time": {
+          "count": 0,
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "p50": 0,
+          "p90": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "status_codes": {
+          "400": 3
+        },
+        "server_timings_avg": {
+          "embed_ms": 0,
+          "route_ms": 0,
+          "search_ms": 0,
+          "rerank_ms": 0,
+          "llm_ms": 0,
+          "total_ms": 0
+        }
+      },
+      "measurements": [
+        {
+          "request_id": "mock_4uedkm",
+          "query": "Query with invalid category trigger",
+          "scenario": "Scenario-F-Failure-Handling",
+          "concurrency_level": 1,
+          "start_time_ms": 11533.0978,
+          "end_time_ms": 11533.1048,
+          "total_latency_ms": 0.01,
+          "ttft_ms": null,
+          "completion_time_ms": 0.01,
+          "status_code": 400,
+          "success": false,
+          "is_timeout": false,
+          "is_aborted": false,
+          "error_message": "HTTP 400: validation error"
+        },
+        {
+          "request_id": "mock_n7j3hs",
+          "query": "Query with invalid category trigger",
+          "scenario": "Scenario-F-Failure-Handling",
+          "concurrency_level": 1,
+          "start_time_ms": 11533.1379,
+          "end_time_ms": 11533.1387,
+          "total_latency_ms": 0,
+          "ttft_ms": null,
+          "completion_time_ms": 0,
+          "status_code": 400,
+          "success": false,
+          "is_timeout": false,
+          "is_aborted": false,
+          "error_message": "HTTP 400: validation error"
+        },
+        {
+          "request_id": "mock_fc8stb",
+          "query": "Query with invalid category trigger",
+          "scenario": "Scenario-F-Failure-Handling",
+          "concurrency_level": 1,
+          "start_time_ms": 11533.147,
+          "end_time_ms": 11533.1477,
+          "total_latency_ms": 0,
+          "ttft_ms": null,
+          "completion_time_ms": 0,
+          "status_code": 400,
+          "success": false,
+          "is_timeout": false,
+          "is_aborted": false,
+          "error_message": "HTTP 400: validation error"
+        }
+      ],
+      "resource_summary": {
+        "start_snapshot": {
+          "label": "start",
+          "timestamp": "2026-10-23T07:45:23.222Z",
+          "memory_mb": {
+            "rss": 277.68,
+            "heap_total": 212.89,
+            "heap_used": 203.59,
+            "external": 11.51
+          },
+          "cpu_usage_us": {
+            "user": 0,
+            "system": 0
+          }
+        },
+        "end_snapshot": {
+          "label": "end",
+          "timestamp": "2026-10-23T07:45:23.222Z",
+          "memory_mb": {
+            "rss": 277.68,
+            "heap_total": 212.89,
+            "heap_used": 203.6,
+            "external": 11.51
+          },
+          "cpu_usage_us": {
+            "user": 0,
+            "system": 0
+          }
+        },
+        "peak_rss_mb": 277.68,
+        "peak_heap_used_mb": 203.6,
+        "delta_rss_mb": 0,
+        "delta_heap_used_mb": 0.01,
+        "total_cpu_time_ms": 0
+      },
+      "aborted_early": false
+    }
+  ]
+}

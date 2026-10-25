@@ -1,0 +1,9 @@
+{"__metadata__": {"version": "1.0.0", "name": "RAG Evaluation Template", "corpus_type": "real", "description": "Template demonstrating JSONL ground truth schema"}}
+# Example 1: Binary Paper Relevance (most common for scientific paper RAG)
+{"query_id": "tpl_001", "query": "What are low-rank adaptation matrices in parameter-efficient fine-tuning?", "category": "cs.LG", "answerable": true, "relevant_paper_ids": ["2106.09685"], "notes": "LoRA paper"}
+# Example 2: Binary Chunk Relevance (fine-grained chunk-level evaluation)
+{"query_id": "tpl_002", "query": "How is the scaling factor alpha used in LoRA weight updates?", "category": "cs.LG", "answerable": true, "relevant_paper_ids": ["2106.09685"], "relevant_chunk_ids": ["2106.09685_sec4"], "notes": "Section 4 describes alpha scaling"}
+# Example 3: Graded Relevance for nDCG evaluation (score: 0 to 3)
+{"query_id": "tpl_003", "query": "Compare multi-head attention with standard self-attention mechanisms", "category": "cs.CL", "answerable": true, "paper_relevance_grades": {"1706.03762": 3, "2005.14165": 1}, "notes": "1706.03762 is Transformer primary source"}
+# Example 4: Unanswerable query (corpus does not contain information)
+{"query_id": "tpl_004", "query": "What is the optimal baking temperature for sourdough bread crust?", "category": "culinary", "answerable": false, "notes": "Should trigger NO_CONTEXT_ANSWER or empty retrieval"}

@@ -1,0 +1,1419 @@
+{
+  "config": {
+    "dataset_path": "C:\\Users\\ASUS\\Music\\TS_backend_rag\\benchmark\\datasets\\samples\\sample_evaluation.jsonl",
+    "adapter_name": "Object",
+    "judge_enabled": true,
+    "judge_name": "MockJudgeProvider",
+    "rubric_version": "1.0.0"
+  },
+  "duration_ms": 4,
+  "aggregated_metrics": {
+    "total_samples": 15,
+    "successful_evaluations": 15,
+    "failed_evaluations": 0,
+    "mean_token_f1": 0,
+    "mean_rouge_l_f1": 0,
+    "exact_match_rate": 0,
+    "mean_faithfulness_score": 0.5667,
+    "total_claims_evaluated": 18,
+    "total_supported_claims": 10,
+    "mean_relevance_score": 0.3759,
+    "mean_query_coverage": 0.1678,
+    "mean_citation_id_precision": 1,
+    "mean_citation_completeness": 0,
+    "mean_citation_support_ratio": 0.8,
+    "total_citations_found": 13,
+    "total_hallucinated_citations": 0,
+    "abstention": {
+      "total_samples": 15,
+      "expected_abstention_count": 2,
+      "actual_abstention_count": 2,
+      "true_abstention_count": 2,
+      "false_abstention_count": 0,
+      "unsupported_answer_count": 0,
+      "abstention_precision": 1,
+      "abstention_recall": 1,
+      "false_abstention_rate": 0,
+      "unsupported_answer_rate": 0
+    },
+    "judge_averages": {
+      "mean_faithfulness_score_1_to_5": 4.6,
+      "mean_correctness_score_1_to_5": 0,
+      "mean_relevance_score_1_to_5": 5
+    },
+    "by_category": {
+      "cs.LG": {
+        "sample_count": 5,
+        "mean_faithfulness": 0.7,
+        "mean_rouge_l": 0,
+        "citation_id_precision": 1
+      },
+      "cs.CL": {
+        "sample_count": 6,
+        "mean_faithfulness": 0.5,
+        "mean_rouge_l": 0,
+        "citation_id_precision": 1
+      },
+      "cs.CV": {
+        "sample_count": 2,
+        "mean_faithfulness": 1,
+        "mean_rouge_l": 0,
+        "citation_id_precision": 1
+      },
+      "biomedical": {
+        "sample_count": 1,
+        "mean_faithfulness": 0,
+        "mean_rouge_l": 0,
+        "citation_id_precision": 1
+      },
+      "cooking": {
+        "sample_count": 1,
+        "mean_faithfulness": 0,
+        "mean_rouge_l": 0,
+        "citation_id_precision": 1
+      }
+    }
+  },
+  "results": [
+    {
+      "query_id": "eval_001",
+      "query": "How does low-rank adaptation LoRA reduce the number of trainable parameters in large language models?",
+      "category": "cs.LG",
+      "answerable": true,
+      "expected_abstention": false,
+      "answer": "Low-rank adaptation LoRA freezes pre-trained weights and injects trainable rank decomposition matrices [Paper: 2106.09685]. This drastically reduces trainable parameters.",
+      "citations": [
+        "2106.09685"
+      ],
+      "retrieved_chunk_count": 1,
+      "correctness": {
+        "has_reference": false,
+        "token_f1": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "rouge_l": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "exact_match": false
+      },
+      "faithfulness": {
+        "total_claims": 2,
+        "supported_claims": 1,
+        "unsupported_claims": 1,
+        "faithfulness_score": 0.5,
+        "claim_details": [
+          {
+            "claim": "Low-rank adaptation LoRA freezes pre-trained weights and injects trainable rank decomposition matrices .",
+            "is_supported": true,
+            "overlap_ratio": 0.62
+          },
+          {
+            "claim": "This drastically reduces trainable parameters.",
+            "is_supported": false,
+            "overlap_ratio": 0.5
+          }
+        ]
+      },
+      "relevance": {
+        "query_keyword_coverage": 0.5455,
+        "is_direct_and_concise": true,
+        "length_chars": 170,
+        "relevance_score": 0.6591
+      },
+      "citations_eval": {
+        "total_citations_found": 1,
+        "extracted_citation_ids": [
+          "2106.09685"
+        ],
+        "format_valid": true,
+        "malformed_citations": [],
+        "in_context_citations": [
+          "2106.09685"
+        ],
+        "hallucinated_citations": [],
+        "id_precision": 1,
+        "supported_citations": [
+          "2106.09685"
+        ],
+        "unsupported_citations": [],
+        "citation_support_ratio": 1,
+        "total_claims": 2,
+        "claims_with_citations": 0,
+        "citation_completeness_ratio": 0
+      },
+      "abstention_eval": {
+        "is_abstention": false,
+        "expected_abstention": false,
+        "is_true_abstention": false,
+        "is_false_abstention": false,
+        "is_unsupported_answer": false
+      },
+      "judge_evaluations": {
+        "provider_name": "MockJudgeProvider",
+        "rubric_version": "1.0.0",
+        "faithfulness": {
+          "score": 5,
+          "reasoning": "All technical claims are supported by provided excerpts",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        },
+        "relevance": {
+          "score": 5,
+          "reasoning": "Directly and concisely answers the user query",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "query_id": "eval_002",
+      "query": "What is the rank parameter r in LoRA decomposition and what values are commonly tested?",
+      "category": "cs.LG",
+      "answerable": true,
+      "expected_abstention": false,
+      "answer": "Low-rank adaptation LoRA freezes pre-trained weights and injects trainable rank decomposition matrices [Paper: 2106.09685]. This drastically reduces trainable parameters.",
+      "citations": [
+        "2106.09685"
+      ],
+      "retrieved_chunk_count": 1,
+      "correctness": {
+        "has_reference": false,
+        "token_f1": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "rouge_l": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "exact_match": false
+      },
+      "faithfulness": {
+        "total_claims": 2,
+        "supported_claims": 1,
+        "unsupported_claims": 1,
+        "faithfulness_score": 0.5,
+        "claim_details": [
+          {
+            "claim": "Low-rank adaptation LoRA freezes pre-trained weights and injects trainable rank decomposition matrices .",
+            "is_supported": true,
+            "overlap_ratio": 0.62
+          },
+          {
+            "claim": "This drastically reduces trainable parameters.",
+            "is_supported": false,
+            "overlap_ratio": 0.5
+          }
+        ]
+      },
+      "relevance": {
+        "query_keyword_coverage": 0.375,
+        "is_direct_and_concise": true,
+        "length_chars": 170,
+        "relevance_score": 0.5313
+      },
+      "citations_eval": {
+        "total_citations_found": 1,
+        "extracted_citation_ids": [
+          "2106.09685"
+        ],
+        "format_valid": true,
+        "malformed_citations": [],
+        "in_context_citations": [
+          "2106.09685"
+        ],
+        "hallucinated_citations": [],
+        "id_precision": 1,
+        "supported_citations": [
+          "2106.09685"
+        ],
+        "unsupported_citations": [],
+        "citation_support_ratio": 1,
+        "total_claims": 2,
+        "claims_with_citations": 0,
+        "citation_completeness_ratio": 0
+      },
+      "abstention_eval": {
+        "is_abstention": false,
+        "expected_abstention": false,
+        "is_true_abstention": false,
+        "is_false_abstention": false,
+        "is_unsupported_answer": false
+      },
+      "judge_evaluations": {
+        "provider_name": "MockJudgeProvider",
+        "rubric_version": "1.0.0",
+        "faithfulness": {
+          "score": 5,
+          "reasoning": "All technical claims are supported by provided excerpts",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        },
+        "relevance": {
+          "score": 5,
+          "reasoning": "Directly and concisely answers the user query",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "query_id": "eval_003",
+      "query": "How does the self-attention mechanism compute queries, keys, and values in Transformer architectures?",
+      "category": "cs.CL",
+      "answerable": true,
+      "expected_abstention": false,
+      "answer": "The Transformer architecture computes queries, keys, and values through scaled dot-product attention [Paper: 1706.03762].",
+      "citations": [
+        "1706.03762"
+      ],
+      "retrieved_chunk_count": 1,
+      "correctness": {
+        "has_reference": false,
+        "token_f1": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "rouge_l": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "exact_match": false
+      },
+      "faithfulness": {
+        "total_claims": 1,
+        "supported_claims": 0,
+        "unsupported_claims": 1,
+        "faithfulness_score": 0,
+        "claim_details": [
+          {
+            "claim": "The Transformer architecture computes queries, keys, and values through scaled dot-product attention .",
+            "is_supported": false,
+            "overlap_ratio": 0.18
+          }
+        ]
+      },
+      "relevance": {
+        "query_keyword_coverage": 0.5556,
+        "is_direct_and_concise": true,
+        "length_chars": 121,
+        "relevance_score": 0.6667
+      },
+      "citations_eval": {
+        "total_citations_found": 1,
+        "extracted_citation_ids": [
+          "1706.03762"
+        ],
+        "format_valid": true,
+        "malformed_citations": [],
+        "in_context_citations": [
+          "1706.03762"
+        ],
+        "hallucinated_citations": [],
+        "id_precision": 1,
+        "supported_citations": [],
+        "unsupported_citations": [
+          "1706.03762"
+        ],
+        "citation_support_ratio": 0,
+        "total_claims": 1,
+        "claims_with_citations": 0,
+        "citation_completeness_ratio": 0
+      },
+      "abstention_eval": {
+        "is_abstention": false,
+        "expected_abstention": false,
+        "is_true_abstention": false,
+        "is_false_abstention": false,
+        "is_unsupported_answer": false
+      },
+      "judge_evaluations": {
+        "provider_name": "MockJudgeProvider",
+        "rubric_version": "1.0.0",
+        "faithfulness": {
+          "score": 5,
+          "reasoning": "All technical claims are supported by provided excerpts",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        },
+        "relevance": {
+          "score": 5,
+          "reasoning": "Directly and concisely answers the user query",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "query_id": "eval_004",
+      "query": "What is the scaled dot-product formula for attention with dimension d_k?",
+      "category": "cs.CL",
+      "answerable": true,
+      "expected_abstention": false,
+      "answer": "The Transformer architecture computes queries, keys, and values through scaled dot-product attention [Paper: 1706.03762].",
+      "citations": [
+        "1706.03762"
+      ],
+      "retrieved_chunk_count": 1,
+      "correctness": {
+        "has_reference": false,
+        "token_f1": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "rouge_l": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "exact_match": false
+      },
+      "faithfulness": {
+        "total_claims": 1,
+        "supported_claims": 0,
+        "unsupported_claims": 1,
+        "faithfulness_score": 0,
+        "claim_details": [
+          {
+            "claim": "The Transformer architecture computes queries, keys, and values through scaled dot-product attention .",
+            "is_supported": false,
+            "overlap_ratio": 0.18
+          }
+        ]
+      },
+      "relevance": {
+        "query_keyword_coverage": 0.4444,
+        "is_direct_and_concise": true,
+        "length_chars": 121,
+        "relevance_score": 0.5833
+      },
+      "citations_eval": {
+        "total_citations_found": 1,
+        "extracted_citation_ids": [
+          "1706.03762"
+        ],
+        "format_valid": true,
+        "malformed_citations": [],
+        "in_context_citations": [
+          "1706.03762"
+        ],
+        "hallucinated_citations": [],
+        "id_precision": 1,
+        "supported_citations": [],
+        "unsupported_citations": [
+          "1706.03762"
+        ],
+        "citation_support_ratio": 0,
+        "total_claims": 1,
+        "claims_with_citations": 0,
+        "citation_completeness_ratio": 0
+      },
+      "abstention_eval": {
+        "is_abstention": false,
+        "expected_abstention": false,
+        "is_true_abstention": false,
+        "is_false_abstention": false,
+        "is_unsupported_answer": false
+      },
+      "judge_evaluations": {
+        "provider_name": "MockJudgeProvider",
+        "rubric_version": "1.0.0",
+        "faithfulness": {
+          "score": 5,
+          "reasoning": "All technical claims are supported by provided excerpts",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        },
+        "relevance": {
+          "score": 5,
+          "reasoning": "Directly and concisely answers the user query",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "query_id": "eval_005",
+      "query": "How does in-context few-shot learning work in GPT-3 without gradient updates?",
+      "category": "cs.CL",
+      "answerable": true,
+      "expected_abstention": false,
+      "answer": "Scientific findings show consistent experimental results [Paper: 2400.10000].",
+      "citations": [
+        "2400.10000"
+      ],
+      "retrieved_chunk_count": 1,
+      "correctness": {
+        "has_reference": false,
+        "token_f1": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "rouge_l": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "exact_match": false
+      },
+      "faithfulness": {
+        "total_claims": 1,
+        "supported_claims": 1,
+        "unsupported_claims": 0,
+        "faithfulness_score": 1,
+        "claim_details": [
+          {
+            "claim": "Scientific findings show consistent experimental results .",
+            "is_supported": true,
+            "overlap_ratio": 1
+          }
+        ]
+      },
+      "relevance": {
+        "query_keyword_coverage": 0,
+        "is_direct_and_concise": true,
+        "length_chars": 77,
+        "relevance_score": 0.25
+      },
+      "citations_eval": {
+        "total_citations_found": 1,
+        "extracted_citation_ids": [
+          "2400.10000"
+        ],
+        "format_valid": true,
+        "malformed_citations": [],
+        "in_context_citations": [
+          "2400.10000"
+        ],
+        "hallucinated_citations": [],
+        "id_precision": 1,
+        "supported_citations": [
+          "2400.10000"
+        ],
+        "unsupported_citations": [],
+        "citation_support_ratio": 1,
+        "total_claims": 1,
+        "claims_with_citations": 0,
+        "citation_completeness_ratio": 0
+      },
+      "abstention_eval": {
+        "is_abstention": false,
+        "expected_abstention": false,
+        "is_true_abstention": false,
+        "is_false_abstention": false,
+        "is_unsupported_answer": false
+      },
+      "judge_evaluations": {
+        "provider_name": "MockJudgeProvider",
+        "rubric_version": "1.0.0",
+        "faithfulness": {
+          "score": 5,
+          "reasoning": "All technical claims are supported by provided excerpts",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        },
+        "relevance": {
+          "score": 5,
+          "reasoning": "Directly and concisely answers the user query",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "query_id": "eval_006",
+      "query": "What are the two pre-training tasks used in BERT: Masked Language Model and Next Sentence Prediction?",
+      "category": "cs.CL",
+      "answerable": true,
+      "expected_abstention": false,
+      "answer": "Scientific findings show consistent experimental results [Paper: 2400.10000].",
+      "citations": [
+        "2400.10000"
+      ],
+      "retrieved_chunk_count": 1,
+      "correctness": {
+        "has_reference": false,
+        "token_f1": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "rouge_l": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "exact_match": false
+      },
+      "faithfulness": {
+        "total_claims": 1,
+        "supported_claims": 1,
+        "unsupported_claims": 0,
+        "faithfulness_score": 1,
+        "claim_details": [
+          {
+            "claim": "Scientific findings show consistent experimental results .",
+            "is_supported": true,
+            "overlap_ratio": 1
+          }
+        ]
+      },
+      "relevance": {
+        "query_keyword_coverage": 0,
+        "is_direct_and_concise": true,
+        "length_chars": 77,
+        "relevance_score": 0.25
+      },
+      "citations_eval": {
+        "total_citations_found": 1,
+        "extracted_citation_ids": [
+          "2400.10000"
+        ],
+        "format_valid": true,
+        "malformed_citations": [],
+        "in_context_citations": [
+          "2400.10000"
+        ],
+        "hallucinated_citations": [],
+        "id_precision": 1,
+        "supported_citations": [
+          "2400.10000"
+        ],
+        "unsupported_citations": [],
+        "citation_support_ratio": 1,
+        "total_claims": 1,
+        "claims_with_citations": 0,
+        "citation_completeness_ratio": 0
+      },
+      "abstention_eval": {
+        "is_abstention": false,
+        "expected_abstention": false,
+        "is_true_abstention": false,
+        "is_false_abstention": false,
+        "is_unsupported_answer": false
+      },
+      "judge_evaluations": {
+        "provider_name": "MockJudgeProvider",
+        "rubric_version": "1.0.0",
+        "faithfulness": {
+          "score": 5,
+          "reasoning": "All technical claims are supported by provided excerpts",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        },
+        "relevance": {
+          "score": 5,
+          "reasoning": "Directly and concisely answers the user query",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "query_id": "eval_007",
+      "query": "How do deep residual connections address degradation problem in deep convolutional networks?",
+      "category": "cs.CV",
+      "answerable": true,
+      "expected_abstention": false,
+      "answer": "Scientific findings show consistent experimental results [Paper: 2400.10000].",
+      "citations": [
+        "2400.10000"
+      ],
+      "retrieved_chunk_count": 1,
+      "correctness": {
+        "has_reference": false,
+        "token_f1": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "rouge_l": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "exact_match": false
+      },
+      "faithfulness": {
+        "total_claims": 1,
+        "supported_claims": 1,
+        "unsupported_claims": 0,
+        "faithfulness_score": 1,
+        "claim_details": [
+          {
+            "claim": "Scientific findings show consistent experimental results .",
+            "is_supported": true,
+            "overlap_ratio": 1
+          }
+        ]
+      },
+      "relevance": {
+        "query_keyword_coverage": 0,
+        "is_direct_and_concise": true,
+        "length_chars": 77,
+        "relevance_score": 0.25
+      },
+      "citations_eval": {
+        "total_citations_found": 1,
+        "extracted_citation_ids": [
+          "2400.10000"
+        ],
+        "format_valid": true,
+        "malformed_citations": [],
+        "in_context_citations": [
+          "2400.10000"
+        ],
+        "hallucinated_citations": [],
+        "id_precision": 1,
+        "supported_citations": [
+          "2400.10000"
+        ],
+        "unsupported_citations": [],
+        "citation_support_ratio": 1,
+        "total_claims": 1,
+        "claims_with_citations": 0,
+        "citation_completeness_ratio": 0
+      },
+      "abstention_eval": {
+        "is_abstention": false,
+        "expected_abstention": false,
+        "is_true_abstention": false,
+        "is_false_abstention": false,
+        "is_unsupported_answer": false
+      },
+      "judge_evaluations": {
+        "provider_name": "MockJudgeProvider",
+        "rubric_version": "1.0.0",
+        "faithfulness": {
+          "score": 5,
+          "reasoning": "All technical claims are supported by provided excerpts",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        },
+        "relevance": {
+          "score": 5,
+          "reasoning": "Directly and concisely answers the user query",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "query_id": "eval_008",
+      "query": "What is the Adam optimization algorithm and how does it combine AdaGrad and RMSProp with momentum?",
+      "category": "cs.LG",
+      "answerable": true,
+      "expected_abstention": false,
+      "answer": "Scientific findings show consistent experimental results [Paper: 2400.10000].",
+      "citations": [
+        "2400.10000"
+      ],
+      "retrieved_chunk_count": 1,
+      "correctness": {
+        "has_reference": false,
+        "token_f1": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "rouge_l": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "exact_match": false
+      },
+      "faithfulness": {
+        "total_claims": 1,
+        "supported_claims": 1,
+        "unsupported_claims": 0,
+        "faithfulness_score": 1,
+        "claim_details": [
+          {
+            "claim": "Scientific findings show consistent experimental results .",
+            "is_supported": true,
+            "overlap_ratio": 1
+          }
+        ]
+      },
+      "relevance": {
+        "query_keyword_coverage": 0,
+        "is_direct_and_concise": true,
+        "length_chars": 77,
+        "relevance_score": 0.25
+      },
+      "citations_eval": {
+        "total_citations_found": 1,
+        "extracted_citation_ids": [
+          "2400.10000"
+        ],
+        "format_valid": true,
+        "malformed_citations": [],
+        "in_context_citations": [
+          "2400.10000"
+        ],
+        "hallucinated_citations": [],
+        "id_precision": 1,
+        "supported_citations": [
+          "2400.10000"
+        ],
+        "unsupported_citations": [],
+        "citation_support_ratio": 1,
+        "total_claims": 1,
+        "claims_with_citations": 0,
+        "citation_completeness_ratio": 0
+      },
+      "abstention_eval": {
+        "is_abstention": false,
+        "expected_abstention": false,
+        "is_true_abstention": false,
+        "is_false_abstention": false,
+        "is_unsupported_answer": false
+      },
+      "judge_evaluations": {
+        "provider_name": "MockJudgeProvider",
+        "rubric_version": "1.0.0",
+        "faithfulness": {
+          "score": 5,
+          "reasoning": "All technical claims are supported by provided excerpts",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        },
+        "relevance": {
+          "score": 5,
+          "reasoning": "Directly and concisely answers the user query",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "query_id": "eval_009",
+      "query": "Compare LoRA adapter efficiency with full fine-tuning on downstream tasks",
+      "category": "cs.LG",
+      "answerable": true,
+      "expected_abstention": false,
+      "answer": "Low-rank adaptation LoRA freezes pre-trained weights and injects trainable rank decomposition matrices [Paper: 2106.09685]. This drastically reduces trainable parameters.",
+      "citations": [
+        "2106.09685"
+      ],
+      "retrieved_chunk_count": 1,
+      "correctness": {
+        "has_reference": false,
+        "token_f1": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "rouge_l": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "exact_match": false
+      },
+      "faithfulness": {
+        "total_claims": 2,
+        "supported_claims": 1,
+        "unsupported_claims": 1,
+        "faithfulness_score": 0.5,
+        "claim_details": [
+          {
+            "claim": "Low-rank adaptation LoRA freezes pre-trained weights and injects trainable rank decomposition matrices .",
+            "is_supported": true,
+            "overlap_ratio": 0.62
+          },
+          {
+            "claim": "This drastically reduces trainable parameters.",
+            "is_supported": false,
+            "overlap_ratio": 0.5
+          }
+        ]
+      },
+      "relevance": {
+        "query_keyword_coverage": 0.1111,
+        "is_direct_and_concise": true,
+        "length_chars": 170,
+        "relevance_score": 0.3333
+      },
+      "citations_eval": {
+        "total_citations_found": 1,
+        "extracted_citation_ids": [
+          "2106.09685"
+        ],
+        "format_valid": true,
+        "malformed_citations": [],
+        "in_context_citations": [
+          "2106.09685"
+        ],
+        "hallucinated_citations": [],
+        "id_precision": 1,
+        "supported_citations": [
+          "2106.09685"
+        ],
+        "unsupported_citations": [],
+        "citation_support_ratio": 1,
+        "total_claims": 2,
+        "claims_with_citations": 0,
+        "citation_completeness_ratio": 0
+      },
+      "abstention_eval": {
+        "is_abstention": false,
+        "expected_abstention": false,
+        "is_true_abstention": false,
+        "is_false_abstention": false,
+        "is_unsupported_answer": false
+      },
+      "judge_evaluations": {
+        "provider_name": "MockJudgeProvider",
+        "rubric_version": "1.0.0",
+        "faithfulness": {
+          "score": 5,
+          "reasoning": "All technical claims are supported by provided excerpts",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        },
+        "relevance": {
+          "score": 5,
+          "reasoning": "Directly and concisely answers the user query",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "query_id": "eval_010",
+      "query": "What is the multi-head attention projection matrix dimension in encoder-decoder models?",
+      "category": "cs.CL",
+      "answerable": true,
+      "expected_abstention": false,
+      "answer": "The Transformer architecture computes queries, keys, and values through scaled dot-product attention [Paper: 1706.03762].",
+      "citations": [
+        "1706.03762"
+      ],
+      "retrieved_chunk_count": 1,
+      "correctness": {
+        "has_reference": false,
+        "token_f1": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "rouge_l": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "exact_match": false
+      },
+      "faithfulness": {
+        "total_claims": 1,
+        "supported_claims": 0,
+        "unsupported_claims": 1,
+        "faithfulness_score": 0,
+        "claim_details": [
+          {
+            "claim": "The Transformer architecture computes queries, keys, and values through scaled dot-product attention .",
+            "is_supported": false,
+            "overlap_ratio": 0.18
+          }
+        ]
+      },
+      "relevance": {
+        "query_keyword_coverage": 0.1111,
+        "is_direct_and_concise": true,
+        "length_chars": 121,
+        "relevance_score": 0.3333
+      },
+      "citations_eval": {
+        "total_citations_found": 1,
+        "extracted_citation_ids": [
+          "1706.03762"
+        ],
+        "format_valid": true,
+        "malformed_citations": [],
+        "in_context_citations": [
+          "1706.03762"
+        ],
+        "hallucinated_citations": [],
+        "id_precision": 1,
+        "supported_citations": [],
+        "unsupported_citations": [
+          "1706.03762"
+        ],
+        "citation_support_ratio": 0,
+        "total_claims": 1,
+        "claims_with_citations": 0,
+        "citation_completeness_ratio": 0
+      },
+      "abstention_eval": {
+        "is_abstention": false,
+        "expected_abstention": false,
+        "is_true_abstention": false,
+        "is_false_abstention": false,
+        "is_unsupported_answer": false
+      },
+      "judge_evaluations": {
+        "provider_name": "MockJudgeProvider",
+        "rubric_version": "1.0.0",
+        "faithfulness": {
+          "score": 5,
+          "reasoning": "All technical claims are supported by provided excerpts",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        },
+        "relevance": {
+          "score": 5,
+          "reasoning": "Directly and concisely answers the user query",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "query_id": "eval_011",
+      "query": "What are the symptoms and incubation period of seasonal influenza virus?",
+      "category": "biomedical",
+      "answerable": false,
+      "expected_abstention": true,
+      "answer": "The provided literature does not contain sufficient details regarding this question.",
+      "citations": [],
+      "retrieved_chunk_count": 0,
+      "correctness": {
+        "has_reference": false,
+        "token_f1": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "rouge_l": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "exact_match": false
+      },
+      "faithfulness": {
+        "total_claims": 1,
+        "supported_claims": 0,
+        "unsupported_claims": 1,
+        "faithfulness_score": 0,
+        "claim_details": [
+          {
+            "claim": "The provided literature does not contain sufficient details regarding this question.",
+            "is_supported": false,
+            "overlap_ratio": 0
+          }
+        ]
+      },
+      "relevance": {
+        "query_keyword_coverage": 0,
+        "is_direct_and_concise": true,
+        "length_chars": 84,
+        "relevance_score": 0.25
+      },
+      "citations_eval": {
+        "total_citations_found": 0,
+        "extracted_citation_ids": [],
+        "format_valid": true,
+        "malformed_citations": [],
+        "in_context_citations": [],
+        "hallucinated_citations": [],
+        "id_precision": 1,
+        "supported_citations": [],
+        "unsupported_citations": [],
+        "citation_support_ratio": 1,
+        "total_claims": 1,
+        "claims_with_citations": 0,
+        "citation_completeness_ratio": 0
+      },
+      "abstention_eval": {
+        "is_abstention": true,
+        "expected_abstention": true,
+        "is_true_abstention": true,
+        "is_false_abstention": false,
+        "is_unsupported_answer": false,
+        "matched_abstention_phrase": "NO_CONTEXT_ANSWER"
+      },
+      "judge_evaluations": {
+        "provider_name": "MockJudgeProvider",
+        "rubric_version": "1.0.0",
+        "faithfulness": {
+          "score": 2,
+          "reasoning": "Context was empty, cannot ground claims",
+          "unsupported_or_omitted_points": [
+            "Unverified claims"
+          ],
+          "confidence": "high"
+        },
+        "relevance": {
+          "score": 5,
+          "reasoning": "Directly and concisely answers the user query",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "query_id": "eval_012",
+      "query": "How to prepare authentic Neapolitan pizza dough using high hydration flour?",
+      "category": "cooking",
+      "answerable": false,
+      "expected_abstention": true,
+      "answer": "The provided literature does not contain sufficient details regarding this question.",
+      "citations": [],
+      "retrieved_chunk_count": 0,
+      "correctness": {
+        "has_reference": false,
+        "token_f1": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "rouge_l": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "exact_match": false
+      },
+      "faithfulness": {
+        "total_claims": 1,
+        "supported_claims": 0,
+        "unsupported_claims": 1,
+        "faithfulness_score": 0,
+        "claim_details": [
+          {
+            "claim": "The provided literature does not contain sufficient details regarding this question.",
+            "is_supported": false,
+            "overlap_ratio": 0
+          }
+        ]
+      },
+      "relevance": {
+        "query_keyword_coverage": 0,
+        "is_direct_and_concise": true,
+        "length_chars": 84,
+        "relevance_score": 0.25
+      },
+      "citations_eval": {
+        "total_citations_found": 0,
+        "extracted_citation_ids": [],
+        "format_valid": true,
+        "malformed_citations": [],
+        "in_context_citations": [],
+        "hallucinated_citations": [],
+        "id_precision": 1,
+        "supported_citations": [],
+        "unsupported_citations": [],
+        "citation_support_ratio": 1,
+        "total_claims": 1,
+        "claims_with_citations": 0,
+        "citation_completeness_ratio": 0
+      },
+      "abstention_eval": {
+        "is_abstention": true,
+        "expected_abstention": true,
+        "is_true_abstention": true,
+        "is_false_abstention": false,
+        "is_unsupported_answer": false,
+        "matched_abstention_phrase": "NO_CONTEXT_ANSWER"
+      },
+      "judge_evaluations": {
+        "provider_name": "MockJudgeProvider",
+        "rubric_version": "1.0.0",
+        "faithfulness": {
+          "score": 2,
+          "reasoning": "Context was empty, cannot ground claims",
+          "unsupported_or_omitted_points": [
+            "Unverified claims"
+          ],
+          "confidence": "high"
+        },
+        "relevance": {
+          "score": 5,
+          "reasoning": "Directly and concisely answers the user query",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "query_id": "eval_seed_01",
+      "query": "Seed text information about paper 0 section abstract",
+      "category": "cs.LG",
+      "answerable": true,
+      "expected_abstention": false,
+      "answer": "Scientific findings show consistent experimental results [Paper: 2400.10000].",
+      "citations": [
+        "2400.10000"
+      ],
+      "retrieved_chunk_count": 1,
+      "correctness": {
+        "has_reference": false,
+        "token_f1": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "rouge_l": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "exact_match": false
+      },
+      "faithfulness": {
+        "total_claims": 1,
+        "supported_claims": 1,
+        "unsupported_claims": 0,
+        "faithfulness_score": 1,
+        "claim_details": [
+          {
+            "claim": "Scientific findings show consistent experimental results .",
+            "is_supported": true,
+            "overlap_ratio": 1
+          }
+        ]
+      },
+      "relevance": {
+        "query_keyword_coverage": 0.125,
+        "is_direct_and_concise": true,
+        "length_chars": 77,
+        "relevance_score": 0.3438
+      },
+      "citations_eval": {
+        "total_citations_found": 1,
+        "extracted_citation_ids": [
+          "2400.10000"
+        ],
+        "format_valid": true,
+        "malformed_citations": [],
+        "in_context_citations": [
+          "2400.10000"
+        ],
+        "hallucinated_citations": [],
+        "id_precision": 1,
+        "supported_citations": [
+          "2400.10000"
+        ],
+        "unsupported_citations": [],
+        "citation_support_ratio": 1,
+        "total_claims": 1,
+        "claims_with_citations": 0,
+        "citation_completeness_ratio": 0
+      },
+      "abstention_eval": {
+        "is_abstention": false,
+        "expected_abstention": false,
+        "is_true_abstention": false,
+        "is_false_abstention": false,
+        "is_unsupported_answer": false
+      },
+      "judge_evaluations": {
+        "provider_name": "MockJudgeProvider",
+        "rubric_version": "1.0.0",
+        "faithfulness": {
+          "score": 5,
+          "reasoning": "All technical claims are supported by provided excerpts",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        },
+        "relevance": {
+          "score": 5,
+          "reasoning": "Directly and concisely answers the user query",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "query_id": "eval_seed_02",
+      "query": "Seed text information about paper 1 section introduction",
+      "category": "cs.CL",
+      "answerable": true,
+      "expected_abstention": false,
+      "answer": "Scientific findings show consistent experimental results [Paper: 2400.10000].",
+      "citations": [
+        "2400.10000"
+      ],
+      "retrieved_chunk_count": 1,
+      "correctness": {
+        "has_reference": false,
+        "token_f1": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "rouge_l": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "exact_match": false
+      },
+      "faithfulness": {
+        "total_claims": 1,
+        "supported_claims": 1,
+        "unsupported_claims": 0,
+        "faithfulness_score": 1,
+        "claim_details": [
+          {
+            "claim": "Scientific findings show consistent experimental results .",
+            "is_supported": true,
+            "overlap_ratio": 1
+          }
+        ]
+      },
+      "relevance": {
+        "query_keyword_coverage": 0.125,
+        "is_direct_and_concise": true,
+        "length_chars": 77,
+        "relevance_score": 0.3438
+      },
+      "citations_eval": {
+        "total_citations_found": 1,
+        "extracted_citation_ids": [
+          "2400.10000"
+        ],
+        "format_valid": true,
+        "malformed_citations": [],
+        "in_context_citations": [
+          "2400.10000"
+        ],
+        "hallucinated_citations": [],
+        "id_precision": 1,
+        "supported_citations": [
+          "2400.10000"
+        ],
+        "unsupported_citations": [],
+        "citation_support_ratio": 1,
+        "total_claims": 1,
+        "claims_with_citations": 0,
+        "citation_completeness_ratio": 0
+      },
+      "abstention_eval": {
+        "is_abstention": false,
+        "expected_abstention": false,
+        "is_true_abstention": false,
+        "is_false_abstention": false,
+        "is_unsupported_answer": false
+      },
+      "judge_evaluations": {
+        "provider_name": "MockJudgeProvider",
+        "rubric_version": "1.0.0",
+        "faithfulness": {
+          "score": 5,
+          "reasoning": "All technical claims are supported by provided excerpts",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        },
+        "relevance": {
+          "score": 5,
+          "reasoning": "Directly and concisely answers the user query",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "query_id": "eval_seed_03",
+      "query": "Seed text information about paper 2 section method",
+      "category": "cs.CV",
+      "answerable": true,
+      "expected_abstention": false,
+      "answer": "Scientific findings show consistent experimental results [Paper: 2400.10000].",
+      "citations": [
+        "2400.10000"
+      ],
+      "retrieved_chunk_count": 1,
+      "correctness": {
+        "has_reference": false,
+        "token_f1": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "rouge_l": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "exact_match": false
+      },
+      "faithfulness": {
+        "total_claims": 1,
+        "supported_claims": 1,
+        "unsupported_claims": 0,
+        "faithfulness_score": 1,
+        "claim_details": [
+          {
+            "claim": "Scientific findings show consistent experimental results .",
+            "is_supported": true,
+            "overlap_ratio": 1
+          }
+        ]
+      },
+      "relevance": {
+        "query_keyword_coverage": 0.125,
+        "is_direct_and_concise": true,
+        "length_chars": 77,
+        "relevance_score": 0.3438
+      },
+      "citations_eval": {
+        "total_citations_found": 1,
+        "extracted_citation_ids": [
+          "2400.10000"
+        ],
+        "format_valid": true,
+        "malformed_citations": [],
+        "in_context_citations": [
+          "2400.10000"
+        ],
+        "hallucinated_citations": [],
+        "id_precision": 1,
+        "supported_citations": [
+          "2400.10000"
+        ],
+        "unsupported_citations": [],
+        "citation_support_ratio": 1,
+        "total_claims": 1,
+        "claims_with_citations": 0,
+        "citation_completeness_ratio": 0
+      },
+      "abstention_eval": {
+        "is_abstention": false,
+        "expected_abstention": false,
+        "is_true_abstention": false,
+        "is_false_abstention": false,
+        "is_unsupported_answer": false
+      },
+      "judge_evaluations": {
+        "provider_name": "MockJudgeProvider",
+        "rubric_version": "1.0.0",
+        "faithfulness": {
+          "score": 5,
+          "reasoning": "All technical claims are supported by provided excerpts",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        },
+        "relevance": {
+          "score": 5,
+          "reasoning": "Directly and concisely answers the user query",
+          "unsupported_or_omitted_points": [],
+          "confidence": "high"
+        }
+      }
+    }
+  ]
+}

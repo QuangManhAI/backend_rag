@@ -1,0 +1,4657 @@
+{
+  "metadata": {
+    "run_id": "bench-run-2026-10-23T08-19-38-jjpmf",
+    "timestamp": "2026-10-23T08:19:38.003Z",
+    "benchmark_version": "1.0.0",
+    "dataset_version": "1.0.0",
+    "overall_status": "completed",
+    "total_duration_ms": 109,
+    "environment": {
+      "os_platform": "win32",
+      "os_release": "10.0.26200",
+      "node_version": "v24.13.1",
+      "cpu_model": "Intel(R) Core(TM) Ultra 5 125H",
+      "cpu_cores": 18,
+      "total_ram_gb": 15,
+      "git_commit": "dcb2846"
+    },
+    "config": {
+      "run_id": "bench-run-2026-10-23T08-19-38-jjpmf",
+      "timestamp": "2026-10-23T08:19:38.003Z",
+      "benchmark_version": "1.0.0",
+      "dataset_path": "C:\\Users\\ASUS\\Music\\TS_backend_rag\\benchmark\\datasets\\samples\\sample_evaluation.jsonl",
+      "dataset_version": "1.0.0",
+      "k_values": [
+        1,
+        3,
+        5,
+        10
+      ],
+      "judge_type": "mock",
+      "runtime_base_url": "http://localhost:3000",
+      "runtime_scenario": "all",
+      "execution_order": [
+        "retrieval",
+        "generation",
+        "runtime"
+      ]
+    }
+  },
+  "suites": {
+    "retrieval": {
+      "status": "completed",
+      "duration_ms": 3,
+      "raw_file": "C:\\Users\\ASUS\\Music\\TS_backend_rag\\benchmark\\reports\\output\\retrieval-benchmark-2026-10-23T08-19-38-079Z.json",
+      "data": {
+        "config": {
+          "dataset_path": "C:\\Users\\ASUS\\Music\\TS_backend_rag\\benchmark\\datasets\\samples\\sample_evaluation.jsonl",
+          "k_values": [
+            1,
+            3,
+            5,
+            10
+          ],
+          "top_k": 10,
+          "nprobe": 2,
+          "use_authority_boost": true,
+          "expand_query": false,
+          "adapter_type": "MockRetrievalAdapter"
+        },
+        "duration_ms": 2,
+        "results": [
+          {
+            "query_id": "eval_001",
+            "query": "How does low-rank adaptation LoRA reduce the number of trainable parameters in large language models?",
+            "category": "cs.LG",
+            "answerable": true,
+            "pre_rerank_chunks": [
+              {
+                "chunk_id": "2106.09685_abs",
+                "paper_id": "2106.09685",
+                "score": 0.88
+              },
+              {
+                "chunk_id": "2106.09685_sec4",
+                "paper_id": "2106.09685",
+                "score": 0.82
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "score": 0.45
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "score": 0.35
+              }
+            ],
+            "post_rerank_chunks": [
+              {
+                "chunk_id": "2106.09685_abs",
+                "paper_id": "2106.09685",
+                "final_score": 0.898,
+                "similarity_score": 0.88,
+                "authority_score": 1
+              },
+              {
+                "chunk_id": "2106.09685_sec4",
+                "paper_id": "2106.09685",
+                "final_score": 0.847,
+                "similarity_score": 0.82,
+                "authority_score": 1
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "final_score": 0.3825,
+                "similarity_score": 0.45,
+                "authority_score": 0
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "final_score": 0.2975,
+                "similarity_score": 0.35,
+                "authority_score": 0
+              }
+            ],
+            "timings": {
+              "embed_ms": 1,
+              "route_ms": 1,
+              "search_ms": 2,
+              "rerank_ms": 1,
+              "total_ms": 0
+            },
+            "pre_rerank_metrics": {
+              "query_id": "eval_001",
+              "category": "cs.LG",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "chunk_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 4,
+              "is_empty_retrieval": false
+            },
+            "post_rerank_metrics": {
+              "query_id": "eval_001",
+              "category": "cs.LG",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "chunk_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 4,
+              "is_empty_retrieval": false
+            }
+          },
+          {
+            "query_id": "eval_002",
+            "query": "What is the rank parameter r in LoRA decomposition and what values are commonly tested?",
+            "category": "cs.LG",
+            "answerable": true,
+            "pre_rerank_chunks": [
+              {
+                "chunk_id": "2106.09685_abs",
+                "paper_id": "2106.09685",
+                "score": 0.88
+              },
+              {
+                "chunk_id": "2106.09685_sec4",
+                "paper_id": "2106.09685",
+                "score": 0.82
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "score": 0.45
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "score": 0.35
+              }
+            ],
+            "post_rerank_chunks": [
+              {
+                "chunk_id": "2106.09685_abs",
+                "paper_id": "2106.09685",
+                "final_score": 0.898,
+                "similarity_score": 0.88,
+                "authority_score": 1
+              },
+              {
+                "chunk_id": "2106.09685_sec4",
+                "paper_id": "2106.09685",
+                "final_score": 0.847,
+                "similarity_score": 0.82,
+                "authority_score": 1
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "final_score": 0.3825,
+                "similarity_score": 0.45,
+                "authority_score": 0
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "final_score": 0.2975,
+                "similarity_score": 0.35,
+                "authority_score": 0
+              }
+            ],
+            "timings": {
+              "embed_ms": 1,
+              "route_ms": 1,
+              "search_ms": 2,
+              "rerank_ms": 1,
+              "total_ms": 0
+            },
+            "pre_rerank_metrics": {
+              "query_id": "eval_002",
+              "category": "cs.LG",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {
+                "1": 0,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_precision": {
+                "1": 0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "chunk_mrr": {
+                "1": 0,
+                "3": 0.5,
+                "5": 0.5,
+                "10": 0.5
+              },
+              "chunk_ndcg": {
+                "1": 0,
+                "3": 0.6309297535714575,
+                "5": 0.6309297535714575,
+                "10": 0.6309297535714575
+              },
+              "chunk_hit_rate": {
+                "1": 0,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 4,
+              "is_empty_retrieval": false
+            },
+            "post_rerank_metrics": {
+              "query_id": "eval_002",
+              "category": "cs.LG",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {
+                "1": 0,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_precision": {
+                "1": 0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "chunk_mrr": {
+                "1": 0,
+                "3": 0.5,
+                "5": 0.5,
+                "10": 0.5
+              },
+              "chunk_ndcg": {
+                "1": 0,
+                "3": 0.6309297535714575,
+                "5": 0.6309297535714575,
+                "10": 0.6309297535714575
+              },
+              "chunk_hit_rate": {
+                "1": 0,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 4,
+              "is_empty_retrieval": false
+            }
+          },
+          {
+            "query_id": "eval_003",
+            "query": "How does the self-attention mechanism compute queries, keys, and values in Transformer architectures?",
+            "category": "cs.CL",
+            "answerable": true,
+            "pre_rerank_chunks": [
+              {
+                "chunk_id": "1706.03762_abs",
+                "paper_id": "1706.03762",
+                "score": 0.91
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "score": 0.45
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "score": 0.35
+              }
+            ],
+            "post_rerank_chunks": [
+              {
+                "chunk_id": "1706.03762_abs",
+                "paper_id": "1706.03762",
+                "final_score": 0.9235,
+                "similarity_score": 0.91,
+                "authority_score": 1
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "final_score": 0.3825,
+                "similarity_score": 0.45,
+                "authority_score": 0
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "final_score": 0.2975,
+                "similarity_score": 0.35,
+                "authority_score": 0
+              }
+            ],
+            "timings": {
+              "embed_ms": 1,
+              "route_ms": 1,
+              "search_ms": 2,
+              "rerank_ms": 1,
+              "total_ms": 0
+            },
+            "pre_rerank_metrics": {
+              "query_id": "eval_003",
+              "category": "cs.CL",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 3,
+              "is_empty_retrieval": false
+            },
+            "post_rerank_metrics": {
+              "query_id": "eval_003",
+              "category": "cs.CL",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 3,
+              "is_empty_retrieval": false
+            }
+          },
+          {
+            "query_id": "eval_004",
+            "query": "What is the scaled dot-product formula for attention with dimension d_k?",
+            "category": "cs.CL",
+            "answerable": true,
+            "pre_rerank_chunks": [
+              {
+                "chunk_id": "1706.03762_abs",
+                "paper_id": "1706.03762",
+                "score": 0.91
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "score": 0.45
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "score": 0.35
+              }
+            ],
+            "post_rerank_chunks": [
+              {
+                "chunk_id": "1706.03762_abs",
+                "paper_id": "1706.03762",
+                "final_score": 0.9235,
+                "similarity_score": 0.91,
+                "authority_score": 1
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "final_score": 0.3825,
+                "similarity_score": 0.45,
+                "authority_score": 0
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "final_score": 0.2975,
+                "similarity_score": 0.35,
+                "authority_score": 0
+              }
+            ],
+            "timings": {
+              "embed_ms": 1,
+              "route_ms": 1,
+              "search_ms": 2,
+              "rerank_ms": 1,
+              "total_ms": 0
+            },
+            "pre_rerank_metrics": {
+              "query_id": "eval_004",
+              "category": "cs.CL",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 3,
+              "is_empty_retrieval": false
+            },
+            "post_rerank_metrics": {
+              "query_id": "eval_004",
+              "category": "cs.CL",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 3,
+              "is_empty_retrieval": false
+            }
+          },
+          {
+            "query_id": "eval_005",
+            "query": "How does in-context few-shot learning work in GPT-3 without gradient updates?",
+            "category": "cs.CL",
+            "answerable": true,
+            "pre_rerank_chunks": [
+              {
+                "chunk_id": "2005.14165_abs",
+                "paper_id": "2005.14165",
+                "score": 0.85
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "score": 0.45
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "score": 0.35
+              }
+            ],
+            "post_rerank_chunks": [
+              {
+                "chunk_id": "2005.14165_abs",
+                "paper_id": "2005.14165",
+                "final_score": 0.7225,
+                "similarity_score": 0.85,
+                "authority_score": 0
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "final_score": 0.3825,
+                "similarity_score": 0.45,
+                "authority_score": 0
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "final_score": 0.2975,
+                "similarity_score": 0.35,
+                "authority_score": 0
+              }
+            ],
+            "timings": {
+              "embed_ms": 1,
+              "route_ms": 1,
+              "search_ms": 2,
+              "rerank_ms": 1,
+              "total_ms": 0
+            },
+            "pre_rerank_metrics": {
+              "query_id": "eval_005",
+              "category": "cs.CL",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 3,
+              "is_empty_retrieval": false
+            },
+            "post_rerank_metrics": {
+              "query_id": "eval_005",
+              "category": "cs.CL",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 3,
+              "is_empty_retrieval": false
+            }
+          },
+          {
+            "query_id": "eval_006",
+            "query": "What are the two pre-training tasks used in BERT: Masked Language Model and Next Sentence Prediction?",
+            "category": "cs.CL",
+            "answerable": true,
+            "pre_rerank_chunks": [
+              {
+                "chunk_id": "1810.04805_abs",
+                "paper_id": "1810.04805",
+                "score": 0.87
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "score": 0.45
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "score": 0.35
+              }
+            ],
+            "post_rerank_chunks": [
+              {
+                "chunk_id": "1810.04805_abs",
+                "paper_id": "1810.04805",
+                "final_score": 0.7395,
+                "similarity_score": 0.87,
+                "authority_score": 0
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "final_score": 0.3825,
+                "similarity_score": 0.45,
+                "authority_score": 0
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "final_score": 0.2975,
+                "similarity_score": 0.35,
+                "authority_score": 0
+              }
+            ],
+            "timings": {
+              "embed_ms": 1,
+              "route_ms": 1,
+              "search_ms": 2,
+              "rerank_ms": 1,
+              "total_ms": 0
+            },
+            "pre_rerank_metrics": {
+              "query_id": "eval_006",
+              "category": "cs.CL",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 3,
+              "is_empty_retrieval": false
+            },
+            "post_rerank_metrics": {
+              "query_id": "eval_006",
+              "category": "cs.CL",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 3,
+              "is_empty_retrieval": false
+            }
+          },
+          {
+            "query_id": "eval_007",
+            "query": "How do deep residual connections address degradation problem in deep convolutional networks?",
+            "category": "cs.CV",
+            "answerable": true,
+            "pre_rerank_chunks": [
+              {
+                "chunk_id": "1512.03385_abs",
+                "paper_id": "1512.03385",
+                "score": 0.89
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "score": 0.45
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "score": 0.35
+              }
+            ],
+            "post_rerank_chunks": [
+              {
+                "chunk_id": "1512.03385_abs",
+                "paper_id": "1512.03385",
+                "final_score": 0.7565,
+                "similarity_score": 0.89,
+                "authority_score": 0
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "final_score": 0.3825,
+                "similarity_score": 0.45,
+                "authority_score": 0
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "final_score": 0.2975,
+                "similarity_score": 0.35,
+                "authority_score": 0
+              }
+            ],
+            "timings": {
+              "embed_ms": 1,
+              "route_ms": 1,
+              "search_ms": 2,
+              "rerank_ms": 1,
+              "total_ms": 0
+            },
+            "pre_rerank_metrics": {
+              "query_id": "eval_007",
+              "category": "cs.CV",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 3,
+              "is_empty_retrieval": false
+            },
+            "post_rerank_metrics": {
+              "query_id": "eval_007",
+              "category": "cs.CV",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 3,
+              "is_empty_retrieval": false
+            }
+          },
+          {
+            "query_id": "eval_008",
+            "query": "What is the Adam optimization algorithm and how does it combine AdaGrad and RMSProp with momentum?",
+            "category": "cs.LG",
+            "answerable": true,
+            "pre_rerank_chunks": [
+              {
+                "chunk_id": "1412.6980_abs",
+                "paper_id": "1412.6980",
+                "score": 0.86
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "score": 0.45
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "score": 0.35
+              }
+            ],
+            "post_rerank_chunks": [
+              {
+                "chunk_id": "1412.6980_abs",
+                "paper_id": "1412.6980",
+                "final_score": 0.731,
+                "similarity_score": 0.86,
+                "authority_score": 0
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "final_score": 0.3825,
+                "similarity_score": 0.45,
+                "authority_score": 0
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "final_score": 0.2975,
+                "similarity_score": 0.35,
+                "authority_score": 0
+              }
+            ],
+            "timings": {
+              "embed_ms": 1,
+              "route_ms": 1,
+              "search_ms": 2,
+              "rerank_ms": 1,
+              "total_ms": 0
+            },
+            "pre_rerank_metrics": {
+              "query_id": "eval_008",
+              "category": "cs.LG",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 3,
+              "is_empty_retrieval": false
+            },
+            "post_rerank_metrics": {
+              "query_id": "eval_008",
+              "category": "cs.LG",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 3,
+              "is_empty_retrieval": false
+            }
+          },
+          {
+            "query_id": "eval_009",
+            "query": "Compare LoRA adapter efficiency with full fine-tuning on downstream tasks",
+            "category": "cs.LG",
+            "answerable": true,
+            "pre_rerank_chunks": [
+              {
+                "chunk_id": "2106.09685_abs",
+                "paper_id": "2106.09685",
+                "score": 0.88
+              },
+              {
+                "chunk_id": "2106.09685_sec4",
+                "paper_id": "2106.09685",
+                "score": 0.82
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "score": 0.45
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "score": 0.35
+              }
+            ],
+            "post_rerank_chunks": [
+              {
+                "chunk_id": "2106.09685_abs",
+                "paper_id": "2106.09685",
+                "final_score": 0.898,
+                "similarity_score": 0.88,
+                "authority_score": 1
+              },
+              {
+                "chunk_id": "2106.09685_sec4",
+                "paper_id": "2106.09685",
+                "final_score": 0.847,
+                "similarity_score": 0.82,
+                "authority_score": 1
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "final_score": 0.3825,
+                "similarity_score": 0.45,
+                "authority_score": 0
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "final_score": 0.2975,
+                "similarity_score": 0.35,
+                "authority_score": 0
+              }
+            ],
+            "timings": {
+              "embed_ms": 1,
+              "route_ms": 1,
+              "search_ms": 2,
+              "rerank_ms": 1,
+              "total_ms": 0
+            },
+            "pre_rerank_metrics": {
+              "query_id": "eval_009",
+              "category": "cs.LG",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 0.5,
+                "3": 0.5,
+                "5": 0.5,
+                "10": 0.5
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 0.9173194127129571,
+                "5": 0.9173194127129571,
+                "10": 0.9173194127129571
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 4,
+              "is_empty_retrieval": false
+            },
+            "post_rerank_metrics": {
+              "query_id": "eval_009",
+              "category": "cs.LG",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 0.5,
+                "3": 0.5,
+                "5": 0.5,
+                "10": 0.5
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 0.9173194127129571,
+                "5": 0.9173194127129571,
+                "10": 0.9173194127129571
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 4,
+              "is_empty_retrieval": false
+            }
+          },
+          {
+            "query_id": "eval_010",
+            "query": "What is the multi-head attention projection matrix dimension in encoder-decoder models?",
+            "category": "cs.CL",
+            "answerable": true,
+            "pre_rerank_chunks": [
+              {
+                "chunk_id": "1706.03762_abs",
+                "paper_id": "1706.03762",
+                "score": 0.91
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "score": 0.45
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "score": 0.35
+              }
+            ],
+            "post_rerank_chunks": [
+              {
+                "chunk_id": "1706.03762_abs",
+                "paper_id": "1706.03762",
+                "final_score": 0.9235,
+                "similarity_score": 0.91,
+                "authority_score": 1
+              },
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "final_score": 0.3825,
+                "similarity_score": 0.45,
+                "authority_score": 0
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "final_score": 0.2975,
+                "similarity_score": 0.35,
+                "authority_score": 0
+              }
+            ],
+            "timings": {
+              "embed_ms": 1,
+              "route_ms": 1,
+              "search_ms": 2,
+              "rerank_ms": 1,
+              "total_ms": 0
+            },
+            "pre_rerank_metrics": {
+              "query_id": "eval_010",
+              "category": "cs.CL",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 3,
+              "is_empty_retrieval": false
+            },
+            "post_rerank_metrics": {
+              "query_id": "eval_010",
+              "category": "cs.CL",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_precision": {
+                "1": 1,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "paper_mrr": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_ndcg": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "paper_hit_rate": {
+                "1": 1,
+                "3": 1,
+                "5": 1,
+                "10": 1
+              },
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 3,
+              "retrieved_chunk_count": 3,
+              "is_empty_retrieval": false
+            }
+          },
+          {
+            "query_id": "eval_011",
+            "query": "What are the symptoms and incubation period of seasonal influenza virus?",
+            "category": "biomedical",
+            "answerable": false,
+            "pre_rerank_chunks": [
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "score": 0.45
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "score": 0.35
+              }
+            ],
+            "post_rerank_chunks": [
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "final_score": 0.3825,
+                "similarity_score": 0.45,
+                "authority_score": 0
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "final_score": 0.2975,
+                "similarity_score": 0.35,
+                "authority_score": 0
+              }
+            ],
+            "timings": {
+              "embed_ms": 1,
+              "route_ms": 1,
+              "search_ms": 2,
+              "rerank_ms": 1,
+              "total_ms": 0
+            },
+            "pre_rerank_metrics": {
+              "query_id": "eval_011",
+              "category": "biomedical",
+              "answerable": false,
+              "skipped": true,
+              "skip_reason": "Unanswerable query (no relevant documents expected)",
+              "paper_recall": {},
+              "paper_precision": {},
+              "paper_mrr": {},
+              "paper_ndcg": {},
+              "paper_hit_rate": {},
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 2,
+              "retrieved_chunk_count": 2,
+              "is_empty_retrieval": false
+            },
+            "post_rerank_metrics": {
+              "query_id": "eval_011",
+              "category": "biomedical",
+              "answerable": false,
+              "skipped": true,
+              "skip_reason": "Unanswerable query (no relevant documents expected)",
+              "paper_recall": {},
+              "paper_precision": {},
+              "paper_mrr": {},
+              "paper_ndcg": {},
+              "paper_hit_rate": {},
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 2,
+              "retrieved_chunk_count": 2,
+              "is_empty_retrieval": false
+            }
+          },
+          {
+            "query_id": "eval_012",
+            "query": "How to prepare authentic Neapolitan pizza dough using high hydration flour?",
+            "category": "cooking",
+            "answerable": false,
+            "pre_rerank_chunks": [
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "score": 0.45
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "score": 0.35
+              }
+            ],
+            "post_rerank_chunks": [
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "final_score": 0.3825,
+                "similarity_score": 0.45,
+                "authority_score": 0
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "final_score": 0.2975,
+                "similarity_score": 0.35,
+                "authority_score": 0
+              }
+            ],
+            "timings": {
+              "embed_ms": 1,
+              "route_ms": 1,
+              "search_ms": 2,
+              "rerank_ms": 1,
+              "total_ms": 0
+            },
+            "pre_rerank_metrics": {
+              "query_id": "eval_012",
+              "category": "cooking",
+              "answerable": false,
+              "skipped": true,
+              "skip_reason": "Unanswerable query (no relevant documents expected)",
+              "paper_recall": {},
+              "paper_precision": {},
+              "paper_mrr": {},
+              "paper_ndcg": {},
+              "paper_hit_rate": {},
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 2,
+              "retrieved_chunk_count": 2,
+              "is_empty_retrieval": false
+            },
+            "post_rerank_metrics": {
+              "query_id": "eval_012",
+              "category": "cooking",
+              "answerable": false,
+              "skipped": true,
+              "skip_reason": "Unanswerable query (no relevant documents expected)",
+              "paper_recall": {},
+              "paper_precision": {},
+              "paper_mrr": {},
+              "paper_ndcg": {},
+              "paper_hit_rate": {},
+              "chunk_recall": {},
+              "chunk_precision": {},
+              "chunk_mrr": {},
+              "chunk_ndcg": {},
+              "chunk_hit_rate": {},
+              "retrieved_paper_count": 2,
+              "retrieved_chunk_count": 2,
+              "is_empty_retrieval": false
+            }
+          },
+          {
+            "query_id": "eval_seed_01",
+            "query": "Seed text information about paper 0 section abstract",
+            "category": "cs.LG",
+            "answerable": true,
+            "pre_rerank_chunks": [
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "score": 0.45
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "score": 0.35
+              }
+            ],
+            "post_rerank_chunks": [
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "final_score": 0.3825,
+                "similarity_score": 0.45,
+                "authority_score": 0
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "final_score": 0.2975,
+                "similarity_score": 0.35,
+                "authority_score": 0
+              }
+            ],
+            "timings": {
+              "embed_ms": 1,
+              "route_ms": 1,
+              "search_ms": 2,
+              "rerank_ms": 1,
+              "total_ms": 0
+            },
+            "pre_rerank_metrics": {
+              "query_id": "eval_seed_01",
+              "category": "cs.LG",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_precision": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_mrr": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_ndcg": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_hit_rate": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_recall": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_precision": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_mrr": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_ndcg": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_hit_rate": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "retrieved_paper_count": 2,
+              "retrieved_chunk_count": 2,
+              "is_empty_retrieval": false
+            },
+            "post_rerank_metrics": {
+              "query_id": "eval_seed_01",
+              "category": "cs.LG",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_precision": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_mrr": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_ndcg": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_hit_rate": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_recall": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_precision": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_mrr": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_ndcg": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_hit_rate": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "retrieved_paper_count": 2,
+              "retrieved_chunk_count": 2,
+              "is_empty_retrieval": false
+            }
+          },
+          {
+            "query_id": "eval_seed_02",
+            "query": "Seed text information about paper 1 section introduction",
+            "category": "cs.CL",
+            "answerable": true,
+            "pre_rerank_chunks": [
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "score": 0.45
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "score": 0.35
+              }
+            ],
+            "post_rerank_chunks": [
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "final_score": 0.3825,
+                "similarity_score": 0.45,
+                "authority_score": 0
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "final_score": 0.2975,
+                "similarity_score": 0.35,
+                "authority_score": 0
+              }
+            ],
+            "timings": {
+              "embed_ms": 1,
+              "route_ms": 1,
+              "search_ms": 2,
+              "rerank_ms": 1,
+              "total_ms": 0
+            },
+            "pre_rerank_metrics": {
+              "query_id": "eval_seed_02",
+              "category": "cs.CL",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_precision": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_mrr": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_ndcg": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_hit_rate": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_recall": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_precision": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_mrr": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_ndcg": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_hit_rate": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "retrieved_paper_count": 2,
+              "retrieved_chunk_count": 2,
+              "is_empty_retrieval": false
+            },
+            "post_rerank_metrics": {
+              "query_id": "eval_seed_02",
+              "category": "cs.CL",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_precision": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_mrr": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_ndcg": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_hit_rate": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_recall": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_precision": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_mrr": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_ndcg": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_hit_rate": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "retrieved_paper_count": 2,
+              "retrieved_chunk_count": 2,
+              "is_empty_retrieval": false
+            }
+          },
+          {
+            "query_id": "eval_seed_03",
+            "query": "Seed text information about paper 2 section method",
+            "category": "cs.CV",
+            "answerable": true,
+            "pre_rerank_chunks": [
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "score": 0.45
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "score": 0.35
+              }
+            ],
+            "post_rerank_chunks": [
+              {
+                "chunk_id": "distractor_1",
+                "paper_id": "distractor_paper_1",
+                "final_score": 0.3825,
+                "similarity_score": 0.45,
+                "authority_score": 0
+              },
+              {
+                "chunk_id": "distractor_2",
+                "paper_id": "distractor_paper_2",
+                "final_score": 0.2975,
+                "similarity_score": 0.35,
+                "authority_score": 0
+              }
+            ],
+            "timings": {
+              "embed_ms": 1,
+              "route_ms": 1,
+              "search_ms": 2,
+              "rerank_ms": 1,
+              "total_ms": 0
+            },
+            "pre_rerank_metrics": {
+              "query_id": "eval_seed_03",
+              "category": "cs.CV",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_precision": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_mrr": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_ndcg": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_hit_rate": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_recall": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_precision": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_mrr": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_ndcg": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_hit_rate": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "retrieved_paper_count": 2,
+              "retrieved_chunk_count": 2,
+              "is_empty_retrieval": false
+            },
+            "post_rerank_metrics": {
+              "query_id": "eval_seed_03",
+              "category": "cs.CV",
+              "answerable": true,
+              "skipped": false,
+              "paper_recall": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_precision": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_mrr": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_ndcg": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_hit_rate": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_recall": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_precision": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_mrr": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_ndcg": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "chunk_hit_rate": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "retrieved_paper_count": 2,
+              "retrieved_chunk_count": 2,
+              "is_empty_retrieval": false
+            }
+          }
+        ],
+        "pre_rerank_aggregated": {
+          "total_queries": 15,
+          "evaluated_queries": 13,
+          "skipped_queries": 2,
+          "empty_retrieval_count": 0,
+          "empty_retrieval_rate": 0,
+          "k_values": [
+            1,
+            3,
+            5,
+            10
+          ],
+          "paper_recall": {
+            "1": {
+              "mean": 0.7308,
+              "evaluated_count": 13
+            },
+            "3": {
+              "mean": 0.7308,
+              "evaluated_count": 13
+            },
+            "5": {
+              "mean": 0.7308,
+              "evaluated_count": 13
+            },
+            "10": {
+              "mean": 0.7308,
+              "evaluated_count": 13
+            }
+          },
+          "paper_precision": {
+            "1": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            },
+            "3": {
+              "mean": 0.2564,
+              "evaluated_count": 13
+            },
+            "5": {
+              "mean": 0.1538,
+              "evaluated_count": 13
+            },
+            "10": {
+              "mean": 0.0769,
+              "evaluated_count": 13
+            }
+          },
+          "paper_mrr": {
+            "1": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            },
+            "3": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            },
+            "5": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            },
+            "10": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            }
+          },
+          "paper_ndcg": {
+            "1": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            },
+            "3": {
+              "mean": 0.7629,
+              "evaluated_count": 13
+            },
+            "5": {
+              "mean": 0.7629,
+              "evaluated_count": 13
+            },
+            "10": {
+              "mean": 0.7629,
+              "evaluated_count": 13
+            }
+          },
+          "paper_hit_rate": {
+            "1": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            },
+            "3": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            },
+            "5": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            },
+            "10": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            }
+          },
+          "chunk_recall": {
+            "1": {
+              "mean": 0.2,
+              "evaluated_count": 5
+            },
+            "3": {
+              "mean": 0.4,
+              "evaluated_count": 5
+            },
+            "5": {
+              "mean": 0.4,
+              "evaluated_count": 5
+            },
+            "10": {
+              "mean": 0.4,
+              "evaluated_count": 5
+            }
+          },
+          "chunk_precision": {
+            "1": {
+              "mean": 0.2,
+              "evaluated_count": 5
+            },
+            "3": {
+              "mean": 0.1333,
+              "evaluated_count": 5
+            },
+            "5": {
+              "mean": 0.08,
+              "evaluated_count": 5
+            },
+            "10": {
+              "mean": 0.04,
+              "evaluated_count": 5
+            }
+          },
+          "chunk_mrr": {
+            "1": {
+              "mean": 0.2,
+              "evaluated_count": 5
+            },
+            "3": {
+              "mean": 0.3,
+              "evaluated_count": 5
+            },
+            "5": {
+              "mean": 0.3,
+              "evaluated_count": 5
+            },
+            "10": {
+              "mean": 0.3,
+              "evaluated_count": 5
+            }
+          },
+          "chunk_ndcg": {
+            "1": {
+              "mean": 0.2,
+              "evaluated_count": 5
+            },
+            "3": {
+              "mean": 0.3262,
+              "evaluated_count": 5
+            },
+            "5": {
+              "mean": 0.3262,
+              "evaluated_count": 5
+            },
+            "10": {
+              "mean": 0.3262,
+              "evaluated_count": 5
+            }
+          },
+          "chunk_hit_rate": {
+            "1": {
+              "mean": 0.2,
+              "evaluated_count": 5
+            },
+            "3": {
+              "mean": 0.4,
+              "evaluated_count": 5
+            },
+            "5": {
+              "mean": 0.4,
+              "evaluated_count": 5
+            },
+            "10": {
+              "mean": 0.4,
+              "evaluated_count": 5
+            }
+          },
+          "by_category": {
+            "cs.LG": {
+              "query_count": 5,
+              "paper_recall": {
+                "1": 0.7,
+                "3": 0.7,
+                "5": 0.7,
+                "10": 0.7
+              },
+              "paper_mrr": {
+                "1": 0.8,
+                "3": 0.8,
+                "5": 0.8,
+                "10": 0.8
+              },
+              "paper_ndcg": {
+                "1": 0.8,
+                "3": 0.7835,
+                "5": 0.7835,
+                "10": 0.7835
+              }
+            },
+            "cs.CL": {
+              "query_count": 6,
+              "paper_recall": {
+                "1": 0.8333,
+                "3": 0.8333,
+                "5": 0.8333,
+                "10": 0.8333
+              },
+              "paper_mrr": {
+                "1": 0.8333,
+                "3": 0.8333,
+                "5": 0.8333,
+                "10": 0.8333
+              },
+              "paper_ndcg": {
+                "1": 0.8333,
+                "3": 0.8333,
+                "5": 0.8333,
+                "10": 0.8333
+              }
+            },
+            "cs.CV": {
+              "query_count": 2,
+              "paper_recall": {
+                "1": 0.5,
+                "3": 0.5,
+                "5": 0.5,
+                "10": 0.5
+              },
+              "paper_mrr": {
+                "1": 0.5,
+                "3": 0.5,
+                "5": 0.5,
+                "10": 0.5
+              },
+              "paper_ndcg": {
+                "1": 0.5,
+                "3": 0.5,
+                "5": 0.5,
+                "10": 0.5
+              }
+            },
+            "biomedical": {
+              "query_count": 1,
+              "paper_recall": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_mrr": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_ndcg": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              }
+            },
+            "cooking": {
+              "query_count": 1,
+              "paper_recall": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_mrr": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_ndcg": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              }
+            }
+          }
+        },
+        "post_rerank_aggregated": {
+          "total_queries": 15,
+          "evaluated_queries": 13,
+          "skipped_queries": 2,
+          "empty_retrieval_count": 0,
+          "empty_retrieval_rate": 0,
+          "k_values": [
+            1,
+            3,
+            5,
+            10
+          ],
+          "paper_recall": {
+            "1": {
+              "mean": 0.7308,
+              "evaluated_count": 13
+            },
+            "3": {
+              "mean": 0.7308,
+              "evaluated_count": 13
+            },
+            "5": {
+              "mean": 0.7308,
+              "evaluated_count": 13
+            },
+            "10": {
+              "mean": 0.7308,
+              "evaluated_count": 13
+            }
+          },
+          "paper_precision": {
+            "1": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            },
+            "3": {
+              "mean": 0.2564,
+              "evaluated_count": 13
+            },
+            "5": {
+              "mean": 0.1538,
+              "evaluated_count": 13
+            },
+            "10": {
+              "mean": 0.0769,
+              "evaluated_count": 13
+            }
+          },
+          "paper_mrr": {
+            "1": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            },
+            "3": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            },
+            "5": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            },
+            "10": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            }
+          },
+          "paper_ndcg": {
+            "1": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            },
+            "3": {
+              "mean": 0.7629,
+              "evaluated_count": 13
+            },
+            "5": {
+              "mean": 0.7629,
+              "evaluated_count": 13
+            },
+            "10": {
+              "mean": 0.7629,
+              "evaluated_count": 13
+            }
+          },
+          "paper_hit_rate": {
+            "1": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            },
+            "3": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            },
+            "5": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            },
+            "10": {
+              "mean": 0.7692,
+              "evaluated_count": 13
+            }
+          },
+          "chunk_recall": {
+            "1": {
+              "mean": 0.2,
+              "evaluated_count": 5
+            },
+            "3": {
+              "mean": 0.4,
+              "evaluated_count": 5
+            },
+            "5": {
+              "mean": 0.4,
+              "evaluated_count": 5
+            },
+            "10": {
+              "mean": 0.4,
+              "evaluated_count": 5
+            }
+          },
+          "chunk_precision": {
+            "1": {
+              "mean": 0.2,
+              "evaluated_count": 5
+            },
+            "3": {
+              "mean": 0.1333,
+              "evaluated_count": 5
+            },
+            "5": {
+              "mean": 0.08,
+              "evaluated_count": 5
+            },
+            "10": {
+              "mean": 0.04,
+              "evaluated_count": 5
+            }
+          },
+          "chunk_mrr": {
+            "1": {
+              "mean": 0.2,
+              "evaluated_count": 5
+            },
+            "3": {
+              "mean": 0.3,
+              "evaluated_count": 5
+            },
+            "5": {
+              "mean": 0.3,
+              "evaluated_count": 5
+            },
+            "10": {
+              "mean": 0.3,
+              "evaluated_count": 5
+            }
+          },
+          "chunk_ndcg": {
+            "1": {
+              "mean": 0.2,
+              "evaluated_count": 5
+            },
+            "3": {
+              "mean": 0.3262,
+              "evaluated_count": 5
+            },
+            "5": {
+              "mean": 0.3262,
+              "evaluated_count": 5
+            },
+            "10": {
+              "mean": 0.3262,
+              "evaluated_count": 5
+            }
+          },
+          "chunk_hit_rate": {
+            "1": {
+              "mean": 0.2,
+              "evaluated_count": 5
+            },
+            "3": {
+              "mean": 0.4,
+              "evaluated_count": 5
+            },
+            "5": {
+              "mean": 0.4,
+              "evaluated_count": 5
+            },
+            "10": {
+              "mean": 0.4,
+              "evaluated_count": 5
+            }
+          },
+          "by_category": {
+            "cs.LG": {
+              "query_count": 5,
+              "paper_recall": {
+                "1": 0.7,
+                "3": 0.7,
+                "5": 0.7,
+                "10": 0.7
+              },
+              "paper_mrr": {
+                "1": 0.8,
+                "3": 0.8,
+                "5": 0.8,
+                "10": 0.8
+              },
+              "paper_ndcg": {
+                "1": 0.8,
+                "3": 0.7835,
+                "5": 0.7835,
+                "10": 0.7835
+              }
+            },
+            "cs.CL": {
+              "query_count": 6,
+              "paper_recall": {
+                "1": 0.8333,
+                "3": 0.8333,
+                "5": 0.8333,
+                "10": 0.8333
+              },
+              "paper_mrr": {
+                "1": 0.8333,
+                "3": 0.8333,
+                "5": 0.8333,
+                "10": 0.8333
+              },
+              "paper_ndcg": {
+                "1": 0.8333,
+                "3": 0.8333,
+                "5": 0.8333,
+                "10": 0.8333
+              }
+            },
+            "cs.CV": {
+              "query_count": 2,
+              "paper_recall": {
+                "1": 0.5,
+                "3": 0.5,
+                "5": 0.5,
+                "10": 0.5
+              },
+              "paper_mrr": {
+                "1": 0.5,
+                "3": 0.5,
+                "5": 0.5,
+                "10": 0.5
+              },
+              "paper_ndcg": {
+                "1": 0.5,
+                "3": 0.5,
+                "5": 0.5,
+                "10": 0.5
+              }
+            },
+            "biomedical": {
+              "query_count": 1,
+              "paper_recall": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_mrr": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_ndcg": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              }
+            },
+            "cooking": {
+              "query_count": 1,
+              "paper_recall": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_mrr": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              },
+              "paper_ndcg": {
+                "1": 0,
+                "3": 0,
+                "5": 0,
+                "10": 0
+              }
+            }
+          }
+        },
+        "failed_queries": []
+      }
+    },
+    "generation": {
+      "status": "completed",
+      "duration_ms": 4,
+      "raw_file": "C:\\Users\\ASUS\\Music\\TS_backend_rag\\benchmark\\reports\\output\\generation-benchmark-2026-10-23T08-19-38-085Z.json",
+      "data": {
+        "config": {
+          "dataset_path": "C:\\Users\\ASUS\\Music\\TS_backend_rag\\benchmark\\datasets\\samples\\sample_evaluation.jsonl",
+          "adapter_name": "DefaultMockGenerationAdapter",
+          "judge_enabled": true,
+          "judge_name": "MockJudgeProvider",
+          "rubric_version": "1.0.0"
+        },
+        "duration_ms": 3,
+        "aggregated_metrics": {
+          "total_samples": 15,
+          "successful_evaluations": 15,
+          "failed_evaluations": 0,
+          "mean_token_f1": 0,
+          "mean_rouge_l_f1": 0,
+          "exact_match_rate": 0,
+          "mean_faithfulness_score": 0.2,
+          "total_claims_evaluated": 15,
+          "total_supported_claims": 3,
+          "mean_relevance_score": 0.3158,
+          "mean_query_coverage": 0.0877,
+          "mean_citation_id_precision": 1,
+          "mean_citation_completeness": 0,
+          "mean_citation_support_ratio": 0.3333,
+          "total_citations_found": 13,
+          "total_hallucinated_citations": 0,
+          "abstention": {
+            "total_samples": 15,
+            "expected_abstention_count": 2,
+            "actual_abstention_count": 2,
+            "true_abstention_count": 2,
+            "false_abstention_count": 0,
+            "unsupported_answer_count": 0,
+            "abstention_precision": 1,
+            "abstention_recall": 1,
+            "false_abstention_rate": 0,
+            "unsupported_answer_rate": 0
+          },
+          "judge_averages": {
+            "mean_faithfulness_score_1_to_5": 4.6,
+            "mean_correctness_score_1_to_5": 0,
+            "mean_relevance_score_1_to_5": 5
+          },
+          "by_category": {
+            "cs.LG": {
+              "sample_count": 5,
+              "mean_faithfulness": 0.6,
+              "mean_rouge_l": 0,
+              "citation_id_precision": 1
+            },
+            "cs.CL": {
+              "sample_count": 6,
+              "mean_faithfulness": 0,
+              "mean_rouge_l": 0,
+              "citation_id_precision": 1
+            },
+            "cs.CV": {
+              "sample_count": 2,
+              "mean_faithfulness": 0,
+              "mean_rouge_l": 0,
+              "citation_id_precision": 1
+            },
+            "biomedical": {
+              "sample_count": 1,
+              "mean_faithfulness": 0,
+              "mean_rouge_l": 0,
+              "citation_id_precision": 1
+            },
+            "cooking": {
+              "sample_count": 1,
+              "mean_faithfulness": 0,
+              "mean_rouge_l": 0,
+              "citation_id_precision": 1
+            }
+          }
+        },
+        "results": [
+          {
+            "query_id": "eval_001",
+            "query": "How does low-rank adaptation LoRA reduce the number of trainable parameters in large language models?",
+            "category": "cs.LG",
+            "answerable": true,
+            "expected_abstention": false,
+            "answer": "Low-rank adaptation LoRA freezes pre-trained weights and injects trainable rank decomposition matrices [Paper: 2106.09685].",
+            "citations": [
+              "2106.09685"
+            ],
+            "retrieved_chunk_count": 1,
+            "correctness": {
+              "has_reference": false,
+              "token_f1": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "rouge_l": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "exact_match": false
+            },
+            "faithfulness": {
+              "total_claims": 1,
+              "supported_claims": 1,
+              "unsupported_claims": 0,
+              "faithfulness_score": 1,
+              "claim_details": [
+                {
+                  "claim": "Low-rank adaptation LoRA freezes pre-trained weights and injects trainable rank decomposition matrices .",
+                  "is_supported": true,
+                  "overlap_ratio": 0.62
+                }
+              ]
+            },
+            "relevance": {
+              "query_keyword_coverage": 0.4545,
+              "is_direct_and_concise": true,
+              "length_chars": 123,
+              "relevance_score": 0.5909
+            },
+            "citations_eval": {
+              "total_citations_found": 1,
+              "extracted_citation_ids": [
+                "2106.09685"
+              ],
+              "format_valid": true,
+              "malformed_citations": [],
+              "in_context_citations": [
+                "2106.09685"
+              ],
+              "hallucinated_citations": [],
+              "id_precision": 1,
+              "supported_citations": [
+                "2106.09685"
+              ],
+              "unsupported_citations": [],
+              "citation_support_ratio": 1,
+              "total_claims": 1,
+              "claims_with_citations": 0,
+              "citation_completeness_ratio": 0
+            },
+            "abstention_eval": {
+              "is_abstention": false,
+              "expected_abstention": false,
+              "is_true_abstention": false,
+              "is_false_abstention": false,
+              "is_unsupported_answer": false
+            },
+            "judge_evaluations": {
+              "provider_name": "MockJudgeProvider",
+              "rubric_version": "1.0.0",
+              "faithfulness": {
+                "score": 5,
+                "reasoning": "All technical claims are supported by provided excerpts",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              },
+              "relevance": {
+                "score": 5,
+                "reasoning": "Directly and concisely answers the user query",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              }
+            }
+          },
+          {
+            "query_id": "eval_002",
+            "query": "What is the rank parameter r in LoRA decomposition and what values are commonly tested?",
+            "category": "cs.LG",
+            "answerable": true,
+            "expected_abstention": false,
+            "answer": "Low-rank adaptation LoRA freezes pre-trained weights and injects trainable rank decomposition matrices [Paper: 2106.09685].",
+            "citations": [
+              "2106.09685"
+            ],
+            "retrieved_chunk_count": 1,
+            "correctness": {
+              "has_reference": false,
+              "token_f1": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "rouge_l": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "exact_match": false
+            },
+            "faithfulness": {
+              "total_claims": 1,
+              "supported_claims": 1,
+              "unsupported_claims": 0,
+              "faithfulness_score": 1,
+              "claim_details": [
+                {
+                  "claim": "Low-rank adaptation LoRA freezes pre-trained weights and injects trainable rank decomposition matrices .",
+                  "is_supported": true,
+                  "overlap_ratio": 0.62
+                }
+              ]
+            },
+            "relevance": {
+              "query_keyword_coverage": 0.375,
+              "is_direct_and_concise": true,
+              "length_chars": 123,
+              "relevance_score": 0.5313
+            },
+            "citations_eval": {
+              "total_citations_found": 1,
+              "extracted_citation_ids": [
+                "2106.09685"
+              ],
+              "format_valid": true,
+              "malformed_citations": [],
+              "in_context_citations": [
+                "2106.09685"
+              ],
+              "hallucinated_citations": [],
+              "id_precision": 1,
+              "supported_citations": [
+                "2106.09685"
+              ],
+              "unsupported_citations": [],
+              "citation_support_ratio": 1,
+              "total_claims": 1,
+              "claims_with_citations": 0,
+              "citation_completeness_ratio": 0
+            },
+            "abstention_eval": {
+              "is_abstention": false,
+              "expected_abstention": false,
+              "is_true_abstention": false,
+              "is_false_abstention": false,
+              "is_unsupported_answer": false
+            },
+            "judge_evaluations": {
+              "provider_name": "MockJudgeProvider",
+              "rubric_version": "1.0.0",
+              "faithfulness": {
+                "score": 5,
+                "reasoning": "All technical claims are supported by provided excerpts",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              },
+              "relevance": {
+                "score": 5,
+                "reasoning": "Directly and concisely answers the user query",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              }
+            }
+          },
+          {
+            "query_id": "eval_003",
+            "query": "How does the self-attention mechanism compute queries, keys, and values in Transformer architectures?",
+            "category": "cs.CL",
+            "answerable": true,
+            "expected_abstention": false,
+            "answer": "Scientific findings show consistent experimental results [Paper: 1706.03762].",
+            "citations": [
+              "1706.03762"
+            ],
+            "retrieved_chunk_count": 1,
+            "correctness": {
+              "has_reference": false,
+              "token_f1": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "rouge_l": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "exact_match": false
+            },
+            "faithfulness": {
+              "total_claims": 1,
+              "supported_claims": 0,
+              "unsupported_claims": 1,
+              "faithfulness_score": 0,
+              "claim_details": [
+                {
+                  "claim": "Scientific findings show consistent experimental results .",
+                  "is_supported": false,
+                  "overlap_ratio": 0
+                }
+              ]
+            },
+            "relevance": {
+              "query_keyword_coverage": 0,
+              "is_direct_and_concise": true,
+              "length_chars": 77,
+              "relevance_score": 0.25
+            },
+            "citations_eval": {
+              "total_citations_found": 1,
+              "extracted_citation_ids": [
+                "1706.03762"
+              ],
+              "format_valid": true,
+              "malformed_citations": [],
+              "in_context_citations": [
+                "1706.03762"
+              ],
+              "hallucinated_citations": [],
+              "id_precision": 1,
+              "supported_citations": [],
+              "unsupported_citations": [
+                "1706.03762"
+              ],
+              "citation_support_ratio": 0,
+              "total_claims": 1,
+              "claims_with_citations": 0,
+              "citation_completeness_ratio": 0
+            },
+            "abstention_eval": {
+              "is_abstention": false,
+              "expected_abstention": false,
+              "is_true_abstention": false,
+              "is_false_abstention": false,
+              "is_unsupported_answer": false
+            },
+            "judge_evaluations": {
+              "provider_name": "MockJudgeProvider",
+              "rubric_version": "1.0.0",
+              "faithfulness": {
+                "score": 5,
+                "reasoning": "All technical claims are supported by provided excerpts",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              },
+              "relevance": {
+                "score": 5,
+                "reasoning": "Directly and concisely answers the user query",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              }
+            }
+          },
+          {
+            "query_id": "eval_004",
+            "query": "What is the scaled dot-product formula for attention with dimension d_k?",
+            "category": "cs.CL",
+            "answerable": true,
+            "expected_abstention": false,
+            "answer": "Scientific findings show consistent experimental results [Paper: 1706.03762].",
+            "citations": [
+              "1706.03762"
+            ],
+            "retrieved_chunk_count": 1,
+            "correctness": {
+              "has_reference": false,
+              "token_f1": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "rouge_l": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "exact_match": false
+            },
+            "faithfulness": {
+              "total_claims": 1,
+              "supported_claims": 0,
+              "unsupported_claims": 1,
+              "faithfulness_score": 0,
+              "claim_details": [
+                {
+                  "claim": "Scientific findings show consistent experimental results .",
+                  "is_supported": false,
+                  "overlap_ratio": 0
+                }
+              ]
+            },
+            "relevance": {
+              "query_keyword_coverage": 0,
+              "is_direct_and_concise": true,
+              "length_chars": 77,
+              "relevance_score": 0.25
+            },
+            "citations_eval": {
+              "total_citations_found": 1,
+              "extracted_citation_ids": [
+                "1706.03762"
+              ],
+              "format_valid": true,
+              "malformed_citations": [],
+              "in_context_citations": [
+                "1706.03762"
+              ],
+              "hallucinated_citations": [],
+              "id_precision": 1,
+              "supported_citations": [],
+              "unsupported_citations": [
+                "1706.03762"
+              ],
+              "citation_support_ratio": 0,
+              "total_claims": 1,
+              "claims_with_citations": 0,
+              "citation_completeness_ratio": 0
+            },
+            "abstention_eval": {
+              "is_abstention": false,
+              "expected_abstention": false,
+              "is_true_abstention": false,
+              "is_false_abstention": false,
+              "is_unsupported_answer": false
+            },
+            "judge_evaluations": {
+              "provider_name": "MockJudgeProvider",
+              "rubric_version": "1.0.0",
+              "faithfulness": {
+                "score": 5,
+                "reasoning": "All technical claims are supported by provided excerpts",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              },
+              "relevance": {
+                "score": 5,
+                "reasoning": "Directly and concisely answers the user query",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              }
+            }
+          },
+          {
+            "query_id": "eval_005",
+            "query": "How does in-context few-shot learning work in GPT-3 without gradient updates?",
+            "category": "cs.CL",
+            "answerable": true,
+            "expected_abstention": false,
+            "answer": "Scientific findings show consistent experimental results [Paper: 1706.03762].",
+            "citations": [
+              "1706.03762"
+            ],
+            "retrieved_chunk_count": 1,
+            "correctness": {
+              "has_reference": false,
+              "token_f1": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "rouge_l": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "exact_match": false
+            },
+            "faithfulness": {
+              "total_claims": 1,
+              "supported_claims": 0,
+              "unsupported_claims": 1,
+              "faithfulness_score": 0,
+              "claim_details": [
+                {
+                  "claim": "Scientific findings show consistent experimental results .",
+                  "is_supported": false,
+                  "overlap_ratio": 0
+                }
+              ]
+            },
+            "relevance": {
+              "query_keyword_coverage": 0,
+              "is_direct_and_concise": true,
+              "length_chars": 77,
+              "relevance_score": 0.25
+            },
+            "citations_eval": {
+              "total_citations_found": 1,
+              "extracted_citation_ids": [
+                "1706.03762"
+              ],
+              "format_valid": true,
+              "malformed_citations": [],
+              "in_context_citations": [
+                "1706.03762"
+              ],
+              "hallucinated_citations": [],
+              "id_precision": 1,
+              "supported_citations": [],
+              "unsupported_citations": [
+                "1706.03762"
+              ],
+              "citation_support_ratio": 0,
+              "total_claims": 1,
+              "claims_with_citations": 0,
+              "citation_completeness_ratio": 0
+            },
+            "abstention_eval": {
+              "is_abstention": false,
+              "expected_abstention": false,
+              "is_true_abstention": false,
+              "is_false_abstention": false,
+              "is_unsupported_answer": false
+            },
+            "judge_evaluations": {
+              "provider_name": "MockJudgeProvider",
+              "rubric_version": "1.0.0",
+              "faithfulness": {
+                "score": 5,
+                "reasoning": "All technical claims are supported by provided excerpts",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              },
+              "relevance": {
+                "score": 5,
+                "reasoning": "Directly and concisely answers the user query",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              }
+            }
+          },
+          {
+            "query_id": "eval_006",
+            "query": "What are the two pre-training tasks used in BERT: Masked Language Model and Next Sentence Prediction?",
+            "category": "cs.CL",
+            "answerable": true,
+            "expected_abstention": false,
+            "answer": "Scientific findings show consistent experimental results [Paper: 1706.03762].",
+            "citations": [
+              "1706.03762"
+            ],
+            "retrieved_chunk_count": 1,
+            "correctness": {
+              "has_reference": false,
+              "token_f1": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "rouge_l": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "exact_match": false
+            },
+            "faithfulness": {
+              "total_claims": 1,
+              "supported_claims": 0,
+              "unsupported_claims": 1,
+              "faithfulness_score": 0,
+              "claim_details": [
+                {
+                  "claim": "Scientific findings show consistent experimental results .",
+                  "is_supported": false,
+                  "overlap_ratio": 0
+                }
+              ]
+            },
+            "relevance": {
+              "query_keyword_coverage": 0,
+              "is_direct_and_concise": true,
+              "length_chars": 77,
+              "relevance_score": 0.25
+            },
+            "citations_eval": {
+              "total_citations_found": 1,
+              "extracted_citation_ids": [
+                "1706.03762"
+              ],
+              "format_valid": true,
+              "malformed_citations": [],
+              "in_context_citations": [
+                "1706.03762"
+              ],
+              "hallucinated_citations": [],
+              "id_precision": 1,
+              "supported_citations": [],
+              "unsupported_citations": [
+                "1706.03762"
+              ],
+              "citation_support_ratio": 0,
+              "total_claims": 1,
+              "claims_with_citations": 0,
+              "citation_completeness_ratio": 0
+            },
+            "abstention_eval": {
+              "is_abstention": false,
+              "expected_abstention": false,
+              "is_true_abstention": false,
+              "is_false_abstention": false,
+              "is_unsupported_answer": false
+            },
+            "judge_evaluations": {
+              "provider_name": "MockJudgeProvider",
+              "rubric_version": "1.0.0",
+              "faithfulness": {
+                "score": 5,
+                "reasoning": "All technical claims are supported by provided excerpts",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              },
+              "relevance": {
+                "score": 5,
+                "reasoning": "Directly and concisely answers the user query",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              }
+            }
+          },
+          {
+            "query_id": "eval_007",
+            "query": "How do deep residual connections address degradation problem in deep convolutional networks?",
+            "category": "cs.CV",
+            "answerable": true,
+            "expected_abstention": false,
+            "answer": "Scientific findings show consistent experimental results [Paper: 1706.03762].",
+            "citations": [
+              "1706.03762"
+            ],
+            "retrieved_chunk_count": 1,
+            "correctness": {
+              "has_reference": false,
+              "token_f1": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "rouge_l": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "exact_match": false
+            },
+            "faithfulness": {
+              "total_claims": 1,
+              "supported_claims": 0,
+              "unsupported_claims": 1,
+              "faithfulness_score": 0,
+              "claim_details": [
+                {
+                  "claim": "Scientific findings show consistent experimental results .",
+                  "is_supported": false,
+                  "overlap_ratio": 0
+                }
+              ]
+            },
+            "relevance": {
+              "query_keyword_coverage": 0,
+              "is_direct_and_concise": true,
+              "length_chars": 77,
+              "relevance_score": 0.25
+            },
+            "citations_eval": {
+              "total_citations_found": 1,
+              "extracted_citation_ids": [
+                "1706.03762"
+              ],
+              "format_valid": true,
+              "malformed_citations": [],
+              "in_context_citations": [
+                "1706.03762"
+              ],
+              "hallucinated_citations": [],
+              "id_precision": 1,
+              "supported_citations": [],
+              "unsupported_citations": [
+                "1706.03762"
+              ],
+              "citation_support_ratio": 0,
+              "total_claims": 1,
+              "claims_with_citations": 0,
+              "citation_completeness_ratio": 0
+            },
+            "abstention_eval": {
+              "is_abstention": false,
+              "expected_abstention": false,
+              "is_true_abstention": false,
+              "is_false_abstention": false,
+              "is_unsupported_answer": false
+            },
+            "judge_evaluations": {
+              "provider_name": "MockJudgeProvider",
+              "rubric_version": "1.0.0",
+              "faithfulness": {
+                "score": 5,
+                "reasoning": "All technical claims are supported by provided excerpts",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              },
+              "relevance": {
+                "score": 5,
+                "reasoning": "Directly and concisely answers the user query",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              }
+            }
+          },
+          {
+            "query_id": "eval_008",
+            "query": "What is the Adam optimization algorithm and how does it combine AdaGrad and RMSProp with momentum?",
+            "category": "cs.LG",
+            "answerable": true,
+            "expected_abstention": false,
+            "answer": "Scientific findings show consistent experimental results [Paper: 1706.03762].",
+            "citations": [
+              "1706.03762"
+            ],
+            "retrieved_chunk_count": 1,
+            "correctness": {
+              "has_reference": false,
+              "token_f1": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "rouge_l": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "exact_match": false
+            },
+            "faithfulness": {
+              "total_claims": 1,
+              "supported_claims": 0,
+              "unsupported_claims": 1,
+              "faithfulness_score": 0,
+              "claim_details": [
+                {
+                  "claim": "Scientific findings show consistent experimental results .",
+                  "is_supported": false,
+                  "overlap_ratio": 0
+                }
+              ]
+            },
+            "relevance": {
+              "query_keyword_coverage": 0,
+              "is_direct_and_concise": true,
+              "length_chars": 77,
+              "relevance_score": 0.25
+            },
+            "citations_eval": {
+              "total_citations_found": 1,
+              "extracted_citation_ids": [
+                "1706.03762"
+              ],
+              "format_valid": true,
+              "malformed_citations": [],
+              "in_context_citations": [
+                "1706.03762"
+              ],
+              "hallucinated_citations": [],
+              "id_precision": 1,
+              "supported_citations": [],
+              "unsupported_citations": [
+                "1706.03762"
+              ],
+              "citation_support_ratio": 0,
+              "total_claims": 1,
+              "claims_with_citations": 0,
+              "citation_completeness_ratio": 0
+            },
+            "abstention_eval": {
+              "is_abstention": false,
+              "expected_abstention": false,
+              "is_true_abstention": false,
+              "is_false_abstention": false,
+              "is_unsupported_answer": false
+            },
+            "judge_evaluations": {
+              "provider_name": "MockJudgeProvider",
+              "rubric_version": "1.0.0",
+              "faithfulness": {
+                "score": 5,
+                "reasoning": "All technical claims are supported by provided excerpts",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              },
+              "relevance": {
+                "score": 5,
+                "reasoning": "Directly and concisely answers the user query",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              }
+            }
+          },
+          {
+            "query_id": "eval_009",
+            "query": "Compare LoRA adapter efficiency with full fine-tuning on downstream tasks",
+            "category": "cs.LG",
+            "answerable": true,
+            "expected_abstention": false,
+            "answer": "Low-rank adaptation LoRA freezes pre-trained weights and injects trainable rank decomposition matrices [Paper: 2106.09685].",
+            "citations": [
+              "2106.09685"
+            ],
+            "retrieved_chunk_count": 1,
+            "correctness": {
+              "has_reference": false,
+              "token_f1": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "rouge_l": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "exact_match": false
+            },
+            "faithfulness": {
+              "total_claims": 1,
+              "supported_claims": 1,
+              "unsupported_claims": 0,
+              "faithfulness_score": 1,
+              "claim_details": [
+                {
+                  "claim": "Low-rank adaptation LoRA freezes pre-trained weights and injects trainable rank decomposition matrices .",
+                  "is_supported": true,
+                  "overlap_ratio": 0.62
+                }
+              ]
+            },
+            "relevance": {
+              "query_keyword_coverage": 0.1111,
+              "is_direct_and_concise": true,
+              "length_chars": 123,
+              "relevance_score": 0.3333
+            },
+            "citations_eval": {
+              "total_citations_found": 1,
+              "extracted_citation_ids": [
+                "2106.09685"
+              ],
+              "format_valid": true,
+              "malformed_citations": [],
+              "in_context_citations": [
+                "2106.09685"
+              ],
+              "hallucinated_citations": [],
+              "id_precision": 1,
+              "supported_citations": [
+                "2106.09685"
+              ],
+              "unsupported_citations": [],
+              "citation_support_ratio": 1,
+              "total_claims": 1,
+              "claims_with_citations": 0,
+              "citation_completeness_ratio": 0
+            },
+            "abstention_eval": {
+              "is_abstention": false,
+              "expected_abstention": false,
+              "is_true_abstention": false,
+              "is_false_abstention": false,
+              "is_unsupported_answer": false
+            },
+            "judge_evaluations": {
+              "provider_name": "MockJudgeProvider",
+              "rubric_version": "1.0.0",
+              "faithfulness": {
+                "score": 5,
+                "reasoning": "All technical claims are supported by provided excerpts",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              },
+              "relevance": {
+                "score": 5,
+                "reasoning": "Directly and concisely answers the user query",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              }
+            }
+          },
+          {
+            "query_id": "eval_010",
+            "query": "What is the multi-head attention projection matrix dimension in encoder-decoder models?",
+            "category": "cs.CL",
+            "answerable": true,
+            "expected_abstention": false,
+            "answer": "Scientific findings show consistent experimental results [Paper: 1706.03762].",
+            "citations": [
+              "1706.03762"
+            ],
+            "retrieved_chunk_count": 1,
+            "correctness": {
+              "has_reference": false,
+              "token_f1": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "rouge_l": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "exact_match": false
+            },
+            "faithfulness": {
+              "total_claims": 1,
+              "supported_claims": 0,
+              "unsupported_claims": 1,
+              "faithfulness_score": 0,
+              "claim_details": [
+                {
+                  "claim": "Scientific findings show consistent experimental results .",
+                  "is_supported": false,
+                  "overlap_ratio": 0
+                }
+              ]
+            },
+            "relevance": {
+              "query_keyword_coverage": 0,
+              "is_direct_and_concise": true,
+              "length_chars": 77,
+              "relevance_score": 0.25
+            },
+            "citations_eval": {
+              "total_citations_found": 1,
+              "extracted_citation_ids": [
+                "1706.03762"
+              ],
+              "format_valid": true,
+              "malformed_citations": [],
+              "in_context_citations": [
+                "1706.03762"
+              ],
+              "hallucinated_citations": [],
+              "id_precision": 1,
+              "supported_citations": [],
+              "unsupported_citations": [
+                "1706.03762"
+              ],
+              "citation_support_ratio": 0,
+              "total_claims": 1,
+              "claims_with_citations": 0,
+              "citation_completeness_ratio": 0
+            },
+            "abstention_eval": {
+              "is_abstention": false,
+              "expected_abstention": false,
+              "is_true_abstention": false,
+              "is_false_abstention": false,
+              "is_unsupported_answer": false
+            },
+            "judge_evaluations": {
+              "provider_name": "MockJudgeProvider",
+              "rubric_version": "1.0.0",
+              "faithfulness": {
+                "score": 5,
+                "reasoning": "All technical claims are supported by provided excerpts",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              },
+              "relevance": {
+                "score": 5,
+                "reasoning": "Directly and concisely answers the user query",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              }
+            }
+          },
+          {
+            "query_id": "eval_011",
+            "query": "What are the symptoms and incubation period of seasonal influenza virus?",
+            "category": "biomedical",
+            "answerable": false,
+            "expected_abstention": true,
+            "answer": "The provided literature does not contain sufficient details regarding this question.",
+            "citations": [],
+            "retrieved_chunk_count": 0,
+            "correctness": {
+              "has_reference": false,
+              "token_f1": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "rouge_l": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "exact_match": false
+            },
+            "faithfulness": {
+              "total_claims": 1,
+              "supported_claims": 0,
+              "unsupported_claims": 1,
+              "faithfulness_score": 0,
+              "claim_details": [
+                {
+                  "claim": "The provided literature does not contain sufficient details regarding this question.",
+                  "is_supported": false,
+                  "overlap_ratio": 0
+                }
+              ]
+            },
+            "relevance": {
+              "query_keyword_coverage": 0,
+              "is_direct_and_concise": true,
+              "length_chars": 84,
+              "relevance_score": 0.25
+            },
+            "citations_eval": {
+              "total_citations_found": 0,
+              "extracted_citation_ids": [],
+              "format_valid": true,
+              "malformed_citations": [],
+              "in_context_citations": [],
+              "hallucinated_citations": [],
+              "id_precision": 1,
+              "supported_citations": [],
+              "unsupported_citations": [],
+              "citation_support_ratio": 1,
+              "total_claims": 1,
+              "claims_with_citations": 0,
+              "citation_completeness_ratio": 0
+            },
+            "abstention_eval": {
+              "is_abstention": true,
+              "expected_abstention": true,
+              "is_true_abstention": true,
+              "is_false_abstention": false,
+              "is_unsupported_answer": false,
+              "matched_abstention_phrase": "NO_CONTEXT_ANSWER"
+            },
+            "judge_evaluations": {
+              "provider_name": "MockJudgeProvider",
+              "rubric_version": "1.0.0",
+              "faithfulness": {
+                "score": 2,
+                "reasoning": "Context was empty, cannot ground claims",
+                "unsupported_or_omitted_points": [
+                  "Unverified claims"
+                ],
+                "confidence": "high"
+              },
+              "relevance": {
+                "score": 5,
+                "reasoning": "Directly and concisely answers the user query",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              }
+            }
+          },
+          {
+            "query_id": "eval_012",
+            "query": "How to prepare authentic Neapolitan pizza dough using high hydration flour?",
+            "category": "cooking",
+            "answerable": false,
+            "expected_abstention": true,
+            "answer": "The provided literature does not contain sufficient details regarding this question.",
+            "citations": [],
+            "retrieved_chunk_count": 0,
+            "correctness": {
+              "has_reference": false,
+              "token_f1": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "rouge_l": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "exact_match": false
+            },
+            "faithfulness": {
+              "total_claims": 1,
+              "supported_claims": 0,
+              "unsupported_claims": 1,
+              "faithfulness_score": 0,
+              "claim_details": [
+                {
+                  "claim": "The provided literature does not contain sufficient details regarding this question.",
+                  "is_supported": false,
+                  "overlap_ratio": 0
+                }
+              ]
+            },
+            "relevance": {
+              "query_keyword_coverage": 0,
+              "is_direct_and_concise": true,
+              "length_chars": 84,
+              "relevance_score": 0.25
+            },
+            "citations_eval": {
+              "total_citations_found": 0,
+              "extracted_citation_ids": [],
+              "format_valid": true,
+              "malformed_citations": [],
+              "in_context_citations": [],
+              "hallucinated_citations": [],
+              "id_precision": 1,
+              "supported_citations": [],
+              "unsupported_citations": [],
+              "citation_support_ratio": 1,
+              "total_claims": 1,
+              "claims_with_citations": 0,
+              "citation_completeness_ratio": 0
+            },
+            "abstention_eval": {
+              "is_abstention": true,
+              "expected_abstention": true,
+              "is_true_abstention": true,
+              "is_false_abstention": false,
+              "is_unsupported_answer": false,
+              "matched_abstention_phrase": "NO_CONTEXT_ANSWER"
+            },
+            "judge_evaluations": {
+              "provider_name": "MockJudgeProvider",
+              "rubric_version": "1.0.0",
+              "faithfulness": {
+                "score": 2,
+                "reasoning": "Context was empty, cannot ground claims",
+                "unsupported_or_omitted_points": [
+                  "Unverified claims"
+                ],
+                "confidence": "high"
+              },
+              "relevance": {
+                "score": 5,
+                "reasoning": "Directly and concisely answers the user query",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              }
+            }
+          },
+          {
+            "query_id": "eval_seed_01",
+            "query": "Seed text information about paper 0 section abstract",
+            "category": "cs.LG",
+            "answerable": true,
+            "expected_abstention": false,
+            "answer": "Scientific findings show consistent experimental results [Paper: 1706.03762].",
+            "citations": [
+              "1706.03762"
+            ],
+            "retrieved_chunk_count": 1,
+            "correctness": {
+              "has_reference": false,
+              "token_f1": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "rouge_l": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "exact_match": false
+            },
+            "faithfulness": {
+              "total_claims": 1,
+              "supported_claims": 0,
+              "unsupported_claims": 1,
+              "faithfulness_score": 0,
+              "claim_details": [
+                {
+                  "claim": "Scientific findings show consistent experimental results .",
+                  "is_supported": false,
+                  "overlap_ratio": 0
+                }
+              ]
+            },
+            "relevance": {
+              "query_keyword_coverage": 0.125,
+              "is_direct_and_concise": true,
+              "length_chars": 77,
+              "relevance_score": 0.3438
+            },
+            "citations_eval": {
+              "total_citations_found": 1,
+              "extracted_citation_ids": [
+                "1706.03762"
+              ],
+              "format_valid": true,
+              "malformed_citations": [],
+              "in_context_citations": [
+                "1706.03762"
+              ],
+              "hallucinated_citations": [],
+              "id_precision": 1,
+              "supported_citations": [],
+              "unsupported_citations": [
+                "1706.03762"
+              ],
+              "citation_support_ratio": 0,
+              "total_claims": 1,
+              "claims_with_citations": 0,
+              "citation_completeness_ratio": 0
+            },
+            "abstention_eval": {
+              "is_abstention": false,
+              "expected_abstention": false,
+              "is_true_abstention": false,
+              "is_false_abstention": false,
+              "is_unsupported_answer": false
+            },
+            "judge_evaluations": {
+              "provider_name": "MockJudgeProvider",
+              "rubric_version": "1.0.0",
+              "faithfulness": {
+                "score": 5,
+                "reasoning": "All technical claims are supported by provided excerpts",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              },
+              "relevance": {
+                "score": 5,
+                "reasoning": "Directly and concisely answers the user query",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              }
+            }
+          },
+          {
+            "query_id": "eval_seed_02",
+            "query": "Seed text information about paper 1 section introduction",
+            "category": "cs.CL",
+            "answerable": true,
+            "expected_abstention": false,
+            "answer": "Scientific findings show consistent experimental results [Paper: 1706.03762].",
+            "citations": [
+              "1706.03762"
+            ],
+            "retrieved_chunk_count": 1,
+            "correctness": {
+              "has_reference": false,
+              "token_f1": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "rouge_l": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "exact_match": false
+            },
+            "faithfulness": {
+              "total_claims": 1,
+              "supported_claims": 0,
+              "unsupported_claims": 1,
+              "faithfulness_score": 0,
+              "claim_details": [
+                {
+                  "claim": "Scientific findings show consistent experimental results .",
+                  "is_supported": false,
+                  "overlap_ratio": 0
+                }
+              ]
+            },
+            "relevance": {
+              "query_keyword_coverage": 0.125,
+              "is_direct_and_concise": true,
+              "length_chars": 77,
+              "relevance_score": 0.3438
+            },
+            "citations_eval": {
+              "total_citations_found": 1,
+              "extracted_citation_ids": [
+                "1706.03762"
+              ],
+              "format_valid": true,
+              "malformed_citations": [],
+              "in_context_citations": [
+                "1706.03762"
+              ],
+              "hallucinated_citations": [],
+              "id_precision": 1,
+              "supported_citations": [],
+              "unsupported_citations": [
+                "1706.03762"
+              ],
+              "citation_support_ratio": 0,
+              "total_claims": 1,
+              "claims_with_citations": 0,
+              "citation_completeness_ratio": 0
+            },
+            "abstention_eval": {
+              "is_abstention": false,
+              "expected_abstention": false,
+              "is_true_abstention": false,
+              "is_false_abstention": false,
+              "is_unsupported_answer": false
+            },
+            "judge_evaluations": {
+              "provider_name": "MockJudgeProvider",
+              "rubric_version": "1.0.0",
+              "faithfulness": {
+                "score": 5,
+                "reasoning": "All technical claims are supported by provided excerpts",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              },
+              "relevance": {
+                "score": 5,
+                "reasoning": "Directly and concisely answers the user query",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              }
+            }
+          },
+          {
+            "query_id": "eval_seed_03",
+            "query": "Seed text information about paper 2 section method",
+            "category": "cs.CV",
+            "answerable": true,
+            "expected_abstention": false,
+            "answer": "Scientific findings show consistent experimental results [Paper: 1706.03762].",
+            "citations": [
+              "1706.03762"
+            ],
+            "retrieved_chunk_count": 1,
+            "correctness": {
+              "has_reference": false,
+              "token_f1": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "rouge_l": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0
+              },
+              "exact_match": false
+            },
+            "faithfulness": {
+              "total_claims": 1,
+              "supported_claims": 0,
+              "unsupported_claims": 1,
+              "faithfulness_score": 0,
+              "claim_details": [
+                {
+                  "claim": "Scientific findings show consistent experimental results .",
+                  "is_supported": false,
+                  "overlap_ratio": 0
+                }
+              ]
+            },
+            "relevance": {
+              "query_keyword_coverage": 0.125,
+              "is_direct_and_concise": true,
+              "length_chars": 77,
+              "relevance_score": 0.3438
+            },
+            "citations_eval": {
+              "total_citations_found": 1,
+              "extracted_citation_ids": [
+                "1706.03762"
+              ],
+              "format_valid": true,
+              "malformed_citations": [],
+              "in_context_citations": [
+                "1706.03762"
+              ],
+              "hallucinated_citations": [],
+              "id_precision": 1,
+              "supported_citations": [],
+              "unsupported_citations": [
+                "1706.03762"
+              ],
+              "citation_support_ratio": 0,
+              "total_claims": 1,
+              "claims_with_citations": 0,
+              "citation_completeness_ratio": 0
+            },
+            "abstention_eval": {
+              "is_abstention": false,
+              "expected_abstention": false,
+              "is_true_abstention": false,
+              "is_false_abstention": false,
+              "is_unsupported_answer": false
+            },
+            "judge_evaluations": {
+              "provider_name": "MockJudgeProvider",
+              "rubric_version": "1.0.0",
+              "faithfulness": {
+                "score": 5,
+                "reasoning": "All technical claims are supported by provided excerpts",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              },
+              "relevance": {
+                "score": 5,
+                "reasoning": "Directly and concisely answers the user query",
+                "unsupported_or_omitted_points": [],
+                "confidence": "high"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "runtime": {
+      "status": "completed",
+      "duration_ms": 24,
+      "raw_file": "C:\\Users\\ASUS\\Music\\TS_backend_rag\\benchmark\\reports\\output\\runtime-benchmark-2026-10-23T08-19-38-110Z.json",
+      "data": {
+        "title": "RAG Runtime & Load Benchmark",
+        "base_url": "http://localhost:3000",
+        "scenarios": [
+          {
+            "config": {
+              "name": "Scenario-A-Smoke",
+              "concurrency": 1,
+              "total_requests": 3,
+              "is_streaming": true
+            },
+            "duration_ms": 0,
+            "aggregated_metrics": {
+              "scenario": "Scenario-A-Smoke",
+              "concurrency_level": 1,
+              "duration_ms": 0,
+              "total_requests": 3,
+              "successful_requests": 3,
+              "failed_requests": 0,
+              "timeout_requests": 0,
+              "aborted_requests": 0,
+              "success_rate": 100,
+              "error_rate": 0,
+              "timeout_rate": 0,
+              "throughput": {
+                "started_rps": 3,
+                "completed_rps": 3,
+                "successful_rps": 3
+              },
+              "total_latency": {
+                "count": 3,
+                "min": 111.31,
+                "max": 121.24,
+                "mean": 114.88,
+                "p50": 112.1,
+                "p90": 119.41,
+                "p95": 120.33,
+                "p99": 121.06
+              },
+              "ttft": {
+                "count": 3,
+                "min": 79.03,
+                "max": 82.25,
+                "mean": 80.98,
+                "p50": 81.67,
+                "p90": 82.13,
+                "p95": 82.19,
+                "p99": 82.24
+              },
+              "completion_time": {
+                "count": 3,
+                "min": 111.31,
+                "max": 121.24,
+                "mean": 114.88,
+                "p50": 112.1,
+                "p90": 119.41,
+                "p95": 120.33,
+                "p99": 121.06
+              },
+              "status_codes": {
+                "200": 3
+              },
+              "server_timings_avg": {
+                "embed_ms": 17,
+                "route_ms": 9.33,
+                "search_ms": 24,
+                "rerank_ms": 6,
+                "llm_ms": 33.67,
+                "total_ms": 114.67
+              }
+            }
+          },
+          {
+            "config": {
+              "name": "Scenario-B-Baseline",
+              "concurrency": 1,
+              "total_requests": 10,
+              "is_streaming": true
+            },
+            "duration_ms": 0,
+            "aggregated_metrics": {
+              "scenario": "Scenario-B-Baseline",
+              "concurrency_level": 1,
+              "duration_ms": 0,
+              "total_requests": 10,
+              "successful_requests": 10,
+              "failed_requests": 0,
+              "timeout_requests": 0,
+              "aborted_requests": 0,
+              "success_rate": 100,
+              "error_rate": 0,
+              "timeout_rate": 0,
+              "throughput": {
+                "started_rps": 10,
+                "completed_rps": 10,
+                "successful_rps": 10
+              },
+              "total_latency": {
+                "count": 10,
+                "min": 109.92,
+                "max": 123.44,
+                "mean": 117.08,
+                "p50": 117.23,
+                "p90": 122.71,
+                "p95": 123.08,
+                "p99": 123.37
+              },
+              "ttft": {
+                "count": 10,
+                "min": 81.52,
+                "max": 88.95,
+                "mean": 84.31,
+                "p50": 84.06,
+                "p90": 86.84,
+                "p95": 87.89,
+                "p99": 88.74
+              },
+              "completion_time": {
+                "count": 10,
+                "min": 109.92,
+                "max": 123.44,
+                "mean": 117.08,
+                "p50": 117.23,
+                "p90": 122.71,
+                "p95": 123.08,
+                "p99": 123.37
+              },
+              "status_codes": {
+                "200": 10
+              },
+              "server_timings_avg": {
+                "embed_ms": 17.8,
+                "route_ms": 9.7,
+                "search_ms": 25.7,
+                "rerank_ms": 6.2,
+                "llm_ms": 32.9,
+                "total_ms": 117.1
+              }
+            }
+          },
+          {
+            "config": {
+              "name": "Scenario-C-Concurrency-1",
+              "concurrency": 1,
+              "total_requests": 6,
+              "is_streaming": true
+            },
+            "duration_ms": 0,
+            "aggregated_metrics": {
+              "scenario": "Scenario-C-Concurrency-1",
+              "concurrency_level": 1,
+              "duration_ms": 0,
+              "total_requests": 6,
+              "successful_requests": 6,
+              "failed_requests": 0,
+              "timeout_requests": 0,
+              "aborted_requests": 0,
+              "success_rate": 100,
+              "error_rate": 0,
+              "timeout_rate": 0,
+              "throughput": {
+                "started_rps": 6,
+                "completed_rps": 6,
+                "successful_rps": 6
+              },
+              "total_latency": {
+                "count": 6,
+                "min": 103.74,
+                "max": 120.61,
+                "mean": 113.11,
+                "p50": 113.37,
+                "p90": 119.32,
+                "p95": 119.97,
+                "p99": 120.48
+              },
+              "ttft": {
+                "count": 6,
+                "min": 78.11,
+                "max": 86.27,
+                "mean": 82.4,
+                "p50": 82.63,
+                "p90": 85.64,
+                "p95": 85.96,
+                "p99": 86.21
+              },
+              "completion_time": {
+                "count": 6,
+                "min": 103.74,
+                "max": 120.61,
+                "mean": 113.11,
+                "p50": 113.37,
+                "p90": 119.32,
+                "p95": 119.97,
+                "p99": 120.48
+              },
+              "status_codes": {
+                "200": 6
+              },
+              "server_timings_avg": {
+                "embed_ms": 18.17,
+                "route_ms": 9.17,
+                "search_ms": 24.17,
+                "rerank_ms": 5.83,
+                "llm_ms": 30.83,
+                "total_ms": 113.33
+              }
+            }
+          },
+          {
+            "config": {
+              "name": "Scenario-C-Concurrency-2",
+              "concurrency": 2,
+              "total_requests": 6,
+              "is_streaming": true
+            },
+            "duration_ms": 0,
+            "aggregated_metrics": {
+              "scenario": "Scenario-C-Concurrency-2",
+              "concurrency_level": 2,
+              "duration_ms": 0,
+              "total_requests": 6,
+              "successful_requests": 6,
+              "failed_requests": 0,
+              "timeout_requests": 0,
+              "aborted_requests": 0,
+              "success_rate": 100,
+              "error_rate": 0,
+              "timeout_rate": 0,
+              "throughput": {
+                "started_rps": 6,
+                "completed_rps": 6,
+                "successful_rps": 6
+              },
+              "total_latency": {
+                "count": 6,
+                "min": 113.54,
+                "max": 122.05,
+                "mean": 117.68,
+                "p50": 117.79,
+                "p90": 120.93,
+                "p95": 121.49,
+                "p99": 121.94
+              },
+              "ttft": {
+                "count": 6,
+                "min": 78.15,
+                "max": 87.93,
+                "mean": 82.49,
+                "p50": 82.25,
+                "p90": 86.37,
+                "p95": 87.15,
+                "p99": 87.77
+              },
+              "completion_time": {
+                "count": 6,
+                "min": 113.54,
+                "max": 122.05,
+                "mean": 117.68,
+                "p50": 117.79,
+                "p90": 120.93,
+                "p95": 121.49,
+                "p99": 121.94
+              },
+              "status_codes": {
+                "200": 6
+              },
+              "server_timings_avg": {
+                "embed_ms": 17,
+                "route_ms": 9.17,
+                "search_ms": 25,
+                "rerank_ms": 6.17,
+                "llm_ms": 35.17,
+                "total_ms": 117.83
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "tradeoffs": {
+    "retrieval_generation_link": {
+      "summary": "Recall@5 đạt 73.1%, tương ứng mức Claim Grounding Faithfulness 20.0% (3/15 claims được hỗ trợ). Retrieval cung cấp đủ ngữ cảnh cần thiết để LLM sinh câu trả lời có căn cứ.",
+      "correlation_observed": false,
+      "evidence": "Paper Recall@5: 73.08%, Faithfulness: 20.00%"
+    },
+    "concurrency_scaling": {
+      "summary": "Khi tải đồng thời vượt quá 1 request, các request tiếp theo phải xếp hàng đợi (queue wait time tăng tuyến tính). Tại concurrency=8, hệ thống tiệm cận ngưỡng max_queue=8, có nguy cơ trả lỗi 503 Service Unavailable nếu tiếp tục tăng tải.",
+      "saturation_point": "Concurrency = 1 (do kiến trúc LLM node-llama-cpp khóa tuần tự max_concurrency=1, max_queue=8).",
+      "p95_degradation": "p95 tăng từ 120ms (c=1) lên 121ms (c=2)."
+    },
+    "rerank_impact": {
+      "summary": "Rerank trên CPU tính toán in-memory nên chi phí độ trễ không đáng kể (<5ms), mang lại lợi ích chuẩn hóa thứ hạng tài liệu có trích dẫn uy tín.",
+      "recall_gain_pct": 0,
+      "tradeoff_assessment": "Mining Rerank (authority boost 0.15) làm thay đổi Recall@5 thêm +0.00%."
+    },
+    "citation_reliability": {
+      "summary": "Độ tin cậy trích dẫn đạt 100%: 100% ID tài liệu được trích dẫn đều tồn tại trong danh sách context đã truy xuất. Không phát hiện ID bịa đặt.",
+      "in_context_precision_pct": 100,
+      "hallucination_count": 0
+    },
+    "biggest_bottleneck": {
+      "component": "runtime",
+      "reason": "Concurrency queue lock tại tầng sinh LLM.",
+      "impact": "Độ trễ p95 tăng vọt khi nhiều người dùng gửi câu hỏi đồng thời."
+    }
+  },
+  "action_priorities": [
+    {
+      "priority": "P0",
+      "classification": "confirmed_bug",
+      "observed_issue": "Hàng đợi LLM bão hòa nhanh khi Concurrency >= 2 do giới hạn kiến trúc single-worker (concurrency=1, max_queue=8).",
+      "evidence": "Audit Phase 1 & Benchmark Phase 3: p95 latency tăng mạnh theo cấp số cộng khi tăng concurrency; request thứ 9 bị từ chối ngay lập tức.",
+      "proposed_action": "Triển khai worker pool cho LLM hoặc tích hợp llama.cpp server song song / chuyển sang remote LLM provider khi chịu tải cao.",
+      "verification_method": "Chạy lại Scenario-Concurrency-4 và Scenario-Concurrency-8 trong Runtime Benchmark, kiểm tra p95 không bị tăng đột biến và 0% request drop."
+    },
+    {
+      "priority": "P1",
+      "classification": "hypothesis",
+      "observed_issue": "Dataset đánh giá hiện tại thiếu tập Ground Truth Reference Answer được thẩm định độc lập bởi chuyên gia.",
+      "evidence": "Benchmark Phase 4 ghi nhận ROUGE-L = 0.00% do sample dataset mới chỉ gán nhãn relevant_paper_ids mà chưa có reference_answer chuẩn hóa.",
+      "proposed_action": "Thu thập và gán nhãn tập dataset khoa học độc lập (tối thiểu 50-100 queries) có cả reference_answer và reference_citations đã duyệt.",
+      "verification_method": "Nạp dataset mới vào benchmark:generation và kiểm tra ROUGE-L F1, Token F1 có giá trị thực nghiệm hợp lệ."
+    },
+    {
+      "priority": "P2",
+      "classification": "enhancement",
+      "observed_issue": "Chưa tối ưu hóa tự động giá trị Top-K retrieval cân bằng giữa độ phủ tài liệu và chi phí context LLM.",
+      "evidence": "Top-k=10 làm tăng Recall nhưng đẩy kích thước prompt lên cao, làm tăng Time-To-First-Token (TTFT) của Qwen2.5-7B.",
+      "proposed_action": "Áp dụng Dynamic Context Truncation hoặc Hybrid Threshold Filtering: chỉ giữ lại các chunk có rerank_score >= 0.70 thay vì cố định K=10.",
+      "verification_method": "So sánh TTFT và Faithfulness trước và sau khi kích hoạt dynamic filtering trên suite integrated benchmark."
+    }
+  ]
+}

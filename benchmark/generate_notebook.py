@@ -10,11 +10,10 @@ notebook = {
                 "# RAG-TS Performance, Stress & Saturation Benchmark Analysis\n",
                 "\n",
                 "This notebook presents an empirical evaluation of the **RAG-TS Backend** across two testing phases:\n",
-                "1. **Fast API Baseline (10 → 100 VUs)** & **Extreme Saturation (100 → 1,000 VUs)**\n",
-                "2. **Heavy RAG Chat Stress (1 → 14 VUs)** & **Queue Saturation Cliff**\n",
-                "3. **Realistic Researcher User Session Simulation (10 → 80 Active Researchers)**\n",
-                "4. **Queue Depth Burst Experiment (16 Simultaneous Users at $t=0$)**\n",
-                "5. **System Failure Taxonomy & Resilience Audit**"
+                "1. **Fast API Extreme Saturation (100 → 1,000 VUs)**\n",
+                "2. **Realistic Researcher User Session Simulation (10 → 80 Active Researchers)**\n",
+                "3. **Queue Depth Burst Experiment (16 Simultaneous Users at $t=0$)**\n",
+                "4. **System Failure Taxonomy & Resilience Audit**"
             ]
         },
         {
@@ -66,50 +65,11 @@ notebook = {
             ]
         },
         {
-            "cell_type": "code",
-            "execution_count": 3,
-            "metadata": {},
-            "outputs": [],
-            "source": [
-                "display(Image(filename=str(RESULTS_DIR / \"fast_api_latency_vs_vus.png\")))"
-            ]
-        },
-        {
             "cell_type": "markdown",
             "metadata": {},
             "source": [
                 "--- \n",
-                "## 2. Heavy RAG Chat Stress Test & Saturation Cliff\n",
-                "\n",
-                "- **Single-Query Baseline (1 VU)**: ~8.1s - 11.8s (Nomic embedding: ~260ms, Qdrant: ~2.4s, Qwen2.5-7B GPU: ~9.1s)\n",
-                "- **Architecture Limit**: `LLM_CONCURRENCY=1`, `LLM_MAX_QUEUE=8`.\n",
-                "- **Observed Behavior**: Queue holds up to 8 waiting queries without error. The 10th+ concurrent query is immediately rejected with HTTP 429 in < 300ms."
-            ]
-        },
-        {
-            "cell_type": "code",
-            "execution_count": 4,
-            "metadata": {},
-            "outputs": [],
-            "source": [
-                "display(Image(filename=str(RESULTS_DIR / \"rag_latency_and_overflow_cliff.png\")))"
-            ]
-        },
-        {
-            "cell_type": "code",
-            "execution_count": 5,
-            "metadata": {},
-            "outputs": [],
-            "source": [
-                "display(Image(filename=str(RESULTS_DIR / \"rag_error_rate_by_vu.png\")))"
-            ]
-        },
-        {
-            "cell_type": "markdown",
-            "metadata": {},
-            "source": [
-                "--- \n",
-                "## 3. Realistic Researcher User Sessions (10 to 80 VUs)\n",
+                "## 2. Realistic Researcher User Sessions (10 to 80 VUs)\n",
                 "\n",
                 "Models complete user research workflows: 3x paper browsing + 10s think time + 1x RAG inquiry + 20s reading time.\n",
                 "- **Completed User Sessions**: 259 sessions\n",
@@ -120,7 +80,7 @@ notebook = {
         },
         {
             "cell_type": "code",
-            "execution_count": 6,
+            "execution_count": 3,
             "metadata": {},
             "outputs": [],
             "source": [
@@ -132,7 +92,7 @@ notebook = {
             "metadata": {},
             "source": [
                 "--- \n",
-                "## 4. Queue Depth Burst Experiment & Physical Limits\n",
+                "## 3. Queue Depth Burst Experiment & Physical Limits\n",
                 "\n",
                 "A burst of 16 simultaneous users hit `POST /api/v1/rag/chat` at $t=0$.\n",
                 "- **Served**: Exactly 9 requests ($1 \\text{ active} + 8 \\text{ queued}$). Wait times scaled from 9.5s to 47.0s.\n",
@@ -142,7 +102,7 @@ notebook = {
         },
         {
             "cell_type": "code",
-            "execution_count": 7,
+            "execution_count": 4,
             "metadata": {},
             "outputs": [],
             "source": [
@@ -154,14 +114,14 @@ notebook = {
             "metadata": {},
             "source": [
                 "--- \n",
-                "## 5. System Failure Taxonomy & Resilience Audit\n",
+                "## 4. System Failure Taxonomy & Resilience Audit\n",
                 "\n",
                 "Breakdown of errors across 320,000+ total test requests:"
             ]
         },
         {
             "cell_type": "code",
-            "execution_count": 8,
+            "execution_count": 5,
             "metadata": {},
             "outputs": [],
             "source": [
@@ -173,7 +133,7 @@ notebook = {
             "metadata": {},
             "source": [
                 "--- \n",
-                "## 6. Executive Summary & Recommended Capacity Table\n",
+                "## 5. Executive Summary & Recommended Capacity Table\n",
                 "\n",
                 "| Scenario / Endpoint | Target SLA | Measured P95 | Measured P99 | Failure Rate | Max Sustainable VUs | Bottleneck / Behavior |\n",
                 "| :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n",

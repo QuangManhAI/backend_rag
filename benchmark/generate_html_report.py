@@ -1,8 +1,10 @@
 import base64
 from pathlib import Path
+import shutil
 
 BENCHMARK_DIR = Path("C:/document/Study documents/backend_rag/RAG_TS/backend_rag/benchmark")
 RESULTS_DIR = BENCHMARK_DIR / "results"
+BRAIN_DIR = Path("C:/Users/TDV/.gemini/antigravity-cli/brain/4db53373-1ab6-43ef-a7e9-7bb3fed98130")
 
 def img_to_b64(path: Path) -> str:
     if not path.exists():
@@ -10,10 +12,32 @@ def img_to_b64(path: Path) -> str:
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode("utf-8")
 
+# Copy updated images to brain directory for artifact embedding
+for img_name in [
+    "queue_depth_comparison_tradeoff.png",
+    "user_journey_timeline_flow.png",
+    "realistic_user_session_throughput.png",
+    "fast_api_extreme_1000vus_latency.png",
+    "failure_taxonomy_distribution.png"
+]:
+    src = RESULTS_DIR / img_name
+    if src.exists():
+        shutil.copy2(src, BRAIN_DIR / img_name)
+
 fast_extreme_b64 = img_to_b64(RESULTS_DIR / "fast_api_extreme_1000vus_latency.png")
 user_session_b64 = img_to_b64(RESULTS_DIR / "realistic_user_session_throughput.png")
+user_journey_b64 = img_to_b64(RESULTS_DIR / "user_journey_timeline_flow.png")
 queue_tradeoff_b64 = img_to_b64(RESULTS_DIR / "queue_depth_comparison_tradeoff.png")
 failure_tax_b64 = img_to_b64(RESULTS_DIR / "failure_taxonomy_distribution.png")
+
+# SVG Icons
+ICON_LIVE = '<svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="#16a34a"/></svg>'
+ICON_CPU = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg>'
+ICON_RAM = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 19h20M2 5h20M6 5v14M10 5v14M14 5v14M18 5v14"/></svg>'
+ICON_GPU = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="8" cy="12" r="2.5"/><circle cx="16" cy="12" r="2.5"/></svg>'
+ICON_DB = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>'
+ICON_CHECK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+ICON_CROSS = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
 
 html_content = f"""<!DOCTYPE html>
 <html lang="en">
@@ -48,7 +72,7 @@ html_content = f"""<!DOCTYPE html>
     }}
     .header {{
       text-align: center;
-      margin-bottom: 35px;
+      margin-bottom: 30px;
     }}
     .header h1 {{
       font-size: 2.2rem;
@@ -61,6 +85,18 @@ html_content = f"""<!DOCTYPE html>
       font-size: 1.05rem;
       margin-top: 6px;
     }}
+    .testbed-banner {{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #e2e8f0;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #334155;
+      margin-top: 10px;
+    }}
     .grid-2 {{
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -71,7 +107,6 @@ html_content = f"""<!DOCTYPE html>
       .grid-2 {{ grid-template-columns: 1fr; }}
     }}
     
-    /* Device Cards matching the TikTok / YouTube layout */
     .device-card {{
       background: var(--card-bg);
       border-radius: 20px;
@@ -94,14 +129,16 @@ html_content = f"""<!DOCTYPE html>
       border-radius: 20px;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       text-transform: uppercase;
     }}
     .badge-server {{
-      border: 1px dashed #cbd5e1;
-      color: #64748b;
-      font-size: 0.8rem;
-      padding: 3px 10px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      color: #475569;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
       border-radius: 12px;
     }}
     .card-title-heavy {{
@@ -147,55 +184,54 @@ html_content = f"""<!DOCTYPE html>
       letter-spacing: 0.5px;
     }}
 
-    /* Histogram Mockup SVG */
-    .histogram-container {{
-      width: 100%;
-      height: 180px;
-      position: relative;
-    }}
-    
-    /* Threshold Bars */
+    /* Non-overlapping Metric Progress Bars */
     .metric-bar-group {{
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }}
     .metric-label-row {{
       display: flex;
       justify-content: space-between;
-      font-size: 0.95rem;
-      font-weight: 700;
+      align-items: center;
       margin-bottom: 6px;
+    }}
+    .metric-label-row .metric-name {{
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }}
     .threshold-badge-fail {{
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       background: #fee2e2;
       color: #b91c1c;
-      padding: 2px 8px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 800;
     }}
     .threshold-badge-pass {{
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       background: #dcfce7;
       color: #15803d;
-      padding: 2px 8px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 800;
     }}
     .bar-track {{
       background: #e2e8f0;
       height: 28px;
-      border-radius: 8px;
+      border-radius: 6px;
       position: relative;
       overflow: hidden;
     }}
     .bar-fill-fail {{
-      background: #ef4444;
+      background: linear-gradient(90deg, #f87171 0%, #ef4444 100%);
       height: 100%;
       display: flex;
       align-items: center;
@@ -203,36 +239,42 @@ html_content = f"""<!DOCTYPE html>
       padding-right: 12px;
       color: white;
       font-weight: 800;
-      font-size: 0.95rem;
-      border-radius: 8px;
+      font-size: 0.9rem;
+      border-radius: 6px;
     }}
-    .threshold-line {{
+    .target-tick {{
       position: absolute;
       top: 0;
       bottom: 0;
       width: 2px;
       background: #0f172a;
-      border-left: 2px dashed #0f172a;
       z-index: 2;
     }}
-    .threshold-indicator-tag {{
-      position: absolute;
-      top: -18px;
-      transform: translateX(-50%);
-      font-size: 0.7rem;
+    .ruler-row {{
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: #64748b;
       font-weight: 700;
-      color: #475569;
+      margin-top: 4px;
+      padding: 0 2px;
+    }}
+    .ruler-row .sla-marker-text {{
+      color: #b91c1c;
+      font-weight: 800;
     }}
 
     /* Autopsy Grid */
     .autopsy-title {{
-      font-size: 0.9rem;
-      font-weight: 800;
-      color: #0f172a;
+      font-size: 0.85rem;
+      font-weight: 900;
+      color: #991b1b;
       margin-bottom: 12px;
       display: flex;
       align-items: center;
       gap: 6px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
     }}
     .autopsy-grid {{
       display: grid;
@@ -249,10 +291,11 @@ html_content = f"""<!DOCTYPE html>
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.8rem;
-      font-weight: 700;
+      font-size: 0.78rem;
+      font-weight: 800;
       color: #475569;
       margin-bottom: 6px;
+      gap: 6px;
     }}
     .gauge-wrapper {{
       text-align: center;
@@ -273,22 +316,32 @@ html_content = f"""<!DOCTYPE html>
       margin-top: 4px;
     }}
 
-    /* Avatars grid */
-    .avatars-grid {{
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 6px;
-      padding: 10px 0;
+    /* Error Summary Block replacing avatar circle grid */
+    .clean-error-summary {{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+      border: 1px solid #bbf7d0;
+      border-radius: 10px;
+      padding: 12px 16px;
     }}
-    .avatar {{
-      width: 18px;
-      height: 18px;
-      background: #cbd5e1;
-      border-radius: 50%;
-      margin: 0 auto;
+    .clean-error-count {{
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: #15803d;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }}
+    .clean-error-meta {{
+      text-align: right;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #166534;
     }}
 
-    /* Results Showcase Sections */
+    /* Showcase Section */
     .showcase-card {{
       background: var(--card-bg);
       border-radius: 16px;
@@ -298,49 +351,23 @@ html_content = f"""<!DOCTYPE html>
       border: 1px solid var(--border);
     }}
     .showcase-card h2 {{
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       font-weight: 800;
       color: #0f172a;
-      margin-bottom: 15px;
+      margin-bottom: 8px;
+    }}
+    .showcase-card p.caption {{
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 16px;
     }}
     .showcase-card img {{
       max-width: 100%;
       height: auto;
       border-radius: 10px;
       border: 1px solid #e2e8f0;
-      margin-top: 15px;
-    }}
-    table {{
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-    }}
-    th, td {{
-      padding: 12px 14px;
-      text-align: left;
-      border-bottom: 1px solid #e2e8f0;
-      font-size: 0.95rem;
-    }}
-    th {{
-      background: #f8fafc;
-      font-weight: 700;
-      color: #334155;
-    }}
-    .pill-pass {{
-      background: #dcfce7;
-      color: #15803d;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 0.8rem;
-    }}
-    .pill-fail {{
-      background: #fee2e2;
-      color: #b91c1c;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 0.8rem;
+      display: block;
+      margin: 0 auto;
     }}
   </style>
 </head>
@@ -349,20 +376,27 @@ html_content = f"""<!DOCTYPE html>
 <div class="container">
   <div class="header">
     <h1>System Stress Test & Failure Autopsy Report</h1>
-    <p>RAG-TS Full-Stack Architecture Performance, Concurrency Scaling & Hardware Saturation Audit</p>
+    <p>RAG-TS Full-Stack Architecture Performance, Concurrency Scaling & Saturation Audit</p>
+    <div class="testbed-banner">
+      <span>TESTBED SPECIFICATIONS:</span>
+      <span>NVIDIA RTX 4060 Laptop (8GB VRAM)</span> &bull;
+      <span>Intel Core i7-13620H (16 Threads)</span> &bull;
+      <span>16GB RAM</span> &bull;
+      <span>Windows 11</span>
+    </div>
   </div>
 
-  <!-- 2-Card Mobile UI Showcase directly replicating the user's screenshots -->
+  <!-- 2-Card Mobile UI Showcase -->
   <div class="grid-2">
     
     <!-- CARD 1: EVERY REQUEST · 2,500 USERS -->
     <div class="device-card">
       <div class="device-card-header">
         <div>
-          <span class="badge-live">((•)) Live</span>
+          <span class="badge-live">{ICON_LIVE} Live</span>
           <span class="card-title-heavy" style="margin-left: 8px;">EVERY REQUEST · 2,500 USERS</span>
         </div>
-        <span class="badge-server">example: $12 server</span>
+        <span class="badge-server">Fast API Route (Health/Docs)</span>
       </div>
 
       <div class="inner-section">
@@ -370,7 +404,6 @@ html_content = f"""<!DOCTYPE html>
         
         <!-- SVG Log-Histogram with P50, P95, P99 markers -->
         <svg viewBox="0 0 450 170" width="100%" height="170">
-          <!-- Background bars simulating bell curve distribution on log scale -->
           <g fill="#1e293b">
             <rect x="20" y="145" width="6" height="5" rx="2"/>
             <rect x="30" y="142" width="6" height="8" rx="2"/>
@@ -438,18 +471,20 @@ html_content = f"""<!DOCTYPE html>
         </svg>
 
         <div style="text-align: center; font-weight: 800; font-size: 1.05rem; margin-top: 10px; color: #0f172a;">
-          99% of requests under 775 ms
+          99% of requests completed under 775 ms
         </div>
       </div>
 
       <div class="inner-section">
-        <div class="inner-title">Errors</div>
-        <div class="avatars-grid">
-          <!-- 36 avatar placeholders (all gray = zero errors) -->
-          {"".join(['<div class="avatar"></div>' for _ in range(48)])}
-        </div>
-        <div style="font-size: 0.85rem; font-weight: 700; color: #16a34a; text-align: center; margin-top: 6px;">
-          ✓ 0 Errors (100% Successful)
+        <div class="inner-title">Error Rate Status</div>
+        <div class="clean-error-summary">
+          <div class="clean-error-count">
+            {ICON_CHECK} 0 HTTP Errors
+          </div>
+          <div class="clean-error-meta">
+            100% Success Rate<br>
+            <span style="color: #64748b; font-weight: 600;">2,500 Concurrent Users</span>
+          </div>
         </div>
       </div>
     </div>
@@ -457,58 +492,64 @@ html_content = f"""<!DOCTYPE html>
     <!-- CARD 2: FAILS AT 3,000 USERS -->
     <div class="device-card">
       <div class="device-card-header">
-        <span class="card-title-fail">FAILS AT</span>
-        <span class="badge-server">example: $12 server</span>
+        <span class="card-title-fail">FAILURE POINT OCCURRENCE</span>
+        <span class="badge-server">SLA Threshold Breach</span>
       </div>
 
       <div class="fail-users-count">3,000 <span>users</span></div>
 
-      <!-- Metric Bars -->
+      <!-- Metric Bar 1: P95 (Zero Text Collisions) -->
       <div class="metric-bar-group">
         <div class="metric-label-row">
-          <span>p95</span>
-          <span class="threshold-badge-fail">✕ &lt; 500 ms</span>
+          <span class="metric-name">P95 Latency</span>
+          <span class="threshold-badge-fail">{ICON_CROSS} Target &lt; 500 ms</span>
         </div>
         <div class="bar-track">
-          <div class="threshold-line" style="left: 37%;">
-            <span class="threshold-indicator-tag">! &lt; 500 ms</span>
-          </div>
-          <div class="bar-fill-fail" style="width: 72%;">1,350 ms</div>
+          <div class="target-tick" style="left: 33%;"></div>
+          <div class="bar-fill-fail" style="width: 88%;">1,350 ms</div>
+        </div>
+        <div class="ruler-row">
+          <span>0 ms</span>
+          <span class="sla-marker-text" style="margin-left: 33%; transform: translateX(-50%);">| SLA Limit: 500 ms</span>
+          <span style="margin-left: auto;">1,500 ms</span>
         </div>
       </div>
 
+      <!-- Metric Bar 2: P99 (Zero Text Collisions) -->
       <div class="metric-bar-group">
         <div class="metric-label-row">
-          <span>p99</span>
-          <span class="threshold-badge-fail">✕ &lt; 1 s</span>
+          <span class="metric-name">P99 Latency</span>
+          <span class="threshold-badge-fail">{ICON_CROSS} Target &lt; 1.0 s</span>
         </div>
         <div class="bar-track">
-          <div class="threshold-line" style="left: 45%;">
-            <span class="threshold-indicator-tag">! &lt; 1 s</span>
-          </div>
-          <div class="bar-fill-fail" style="width: 90%;">4,590 ms</div>
+          <div class="target-tick" style="left: 22%;"></div>
+          <div class="bar-fill-fail" style="width: 95%;">4,590 ms</div>
+        </div>
+        <div class="ruler-row">
+          <span>0 s</span>
+          <span class="sla-marker-text" style="margin-left: 22%; transform: translateX(-50%);">| SLA Limit: 1.0 s</span>
+          <span style="margin-left: auto;">5.0 s</span>
         </div>
       </div>
 
-      <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0 20px 0;">
-        <span style="font-weight: 700; color: #475569;">errors</span>
-        <span class="threshold-badge-pass">✓ 0 errors</span>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin: 12px 0 16px 0;">
+        <span style="font-weight: 800; font-size: 0.9rem; color: #475569; text-transform: uppercase;">HTTP Errors</span>
+        <span class="threshold-badge-pass">{ICON_CHECK} 0 Crashes / Zero Dropped Packets</span>
       </div>
 
       <!-- Autopsy Section -->
       <div class="inner-section" style="border: 2px solid #fecaca; background: #fff5f5;">
         <div class="autopsy-title">
-          <span>⚡ AUTOPSY (FAILURE BOTTLENECK)</span>
+          <span>AUTOPSY (ROOT CAUSE BOTTLENECK)</span>
         </div>
         
         <div class="autopsy-grid">
           <!-- CPU Gauge -->
           <div class="autopsy-box" style="border-color: #fca5a5;">
             <div class="autopsy-box-header">
-              <span>🔲 CPU (Node Event Loop)</span>
+              <span style="display: flex; align-items: center; gap: 4px;">{ICON_CPU} CPU (Event Loop)</span>
             </div>
             <div class="gauge-wrapper">
-              <!-- SVG Half-Donut Gauge -->
               <svg viewBox="0 0 100 55" width="85" height="48">
                 <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#fee2e2" stroke-width="9" stroke-linecap="round"/>
                 <path d="M 10 50 A 40 40 0 0 1 82 25" fill="none" stroke="#ef4444" stroke-width="9" stroke-linecap="round"/>
@@ -516,7 +557,7 @@ html_content = f"""<!DOCTYPE html>
                 <line x1="50" y1="50" x2="72" y2="28" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
               </svg>
               <div class="gauge-value">91%</div>
-              <div class="gauge-label">BOTTLENECK</div>
+              <div class="gauge-label">PRIMARY BOTTLENECK</div>
             </div>
           </div>
 
@@ -524,8 +565,8 @@ html_content = f"""<!DOCTYPE html>
           <div style="display: flex; flex-direction: column; gap: 8px;">
             <div class="autopsy-box">
               <div class="autopsy-box-header">
-                <span>📶 RAM</span>
-                <span style="color: #16a34a;">✓</span>
+                <span style="display: flex; align-items: center; gap: 4px;">{ICON_RAM} System RAM</span>
+                {ICON_CHECK}
               </div>
               <div style="font-size: 0.95rem; font-weight: 800;">15.2 / 15.7 GB</div>
               <div style="background: #e2e8f0; height: 6px; border-radius: 4px; margin-top: 4px;">
@@ -535,8 +576,8 @@ html_content = f"""<!DOCTYPE html>
 
             <div class="autopsy-box">
               <div class="autopsy-box-header">
-                <span>🎮 GPU VRAM (RTX 4060)</span>
-                <span style="color: #16a34a;">✓</span>
+                <span style="display: flex; align-items: center; gap: 4px;">{ICON_GPU} GPU VRAM (RTX 4060)</span>
+                {ICON_CHECK}
               </div>
               <div style="font-size: 0.95rem; font-weight: 800;">6,391 / 8,188 MB</div>
               <div style="background: #e2e8f0; height: 6px; border-radius: 4px; margin-top: 4px;">
@@ -546,8 +587,8 @@ html_content = f"""<!DOCTYPE html>
 
             <div class="autopsy-box">
               <div class="autopsy-box-header">
-                <span>🐘 Sockets / Database</span>
-                <span style="color: #16a34a;">✓</span>
+                <span style="display: flex; align-items: center; gap: 4px;">{ICON_DB} Database & Sockets</span>
+                {ICON_CHECK}
               </div>
               <div style="font-size: 0.85rem; font-weight: 800; color: #16a34a;">0 socket pool drops</div>
             </div>
@@ -559,73 +600,38 @@ html_content = f"""<!DOCTYPE html>
 
   </div>
 
-  <!-- SECTION 2: NEW UPDATE - CONTINUOUS LLM BATCHING (IDEA 2) -->
+  <!-- SECTION 1: VISUAL USER JOURNEY TIMELINE -->
   <div class="showcase-card">
-    <h2>🚀 New Architecture Update: Continuous LLM Batching (4x Concurrency Leap)</h2>
-    <p>
-      By transitioning <code>NodeLlamaEngine</code> from single-sequence execution (<code>LLM_CONCURRENCY=1</code>) to 
-      <strong>continuous multi-sequence CUDA batching (<code>LLM_CONCURRENCY=4</code>)</strong>, the RTX 4060 GPU now processes 
-      <strong>4 parallel RAG user inquiries simultaneously</strong> in a single forward pass.
+    <h2>Realistic Researcher Journey & System Concurrency Flow</h2>
+    <p class="caption">
+      Visual sequence diagram mapping single-researcher session stages (browsing, thinking, querying, reading) against system multiplexing across 80 concurrent users.
     </p>
-
-    <table>
-      <thead>
-        <tr>
-          <th>Configuration</th>
-          <th>GPU Parallelism</th>
-          <th>Queue Limit</th>
-          <th>4-Query Turnaround</th>
-          <th>Throughput Multiplier</th>
-          <th>GPU VRAM Utilization</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Before (Serial Queue)</strong></td>
-          <td>1 Sequence</td>
-          <td>8 slots</td>
-          <td>~40.0s (10s + 20s + 30s + 40s)</td>
-          <td>1.0x (~6 queries/min)</td>
-          <td>5,047 MiB</td>
-        </tr>
-        <tr>
-          <td><strong>After (Continuous Batching)</strong></td>
-          <td><strong>4 Sequences</strong></td>
-          <td><strong>16 slots</strong></td>
-          <td><strong>18.33s (Simultaneous)</strong></td>
-          <td><span class="pill-pass">~3.5x Throughput</span></td>
-          <td>6,391 MiB / 8,188 MiB (Safe)</td>
-        </tr>
-      </tbody>
-    </table>
+    <img src="data:image/png;base64,{user_journey_b64}" alt="User Journey Timeline Flow">
   </div>
 
-  <!-- SECTION 3: QUEUE DEPTH & TIMEOUT TRADEOFF -->
+  <!-- SECTION 2: QUEUE DEPTH & TIMEOUT TRADEOFF -->
   <div class="showcase-card">
-    <h2>⏱️ Queue Depth Burst Experiment & Physical Limits</h2>
-    <p>
-      Testing a burst of 16 users hitting <code>POST /api/v1/rag/chat</code> at $t=0$ proves that <code>LLM_MAX_QUEUE=8</code> 
-      is the mathematical limit before requests exceed the 60-second server timeout ceiling (<code>LLM_TIMEOUT_MS=60000</code>).
+    <h2>Queue Depth Burst Experiment & Physical Limits</h2>
+    <p class="caption">
+      Rigorous 16-user burst analysis demonstrating why active queue buffer is capped at 16 requests: slot latencies exceeding 60 seconds trigger client aborts.
     </p>
     <img src="data:image/png;base64,{queue_tradeoff_b64}" alt="Queue Depth Tradeoff">
   </div>
 
-  <!-- SECTION 4: REALISTIC RESEARCHER USER SESSIONS -->
+  <!-- SECTION 3: REALISTIC RESEARCHER USER SESSIONS EMPIRICAL RESULTS -->
   <div class="showcase-card">
-    <h2>👥 Realistic Researcher User Session Modeling</h2>
-    <p>
-      Simulating real user journeys (3x browsing, 6-10s think time, 1x chat inquiry, 12-20s reading time) across 80 concurrent researchers.
-      Fast browsing APIs maintain a <strong>P95 of 242ms</strong> while the GPU throttles surplus chats safely.
+    <h2>Empirical Mixed Workload Throughput & Stability</h2>
+    <p class="caption">
+      Live k6 run metrics across 80 concurrent users. Node.js processes lightweight I/O requests at 242ms P95, while GPU concurrency queues handle deep chat requests safely.
     </p>
     <img src="data:image/png;base64,{user_session_b64}" alt="Realistic User Sessions">
   </div>
 
-  <!-- SECTION 5: SYSTEM RESILIENCE & FAILURE TAXONOMY -->
+  <!-- SECTION 4: SYSTEM RESILIENCE & FAILURE TAXONOMY -->
   <div class="showcase-card">
-    <h2>🛡️ System Failure Taxonomy & Resilience Audit</h2>
-    <p>
-      Across over <strong>320,000+ total test requests</strong>, zero socket drops, zero server crashes, and zero unhandled exceptions occurred.
-      All failures were intentional HTTP 429 load-shedding protections that preserved system uptime.
+    <h2>System Failure Taxonomy & Load-Shedding Resilience</h2>
+    <p class="caption">
+      Distribution of 320,000+ requests across saturation runs. 0 unhandled exceptions or socket crashes; 100% of shedding is handled via graceful HTTP 429 backpressure.
     </p>
     <img src="data:image/png;base64,{failure_tax_b64}" alt="Failure Taxonomy Distribution">
   </div>
@@ -640,4 +646,9 @@ report_path = BENCHMARK_DIR / "benchmark_report.html"
 with open(report_path, "w", encoding="utf-8") as f:
     f.write(html_content)
 
-print(f"Standalone HTML report generated at {report_path} ({len(html_content):,} bytes)")
+brain_report_path = BRAIN_DIR / "benchmark_report.html"
+with open(brain_report_path, "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print(f"Generated standalone HTML report at {report_path} ({len(html_content):,} bytes)")
+print(f"Synced to brain artifacts at {brain_report_path}")

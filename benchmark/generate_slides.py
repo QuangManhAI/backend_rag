@@ -247,20 +247,20 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 </section>
 
 <!-- =========================================================
-     SLIDE 2: PIPELINE RAG
+     SLIDE 2: PIPELINE RAG & QUALITY BENCHMARK
      ========================================================= -->
 <section class="slide s2">
   <div class="slide-content">
     <div class="head reveal">
-      <div class="chip">Kiến trúc tổng quan</div>
-      <h2>Pipeline RAG 6 Bước &amp; Hoạt Ảnh 3D Đồng Bộ</h2>
-      <p class="lede">Mọi câu hỏi đều trải qua quy trình xác thực trích dẫn <code>[Paper: id]</code> song hành với quả cầu truy vấn di chuyển trên Cây Tri Thức 3D.</p>
+      <div class="chip">Kiến trúc &amp; Đánh giá RAG</div>
+      <h2>Pipeline RAG 6 Bước &amp; Chất Lượng Kiểm Chuẩn</h2>
+      <p class="lede">Quy trình xử lý song hành với hoạt ảnh 3D và kết quả đánh giá chất lượng từ phiên kiểm thử chuẩn (15 câu hỏi đa lĩnh vực ML, CV, NLP).</p>
     </div>
     <div class="cols-wide reveal">
       <div class="stack">
         <div class="card edge">
           <div class="label">6 bước xử lý tuần tự</div>
-          <ol style="padding-left: 1.2em; display: flex; flex-direction: column; gap: 0.45em; font-size: var(--small-size);">
+          <ol style="padding-left: 1.2em; display: flex; flex-direction: column; gap: 0.35em; font-size: var(--small-size);">
             <li><b>1. Embed:</b> Mã hóa câu hỏi với <code>nomic-embed-text-v1.5</code> (768 chiều, prefix <code>search_query:</code>).</li>
             <li><b>2. Route 3D:</b> Tìm centroid cấp 1 / cấp 2 gần nhất trên cây World (tham số <code>nprobe</code>).</li>
             <li><b>3. Search ANN:</b> Truy vấn Cosine similarity trong Qdrant collection <code>scientific_papers_gold</code>.</li>
@@ -271,19 +271,19 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
         </div>
       </div>
       <div class="stack">
-        <div class="label">Chỉ số dữ liệu &amp; đồng bộ</div>
+        <div class="label">Chỉ số chất lượng kiểm chuẩn (Run jjpmf)</div>
         <div class="metrics">
-          <div class="metric"><div class="v">60.783</div><div class="l">Bài báo khoa học trong Gold Lakehouse</div></div>
-          <div class="metric"><div class="v">768</div><div class="l">Chiều vector nhúng (Cosine metric)</div></div>
+          <div class="metric"><div class="v">73,08%</div><div class="l">Recall@5 (Độ phủ Top-5 có Rerank)</div></div>
+          <div class="metric"><div class="v">100%</div><div class="l">Zero Citation Hallucination (0 bịa đặt)</div></div>
         </div>
         <div class="metrics">
-          <div class="metric"><div class="v">6</div><div class="l">Pha trạng thái visual 3D đồng bộ</div></div>
-          <div class="metric"><div class="v">100%</div><div class="l">Trích dẫn grounded được kiểm chứng</div></div>
+          <div class="metric"><div class="v">100%</div><div class="l">Robust Abstention (Từ chối an toàn)</div></div>
+          <div class="metric"><div class="v">&lt; 200ms</div><div class="l">Time-to-First-Token (P95 TTFT)</div></div>
         </div>
       </div>
     </div>
   </div>
-  <div class="foot"><span>1. Kiến trúc hệ thống</span><code>rag.service.ts</code></div>
+  <div class="foot"><span>1. Kiến trúc &amp; Chất lượng RAG</span><code>bench-run-2026-10-23T08-19-38-jjpmf</code></div>
 </section>
 
 <!-- =========================================================

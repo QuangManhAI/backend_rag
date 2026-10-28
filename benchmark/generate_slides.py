@@ -47,11 +47,11 @@ html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
 }
 :root {
   --title-size: clamp(1.4rem, 3.8vw, 3.2rem);
-  --h2-size: clamp(1.1rem, 2.3vw, 2.4rem);
-  --h3-size: clamp(0.85rem, 1.4vw, 1.35rem);
-  --body-size: clamp(0.72rem, 1.1vw, 1.15rem);
-  --small-size: clamp(0.62rem, 0.88vw, 0.96rem);
-  --code-size: clamp(0.55rem, 0.8vw, 0.92rem);
+  --h2-size: clamp(1.1rem, 2.3vw, 2.3rem);
+  --h3-size: clamp(0.85rem, 1.35vw, 1.3rem);
+  --body-size: clamp(0.72rem, 1.05vw, 1.1rem);
+  --small-size: clamp(0.62rem, 0.85vw, 0.95rem);
+  --code-size: clamp(0.55rem, 0.78vw, 0.9rem);
   --slide-padding: clamp(1rem, 3vw, 3.2rem);
   --content-gap: clamp(0.5rem, 1.4vw, 1.4rem);
   --element-gap: clamp(0.25rem, 0.75vw, 0.75rem);
@@ -109,11 +109,10 @@ html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
 
   --step: var(--ink);
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --serif: "Georgia", "Times New Roman", "Noto Serif", serif;
   --mono: "SF Mono", Menlo, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
-/* === BASE === */
+/* === BASE (Use native Segoe UI for Vietnamese text without broken combining accents) === */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: var(--body-size); line-height: 1.45; -webkit-font-smoothing: antialiased; }
 .slide { background: var(--bg); }
@@ -124,9 +123,9 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
 .s7 { --step: var(--c7); } .s8 { --step: var(--c8); } .s9 { --step: var(--c9); }
 .s10 { --step: var(--c10); } .s11 { --step: var(--c11); } .s12 { --step: var(--c12); }
 
-h1 { font-family: var(--serif); font-size: var(--title-size); line-height: 1.15; font-weight: 700; letter-spacing: -0.01em; }
-h2 { font-family: var(--serif); font-size: var(--h2-size); line-height: 1.2; font-weight: 700; }
-h3 { font-size: var(--h3-size); font-weight: 700; line-height: 1.25; }
+h1 { font-family: var(--sans); font-size: var(--title-size); line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; }
+h2 { font-family: var(--sans); font-size: var(--h2-size); line-height: 1.2; font-weight: 700; letter-spacing: -0.01em; }
+h3 { font-family: var(--sans); font-size: var(--h3-size); font-weight: 700; line-height: 1.25; }
 p, li { font-size: var(--body-size); }
 b, strong { font-weight: 700; }
 code { font-family: var(--mono); font-size: 0.92em; background: var(--soft); padding: 0.05em 0.35em; border-radius: 4px; }
@@ -137,14 +136,14 @@ code { font-family: var(--mono); font-size: 0.92em; background: var(--soft); pad
 /* === SLIDE HEADER / FOOTER === */
 .head { display: flex; flex-direction: column; gap: clamp(0.2rem, 0.5vh, 0.45rem); margin-bottom: var(--content-gap); }
 .chip { align-self: flex-start; display: inline-flex; align-items: center; gap: 0.5em; font-size: var(--small-size); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; background: var(--step); padding: 0.28em 0.75em; border-radius: 3px; }
-.lede { color: var(--ink-2); max-width: 80ch; font-size: clamp(0.78rem, 1.2vw, 1.18rem); }
+.lede { color: var(--ink-2); max-width: 80ch; font-size: clamp(0.78rem, 1.2vw, 1.15rem); }
 .foot { position: absolute; left: var(--slide-padding); right: calc(var(--slide-padding) + 5em); bottom: clamp(0.35rem, 1.2vh, 0.9rem); display: flex; justify-content: space-between; gap: 1rem; font-size: var(--small-size); color: var(--muted); }
 .foot code { background: transparent; padding: 0; color: var(--ink-2); }
 
 /* === LAYOUT === */
 .cols { display: grid; grid-template-columns: 1fr 1fr; gap: var(--content-gap); align-items: start; }
-.cols-wide { display: grid; grid-template-columns: 1.25fr 1fr; gap: var(--content-gap); align-items: start; }
-.cols-narrow { display: grid; grid-template-columns: 1fr 1.25fr; gap: var(--content-gap); align-items: start; }
+.cols-wide { display: grid; grid-template-columns: 1.35fr 1fr; gap: var(--content-gap); align-items: start; }
+.cols-narrow { display: grid; grid-template-columns: 1fr 1.35fr; gap: var(--content-gap); align-items: start; }
 .cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--content-gap); align-items: stretch; }
 .stack { display: flex; flex-direction: column; gap: var(--element-gap); }
 .card { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: clamp(0.55rem, 1.1vw, 1rem); }
@@ -165,8 +164,8 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 /* === METRICS === */
 .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 130px), 1fr)); gap: var(--element-gap); }
 .metric { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: clamp(0.4rem, 0.8vw, 0.8rem); }
-.metric .v { font-family: var(--serif); font-size: clamp(1rem, 2.1vw, 1.9rem); font-weight: 700; line-height: 1.05; color: var(--step); font-variant-numeric: tabular-nums; }
-.metric .l { font-size: var(--small-size); color: var(--ink-2); margin-top: 0.2em; }
+.metric .v { font-family: var(--sans); font-size: clamp(1rem, 2.1vw, 1.9rem); font-weight: 800; line-height: 1.05; color: var(--step); font-variant-numeric: tabular-nums; }
+.metric .l { font-size: var(--small-size); color: var(--ink-2); margin-top: 0.2em; font-weight: 500; }
 
 /* === FLOW / PILLS === */
 .flow { display: flex; flex-wrap: wrap; gap: 0; }
@@ -178,15 +177,17 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .pill.ok { background: #e3f3e6; color: var(--ok); }
 .pill.bad { background: #fbe6e4; color: var(--bad); }
 
-/* === IMAGES / PLOTS === */
+/* === IMAGES / PLOTS / DIAGRAM CONTAINERS === */
 .plot-container { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: clamp(0.35rem, 0.7vw, 0.75rem); display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .plot-container img { width: 100%; height: auto; max-height: clamp(230px, 46vh, 480px); object-fit: contain; border-radius: 4px; }
 .plot-caption { font-size: var(--small-size); color: var(--muted); margin-top: 0.35em; text-align: center; }
 
+.diagram-card { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: clamp(0.5rem, 1vw, 0.9rem); display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
+
 /* === TITLE SLIDE === */
 .title-slide { --step: var(--ink); }
 .kicker { font-size: var(--small-size); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
-.title-slide h1 { max-width: 22ch; margin: 0.3em 0 0.35em; }
+.title-slide h1 { max-width: 24ch; margin: 0.3em 0 0.35em; }
 .title-slide .lede { font-size: clamp(0.85rem, 1.4vw, 1.25rem); }
 
 /* === REVEAL ANIMATION === */
@@ -247,38 +248,109 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 </section>
 
 <!-- =========================================================
-     SLIDE 2: PIPELINE RAG & QUALITY BENCHMARK
+     SLIDE 2: PIPELINE RAG & QUALITY BENCHMARK (DIAGRAM)
      ========================================================= -->
 <section class="slide s2">
   <div class="slide-content">
     <div class="head reveal">
       <div class="chip">Kiến trúc &amp; Đánh giá RAG</div>
       <h2>Pipeline RAG 6 Bước &amp; Chất Lượng Kiểm Chuẩn</h2>
-      <p class="lede">Quy trình xử lý song hành với hoạt ảnh 3D và kết quả đánh giá chất lượng từ phiên kiểm thử chuẩn (15 câu hỏi đa lĩnh vực ML, CV, NLP).</p>
+      <p class="lede">Quy trình xử lý dữ liệu song hành với hoạt ảnh 3D và kết quả đánh giá chất lượng (15 câu hỏi khoa học đa lĩnh vực ML, CV, NLP).</p>
     </div>
     <div class="cols-wide reveal">
-      <div class="stack">
-        <div class="card edge">
-          <div class="label">6 bước xử lý tuần tự</div>
-          <ol style="padding-left: 1.2em; display: flex; flex-direction: column; gap: 0.35em; font-size: var(--small-size);">
-            <li><b>1. Embed:</b> Mã hóa câu hỏi với <code>nomic-embed-text-v1.5</code> (768 chiều, prefix <code>search_query:</code>).</li>
-            <li><b>2. Route 3D:</b> Tìm centroid cấp 1 / cấp 2 gần nhất trên cây World (tham số <code>nprobe</code>).</li>
-            <li><b>3. Search ANN:</b> Truy vấn Cosine similarity trong Qdrant collection <code>scientific_papers_gold</code>.</li>
-            <li><b>4. Rerank tác giả:</b> Kết hợp độ tương đồng và PageRank: <code>S = 0.85 · S_sim + 0.15 · A_PageRank</code>.</li>
-            <li><b>5. Generate:</b> Qwen2.5-7B-Instruct (GGUF Q4_K_M) chạy trên CUDA GPU qua <code>node-llama-cpp</code>.</li>
-            <li><b>6. Stream SSE:</b> Đẩy từng token câu trả lời và sự kiện phase về client theo thời gian thực.</li>
-          </ol>
-        </div>
+      <!-- Sơ đồ SVG Pipeline trực quan thay cho khối chữ -->
+      <div class="diagram-card edge">
+        <svg viewBox="0 0 520 235" width="100%" height="235" style="max-height: 44vh;">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#6b7286"/>
+            </marker>
+          </defs>
+          <!-- Hàng trên: 1 -> 2 -> 3 -->
+          <g transform="translate(10, 10)">
+            <rect width="145" height="90" rx="6" fill="#f8fafc" stroke="#e2702a" stroke-width="1.8"/>
+            <rect width="145" height="22" rx="6" fill="#e2702a"/>
+            <rect y="14" width="145" height="8" fill="#e2702a"/>
+            <text x="72" y="15" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">1. NOMIC EMBED</text>
+            <text x="72" y="44" fill="#13213f" font-size="10.5" font-weight="600" text-anchor="middle">search_query: text</text>
+            <text x="72" y="63" fill="#6b7286" font-size="9.5" text-anchor="middle">Vector 768 chiều</text>
+            <text x="72" y="80" fill="#1f7a3a" font-size="9.5" font-weight="700" text-anchor="middle">TTFT &lt; 200 ms</text>
+          </g>
+          <path d="M 157 55 L 180 55" stroke="#6b7286" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <g transform="translate(185, 10)">
+            <rect width="145" height="90" rx="6" fill="#f8fafc" stroke="#1795cc" stroke-width="1.8"/>
+            <rect width="145" height="22" rx="6" fill="#1795cc"/>
+            <rect y="14" width="145" height="8" fill="#1795cc"/>
+            <text x="72" y="15" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">2. ROUTE 3D TREE</text>
+            <text x="72" y="44" fill="#13213f" font-size="10.5" font-weight="600" text-anchor="middle">Centroid Cấp 1 &amp; 2</text>
+            <text x="72" y="63" fill="#6b7286" font-size="9.5" text-anchor="middle">nprobe = 2 twigs</text>
+            <text x="72" y="80" fill="#1795cc" font-size="9.5" font-weight="700" text-anchor="middle">Quả cầu bay 3D</text>
+          </g>
+          <path d="M 332 55 L 355 55" stroke="#6b7286" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <g transform="translate(360, 10)">
+            <rect width="145" height="90" rx="6" fill="#f8fafc" stroke="#1d6a2d" stroke-width="1.8"/>
+            <rect width="145" height="22" rx="6" fill="#1d6a2d"/>
+            <rect y="14" width="145" height="8" fill="#1d6a2d"/>
+            <text x="72" y="15" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">3. QDRANT SEARCH</text>
+            <text x="72" y="44" fill="#13213f" font-size="10.5" font-weight="600" text-anchor="middle">papers_gold (ANN)</text>
+            <text x="72" y="63" fill="#6b7286" font-size="9.5" text-anchor="middle">Cosine similarity</text>
+            <text x="72" y="80" fill="#1d6a2d" font-size="9.5" font-weight="700" text-anchor="middle">Recall@5: 73.08%</text>
+          </g>
+
+          <!-- U-turn arrow: 3 -> 4 -->
+          <path d="M 432 102 L 432 126" stroke="#6b7286" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <!-- Hàng dưới: 6 <- 5 <- 4 -->
+          <g transform="translate(360, 130)">
+            <rect width="145" height="90" rx="6" fill="#f8fafc" stroke="#962a8c" stroke-width="1.8"/>
+            <rect width="145" height="22" rx="6" fill="#962a8c"/>
+            <rect y="14" width="145" height="8" fill="#962a8c"/>
+            <text x="72" y="15" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">4. MINING RERANK</text>
+            <text x="72" y="44" fill="#13213f" font-size="10" font-weight="600" text-anchor="middle">0.85·Sim + 0.15·Rank</text>
+            <text x="72" y="63" fill="#6b7286" font-size="9.5" text-anchor="middle">Tác giả &amp; trích dẫn</text>
+            <text x="72" y="80" fill="#962a8c" font-size="9.5" font-weight="700" text-anchor="middle">Top-K Grounded</text>
+          </g>
+          <path d="M 358 175 L 335 175" stroke="#6b7286" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <g transform="translate(185, 130)">
+            <rect width="145" height="90" rx="6" fill="#f8fafc" stroke="#d9480f" stroke-width="1.8"/>
+            <rect width="145" height="22" rx="6" fill="#d9480f"/>
+            <rect y="14" width="145" height="8" fill="#d9480f"/>
+            <text x="72" y="15" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">5. QWEN2.5-7B GPU</text>
+            <text x="72" y="44" fill="#13213f" font-size="10.5" font-weight="600" text-anchor="middle">node-llama-cpp (CUDA)</text>
+            <text x="72" y="63" fill="#6b7286" font-size="9.5" text-anchor="middle">GGUF Q4_K_M</text>
+            <text x="72" y="80" fill="#1f7a3a" font-size="9.5" font-weight="700" text-anchor="middle">0% Bịa đặt nguồn</text>
+          </g>
+          <path d="M 183 175 L 160 175" stroke="#6b7286" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <g transform="translate(10, 130)">
+            <rect width="145" height="90" rx="6" fill="#f8fafc" stroke="#7048e8" stroke-width="1.8"/>
+            <rect width="145" height="22" rx="6" fill="#7048e8"/>
+            <rect y="14" width="145" height="8" fill="#7048e8"/>
+            <text x="72" y="15" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">6. REALTIME SSE</text>
+            <text x="72" y="44" fill="#13213f" font-size="10.5" font-weight="600" text-anchor="middle">text/event-stream</text>
+            <text x="72" y="63" fill="#6b7286" font-size="9.5" text-anchor="middle">Stream từng token</text>
+            <text x="72" y="80" fill="#7048e8" font-size="9.5" font-weight="700" text-anchor="middle">Đồng bộ UI 3D</text>
+          </g>
+        </svg>
       </div>
+
+      <!-- Thẻ số đo kiểm chuẩn RAG -->
       <div class="stack">
-        <div class="label">Chỉ số chất lượng kiểm chuẩn (Run jjpmf)</div>
+        <div class="label">Chỉ số kiểm chuẩn chất lượng (Run jjpmf)</div>
         <div class="metrics">
-          <div class="metric"><div class="v">73,08%</div><div class="l">Recall@5 (Độ phủ Top-5 có Rerank)</div></div>
-          <div class="metric"><div class="v">100%</div><div class="l">Zero Citation Hallucination (0 bịa đặt)</div></div>
+          <div class="metric"><div class="v">73,08%</div><div class="l">Recall@5 (Độ phủ tài liệu Top-5)</div></div>
+          <div class="metric"><div class="v">100%</div><div class="l">Zero Citation Hallucination</div></div>
         </div>
         <div class="metrics">
-          <div class="metric"><div class="v">100%</div><div class="l">Robust Abstention (Từ chối an toàn)</div></div>
-          <div class="metric"><div class="v">&lt; 200ms</div><div class="l">Time-to-First-Token (P95 TTFT)</div></div>
+          <div class="metric"><div class="v">100%</div><div class="l">Robust Abstention (Từ chối chuẩn)</div></div>
+          <div class="metric"><div class="v">&lt; 200 ms</div><div class="l">Time-to-First-Token (P95 TTFT)</div></div>
+        </div>
+        <div class="card" style="font-size: var(--small-size);">
+          <div class="label">Đặc tính kỹ thuật cốt lõi</div>
+          <p>Thuật toán <b>Mining Rerank</b> đưa các bài báo uy tín lên đầu. 100% trích dẫn <code>[Paper: id]</code> đều tồn tại thực sự trong ngữ cảnh truy xuất.</p>
         </div>
       </div>
     </div>
@@ -287,35 +359,97 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 </section>
 
 <!-- =========================================================
-     SLIDE 3: DEPLOYMENT & HOSTING
+     SLIDE 3: DEPLOYMENT & HOSTING (DIAGRAM)
      ========================================================= -->
 <section class="slide s3">
   <div class="slide-content">
     <div class="head reveal">
       <div class="chip">Hạ tầng &amp; Triển khai</div>
       <h2>Mô Hình Hybrid: Cloudflare Tunnel &amp; Trạm GPU Cục Bộ</h2>
-      <p class="lede">Tách biệt rõ ràng giữa dịch vụ lưu trữ dữ liệu từ xa và máy trạm tính toán mô hình để tối ưu tài nguyên phần cứng.</p>
+      <p class="lede">Sơ đồ kết nối phân tán giữa máy chủ dữ liệu từ xa và máy trạm GPU cục bộ.</p>
     </div>
-    <div class="cols reveal">
-      <div class="card edge">
-        <div class="label">Remote Data Services (Bạn Mạnh host)</div>
-        <h3 style="margin-bottom: 0.4em;">Cloud Lakehouse &amp; Dữ liệu Vector</h3>
-        <ul style="padding-left: 1.2em; display: flex; flex-direction: column; gap: 0.4em; font-size: var(--small-size);">
-          <li><b>MinIO S3 Lakehouse:</b> Lưu trữ các tầng dữ liệu Bronze (HTML/PDF), Silver (Parquet), Gold (JSON chunks).</li>
-          <li><b>Qdrant Vector DB:</b> Chạy container Docker, phục vụ tìm kiếm ANN vector qua cổng 6333.</li>
-          <li><b>MongoDB Replica Set:</b> Lưu trữ tài khoản người dùng, phiên chat và tokens.</li>
-          <li><b>Cloudflare Zero Trust Tunnel:</b> Định tuyến an toàn từ xa về <code>localhost:27017</code> không cần mở port public.</li>
-        </ul>
+    <div class="cols-wide reveal">
+      <!-- Sơ đồ kiến trúc hạ tầng SVG -->
+      <div class="diagram-card edge">
+        <svg viewBox="0 0 520 220" width="100%" height="220" style="max-height: 42vh;">
+          <defs>
+            <marker id="tunnel-arr-r" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#0b7285"/>
+            </marker>
+            <marker id="tunnel-arr-l" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 10 1 L 0 5 L 10 9 z" fill="#0b7285"/>
+            </marker>
+          </defs>
+
+          <!-- Khối Remote -->
+          <g transform="translate(10, 15)">
+            <rect width="185" height="190" rx="8" fill="#f8fafc" stroke="#1d6a2d" stroke-width="2"/>
+            <rect width="185" height="28" rx="8" fill="#1d6a2d"/>
+            <rect y="18" width="185" height="10" fill="#1d6a2d"/>
+            <text x="92" y="18" fill="#ffffff" font-size="10.5" font-weight="700" text-anchor="middle">REMOTE SERVICES (Host: Mạnh)</text>
+            
+            <g transform="translate(12, 38)">
+              <rect width="160" height="42" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+              <text x="10" y="18" font-size="10" font-weight="700" fill="#13213f">MinIO S3 Lakehouse</text>
+              <text x="10" y="32" font-size="8.5" fill="#64748b">Bronze · Silver · Gold Chunks</text>
+            </g>
+            <g transform="translate(12, 88)">
+              <rect width="160" height="42" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+              <text x="10" y="18" font-size="10" font-weight="700" fill="#13213f">Qdrant Vector DB (Port 6333)</text>
+              <text x="10" y="32" font-size="8.5" fill="#64748b">60,783 Vector nhúng Cosine</text>
+            </g>
+            <g transform="translate(12, 138)">
+              <rect width="160" height="42" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+              <text x="10" y="18" font-size="10" font-weight="700" fill="#13213f">MongoDB Replica Set</text>
+              <text x="10" y="32" font-size="8.5" fill="#64748b">Users · Sessions · Messages</text>
+            </g>
+          </g>
+
+          <!-- Đường hầm Cloudflare Tunnel ở giữa -->
+          <g transform="translate(205, 75)">
+            <rect width="110" height="70" rx="8" fill="#e6f7ff" stroke="#0b7285" stroke-width="2" stroke-dasharray="4,2"/>
+            <text x="55" y="24" fill="#0b7285" font-size="9" font-weight="800" text-anchor="middle">CLOUDFLARE</text>
+            <text x="55" y="38" fill="#0b7285" font-size="9" font-weight="800" text-anchor="middle">ZERO TRUST</text>
+            <text x="55" y="54" fill="#13213f" font-size="8.5" font-weight="600" text-anchor="middle">TCP localhost:27017</text>
+          </g>
+          <line x1="195" y1="110" x2="203" y2="110" stroke="#0b7285" stroke-width="2"/>
+          <line x1="317" y1="110" x2="323" y2="110" stroke="#0b7285" stroke-width="2"/>
+
+          <!-- Khối Local Workstation -->
+          <g transform="translate(325, 15)">
+            <rect width="185" height="190" rx="8" fill="#f8fafc" stroke="#13213f" stroke-width="2"/>
+            <rect width="185" height="28" rx="8" fill="#13213f"/>
+            <rect y="18" width="185" height="10" fill="#13213f"/>
+            <text x="92" y="18" fill="#ffffff" font-size="10.5" font-weight="700" text-anchor="middle">LOCAL GPU WORKSTATION</text>
+            
+            <g transform="translate(12, 38)">
+              <rect width="160" height="42" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+              <text x="10" y="18" font-size="10" font-weight="700" fill="#13213f">NestJS 11 Backend (3000)</text>
+              <text x="10" y="32" font-size="8.5" fill="#64748b">REST API · SSE · Swagger UI</text>
+            </g>
+            <g transform="translate(12, 88)">
+              <rect width="160" height="42" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+              <text x="10" y="18" font-size="10" font-weight="700" fill="#13213f">CUDA Local LLM (RTX 4060)</text>
+              <text x="10" y="32" font-size="8.5" fill="#64748b">Qwen2.5-7B (8GB VRAM)</text>
+            </g>
+            <g transform="translate(12, 138)">
+              <rect width="160" height="42" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+              <text x="10" y="18" font-size="10" font-weight="700" fill="#13213f">React 19 Frontend (5174)</text>
+              <text x="10" y="32" font-size="8.5" fill="#64748b">Three.js 3D · Dexie Offline</text>
+            </g>
+          </g>
+        </svg>
       </div>
-      <div class="card edge">
-        <div class="label">Local Workstation (Máy trạm phát triển)</div>
-        <h3 style="margin-bottom: 0.4em;">Application Server &amp; GPU LLM</h3>
-        <ul style="padding-left: 1.2em; display: flex; flex-direction: column; gap: 0.4em; font-size: var(--small-size);">
-          <li><b>NestJS 11 Backend:</b> Cổng 3000, xử lý API REST, SSE streaming, authentication và swagger docs.</li>
-          <li><b>CUDA Local LLM:</b> Qwen2.5-7B-Instruct (GGUF Q4_K_M) offload 28/28 layers lên GPU VRAM qua <code>node-llama-cpp</code>.</li>
-          <li><b>React 19 + Vite Frontend:</b> Cổng 5174, hiển thị Cây Tri Thức 3D WebGL và khung chat hỗ trợ Offline-First.</li>
-          <li><b>Swagger Interactive UI:</b> Tài liệu hóa chuẩn OpenAPI tại <code>/api/v1/docs</code>.</li>
-        </ul>
+
+      <div class="stack">
+        <div class="card edge">
+          <div class="label">Đặc tả kết nối hạ tầng</div>
+          <ul style="padding-left: 1.2em; display: flex; flex-direction: column; gap: 0.4em; font-size: var(--small-size);">
+            <li><b>Không mở cổng Public:</b> Cloudflare Zero Trust thiết lập đường truyền TCP mã hóa an toàn về port 27017 nội bộ.</li>
+            <li><b>Tách biệt tải nặng:</b> Máy chủ từ xa chịu tải lưu trữ (S3/Vector/Mongo); máy trạm cục bộ tập trung 100% VRAM GPU cho mô hình ngôn ngữ lớn.</li>
+            <li><b>Tài liệu hóa OpenAPI:</b> Tích hợp Swagger tương tác trực tiếp tại <code>/api/v1/docs</code>.</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -361,37 +495,71 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 </section>
 
 <!-- =========================================================
-     SLIDE 5: AUTH & SECURITY
+     SLIDE 5: AUTH & SECURITY (DIAGRAM)
      ========================================================= -->
 <section class="slide s5">
   <div class="slide-content">
     <div class="head reveal">
       <div class="chip">Bảo mật &amp; Xác thực</div>
       <h2>Mã Hóa Argon2id &amp; JWT Refresh Token Rotation</h2>
-      <p class="lede">Cơ chế xác thực đa tầng: Băm mật khẩu kháng GPU cracking, token vòng đời ngắn và phát hiện tái sử dụng token.</p>
+      <p class="lede">Xác thực đa tầng: Băm mật khẩu kháng GPU cracking, token vòng đời ngắn và phát hiện tái sử dụng token.</p>
     </div>
-    <div class="cols reveal">
-      <div class="stack">
-        <div class="card edge">
-          <div class="label">Vòng đời Token &amp; Chống Tái Sử Dụng</div>
-          <p style="font-size: var(--small-size); margin-bottom: 0.5em;">Người dùng gửi thông tin đăng nhập → Backend kiểm tra Argon2id → Cấp cặp Access Token (15 phút) và Refresh Token (7 ngày).</p>
-          <div class="flow" style="margin: 0.5em 0;">
-            <div class="st" style="background: var(--c5)">Login<span>Argon2id</span></div>
-            <div class="st" style="background: var(--c4)">Access<span>15 phút</span></div>
-            <div class="st" style="background: var(--c1)">Rotate<span>Token mới</span></div>
-            <div class="st" style="background: var(--bad)">Reuse?<span>Revoke họ</span></div>
-          </div>
-          <p class="small muted">Khi token cũ bị sử dụng lại (dấu hiệu lộ token), hệ thống kích hoạt <b>Family Revocation</b>, thu hồi toàn bộ phiên làm việc của tài khoản đó.</p>
-        </div>
+    <div class="cols-wide reveal">
+      <!-- Sơ đồ luồng Auth & Family Revocation SVG -->
+      <div class="diagram-card edge">
+        <svg viewBox="0 0 520 210" width="100%" height="210" style="max-height: 40vh;">
+          <defs>
+            <marker id="auth-arr" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#962a8c"/>
+            </marker>
+          </defs>
+
+          <!-- 3 Cột: Client, Auth Guard, Database -->
+          <line x1="80" y1="35" x2="80" y2="200" stroke="#cbd5e1" stroke-dasharray="3,3"/>
+          <line x1="260" y1="35" x2="260" y2="200" stroke="#cbd5e1" stroke-dasharray="3,3"/>
+          <line x1="440" y1="35" x2="440" y2="200" stroke="#cbd5e1" stroke-dasharray="3,3"/>
+
+          <rect x="35" y="10" width="90" height="25" rx="4" fill="#13213f"/>
+          <text x="80" y="26" fill="#fff" font-size="10" font-weight="700" text-anchor="middle">CLIENT (Vite)</text>
+
+          <rect x="205" y="10" width="110" height="25" rx="4" fill="#962a8c"/>
+          <text x="260" y="26" fill="#fff" font-size="10" font-weight="700" text-anchor="middle">AUTH GUARD</text>
+
+          <rect x="390" y="10" width="100" height="25" rx="4" fill="#1d6a2d"/>
+          <text x="440" y="26" fill="#fff" font-size="10" font-weight="700" text-anchor="middle">MONGODB</text>
+
+          <!-- Bước 1: Login -->
+          <line x1="80" y1="55" x2="255" y2="55" stroke="#962a8c" stroke-width="1.6" marker-end="url(#auth-arr)"/>
+          <text x="170" y="50" font-size="9" fill="#13213f" font-weight="600" text-anchor="middle">1. POST /auth/login</text>
+
+          <line x1="260" y1="75" x2="435" y2="75" stroke="#1d6a2d" stroke-width="1.6" marker-end="url(#auth-arr)"/>
+          <text x="350" y="70" font-size="9" fill="#1d6a2d" font-weight="600" text-anchor="middle">2. Verify Argon2id</text>
+
+          <line x1="260" y1="95" x2="85" y2="95" stroke="#1f7a3a" stroke-width="1.6" marker-end="url(#auth-arr)"/>
+          <text x="170" y="90" font-size="9" fill="#1f7a3a" font-weight="700" text-anchor="middle">Access (15m) + Refresh (7d)</text>
+
+          <!-- Bước 2: Rotate -->
+          <line x1="80" y1="125" x2="255" y2="125" stroke="#962a8c" stroke-width="1.6" marker-end="url(#auth-arr)"/>
+          <text x="170" y="120" font-size="9" fill="#13213f" font-weight="600" text-anchor="middle">3. POST /auth/refresh</text>
+
+          <line x1="260" y1="145" x2="85" y2="145" stroke="#1f7a3a" stroke-width="1.6" marker-end="url(#auth-arr)"/>
+          <text x="170" y="140" font-size="9" fill="#1f7a3a" font-weight="600" text-anchor="middle">Cấp cặp Token mới (Rotate)</text>
+
+          <!-- Bước 3: Reuse detection -->
+          <rect x="180" y="160" width="160" height="32" rx="4" fill="#fee2e2" stroke="#b3261e" stroke-width="1.2"/>
+          <text x="260" y="174" fill="#b3261e" font-size="9" font-weight="800" text-anchor="middle">REUSE TOKEN DETECTED</text>
+          <text x="260" y="186" fill="#b3261e" font-size="8.5" text-anchor="middle">Thu hồi toàn bộ Token Family</text>
+        </svg>
       </div>
+
       <div class="stack">
         <table>
           <tr><th>Tham số bảo mật</th><th>Cấu hình triển khai</th></tr>
-          <tr><td>Thuật toán băm mật khẩu</td><td><b>Argon2id</b> (timeCost: 3, memoryCost: 65,536 KB)</td></tr>
+          <tr><td>Thuật toán băm mật khẩu</td><td><b>Argon2id</b> (timeCost: 3, memoryCost: 64MB)</td></tr>
           <tr><td>Ký Access Token</td><td>HMAC-SHA256 (Secret 256-bit, TTL 15m)</td></tr>
-          <tr><td>Lưu trữ Refresh Token</td><td>Băm SHA-256 trong MongoDB, không lưu plaintext</td></tr>
-          <tr><td>Hạn chế Brute-force</td><td><code>ThrottlerGuard</code> (Giới hạn 10 req/phút ở auth)</td></tr>
-          <tr><td>Ngữ cảnh Auth MongoDB</td><td><code>authSource=admin</code> xác thực tài khoản nội bộ</td></tr>
+          <tr><td>Lưu trữ Refresh Token</td><td>Băm SHA-256 trong MongoDB, không lưu thô</td></tr>
+          <tr><td>Hạn chế Brute-force</td><td><code>ThrottlerGuard</code> (10 req/phút ở auth)</td></tr>
+          <tr><td>Ngữ cảnh Auth MongoDB</td><td><code>authSource=admin</code> xác thực nội bộ</td></tr>
         </table>
       </div>
     </div>
@@ -400,25 +568,70 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 </section>
 
 <!-- =========================================================
-     SLIDE 6: OFFLINE-FIRST PERSISTENCE
+     SLIDE 6: OFFLINE-FIRST PERSISTENCE (DIAGRAM)
      ========================================================= -->
 <section class="slide s6">
   <div class="slide-content">
     <div class="head reveal">
       <div class="chip">Lưu trữ Offline-First</div>
       <h2>Trải Nghiệm Hội Thoại Liên Tục với Dexie.js (IndexedDB)</h2>
-      <p class="lede">Đọc lịch sử chat tức thì, tra cứu tài liệu và trích dẫn khoa học ngay cả khi Backend ngừng hoạt động.</p>
+      <p class="lede">Đọc lịch sử chat tức thì 0ms, tra cứu trích dẫn khoa học ngay cả khi Backend ngừng hoạt động.</p>
     </div>
-    <div class="cols reveal">
-      <div class="card edge">
-        <div class="label">Chiến lược Cache-First &amp; Đa Phiên</div>
-        <ul style="padding-left: 1.2em; display: flex; flex-direction: column; gap: 0.4em; font-size: var(--small-size);">
-          <li><b>Cache-First Instant Load:</b> Khi mở ứng dụng, tin nhắn được tải trực tiếp từ IndexedDB cục bộ (0ms latency, không chờ mạng).</li>
-          <li><b>Background Sync:</b> Đồng bộ nền không chặn với Backend; nếu BE offline, UI tự động hiển thị huy hiệu <code>Ngoại tuyến</code>.</li>
-          <li><b>Quản lý phiên:</b> History Drawer cho phép tạo <b>+ Đoạn chat mới</b>; tự sinh tiêu đề từ 48 ký tự đầu câu hỏi.</li>
-          <li><b>Xóa an toàn 2 bước:</b> Xác nhận inline (<code>Xóa?</code> / <code>Huỷ</code>), xóa local ngay tức thì và gọi DELETE lên server ở background.</li>
-        </ul>
+    <div class="cols-wide reveal">
+      <!-- Sơ đồ luồng Cache-First & Lazy Sync SVG -->
+      <div class="diagram-card edge">
+        <svg viewBox="0 0 520 210" width="100%" height="210" style="max-height: 40vh;">
+          <defs>
+            <marker id="dexie-arr" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#4e9d2b"/>
+            </marker>
+          </defs>
+
+          <!-- Hộp 1: Người dùng mở Web -->
+          <g transform="translate(10, 20)">
+            <rect width="135" height="75" rx="6" fill="#f8fafc" stroke="#13213f" stroke-width="1.8"/>
+            <text x="67" y="25" fill="#13213f" font-size="10.5" font-weight="700" text-anchor="middle">1. MỞ ỨNG DỤNG</text>
+            <text x="67" y="44" fill="#6b7286" font-size="9" text-anchor="middle">Kiểm tra phiên đăng nhập</text>
+            <text x="67" y="60" fill="#13213f" font-size="9" font-weight="600" text-anchor="middle">Client Cache-First</text>
+          </g>
+          <path d="M 147 57 L 175 57" stroke="#4e9d2b" stroke-width="2" marker-end="url(#dexie-arr)"/>
+
+          <!-- Hộp 2: Hydrate Dexie 0ms -->
+          <g transform="translate(180, 20)">
+            <rect width="160" height="75" rx="6" fill="#eef8ee" stroke="#4e9d2b" stroke-width="2"/>
+            <text x="80" y="25" fill="#1d6a2d" font-size="10.5" font-weight="700" text-anchor="middle">2. DEXIE (INDEXEDDB)</text>
+            <text x="80" y="44" fill="#13213f" font-size="9.5" font-weight="700" text-anchor="middle">Tải tức thì 0ms (Local)</text>
+            <text x="80" y="60" fill="#6b7286" font-size="8.5" text-anchor="middle">Lịch sử · Trích dẫn · Timings</text>
+          </g>
+
+          <!-- Nhánh 3a: Backend Online -->
+          <path d="M 342 45 L 368 35" stroke="#1f7a3a" stroke-width="1.8" marker-end="url(#dexie-arr)"/>
+          <g transform="translate(370, 10)">
+            <rect width="140" height="65" rx="6" fill="#f8fafc" stroke="#1f7a3a" stroke-width="1.8"/>
+            <text x="70" y="20" fill="#1f7a3a" font-size="10" font-weight="700" text-anchor="middle">BACKEND LIVE (Online)</text>
+            <text x="70" y="36" fill="#13213f" font-size="8.5" text-anchor="middle">GET /chat-sessions sync</text>
+            <text x="70" y="50" fill="#64748b" font-size="8.5" text-anchor="middle">Lazy create on 1st prompt</text>
+          </g>
+
+          <!-- Nhánh 3b: Backend Offline -->
+          <path d="M 342 70 L 368 85" stroke="#b3261e" stroke-width="1.8" marker-end="url(#dexie-arr)"/>
+          <g transform="translate(370, 85)">
+            <rect width="140" height="65" rx="6" fill="#fee2e2" stroke="#b3261e" stroke-width="1.8"/>
+            <text x="70" y="20" fill="#b3261e" font-size="10" font-weight="700" text-anchor="middle">BACKEND DEAD (Offline)</text>
+            <text x="70" y="36" fill="#13213f" font-size="8.5" text-anchor="middle">Huy hiệu "Ngoại tuyến"</text>
+            <text x="70" y="50" fill="#b3261e" font-size="8.5" font-weight="700" text-anchor="middle">100% Đọc lịch sử bình thường</text>
+          </g>
+
+          <!-- Hàng dưới: 2-step Delete & UUIDv7 -->
+          <g transform="translate(10, 120)">
+            <rect width="330" height="75" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+            <text x="165" y="24" fill="#13213f" font-size="10" font-weight="700" text-anchor="middle">TÍNH NĂNG ĐA PHIÊN &amp; AN TOÀN DỮ LIỆU</text>
+            <text x="165" y="44" fill="#6b7286" font-size="9" text-anchor="middle">Nút <b>+ Đoạn chat mới</b> · Tiêu đề tự sinh từ 48 ký tự đầu câu hỏi</text>
+            <text x="165" y="62" fill="#13213f" font-size="9" font-weight="600" text-anchor="middle">Xóa an toàn 2 bước: Xác nhận inline (Xóa? / Huỷ) chống xóa nhầm</text>
+          </g>
+        </svg>
       </div>
+
       <div class="stack">
         <div class="card">
           <div class="label">Schema Bảng Dexie (frontend_rag)</div>
@@ -569,7 +782,7 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
           <div class="label">Chỉ số Web Vitals chi tiết</div>
           <ul style="padding-left: 1.2em; display: flex; flex-direction: column; gap: 0.3em;">
             <li><b>Total Blocking Time (TBT):</b> <b>40 ms</b> (ngưỡng tốt &lt; 200 ms).</li>
-            <li><b>Cumulative Layout Shift (CLS):</b> <b>0.002</b> (không bị xô lệch bố cục).</li>
+            <li><b>Cumulative Layout Shift (CLS):</b> <b>0.002</b> (hầu như không xô lệch bố cục).</li>
             <li><b>Speed Index (SI):</b> <b>1.2 s</b>.</li>
             <li><b>Three.js InstancedMesh:</b> Gom toàn bộ node lá cây vào 1 draw call, duy trì tốc độ khung hình <b>57.1 ± 1.2 FPS</b>.</li>
           </ul>
@@ -773,7 +986,7 @@ document.addEventListener('DOMContentLoaded', () => { new SlidePresentation(); }
 </html>
 """
 
-# Normalize unicode to NFC to avoid combining accent rendering bugs on Windows/Chrome
+# Normalize unicode to NFC to avoid combining accent rendering bugs on Windows
 normalized_html = unicodedata.normalize("NFC", html_template)
 
 print(f"Writing generated slides HTML to {OUTPUT_HTML}...")

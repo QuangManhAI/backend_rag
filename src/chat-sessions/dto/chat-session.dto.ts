@@ -30,6 +30,7 @@ export class SessionSummaryDto {
   @ApiProperty() id: string;
   @ApiProperty() title: string;
   @ApiProperty() message_count: number;
+  @ApiProperty() last_message_at: string;
   @ApiProperty() created_at: string;
   @ApiProperty() updated_at: string;
 }
@@ -43,11 +44,13 @@ export class MessageDto {
   grounded_chunks?: GroundedChunk[];
   @ApiPropertyOptional({ type: () => TimingsDto }) timings?: Timings;
   @ApiProperty() created_at: string;
+  @ApiProperty() updated_at: string;
 }
 
 export class SessionDto {
   @ApiProperty() id: string;
   @ApiProperty() title: string;
+  @ApiProperty() last_message_at: string;
   @ApiProperty() created_at: string;
   @ApiProperty() updated_at: string;
   @ApiProperty({ type: [MessageDto] }) messages: MessageDto[];

@@ -1,12 +1,13 @@
 import base64
 import os
+import unicodedata
 from pathlib import Path
 
 # Paths
 ROOT_DIR = Path(r"C:\document\Study documents\backend_rag\RAG_TS")
 RESULTS_DIR = ROOT_DIR / "backend_rag" / "benchmark" / "results"
-FE_SCREENSHOTS = ROOT_DIR / "frontend_rag" / "docs" / "screenshots"
 OUTPUT_HTML = ROOT_DIR / "docs" / "report_slides.html"
+USER_LIGHTHOUSE_IMG = Path(r"C:\Users\TDV\.gemini\antigravity-cli\brain\4db53373-1ab6-43ef-a7e9-7bb3fed98130\.user_uploaded\uploaded_media_1_1793185932105.png")
 
 def get_base64_img(path: Path) -> str:
     if not path.exists():
@@ -20,7 +21,7 @@ print("Reading and encoding benchmark images...")
 img_soak = get_base64_img(RESULTS_DIR / "qualification_5min_sustained_throughput.png")
 img_timeline = get_base64_img(RESULTS_DIR / "qualification_5min_continuous_timeline.png")
 img_burst = get_base64_img(RESULTS_DIR / "empirical_k_fold_burst_turnaround.png")
-img_frontend = get_base64_img(FE_SCREENSHOTS / "after-dark-overview.png")
+img_frontend = get_base64_img(USER_LIGHTHOUSE_IMG)
 print("Images encoded successfully.")
 
 html_template = """<!DOCTYPE html>
@@ -107,8 +108,8 @@ html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
   --c12: #1971c2; /* Conclusion */
 
   --step: var(--ink);
-  --sans: "Segoe UI", "Helvetica Neue", Helvetica, Arial, "Noto Sans", sans-serif;
-  --serif: Georgia, "Times New Roman", "Noto Serif", serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --serif: "Georgia", "Times New Roman", "Noto Serif", serif;
   --mono: "SF Mono", Menlo, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
@@ -123,8 +124,8 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
 .s7 { --step: var(--c7); } .s8 { --step: var(--c8); } .s9 { --step: var(--c9); }
 .s10 { --step: var(--c10); } .s11 { --step: var(--c11); } .s12 { --step: var(--c12); }
 
-h1 { font-family: var(--serif); font-size: var(--title-size); line-height: 1.1; font-weight: 700; letter-spacing: -0.01em; }
-h2 { font-family: var(--serif); font-size: var(--h2-size); line-height: 1.18; font-weight: 700; }
+h1 { font-family: var(--serif); font-size: var(--title-size); line-height: 1.15; font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-family: var(--serif); font-size: var(--h2-size); line-height: 1.2; font-weight: 700; }
 h3 { font-size: var(--h3-size); font-weight: 700; line-height: 1.25; }
 p, li { font-size: var(--body-size); }
 b, strong { font-weight: 700; }
@@ -235,7 +236,7 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
       <div class="st" style="background: var(--c3)">2 · Hạ tầng<span>Tunnel + CUDA LLM</span></div>
       <div class="st" style="background: var(--c4)">3 · TypeScript<span>Strict + Discriminated</span></div>
       <div class="st" style="background: var(--c6)">4 · Offline-First<span>Dexie.js / Cache-First</span></div>
-      <div class="st" style="background: var(--c7)">5 · Hiệu năng<span>2,000 VUs / 5 Phút</span></div>
+      <div class="st" style="background: var(--c7)">5 · Hiệu năng<span>1,600 CU / 5 Phút</span></div>
     </div>
     <div class="cols reveal" style="margin-top: clamp(0.8rem, 2.5vh, 1.8rem); max-width: 1000px;">
       <p class="small muted"><b>Công nghệ chính:</b> TypeScript 5.x (strict), NestJS 11, React 19, Three.js, Qdrant, MongoDB, node-llama-cpp, Dexie.js, Tailwind v4.</p>
@@ -253,7 +254,7 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
     <div class="head reveal">
       <div class="chip">Kiến trúc tổng quan</div>
       <h2>Pipeline RAG 6 Bước &amp; Hoạt Ảnh 3D Đồng Bộ</h2>
-      <p class="lede">Mọi câu hỏi đều trải qua quy trình xác thực trích dẫn minh bạch <code>[Paper: id]</code> song hành với quả cầu truy vấn bay trên Cây Tri Thức 3D.</p>
+      <p class="lede">Mọi câu hỏi đều trải qua quy trình xác thực trích dẫn <code>[Paper: id]</code> song hành với quả cầu truy vấn di chuyển trên Cây Tri Thức 3D.</p>
     </div>
     <div class="cols-wide reveal">
       <div class="stack">
@@ -293,7 +294,7 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
     <div class="head reveal">
       <div class="chip">Hạ tầng &amp; Triển khai</div>
       <h2>Mô Hình Hybrid: Cloudflare Tunnel &amp; Trạm GPU Cục Bộ</h2>
-      <p class="lede">Tách biệt rõ ràng giữa dịch vụ dữ liệu lưu trữ từ xa và máy trạm tính toán mô hình lớn để tối ưu chi phí và tài nguyên phần cứng.</p>
+      <p class="lede">Tách biệt rõ ràng giữa dịch vụ lưu trữ dữ liệu từ xa và máy trạm tính toán mô hình để tối ưu tài nguyên phần cứng.</p>
     </div>
     <div class="cols reveal">
       <div class="card edge">
@@ -303,7 +304,7 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
           <li><b>MinIO S3 Lakehouse:</b> Lưu trữ các tầng dữ liệu Bronze (HTML/PDF), Silver (Parquet), Gold (JSON chunks).</li>
           <li><b>Qdrant Vector DB:</b> Chạy container Docker, phục vụ tìm kiếm ANN vector qua cổng 6333.</li>
           <li><b>MongoDB Replica Set:</b> Lưu trữ tài khoản người dùng, phiên chat và tokens.</li>
-          <li><b>Cloudflare Zero Trust Tunnel:</b> Định tuyến bảo mật từ xa về <code>localhost:27017</code> không cần mở port public.</li>
+          <li><b>Cloudflare Zero Trust Tunnel:</b> Định tuyến an toàn từ xa về <code>localhost:27017</code> không cần mở port public.</li>
         </ul>
       </div>
       <div class="card edge">
@@ -311,7 +312,7 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
         <h3 style="margin-bottom: 0.4em;">Application Server &amp; GPU LLM</h3>
         <ul style="padding-left: 1.2em; display: flex; flex-direction: column; gap: 0.4em; font-size: var(--small-size);">
           <li><b>NestJS 11 Backend:</b> Cổng 3000, xử lý API REST, SSE streaming, authentication và swagger docs.</li>
-          <li><b>CUDA Local LLM:</b> Qwen2.5-7B-Instruct (GGUF Q4_K_M) offload 28/28 layers lên NVIDIA RTX GPU qua <code>node-llama-cpp</code>.</li>
+          <li><b>CUDA Local LLM:</b> Qwen2.5-7B-Instruct (GGUF Q4_K_M) offload 28/28 layers lên GPU VRAM qua <code>node-llama-cpp</code>.</li>
           <li><b>React 19 + Vite Frontend:</b> Cổng 5174, hiển thị Cây Tri Thức 3D WebGL và khung chat hỗ trợ Offline-First.</li>
           <li><b>Swagger Interactive UI:</b> Tài liệu hóa chuẩn OpenAPI tại <code>/api/v1/docs</code>.</li>
         </ul>
@@ -329,7 +330,7 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
     <div class="head reveal">
       <div class="chip">Kỹ thuật TypeScript</div>
       <h2>Hệ Thống Kiểu Strict Xuyên Suốt Backend &amp; Frontend</h2>
-      <p class="lede">Tận dụng triệt để static typing, decorator validation, discriminated unions và kiến trúc Clean Architecture Ports &amp; Adapters.</p>
+      <p class="lede">Áp dụng static typing, decorator validation, discriminated unions và kiến trúc Clean Architecture Ports &amp; Adapters.</p>
     </div>
     <div class="cols-wide reveal">
       <div class="card edge">
@@ -348,7 +349,7 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
           <div class="label">4 Trụ cột TypeScript trong đồ án</div>
           <ul style="padding-left: 1.2em; display: flex; flex-direction: column; gap: 0.35em; font-size: var(--small-size);">
             <li><b>Strict tsconfig:</b> Bật <code>strict: true</code>, <code>noImplicitAny</code>, <code>exactOptionalPropertyTypes</code> ở cả BE lẫn FE.</li>
-            <li><b>DTO Validation:</b> <code>class-validator</code> kết hợp NestJS <code>ValidationPipe</code> bảo đảm payload sạch 100%.</li>
+            <li><b>DTO Validation:</b> <code>class-validator</code> kết hợp NestJS <code>ValidationPipe</code> xác minh payload đầu vào.</li>
             <li><b>Ports &amp; Adapters:</b> Giao diện <code>SessionStorePort</code> trừu tượng hóa DB, cho phép tráo mock dễ dàng khi test.</li>
             <li><b>Zod Validation:</b> Kiểm định chặt chẽ biến môi trường <code>.env</code> ngay khi khởi động server.</li>
           </ul>
@@ -366,21 +367,21 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
   <div class="slide-content">
     <div class="head reveal">
       <div class="chip">Bảo mật &amp; Xác thực</div>
-      <h2>Argon2id &amp; JWT Refresh Token Rotation Chống Đánh Cắp</h2>
-      <p class="lede">Bảo vệ tài khoản đa tầng: Băm mật khẩu kháng GPU cracking, token vòng đời ngắn và cơ chế phát hiện tái sử dụng token.</p>
+      <h2>Mã Hóa Argon2id &amp; JWT Refresh Token Rotation</h2>
+      <p class="lede">Cơ chế xác thực đa tầng: Băm mật khẩu kháng GPU cracking, token vòng đời ngắn và phát hiện tái sử dụng token.</p>
     </div>
     <div class="cols reveal">
       <div class="stack">
         <div class="card edge">
           <div class="label">Vòng đời Token &amp; Chống Tái Sử Dụng</div>
-          <p style="font-size: var(--small-size); margin-bottom: 0.5em;">Người dùng gửi thông tin đăng nhập $\rightarrow$ Backend kiểm tra Argon2id $\rightarrow$ Cấp cặp Access Token (15 phút) và Refresh Token (7 ngày).</p>
+          <p style="font-size: var(--small-size); margin-bottom: 0.5em;">Người dùng gửi thông tin đăng nhập → Backend kiểm tra Argon2id → Cấp cặp Access Token (15 phút) và Refresh Token (7 ngày).</p>
           <div class="flow" style="margin: 0.5em 0;">
             <div class="st" style="background: var(--c5)">Login<span>Argon2id</span></div>
             <div class="st" style="background: var(--c4)">Access<span>15 phút</span></div>
             <div class="st" style="background: var(--c1)">Rotate<span>Token mới</span></div>
             <div class="st" style="background: var(--bad)">Reuse?<span>Revoke họ</span></div>
           </div>
-          <p class="small muted">Khi token cũ bị sử dụng lại (dấu hiệu lộ token), hệ thống kích hoạt <b>Family Revocation</b>, thu hồi lập tức toàn bộ phiên làm việc của user đó.</p>
+          <p class="small muted">Khi token cũ bị sử dụng lại (dấu hiệu lộ token), hệ thống kích hoạt <b>Family Revocation</b>, thu hồi toàn bộ phiên làm việc của tài khoản đó.</p>
         </div>
       </div>
       <div class="stack">
@@ -389,8 +390,8 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
           <tr><td>Thuật toán băm mật khẩu</td><td><b>Argon2id</b> (timeCost: 3, memoryCost: 65,536 KB)</td></tr>
           <tr><td>Ký Access Token</td><td>HMAC-SHA256 (Secret 256-bit, TTL 15m)</td></tr>
           <tr><td>Lưu trữ Refresh Token</td><td>Băm SHA-256 trong MongoDB, không lưu plaintext</td></tr>
-          <tr><td>Ngăn chặn Brute-force</td><td><code>ThrottlerGuard</code> (Giới hạn 10 req/phút ở auth)</td></tr>
-          <tr><td>Ngữ cảnh Auth MongoDB</td><td><code>authSource=admin</code> xác thực user nội bộ an toàn</td></tr>
+          <tr><td>Hạn chế Brute-force</td><td><code>ThrottlerGuard</code> (Giới hạn 10 req/phút ở auth)</td></tr>
+          <tr><td>Ngữ cảnh Auth MongoDB</td><td><code>authSource=admin</code> xác thực tài khoản nội bộ</td></tr>
         </table>
       </div>
     </div>
@@ -406,15 +407,15 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
     <div class="head reveal">
       <div class="chip">Lưu trữ Offline-First</div>
       <h2>Trải Nghiệm Hội Thoại Liên Tục với Dexie.js (IndexedDB)</h2>
-      <p class="lede">Đọc lịch sử chat 0ms, tra cứu tài liệu và trích dẫn khoa học ngay cả khi Backend ngừng hoạt động hoàn toàn.</p>
+      <p class="lede">Đọc lịch sử chat tức thì, tra cứu tài liệu và trích dẫn khoa học ngay cả khi Backend ngừng hoạt động.</p>
     </div>
     <div class="cols reveal">
       <div class="card edge">
         <div class="label">Chiến lược Cache-First &amp; Đa Phiên</div>
         <ul style="padding-left: 1.2em; display: flex; flex-direction: column; gap: 0.4em; font-size: var(--small-size);">
-          <li><b>Cache-First Instant Load:</b> Khi mở ứng dụng, tin nhắn được hydrate trực tiếp từ IndexedDB cục bộ (0ms latency, không chờ API).</li>
-          <li><b>Background Sync:</b> Đồng bộ nền không chặn (fire-and-forget) với Backend; nếu BE offline, UI tự động hiển thị huy hiệu <code>Ngoại tuyến</code>.</li>
-          <li><b>Quản lý phiên đa dạng:</b> History Drawer cho phép tạo <b>+ Đoạn chat mới</b>; tự sinh tiêu đề từ 48 ký tự đầu câu hỏi.</li>
+          <li><b>Cache-First Instant Load:</b> Khi mở ứng dụng, tin nhắn được tải trực tiếp từ IndexedDB cục bộ (0ms latency, không chờ mạng).</li>
+          <li><b>Background Sync:</b> Đồng bộ nền không chặn với Backend; nếu BE offline, UI tự động hiển thị huy hiệu <code>Ngoại tuyến</code>.</li>
+          <li><b>Quản lý phiên:</b> History Drawer cho phép tạo <b>+ Đoạn chat mới</b>; tự sinh tiêu đề từ 48 ký tự đầu câu hỏi.</li>
           <li><b>Xóa an toàn 2 bước:</b> Xác nhận inline (<code>Xóa?</code> / <code>Huỷ</code>), xóa local ngay tức thì và gọi DELETE lên server ở background.</li>
         </ul>
       </div>
@@ -441,37 +442,37 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 </section>
 
 <!-- =========================================================
-     SLIDE 7: BENCHMARK 1 - SOAK TEST
+     SLIDE 7: BENCHMARK 1 - STRESS TEST 5 PHÚT
      ========================================================= -->
 <section class="slide s7">
   <div class="slide-content">
     <div class="head reveal">
-      <div class="chip">Hiệu năng &amp; Stress Test</div>
-      <h2>Fast API: 2,000 VUs Chịu Tải Bền Vững Suốt 5 Phút</h2>
-      <p class="lede">Kiểm thử độ bền (Soak Test) bằng k6 chứng minh độ ổn định tuyệt đối của tầng REST API NestJS không suy giảm tài nguyên.</p>
+      <div class="chip">Kiểm thử hiệu năng</div>
+      <h2>Fast API: Stress Test 5 Phút (1,600 CU Đạt Chuẩn)</h2>
+      <p class="lede">Kiểm thử độ bền (Endurance Test) bằng k6 xác định khả năng chịu tải liên tục của tầng REST API NestJS.</p>
     </div>
     <div class="cols-wide reveal">
       <div class="plot-container">
-        <img src=\"""" + img_soak + """\" alt="Biểu đồ k6 2,000 VUs Soak Test">
-        <div class="plot-caption">Hình 1: Thông lượng đo được đạt 2,451.3 req/s ổn định suốt 300 giây liên tục.</div>
+        <img src=\"""" + img_soak + """\" alt="Biểu đồ k6 1,600 CU Stress Test">
+        <div class="plot-caption">Hình 1: Thông lượng đo được đạt 3,958.53 req/s duy trì ổn định suốt 300 giây liên tục.</div>
       </div>
       <div class="stack">
         <div class="metrics">
-          <div class="metric"><div class="v">2.000</div><div class="l">Virtual Users (VUs) đồng thời</div></div>
-          <div class="metric"><div class="v">2.451</div><div class="l">Requests / giây (Sustained RPS)</div></div>
+          <div class="metric"><div class="v">1.600</div><div class="l">Certified Max Concurrent Users (CU)</div></div>
+          <div class="metric"><div class="v">3.958</div><div class="l">Requests / giây (Sustained Throughput)</div></div>
         </div>
         <div class="metrics">
-          <div class="metric"><div class="v">368 ms</div><div class="l">Độ trễ phân vị P95</div></div>
-          <div class="metric"><div class="v">0,00%</div><div class="l">Tỉ lệ lỗi HTTP (0 request hỏng)</div></div>
+          <div class="metric"><div class="v">379.5 ms</div><div class="l">Độ trễ phân vị P95 (SLA &lt; 500 ms)</div></div>
+          <div class="metric"><div class="v">0,00%</div><div class="l">Tỉ lệ lỗi HTTP (0 / 1.187.560 req)</div></div>
         </div>
         <div class="card" style="font-size: var(--small-size);">
-          <div class="label">Phân tích cạn kiệt cổng Windows</div>
-          <p>Khi nâng tải lên 2,500 VUs, xuất hiện lỗi kết nối hệ điều hành do <b>Windows Ephemeral Port Exhaustion</b> (hết dải socket TCP tạm thời <code>TIME_WAIT</code>), chứ không phải do NestJS bị sập server.</p>
+          <div class="label">Xác định ngưỡng chịu tải (Failure Boundary)</div>
+          <p>Khi nâng tải lên 2,000 VUs, độ trễ P95 trôi lên 520.4 ms (vượt ngưỡng SLA 500 ms); ở mức 2,500 VUs độ trễ đạt 599.1 ms. Hệ thống đạt chuẩn kiểm định ở mức <b>1,600 CU</b> với <b>1.187.560 requests</b> liên tục.</p>
         </div>
       </div>
     </div>
   </div>
-  <div class="foot"><span>6. Benchmark: Fast API Soak</span><code>k6 soak-test-2000vus.js</code></div>
+  <div class="foot"><span>6. Benchmark: Fast API Stress Test</span><code>k6 endurance-test-1600cu.js</code></div>
 </section>
 
 <!-- =========================================================
@@ -480,23 +481,23 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 <section class="slide s8">
   <div class="slide-content">
     <div class="head reveal">
-      <div class="chip">Phân tích độ trễ sâu</div>
-      <h2>Dòng Thời Gian 5 Phút, Gai P99.9 &amp; V8 Garbage Collection</h2>
-      <p class="lede">Theo dõi liên tục từng mili-giây giúp phát hiện chính xác thời điểm V8 Engine kích hoạt dọn dẹp bộ nhớ.</p>
+      <div class="chip">Phân tích độ trễ chi tiết</div>
+      <h2>Dòng Thời Gian 5 Phút, Phân Vị P99.9 &amp; V8 Garbage Collection</h2>
+      <p class="lede">Theo dõi liên tục từng giây ghi nhận phân vị độ trễ và tác động của tiến trình thu gom bộ nhớ V8.</p>
     </div>
     <div class="cols-wide reveal">
       <div class="plot-container">
         <img src=\"""" + img_timeline + """\" alt="Timeline độ trễ và phân vị P99.9">
-        <div class="plot-caption">Hình 2: Phân tích đường biên latency P50, P90, P95 và các đỉnh nhọn P99.9.</div>
+        <div class="plot-caption">Hình 2: Phân tích đường biên latency P50 (349 ms), P95 (379.5 ms) và các đỉnh nhọn P99.9.</div>
       </div>
       <div class="stack">
         <div class="card edge">
           <div class="label">Hiện tượng V8 Full GC Pauses</div>
-          <p style="font-size: var(--small-size); margin-bottom: 0.5em;">Đồ án xử lý hơn <b>735,000 requests</b> trong 5 phút. V8 Engine (Node.js) thực hiện thu gom bộ nhớ định kỳ:</p>
+          <p style="font-size: var(--small-size); margin-bottom: 0.5em;">Đồ án xử lý hơn <b>1.180.000 requests</b> trong 5 phút. V8 Engine (Node.js) thực hiện thu gom bộ nhớ định kỳ:</p>
           <ul style="padding-left: 1.2em; display: flex; flex-direction: column; gap: 0.35em; font-size: var(--small-size);">
-            <li><b>Phân vị P50:</b> Cực kỳ ổn định ở mức <b>182.4 ms</b>.</li>
-            <li><b>Phân vị P95:</b> Đạt <b>368.1 ms</b>, đáp ứng hoàn hảo tiêu chuẩn SLA web (&lt; 500 ms).</li>
-            <li><b>Gai nhọn P99.9:</b> Xuất hiện chu kỳ ~50,000 requests khi V8 kích hoạt Full Mark-Sweep-Compact GC pause (~1.2s) rồi lập tức hạ nhiệt.</li>
+            <li><b>Phân vị P50:</b> Duy trì ở mức <b>349 ms</b>.</li>
+            <li><b>Phân vị P95:</b> Đạt <b>379.5 ms</b>, đáp ứng tiêu chuẩn SLA (&lt; 500 ms).</li>
+            <li><b>Gai nhọn P99.9:</b> Xuất hiện theo chu kỳ ~50,000 requests khi V8 kích hoạt Full Mark-Sweep-Compact GC pause (~1.2s) rồi hạ nhiệt trở lại.</li>
           </ul>
         </div>
         <div class="metrics">
@@ -517,7 +518,7 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
     <div class="head reveal">
       <div class="chip">Tầng GPU &amp; Hàng đợi</div>
       <h2>LLM Queue Cliff, K=5 Burst Turnaround &amp; Fail-Fast 429</h2>
-      <p class="lede">Khi bị giới hạn bởi năng lực tính toán GPU (1 request chạy đồng thời), hàng đợi thông minh bảo vệ hệ thống không bị treo.</p>
+      <p class="lede">Do GPU xử lý tuần tự từng ngữ cảnh, hàng đợi điều tiết giúp tránh treo hệ thống khi xuất hiện đợt truy cập dồn dập.</p>
     </div>
     <div class="cols-wide reveal">
       <div class="plot-container">
@@ -527,11 +528,11 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
       <div class="stack">
         <div class="card edge">
           <div class="label">Cơ chế Hàng đợi Fail-Fast HTTP 429</div>
-          <p style="font-size: var(--small-size); margin-bottom: 0.4em;">Do LLM chạy tuần tự trên VRAM GPU, khi một đợt request dồn dập (burst) ập tới:</p>
+          <p style="font-size: var(--small-size); margin-bottom: 0.4em;">Đặc điểm tính toán trên GPU VRAM cục bộ khi tải tăng đột biến:</p>
           <ul style="padding-left: 1.2em; display: flex; flex-direction: column; gap: 0.35em; font-size: var(--small-size);">
-            <li><b>Slot 1–5:</b> Xử lý thành công trong thời gian cho phép SLA (&lt; 15s).</li>
-            <li><b>Slot 7–9:</b> Chờ xếp hàng quá lâu dẫn đến vi phạm SLA phản hồi.</li>
-            <li><b>Fail-Fast HTTP 429:</b> Khi hàng đợi vượt quá dung lượng cho phép, server từ chối ngay lập tức (2ms) với mã lỗi <code>429 Too Many Requests</code> thay vì để user chờ treo timeout 504.</li>
+            <li><b>Slot 1–5:</b> Hoàn thành trong khoảng thời gian cho phép của SLA (&lt; 15s).</li>
+            <li><b>Slot 7–9:</b> Thời gian chờ tích lũy trong hàng đợi làm vi phạm SLA phản hồi.</li>
+            <li><b>Fail-Fast HTTP 429:</b> Khi hàng đợi vượt quá dung lượng cho phép, server từ chối ngay lập tức (2ms) với mã <code>429 Too Many Requests</code> nhằm tránh để client chờ kết nối dẫn đến timeout 504.</li>
           </ul>
         </div>
       </div>
@@ -541,37 +542,42 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 </section>
 
 <!-- =========================================================
-     SLIDE 10: BENCHMARK 4 - FRONTEND & 3D
+     SLIDE 10: BENCHMARK 4 - FRONTEND & 3D (LIGHTHOUSE 97)
      ========================================================= -->
 <section class="slide s10">
   <div class="slide-content">
     <div class="head reveal">
-      <div class="chip">Hiệu năng Frontend</div>
-      <h2>Tối Ưu Hóa Cây Tri Thức 3D WebGL &amp; Lighthouse Vitals</h2>
-      <p class="lede">Kết hợp Three.js InstancedMesh và kỹ thuật lazy-loading giúp giao diện đạt tốc độ khung hình 57 FPS mượt mà.</p>
+      <div class="chip">Hiệu năng Frontend &amp; 3D</div>
+      <h2>Tối Ưu Hóa Cây Tri Thức 3D &amp; Điểm Lighthouse 97</h2>
+      <p class="lede">Kết hợp Three.js InstancedMesh và lazy-loading giúp giao diện đạt 97 điểm hiệu năng và 100 điểm Best Practices.</p>
     </div>
     <div class="cols-wide reveal">
       <div class="plot-container">
-        <img src=\"""" + img_frontend + """\" alt="Giao diện Cây Tri Thức 3D Chế Độ Tối">
-        <div class="plot-caption">Hình 4: Toàn cảnh Cây Tri Thức Vector 3D chạy song song khung hội thoại.</div>
+        <img src=\"""" + img_frontend + """\" alt="Kết quả audit Lighthouse trên giao diện 3D">
+        <div class="plot-caption">Hình 4: Kiểm thử Lighthouse đạt Performance 97, Accessibility 100, Best Practices 100.</div>
       </div>
       <div class="stack">
         <div class="metrics">
-          <div class="metric"><div class="v">2,15 s</div><div class="l">LCP (giảm từ 6.6s, -67.4%)</div></div>
-          <div class="metric"><div class="v">444 ms</div><div class="l">FCP (giảm từ 3.6s, -87.6%)</div></div>
+          <div class="metric"><div class="v">97 / 100</div><div class="l">Lighthouse Performance Score</div></div>
+          <div class="metric"><div class="v">100 / 100</div><div class="l">Accessibility &amp; Best Practices</div></div>
         </div>
-        <div class="card edge">
-          <div class="label">Kỹ thuật đồ họa Three.js</div>
-          <ul style="padding-left: 1.2em; display: flex; flex-direction: column; gap: 0.35em; font-size: var(--small-size);">
-            <li><b>InstancedMesh:</b> Gom toàn bộ các node lá trên cây vào 1 draw call duy nhất thay vì render từng mesh riêng rẽ.</li>
-            <li><b>Tốc độ khung hình:</b> Đo bằng PerfHUD đạt <b>57.1 ± 1.2 FPS</b> ngay cả khi người dùng xoay camera tự do trong lúc LLM đang stream token.</li>
-            <li><b>Kích thước Bundle:</b> Phân đoạn code dynamic import giúp tải trang ban đầu cực nhanh.</li>
+        <div class="metrics">
+          <div class="metric"><div class="v">0,9 s</div><div class="l">First Contentful Paint (FCP)</div></div>
+          <div class="metric"><div class="v">1,0 s</div><div class="l">Largest Contentful Paint (LCP)</div></div>
+        </div>
+        <div class="card edge" style="font-size: var(--small-size);">
+          <div class="label">Chỉ số Web Vitals chi tiết</div>
+          <ul style="padding-left: 1.2em; display: flex; flex-direction: column; gap: 0.3em;">
+            <li><b>Total Blocking Time (TBT):</b> <b>40 ms</b> (ngưỡng tốt &lt; 200 ms).</li>
+            <li><b>Cumulative Layout Shift (CLS):</b> <b>0.002</b> (không bị xô lệch bố cục).</li>
+            <li><b>Speed Index (SI):</b> <b>1.2 s</b>.</li>
+            <li><b>Three.js InstancedMesh:</b> Gom toàn bộ node lá cây vào 1 draw call, duy trì tốc độ khung hình <b>57.1 ± 1.2 FPS</b>.</li>
           </ul>
         </div>
       </div>
     </div>
   </div>
-  <div class="foot"><span>9. Hiệu năng Frontend &amp; 3D</span><code>Three.js · InstancedMesh</code></div>
+  <div class="foot"><span>9. Hiệu năng Frontend &amp; 3D</span><code>Three.js · Lighthouse Audit</code></div>
 </section>
 
 <!-- =========================================================
@@ -596,11 +602,11 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
         </table>
       </div>
       <div class="card edge">
-        <div class="label">Kỹ thuật kiểm thử tiên tiến</div>
+        <div class="label">Kỹ thuật kiểm thử</div>
         <ul style="padding-left: 1.2em; display: flex; flex-direction: column; gap: 0.4em; font-size: var(--small-size);">
-          <li><b>Fake Ports &amp; Adapters:</b> Thay thế GPU LLM thật bằng fake stream provider, giúp CI/CD chạy test e2e trong vài giây không cần card đồ họa.</li>
-          <li><b>Fake IndexedDB:</b> Sử dụng thư viện <code>fake-indexeddb/auto</code> để giả lập IndexedDB hoàn hảo trong môi trường kiểm thử jsdom.</li>
-          <li><b>Bảo mật PR #9:</b> Kiểm thử tự động khả năng chống tấn công NoSQL Injection, ReDoS và phân quyền truy cập chéo giữa các tài khoản.</li>
+          <li><b>Fake Ports &amp; Adapters:</b> Thay thế GPU LLM thật bằng fake stream provider, giúp CI/CD chạy test e2e trong vài giây không cần GPU.</li>
+          <li><b>Fake IndexedDB:</b> Sử dụng <code>fake-indexeddb/auto</code> để giả lập IndexedDB trong môi trường jsdom.</li>
+          <li><b>Kiểm định bảo mật:</b> Kiểm tra khả năng chống tấn công NoSQL Injection, ReDoS và phân quyền truy cập chéo giữa các tài khoản.</li>
         </ul>
       </div>
     </div>
@@ -615,17 +621,17 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
   <div class="slide-content">
     <div class="head reveal">
       <div class="chip">Tổng kết đồ án</div>
-      <h2>Đạt Đầy Đủ Mục Tiêu Kỹ Thuật Môn Lập Trình TypeScript</h2>
-      <p class="lede">Hệ thống RAG hoàn chỉnh, minh bạch, chịu tải cao, giao diện 3D trực quan và bền bỉ trong mọi điều kiện vận hành.</p>
+      <h2>Đáp Ứng Mục Tiêu Kỹ Thuật Môn Lập Trình TypeScript</h2>
+      <p class="lede">Hệ thống RAG hoàn chỉnh, minh bạch trích dẫn, chịu tải cao, giao diện 3D trực quan và duy trì hoạt động ngoại tuyến.</p>
     </div>
     <div class="cols reveal">
       <div class="card edge">
         <div class="label">Thành quả kỹ thuật cốt lõi</div>
         <ul style="padding-left: 1.2em; display: flex; flex-direction: column; gap: 0.45em; font-size: var(--small-size);">
-          <li><b>TypeScript Strict:</b> Áp dụng toàn diện type-safety, discriminated unions và decorators từ backend đến frontend.</li>
-          <li><b>Khả năng chịu tải:</b> Chứng minh sức mạnh với <b>2,000 VUs liên tục</b> (2,451 req/s, P95 368ms, 0% lỗi).</li>
-          <li><b>Cơ chế phòng vệ:</b> Xử lý nghẽn GPU bằng hàng đợi fail-fast 429 và bảo mật token với Argon2id + Family Rotation.</li>
-          <li><b>Offline-First:</b> Đảm bảo người dùng luôn đọc được dữ liệu hội thoại dù server offline nhờ Dexie.js.</li>
+          <li><b>TypeScript Strict:</b> Áp dụng nhất quán type-safety, discriminated unions và decorators từ backend đến frontend.</li>
+          <li><b>Khả năng chịu tải:</b> Đạt chuẩn <b>1,600 CU liên tục trong 5 phút</b> (3,958 req/s, P95 379.5ms, 0% lỗi).</li>
+          <li><b>Kiểm soát quá tải:</b> Xử lý nghẽn GPU bằng hàng đợi fail-fast 429 và bảo vệ tài khoản với Argon2id + Family Rotation.</li>
+          <li><b>Offline-First:</b> Duy trì khả năng tra cứu dữ liệu hội thoại khi server offline nhờ Dexie.js.</li>
         </ul>
       </div>
       <div class="stack">
@@ -636,7 +642,7 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
             <li><b>Đặc tả API &amp; Swagger:</b> <code>docs/API_DESIGN.md</code></li>
             <li><b>Hướng dẫn khởi chạy:</b> <code>README.md</code> &amp; <code>docs/RUN_GUIDE.md</code></li>
             <li><b>Dữ liệu Benchmark k6:</b> <code>backend_rag/benchmark/results/</code></li>
-            <li><b>Nhật ký quyết định kiến trúc:</b> <code>docs/AI_chat_log/Vuong_chat_logs.md</code></li>
+            <li><b>Nhật ký quyết định:</b> <code>docs/AI_chat_log/Vuong_chat_logs.md</code></li>
           </ul>
         </div>
       </div>
@@ -767,8 +773,11 @@ document.addEventListener('DOMContentLoaded', () => { new SlidePresentation(); }
 </html>
 """
 
+# Normalize unicode to NFC to avoid combining accent rendering bugs on Windows/Chrome
+normalized_html = unicodedata.normalize("NFC", html_template)
+
 print(f"Writing generated slides HTML to {OUTPUT_HTML}...")
 with open(OUTPUT_HTML, "w", encoding="utf-8") as f:
-    f.write(html_template)
+    f.write(normalized_html)
 
 print(f"Successfully generated {OUTPUT_HTML}! File size: {os.path.getsize(OUTPUT_HTML) / (1024 * 1024):.2f} MB")

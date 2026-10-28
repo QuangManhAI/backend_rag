@@ -61,7 +61,7 @@ class Fakes {
   hangAfterFirst = false;
   saved: Array<{ userId: string; sessionId: string | null; question: string }> =
     [];
-  owned = new Set<string>(['aaaaaaaaaaaaaaaaaaaaaaaa']);
+  owned = new Set<string>(['0199f0c2-7a3e-7c1d-9a52-3c9d8f1e2b10']);
 
   constructor() {
     this.firstToken = new Promise((r) => (this.markFirst = r));
@@ -111,7 +111,7 @@ class Fakes {
     saveExchange: (userId, sessionId, question) => {
       this.saved.push({ userId, sessionId, question });
       return Promise.resolve({
-        session_id: sessionId ?? 'bbbbbbbbbbbbbbbbbbbbbbbb',
+        session_id: sessionId ?? '0199f0c2-7a3e-7c1d-9a52-3c9d8f1e2b11',
         user_message_id: 'u1',
         assistant_message_id: 'a1',
       });
@@ -151,12 +151,12 @@ describe('topPapers', () => {
     const many = Array.from({ length: 40 }, (_, i) => hit(`p${i}`, i / 100));
     expect(topPapers(many, 5)).toHaveLength(5);
     expect(topPapers(many, 5)[0]).toEqual({ paper_id: 'p39', score: 0.39 });
-    expect(
-      topPapers([hit('a', 0.5), hit('a', 0.9), hit('b', 0.7)], 5),
-    ).toEqual([
-      { paper_id: 'a', score: 0.9 },
-      { paper_id: 'b', score: 0.7 },
-    ]);
+    expect(topPapers([hit('a', 0.5), hit('a', 0.9), hit('b', 0.7)], 5)).toEqual(
+      [
+        { paper_id: 'a', score: 0.9 },
+        { paper_id: 'b', score: 0.7 },
+      ],
+    );
   });
 });
 
@@ -260,7 +260,7 @@ describe('RAG endpoints', () => {
     const res = await stream({ query: 'LoRA?' }, token).expect(200);
     const done = parseSse(res.body as string).at(-1);
     expect(done).toMatchObject({
-      session_id: 'bbbbbbbbbbbbbbbbbbbbbbbb',
+      session_id: '0199f0c2-7a3e-7c1d-9a52-3c9d8f1e2b11',
       message_id: 'a1',
     });
     expect(f.saved).toEqual([
@@ -274,7 +274,7 @@ describe('RAG endpoints', () => {
 
   it("someone else's session ➔ 404 before streaming", async () => {
     const res = await stream(
-      { query: 'x', session_id: 'cccccccccccccccccccccccc' },
+      { query: 'x', session_id: '0199f0c2-7a3e-7c1d-9a52-3c9d8f1e2b12' },
       token,
     ).expect(404);
     expect(res.headers['content-type']).toMatch(/json/);
@@ -341,7 +341,7 @@ describe('RAG endpoints', () => {
       .send({ query: '  LoRA?  ', top_k: 1 })
       .expect(200);
     expect(res.body).toMatchObject({
-      session_id: 'bbbbbbbbbbbbbbbbbbbbbbbb',
+      session_id: '0199f0c2-7a3e-7c1d-9a52-3c9d8f1e2b11',
       message_id: 'a1',
       query: 'LoRA?',
       answer:

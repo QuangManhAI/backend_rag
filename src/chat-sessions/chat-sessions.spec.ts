@@ -4,18 +4,22 @@ import { Model, Types } from 'mongoose';
 import request from 'supertest';
 import { AuthModule } from '../auth/auth.module';
 import { TokenService } from '../auth/token.service';
+import { isUuid, uuidv7 } from '../common/uuid';
 import { createTestApp, startMongo, TestApp } from '../testing/test-app';
 import { ChatSessionsModule } from './chat-sessions.module';
 import {
   ChatSessionsService,
+  formatTimestampTitle,
   titleFromQuestion,
   validTitle,
 } from './chat-sessions.service';
+import { ChatMessage } from './schemas/chat-message.schema';
 import { ChatSession } from './schemas/chat-session.schema';
 import { SESSION_STORE, SessionStorePort } from './session-store.port';
 
 const ALICE = new Types.ObjectId().toString();
 const BOB = new Types.ObjectId().toString();
+const TIMESTAMP_TITLE_RE = /^\d{2}-\d{2}-\d{2}:\d{2}-\d{2}-\d{2}$/;
 
 const answer = {
   content: 'LoRA ... [Paper: 2106.09685]',
@@ -37,6 +41,13 @@ describe('title helpers', () => {
     expect(validTitle('😀'.repeat(120))).toHaveLength(240); // 120 emoji = 240 UTF-16 units
     expect(() => validTitle('😀'.repeat(121))).toThrow('invalid title');
     expect(() => validTitle('   ')).toThrow('invalid title');
+  });
+
+  it('formatTimestampTitle formats Date as YY-MM-DD:HH-MM-SS in UTC+07', () => {
+    // 2026-10-19T07:28:33Z == 2026-10-19T14:28:33+07:00
+    expect(formatTimestampTitle(new Date('2026-10-19T07:28:33.000Z'))).toBe(
+      '26-10-19:14-28-33',
+    );
   });
 
   it('titleFromQuestion keeps the first 60 characters', () => {
@@ -75,6 +86,9 @@ describe('Chat sessions (integration)', () => {
     await t.app
       .get<Model<ChatSession>>(getModelToken(ChatSession.name))
       .deleteMany({});
+    await t.app
+      .get<Model<ChatMessage>>(getModelToken(ChatMessage.name))
+      .deleteMany({});
   });
 
   const http = () => request(t.server());
@@ -84,20 +98,30 @@ describe('Chat sessions (integration)', () => {
     await http().get('/api/v1/chat-sessions').expect(401);
   });
 
-  it('create, get, rename, delete', async () => {
+  it('create, get, rename, soft-delete (with 3d tombstone)', async () => {
     const created = await http()
       .post('/api/v1/chat-sessions')
       .set(as(alice))
       .send({})
       .expect(201);
-    expect(created.body).toMatchObject({ title: 'New chat', message_count: 0 });
+    expect(created.body).toMatchObject({
+      title: expect.stringMatching(TIMESTAMP_TITLE_RE),
+      message_count: 0,
+      last_message_at: expect.any(String),
+    });
     const id = created.body.id as string;
+    expect(isUuid(id)).toBe(true);
 
     const got = await http()
       .get(`/api/v1/chat-sessions/${id}`)
       .set(as(alice))
       .expect(200);
-    expect(got.body).toMatchObject({ id, title: 'New chat', messages: [] });
+    expect(got.body).toMatchObject({
+      id,
+      title: created.body.title,
+      last_message_at: created.body.last_message_at,
+      messages: [],
+    });
 
     const renamed = await http()
       .patch(`/api/v1/chat-sessions/${id}`)
@@ -105,6 +129,7 @@ describe('Chat sessions (integration)', () => {
       .send({ title: '  LoRA notes  ' })
       .expect(200);
     expect(renamed.body.title).toBe('LoRA notes');
+    expect(renamed.body.last_message_at).toBe(created.body.last_message_at);
 
     const bad = await http()
       .patch(`/api/v1/chat-sessions/${id}`)
@@ -122,6 +147,35 @@ describe('Chat sessions (integration)', () => {
       .set(as(alice))
       .expect(204);
     await http().get(`/api/v1/chat-sessions/${id}`).set(as(alice)).expect(404);
+
+    // Tombstone remains in MongoDB with deleted_at set
+    const sessionModel = t.app.get<Model<ChatSession>>(
+      getModelToken(ChatSession.name),
+    );
+    const raw = await sessionModel.findById(id).lean();
+    expect(raw?.deleted_at).toBeInstanceOf(Date);
+  });
+
+  it('renaming an older session updates updated_at without changing last_message_at or list order', async () => {
+    const s1 = await svc.create(ALICE, 'Older session');
+    await new Promise((r) => setTimeout(r, 15));
+    const s2 = await svc.create(ALICE, 'Newer session');
+
+    await new Promise((r) => setTimeout(r, 15));
+    const renamed = await svc.rename(ALICE, s1.id, 'Older renamed');
+    expect(renamed.last_message_at).toBe(s1.last_message_at);
+    expect(Date.parse(renamed.updated_at)).toBeGreaterThan(
+      Date.parse(s1.updated_at),
+    );
+
+    const list = await http()
+      .get('/api/v1/chat-sessions')
+      .set(as(alice))
+      .expect(200);
+    expect(list.body.items.map((x: { id: string }) => x.id)).toEqual([
+      s2.id,
+      s1.id,
+    ]);
   });
 
   it("another user's session ➔ 404, and delete does nothing", async () => {
@@ -142,25 +196,29 @@ describe('Chat sessions (integration)', () => {
       .expect(404);
   });
 
-  it('paginates 3 pages with no duplicates and no gaps (same updated_at too)', async () => {
+  it('paginates 3 pages with no duplicates and no gaps (same last_message_at too)', async () => {
     const model = t.app.get<Model<ChatSession>>(
       getModelToken(ChatSession.name),
     );
     const same = new Date('2026-10-20T00:00:00Z');
     const ids: string[] = [];
     for (let i = 0; i < 7; i++) {
+      const ts = i < 4 ? same : new Date(same.getTime() + i * 1000);
       const [doc] = await model.create(
         [
           {
+            _id: uuidv7(same.getTime() + i),
             user_id: new Types.ObjectId(ALICE),
             title: `s${i}`,
+            last_message_at: ts,
             created_at: same,
-            updated_at: i < 4 ? same : new Date(same.getTime() + i * 1000),
+            updated_at: ts,
+            deleted_at: null,
           },
         ],
         { timestamps: false },
       );
-      ids.push(doc._id.toString());
+      ids.push(doc._id);
     }
     const seen: string[] = [];
     let cursor: string | null = null;
@@ -217,7 +275,7 @@ describe('Chat sessions (integration)', () => {
     expect(dot.body.items).toEqual([]);
   });
 
-  it('saveExchange: new session titled after the question, count +2, messages in order', async () => {
+  it('saveExchange: new session has timestamp title, UUIDv7 ids, count +2, messages in order', async () => {
     const store = t.app.get<SessionStorePort>(SESSION_STORE);
     const first = await store.saveExchange(
       ALICE,
@@ -225,14 +283,16 @@ describe('Chat sessions (integration)', () => {
       'How does LoRA reduce trainable parameters in practice?',
       answer,
     );
+    expect(isUuid(first.session_id)).toBe(true);
+    expect(isUuid(first.user_message_id)).toBe(true);
+    expect(isUuid(first.assistant_message_id)).toBe(true);
+
     await store.saveExchange(ALICE, first.session_id, 'And QLoRA?', answer);
     const r = await http()
       .get(`/api/v1/chat-sessions/${first.session_id}`)
       .set(as(alice))
       .expect(200);
-    expect(r.body.title).toBe(
-      'How does LoRA reduce trainable parameters in practice?',
-    );
+    expect(r.body.title).toMatch(TIMESTAMP_TITLE_RE);
     expect(
       r.body.messages.map((m: { role: string; content: string }) => [
         m.role,
@@ -247,6 +307,7 @@ describe('Chat sessions (integration)', () => {
     expect(r.body.messages[1]).toMatchObject({
       citations: ['2106.09685'],
       timings: answer.timings,
+      updated_at: expect.any(String),
     });
     expect(r.body.messages[0]).not.toHaveProperty('citations');
     const list = await http()
@@ -256,13 +317,15 @@ describe('Chat sessions (integration)', () => {
     expect(list.body.items[0]).toMatchObject({
       id: first.session_id,
       message_count: 4,
+      last_message_at: expect.any(String),
     });
   });
 
-  it('saveExchange into an explicitly created untitled session takes the question as title', async () => {
+  it('saveExchange preserves default timestamp title until manually renamed', async () => {
     const s = await svc.create(ALICE);
+    expect(s.title).toMatch(TIMESTAMP_TITLE_RE);
     await svc.saveExchange(ALICE, s.id, 'Diffusion models?', answer);
-    expect((await svc.get(ALICE, s.id)).title).toBe('Diffusion models?');
+    expect((await svc.get(ALICE, s.id)).title).toBe(s.title);
   });
 
   it("saveExchange into someone else's session ➔ 404 and nothing written", async () => {

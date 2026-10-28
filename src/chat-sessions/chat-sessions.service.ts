@@ -6,12 +6,13 @@ import {
 } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { ClientSession, Connection, Model, Types } from 'mongoose';
-import { decodeCursor, encodeCursor, Page } from '../common/pagination';
+import { decodeCursor, encodeCursor } from '../common/pagination';
 import { logEvent } from '../common/request-context';
 import { isUuid, uuidv7 } from '../common/uuid';
 import {
   MessageDto,
   SessionDto,
+  SessionPageDto,
   SessionSummaryDto,
 } from './dto/chat-session.dto';
 import { ChatMessage } from './schemas/chat-message.schema';
@@ -26,9 +27,8 @@ import type {
 } from './session-store.port';
 
 export const SESSION_NOT_FOUND = 'session not found';
-export const DEFAULT_TITLE = 'New chat';
+export const SESSION_PAGE_SIZE = 10;
 export const TITLE_MAX = 120;
-export const AUTO_TITLE_CHARS = 60;
 export const MAX_MESSAGES = 200;
 export const UTC7_OFFSET_MS = 7 * 60 * 60 * 1000;
 
@@ -69,14 +69,6 @@ export function formatTimestampTitle(date: Date = new Date()): string {
   const min = String(utc7.getUTCMinutes()).padStart(2, '0');
   const ss = String(utc7.getUTCSeconds()).padStart(2, '0');
   return `${yy}-${mm}-${dd}:${hh}-${min}-${ss}`;
-}
-
-/** First 60 characters of the question, whitespace collapsed. */
-export function titleFromQuestion(q: string): string {
-  const flat = q.replace(/\s+/g, ' ').trim();
-  return (
-    Array.from(flat).slice(0, AUTO_TITLE_CHARS).join('').trim() || DEFAULT_TITLE
-  );
 }
 
 function toSummary(
@@ -138,13 +130,13 @@ export class ChatSessionsService implements SessionStorePort {
 
   async list(
     userId: string,
-    limit: number,
     cursor?: string,
     q?: string,
-  ): Promise<Page<SessionSummaryDto>> {
+  ): Promise<SessionPageDto> {
     const filter: Record<string, unknown> = {
       user_id: new Types.ObjectId(userId),
       deleted_at: null,
+      message_count: { $gt: 0 },
     };
     if (q?.trim())
       filter.title = { $regex: escapeRegex(q.trim()), $options: 'i' };
@@ -159,34 +151,22 @@ export class ChatSessionsService implements SessionStorePort {
     const rows = await this.sessions
       .find(filter)
       .sort({ last_message_at: -1, _id: -1 })
-      .limit(limit + 1)
+      .limit(SESSION_PAGE_SIZE + 1)
       .lean();
-    const page = rows.slice(0, limit);
+    const hasMore = rows.length > SESSION_PAGE_SIZE;
+    const page = rows.slice(0, SESSION_PAGE_SIZE);
     const last = page.at(-1);
     return {
       items: page.map(toSummary),
       next_cursor:
-        rows.length > limit && last
+        hasMore && last
           ? encodeCursor({
               m: (last.last_message_at ?? last.created_at).toISOString(),
               id: last._id,
             })
           : null,
+      has_more: hasMore,
     };
-  }
-
-  async create(userId: string, title?: string): Promise<SessionSummaryDto> {
-    const now = new Date();
-    const explicit = title === undefined ? null : validTitle(title);
-    const s = await this.sessions.create({
-      _id: uuidv7(now.getTime()),
-      user_id: new Types.ObjectId(userId),
-      title: explicit ?? formatTimestampTitle(now),
-      last_message_at: now,
-      deleted_at: null,
-    });
-    logEvent('SESSION_CREATED', { session_id: s._id });
-    return toSummary(s);
   }
 
   async get(userId: string, id: string): Promise<SessionDto> {
@@ -200,6 +180,7 @@ export class ChatSessionsService implements SessionStorePort {
     return {
       id: s._id,
       title: s.title,
+      message_count: s.message_count,
       last_message_at: lastMsgAt.toISOString(),
       created_at: s.created_at.toISOString(),
       updated_at: s.updated_at.toISOString(),
@@ -253,7 +234,7 @@ export class ChatSessionsService implements SessionStorePort {
    * One question/answer pair (new session when `sessionId` is null), in a transaction when the
    * server supports it. A standalone MongoDB (no replica set) cannot: the writes then run in
    * sequence, messages first, so a failure leaves at worst an orphan message, never a count that
-   * is ahead of the messages.
+   * is ahead of the messages or an empty session with message_count = 0.
    */
   async saveExchange(
     userId: string,
@@ -301,7 +282,7 @@ export class ChatSessionsService implements SessionStorePort {
     const now = Date.now();
     const userDate = new Date(now);
     const assistantDate = new Date(now + 1);
-    let session: ChatSessionDocument;
+    let targetSessionId: string;
     if (sessionId) {
       const found = isUuid(sessionId)
         ? await this.sessions
@@ -309,26 +290,15 @@ export class ChatSessionsService implements SessionStorePort {
             .session(db)
         : null;
       if (!found) throw new NotFoundException(SESSION_NOT_FOUND);
-      session = found;
+      targetSessionId = found._id;
     } else {
-      [session] = await this.sessions.create(
-        [
-          {
-            _id: uuidv7(now),
-            user_id: uid,
-            title: formatTimestampTitle(userDate),
-            last_message_at: assistantDate,
-            deleted_at: null,
-          },
-        ],
-        { session: db ?? undefined },
-      );
+      targetSessionId = uuidv7(now);
     }
     const [userMsg, assistantMsg] = await this.messages.insertMany(
       [
         {
           _id: uuidv7(now),
-          session_id: session._id,
+          session_id: targetSessionId,
           role: 'user',
           content: question,
           created_at: userDate,
@@ -337,7 +307,7 @@ export class ChatSessionsService implements SessionStorePort {
         },
         {
           _id: uuidv7(now + 1),
-          session_id: session._id,
+          session_id: targetSessionId,
           role: 'assistant',
           content: answer.content,
           citations: answer.citations,
@@ -350,16 +320,35 @@ export class ChatSessionsService implements SessionStorePort {
       ],
       { session: db ?? undefined },
     );
-    await this.sessions.updateOne(
-      { _id: session._id },
-      {
-        $inc: { message_count: 2 },
-        $set: { last_message_at: assistantDate, updated_at: assistantDate },
-      },
-      { session: db ?? undefined, timestamps: false },
-    );
+    if (sessionId) {
+      await this.sessions.updateOne(
+        { _id: targetSessionId },
+        {
+          $inc: { message_count: 2 },
+          $set: { last_message_at: assistantDate, updated_at: assistantDate },
+        },
+        { session: db ?? undefined, timestamps: false },
+      );
+    } else {
+      await this.sessions.create(
+        [
+          {
+            _id: targetSessionId,
+            user_id: uid,
+            title: formatTimestampTitle(userDate),
+            message_count: 2,
+            last_message_at: assistantDate,
+            created_at: userDate,
+            updated_at: assistantDate,
+            deleted_at: null,
+          },
+        ],
+        { session: db ?? undefined, timestamps: false },
+      );
+      logEvent('SESSION_CREATED', { session_id: targetSessionId });
+    }
     return {
-      session_id: session._id,
+      session_id: targetSessionId,
       user_message_id: userMsg._id,
       assistant_message_id: assistantMsg._id,
     };

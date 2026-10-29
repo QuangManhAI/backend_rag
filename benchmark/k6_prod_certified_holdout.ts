@@ -18,18 +18,20 @@ export const ProfilePatchDuration = new Trend('prod_profile_patch_duration', tru
 export const ProdErrors = new Rate('prod_errors');
 export const SlaBreaches500ms = new Counter('prod_sla_breaches_over_500ms');
 
+const TARGET_RPS = Number(__ENV.TARGET_RPS || 300);
+
 export const options = {
   scenarios: {
     rule_l1_certified_holdout_3min: {
       executor: 'ramping-arrival-rate',
-      startRate: 40,
+      startRate: 100,
       timeUnit: '1s',
-      preAllocatedVUs: 100, // 100 Concurrent Users (CUs) pool
-      maxVUs: 200,
+      preAllocatedVUs: 450, // 450 Concurrent Users (CUs) pool
+      maxVUs: 600,
       stages: [
-        { duration: '15s', target: 50 },  // Warm-up ramp to 50 req/s (100 CUs with 1.75s think time)
-        { duration: '180s', target: 50 }, // Rule L1: Full 3-Minute (180s) Continuous Hold-Out at 50 req/s (100 CUs)
-        { duration: '10s', target: 0 },   // Graceful ramp-down
+        { duration: '15s', target: TARGET_RPS },  // Warm-up ramp to TARGET_RPS (300 req/s = 450 CUs)
+        { duration: '180s', target: TARGET_RPS }, // Rule L1: Full 3-Minute (180s) Continuous Hold-Out at 300 req/s (450 CUs)
+        { duration: '10s', target: 0 },           // Graceful ramp-down
       ],
     },
   },

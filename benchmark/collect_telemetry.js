@@ -4,7 +4,9 @@ const path = require('path');
 const os = require('os');
 
 const durationSec = parseInt(process.argv[2] || '195', 10);
-const outPath = path.resolve(__dirname, 'results/prod_server_telemetry.json');
+const outPath = process.argv[3]
+  ? path.resolve(process.cwd(), process.argv[3])
+  : path.resolve(__dirname, 'results/prod_server_telemetry.json');
 const logicalCores = os.cpus().length || 16;
 
 console.log(`Starting zero-spawn Server Telemetry Collector for ${durationSec}s...`);

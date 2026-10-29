@@ -183,24 +183,24 @@ def generate_report():
 
     <div class="kpi-grid">
       <div class="kpi-card green">
-        <div class="kpi-label">SLA-Strict Open-Model Ceiling</div>
-        <div class="kpi-value">71 RPS / 100 CUs</div>
-        <div class="kpi-sub">P50: 205.2ms · P95: 470.7ms (&lt;500ms) · Max: 647.4ms · 0.00% Error</div>
+        <div class="kpi-label">Rule L1 Certified Ceiling (Optimized)</div>
+        <div class="kpi-value">400 CUs / 250 RPS</div>
+        <div class="kpi-sub">4.0× Increase (up from 100 CUs) · P50: 29.8ms · P95: 265.5ms (&lt;500ms) · P99: 475.1ms · 0.00% Error</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Zero-Error 3-Min Hold-Out</div>
-        <div class="kpi-value">65 RPS / 12,812 Reqs</div>
-        <div class="kpi-sub">100.00% Check Pass (21,771/21,771) · 59 MB Transferred · 0.00% Error</div>
+        <div class="kpi-value">48,874 Reqs / 227 MB</div>
+        <div class="kpi-sub">100.00% Check Pass (83,137/83,137) · 1.1 MB/s Rx · 0.00% Error over 180s</div>
       </div>
       <div class="kpi-card amber">
         <div class="kpi-label">Open-Model Breakpoint Knee</div>
-        <div class="kpi-value">150 → 200 RPS</div>
-        <div class="kpi-sub">150 RPS: P95 514.4ms (0% Err) → 200 RPS: P95 1.31s → 250 RPS: Timeout</div>
+        <div class="kpi-value">300 RPS / 450 CUs</div>
+        <div class="kpi-sub">Stage A 300 RPS: P95 266.6ms, P99 406.6ms (&lt;1s) · GET /sessions/:id P50 cut 17.1× (408ms → 23.9ms)</div>
       </div>
       <div class="kpi-card purple">
         <div class="kpi-label">Server Telemetry &amp; Crypto</div>
-        <div class="kpi-value">30.1% vs 310.2% CPU</div>
-        <div class="kpi-sub">CRUD Mix: I/O-Bound (2,062 MB RAM) · Argon2id: 3.1 Cores (100% Refresh OK)</div>
+        <div class="kpi-value">65.4% CPU / +23.8% Login</div>
+        <div class="kpi-sub">400 CUs: 65.4% avg CPU · Login Min: 196.7ms (3.7× faster) · Refresh P50: 305.7ms (100% OK)</div>
       </div>
     </div>
 

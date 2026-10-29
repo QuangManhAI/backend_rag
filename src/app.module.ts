@@ -17,6 +17,9 @@ import { RagModule } from './rag/rag.module';
       useFactory: (config: AppConfigService) => ({
         uri: config.get('MONGO_URI'),
         serverSelectionTimeoutMS: 5000,
+        maxPoolSize: 120,
+        minPoolSize: 20,
+        maxIdleTimeMS: 60_000,
       }),
     }),
     AuthModule,

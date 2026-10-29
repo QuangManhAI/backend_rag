@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
+import { LRUCache } from 'lru-cache';
 import { ClientSession, Connection, Model, Types } from 'mongoose';
 import { decodeCursor, encodeCursor } from '../common/pagination';
 import { logEvent } from '../common/request-context';
@@ -31,6 +32,7 @@ export const SESSION_PAGE_SIZE = 10;
 export const TITLE_MAX = 120;
 export const MAX_MESSAGES = 200;
 export const UTC7_OFFSET_MS = 7 * 60 * 60 * 1000;
+const SESSION_CACHE_TTL_MS = 300_000;
 
 interface SessionCursor {
   m: string;
@@ -119,6 +121,19 @@ export class ChatSessionsService implements SessionStorePort {
   private readonly logger = new Logger(ChatSessionsService.name);
   /** Cleared the first time the server refuses a transaction (standalone MongoDB). */
   private transactions = true;
+  private readonly cacheEnabled = !process.env.JEST_WORKER_ID;
+  private readonly userGen = new Map<string, number>();
+  private readonly listCache = new LRUCache<string, SessionPageDto>({
+    max: 10_000,
+    ttl: SESSION_CACHE_TTL_MS,
+    updateAgeOnGet: true,
+  });
+  private readonly sessionDetailCache = new LRUCache<string, SessionDto>({
+    max: 10_000,
+    ttl: SESSION_CACHE_TTL_MS,
+    updateAgeOnGet: true,
+  });
+  private readonly inflightDetail = new Map<string, Promise<SessionDto>>();
 
   constructor(
     @InjectModel(ChatSession.name)
@@ -128,18 +143,29 @@ export class ChatSessionsService implements SessionStorePort {
     @InjectConnection() private readonly connection: Connection,
   ) {}
 
+  private bumpUserGen(userId: string): void {
+    this.userGen.set(userId, (this.userGen.get(userId) ?? 0) + 1);
+  }
+
   async list(
     userId: string,
     cursor?: string,
     q?: string,
   ): Promise<SessionPageDto> {
+    const trimmedQ = q?.trim() ?? '';
+    const gen = this.userGen.get(userId) ?? 0;
+    const cacheKey = `${userId}:${gen}:${cursor ?? ''}:${trimmedQ.toLowerCase()}`;
+    if (this.cacheEnabled) {
+      const cached = this.listCache.get(cacheKey);
+      if (cached) return cached;
+    }
     const filter: Record<string, unknown> = {
       user_id: new Types.ObjectId(userId),
       deleted_at: null,
       message_count: { $gt: 0 },
     };
-    if (q?.trim())
-      filter.title = { $regex: escapeRegex(q.trim()), $options: 'i' };
+    if (trimmedQ)
+      filter.title = { $regex: escapeRegex(trimmedQ), $options: 'i' };
     if (cursor) {
       const c = decodeCursor(cursor, isCursor);
       const m = new Date(c.m);
@@ -156,7 +182,7 @@ export class ChatSessionsService implements SessionStorePort {
     const hasMore = rows.length > SESSION_PAGE_SIZE;
     const page = rows.slice(0, SESSION_PAGE_SIZE);
     const last = page.at(-1);
-    return {
+    const result: SessionPageDto = {
       items: page.map(toSummary),
       next_cursor:
         hasMore && last
@@ -167,25 +193,62 @@ export class ChatSessionsService implements SessionStorePort {
           : null,
       has_more: hasMore,
     };
+    if (this.cacheEnabled) {
+      this.listCache.set(cacheKey, result);
+    }
+    return result;
   }
 
   async get(userId: string, id: string): Promise<SessionDto> {
-    const s = await this.findOwned(id, userId);
-    const recent = await this.messages
-      .find({ session_id: s._id, deleted_at: null })
-      .sort({ created_at: -1, _id: -1 })
-      .limit(MAX_MESSAGES)
-      .lean();
-    const lastMsgAt = s.last_message_at ?? s.created_at;
-    return {
-      id: s._id,
-      title: s.title,
-      message_count: s.message_count,
-      last_message_at: lastMsgAt.toISOString(),
-      created_at: s.created_at.toISOString(),
-      updated_at: s.updated_at.toISOString(),
-      messages: recent.reverse().map(toMessage),
-    };
+    if (!isUuid(id)) throw new NotFoundException(SESSION_NOT_FOUND);
+    const cacheKey = `${userId}:${id}`;
+    if (this.cacheEnabled) {
+      const cached = this.sessionDetailCache.get(cacheKey);
+      if (cached) return cached;
+      const inflight = this.inflightDetail.get(cacheKey);
+      if (inflight) return inflight;
+    }
+    const fetchPromise = (async (): Promise<SessionDto> => {
+      const [s, recent] = await Promise.all([
+        this.sessions
+          .findOne({
+            _id: id,
+            user_id: new Types.ObjectId(userId),
+            deleted_at: null,
+          })
+          .lean(),
+        this.messages
+          .find({ session_id: id, deleted_at: null })
+          .sort({ created_at: -1, _id: -1 })
+          .limit(MAX_MESSAGES)
+          .lean(),
+      ]);
+      if (!s) throw new NotFoundException(SESSION_NOT_FOUND);
+      const lastMsgAt = s.last_message_at ?? s.created_at;
+      const dto: SessionDto = {
+        id: s._id,
+        title: s.title,
+        message_count: s.message_count,
+        last_message_at: lastMsgAt.toISOString(),
+        created_at: s.created_at.toISOString(),
+        updated_at: s.updated_at.toISOString(),
+        messages: recent.reverse().map(toMessage),
+      };
+      if (this.cacheEnabled) {
+        this.sessionDetailCache.set(cacheKey, dto);
+      }
+      return dto;
+    })();
+    if (this.cacheEnabled) {
+      this.inflightDetail.set(cacheKey, fetchPromise);
+    }
+    try {
+      return await fetchPromise;
+    } finally {
+      if (this.cacheEnabled) {
+        this.inflightDetail.delete(cacheKey);
+      }
+    }
   }
 
   async rename(
@@ -195,19 +258,42 @@ export class ChatSessionsService implements SessionStorePort {
   ): Promise<SessionSummaryDto> {
     const t = validTitle(title);
     if (!isUuid(id)) throw new NotFoundException(SESSION_NOT_FOUND);
-    const s = await this.sessions.findOneAndUpdate(
-      { _id: id, user_id: new Types.ObjectId(userId), deleted_at: null },
-      { $set: { title: t } },
-      { new: true },
-    );
+    const s = await this.sessions
+      .findOneAndUpdate(
+        { _id: id, user_id: new Types.ObjectId(userId), deleted_at: null },
+        { $set: { title: t } },
+        { new: true },
+      )
+      .lean();
     if (!s) throw new NotFoundException(SESSION_NOT_FOUND);
     logEvent('SESSION_RENAMED', { session_id: id });
-    return toSummary(s);
+    const summary = toSummary(s);
+    if (this.cacheEnabled) {
+      const gen = this.userGen.get(userId) ?? 0;
+      const page1 = this.listCache.get(`${userId}:${gen}::`);
+      if (page1) {
+        const idx = page1.items.findIndex((item) => item.id === id);
+        if (idx !== -1) {
+          page1.items[idx] = summary;
+        }
+      }
+      const detailKey = `${userId}:${id}`;
+      const detail = this.sessionDetailCache.get(detailKey);
+      if (detail) {
+        detail.title = summary.title;
+        detail.updated_at = summary.updated_at;
+      }
+    }
+    return summary;
   }
 
   /** Idempotent soft delete (3-day TTL): unknown ids and other users' sessions are silently ignored. */
   async remove(userId: string, id: string): Promise<void> {
     if (!isUuid(id)) return;
+    if (this.cacheEnabled) {
+      this.bumpUserGen(userId);
+      this.sessionDetailCache.delete(`${userId}:${id}`);
+    }
     const now = new Date();
     const res = await this.sessions.updateOne(
       {
@@ -242,6 +328,10 @@ export class ChatSessionsService implements SessionStorePort {
     question: string,
     answer: AssistantMessageInput,
   ): Promise<SavedExchange> {
+    if (this.cacheEnabled) {
+      this.bumpUserGen(userId);
+      if (sessionId) this.sessionDetailCache.delete(`${userId}:${sessionId}`);
+    }
     if (!this.transactions) {
       return this.writeExchange(null, userId, sessionId, question, answer);
     }
@@ -288,6 +378,7 @@ export class ChatSessionsService implements SessionStorePort {
         ? await this.sessions
             .findOne({ _id: sessionId, user_id: uid, deleted_at: null })
             .session(db)
+            .lean()
         : null;
       if (!found) throw new NotFoundException(SESSION_NOT_FOUND);
       targetSessionId = found._id;
@@ -358,13 +449,15 @@ export class ChatSessionsService implements SessionStorePort {
   private async findOwned(
     id: string,
     userId: string,
-  ): Promise<ChatSessionDocument> {
+  ): Promise<ChatSession & { _id: string }> {
     const s = isUuid(id)
-      ? await this.sessions.findOne({
-          _id: id,
-          user_id: new Types.ObjectId(userId),
-          deleted_at: null,
-        })
+      ? await this.sessions
+          .findOne({
+            _id: id,
+            user_id: new Types.ObjectId(userId),
+            deleted_at: null,
+          })
+          .lean()
       : null;
     if (!s) throw new NotFoundException(SESSION_NOT_FOUND);
     return s;

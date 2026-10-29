@@ -1,4 +1,6 @@
+process.env.UV_THREADPOOL_SIZE = process.env.UV_THREADPOOL_SIZE ?? '4';
 import 'dotenv/config';
+import type { Server } from 'http';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { configureApp } from './app.setup';
@@ -16,7 +18,9 @@ async function bootstrap(): Promise<void> {
   }
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
   configureApp(app);
-  await app.listen(Number(process.env.PORT ?? 3000));
+  const server = (await app.listen(Number(process.env.PORT ?? 3000))) as Server;
+  server.keepAliveTimeout = 65_000;
+  server.headersTimeout = 66_000;
 }
 
 void bootstrap();

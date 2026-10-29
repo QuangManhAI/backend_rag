@@ -45,8 +45,8 @@ export const ChatMessageSchema = SchemaFactory.createForClass(ChatMessage);
 ChatMessageSchema.index({
   session_id: 1,
   deleted_at: 1,
-  created_at: 1,
-  _id: 1,
+  created_at: -1,
+  _id: -1,
 });
 ChatMessageSchema.index(
   { deleted_at: 1 },

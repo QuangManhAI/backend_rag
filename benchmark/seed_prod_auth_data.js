@@ -7,8 +7,16 @@ const dotenv = require('dotenv');
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://app_user:YqihzvCaDSkqGQEoR8xWwVZ3@127.0.0.1:27017/rag_ts?authSource=admin&directConnection=true';
-const JWT_SECRET = process.env.JWT_ACCESS_SECRET || 'rag-ts-dev-access-secret-32-chars-minimum-token';
+// Credentials come from the environment (backend_rag/.env). Never hard-code a real URI or
+// secret in a file that lives in the repository.
+const MONGO_URI = process.env.MONGO_URI;
+const JWT_SECRET = process.env.JWT_ACCESS_SECRET;
+if (!MONGO_URI || !JWT_SECRET) {
+  console.error(
+    '[ERROR] MONGO_URI and JWT_ACCESS_SECRET must be set (see backend_rag/.env.example).',
+  );
+  process.exit(1);
+}
 
 const NUM_USERS = 100;
 const SESSIONS_PER_USER = 15; // > 10 (SESSION_PAGE_SIZE) to exercise Page 1 + Page 2 cursor pagination

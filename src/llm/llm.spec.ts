@@ -127,6 +127,7 @@ describe('LlmService', () => {
       model_id: 'qwen2.5-7b-instruct-q4_k_m',
       gpu: 'metal',
       queue_length: 0,
+      running: 0,
     });
     expect(
       await collect(s.generate('s', 'u', new AbortController().signal)),

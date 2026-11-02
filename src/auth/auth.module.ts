@@ -35,6 +35,13 @@ import { TokenService } from './token.service';
     OptionalJwtAuthGuard,
     RolesGuard,
   ],
-  exports: [TokenService, JwtAuthGuard, OptionalJwtAuthGuard, RolesGuard],
+  exports: [
+    TokenService,
+    AuthService,
+    JwtAuthGuard,
+    OptionalJwtAuthGuard,
+    RolesGuard,
+    MongooseModule,
+  ],
 })
 export class AuthModule {}

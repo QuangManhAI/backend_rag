@@ -16,7 +16,12 @@ import { EMBEDDING_PORT, EmbeddingPort } from '../embedding/embedding.service';
 import { AbortedError } from '../llm/llm-queue';
 import { LLM_PORT, LlmPort } from '../llm/llm.service';
 import { MiningService } from '../mining/mining.service';
-import { createTestApp, startMongo, TestApp } from '../testing/test-app';
+import {
+  createTestApp,
+  seedUser,
+  startMongo,
+  TestApp,
+} from '../testing/test-app';
 import { TreeRouterService } from '../tree-router/tree-router.service';
 import type { RagStreamEvent, ScoredChunk } from '../types/scientific-rag';
 import {
@@ -80,7 +85,13 @@ class Fakes {
   };
 
   llm: LlmPort = {
-    status: () => ({ ready: true, model_id: 'm', gpu: 'cpu', queue_length: 0 }),
+    status: () => ({
+      ready: true,
+      model_id: 'm',
+      gpu: 'cpu',
+      queue_length: 0,
+      running: 0,
+    }),
     generate: (_s: string, _u: string, signal: AbortSignal) => {
       this.llmCalls++;
       this.llmSignal = signal;
@@ -194,10 +205,12 @@ describe('RAG endpoints', () => {
         },
       ],
     });
+    const RAG_USER_ID = '64b000000000000000000001';
+    await seedUser(t.app, RAG_USER_ID);
     token = (
       await t.app
         .get(TokenService)
-        .issue({ id: '64b000000000000000000001', roles: ['user'] }, 'fam')
+        .issue({ id: RAG_USER_ID, roles: ['user'] }, 'fam')
     ).access_token;
   });
   afterEach(() => t.close());

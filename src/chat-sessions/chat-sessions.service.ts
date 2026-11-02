@@ -8,6 +8,7 @@ import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { LRUCache } from 'lru-cache';
 import { ClientSession, Connection, Model, Types } from 'mongoose';
 import { decodeCursor, encodeCursor } from '../common/pagination';
+import { escapeRegex } from '../common/sanitize';
 import { logEvent } from '../common/request-context';
 import { isUuid, uuidv7 } from '../common/uuid';
 import {
@@ -48,10 +49,6 @@ const isCursor = (v: unknown): v is SessionCursor =>
 
 /** Unicode-aware length (an emoji counts as one character). */
 const charLength = (s: string) => Array.from(s).length;
-
-export function escapeRegex(s: string): string {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
 
 /** Trimmed title of 1–120 characters, else 400 `invalid title`. */
 export function validTitle(raw: string): string {

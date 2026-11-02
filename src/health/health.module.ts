@@ -9,5 +9,6 @@ import { HealthService } from './health.service';
   imports: [VectorStoreModule, LlmModule, TreeRouterModule],
   controllers: [HealthController],
   providers: [HealthService],
+  exports: [HealthService],
 })
 export class HealthModule {}

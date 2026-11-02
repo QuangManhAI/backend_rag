@@ -13,9 +13,11 @@ export const REFRESH_TTL_SECONDS = 7 * 24 * 60 * 60;
 export const TOKEN_EXPIRED = 'token expired';
 export const UNAUTHORIZED = 'unauthorized';
 
-interface AccessClaims {
+export interface AccessClaims {
   sub: string;
   roles: Role[];
+  /** `users.token_version` at issue time — a mismatch invalidates the token (S3). */
+  ver?: number;
 }
 
 export interface IssuedTokens {
@@ -51,7 +53,11 @@ export class TokenService {
   }
 
   async issue(user: AuthUser, familyId: string): Promise<IssuedTokens> {
-    const claims: AccessClaims = { sub: user.id, roles: user.roles };
+    const claims: AccessClaims = {
+      sub: user.id,
+      roles: user.roles,
+      ver: user.tokenVersion ?? 0,
+    };
     const raw = randomBytes(32).toString('base64url');
     const [access_token] = await Promise.all([
       this.jwt.signAsync(claims, {
@@ -82,7 +88,11 @@ export class TokenService {
       if (typeof c.sub !== 'string' || !Array.isArray(c.roles)) {
         throw new UnauthorizedException(UNAUTHORIZED);
       }
-      return { id: c.sub, roles: c.roles };
+      return {
+        id: c.sub,
+        roles: c.roles,
+        tokenVersion: typeof c.ver === 'number' ? c.ver : 0,
+      };
     } catch (e) {
       throw new UnauthorizedException(
         e instanceof TokenExpiredError ? TOKEN_EXPIRED : UNAUTHORIZED,
@@ -140,10 +150,12 @@ export class TokenService {
     );
   }
 
-  async revokeAllForUser(userId: string): Promise<void> {
-    await this.refreshTokens.updateMany(
+  /** Revokes every active refresh token of a user and returns how many were revoked. */
+  async revokeAllForUser(userId: string): Promise<number> {
+    const res = await this.refreshTokens.updateMany(
       { user_id: new Types.ObjectId(userId), revoked_at: null },
       { $set: { revoked_at: new Date() } },
     );
+    return res.modifiedCount;
   }
 }

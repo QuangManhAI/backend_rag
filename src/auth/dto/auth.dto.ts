@@ -7,12 +7,11 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from '../common-passwords';
 import type { Role } from '../../types/auth-user';
 
 const trim = ({ value }: { value: unknown }) =>
   typeof value === 'string' ? value.trim() : value;
-
-const PASSWORD_MAX = 200;
 
 export class RegisterDto {
   @ApiProperty({ example: 'a@example.com' })
@@ -21,9 +20,9 @@ export class RegisterDto {
   @IsEmail({}, { message: 'invalid email' })
   email: string;
 
-  @ApiProperty({ minLength: 8, example: 'correct horse' })
-  @MaxLength(PASSWORD_MAX, { message: 'password too long' })
-  @MinLength(8, { message: 'password too short' })
+  @ApiProperty({ minLength: 10, example: 'correct horse battery' })
+  @MaxLength(PASSWORD_MAX_LENGTH, { message: 'password too long' })
+  @MinLength(PASSWORD_MIN_LENGTH, { message: 'password too short' })
   @IsString({ message: 'password too short' })
   password: string;
 
@@ -43,7 +42,7 @@ export class LoginDto {
 
   @ApiProperty()
   @IsString({ message: 'invalid credentials' })
-  @MaxLength(PASSWORD_MAX, { message: 'invalid credentials' })
+  @MaxLength(PASSWORD_MAX_LENGTH, { message: 'invalid credentials' })
   password: string;
 }
 
@@ -65,12 +64,12 @@ export class UpdateProfileDto {
 export class ChangePasswordDto {
   @ApiProperty()
   @IsString({ message: 'old password incorrect' })
-  @MaxLength(PASSWORD_MAX, { message: 'old password incorrect' })
+  @MaxLength(PASSWORD_MAX_LENGTH, { message: 'old password incorrect' })
   old_password: string;
 
-  @ApiProperty({ minLength: 8 })
-  @MaxLength(PASSWORD_MAX, { message: 'password too long' })
-  @MinLength(8, { message: 'password too short' })
+  @ApiProperty({ minLength: 10 })
+  @MaxLength(PASSWORD_MAX_LENGTH, { message: 'password too long' })
+  @MinLength(PASSWORD_MIN_LENGTH, { message: 'password too short' })
   @IsString({ message: 'password too short' })
   new_password: string;
 }

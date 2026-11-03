@@ -3,7 +3,6 @@ import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
   IsInt,
-  IsMongoId,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -12,6 +11,7 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
+import { UUID_RE } from '../../common/uuid';
 import { CATEGORY_RE } from '../../vector-store/vector-store.service';
 
 const trim = ({ value }: { value: unknown }) =>
@@ -69,6 +69,7 @@ export class ChatRequestDto {
 
   @ApiPropertyOptional({ description: 'Continue this session (needs JWT)' })
   @IsOptional()
-  @IsMongoId({ message: 'invalid session_id' })
+  @Matches(UUID_RE, { message: 'invalid session_id' })
+  @IsString({ message: 'invalid session_id' })
   session_id?: string;
 }

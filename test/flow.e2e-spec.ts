@@ -108,6 +108,7 @@ describe('RAG_TS end-to-end flow', () => {
       .set('Authorization', `Bearer ${access}`)
       .expect(200);
     expect(list.body.items).toHaveLength(1);
+    expect(list.body.has_more).toBe(false);
     expect(list.body.items[0]).toMatchObject({
       id: done.session_id,
       message_count: 2,
@@ -185,7 +186,7 @@ describe('RAG_TS end-to-end flow', () => {
     await http().get('/api/v1/health/live').expect(200, { status: 'ok' });
   });
 
-  it('OpenAPI lists all 18 routes', async () => {
+  it('OpenAPI lists all 17 routes', async () => {
     const doc = await http().get('/api/v1/docs-json').expect(200);
     const ops = Object.entries(
       doc.body.paths as Record<string, Record<string, unknown>>,
@@ -204,7 +205,6 @@ describe('RAG_TS end-to-end flow', () => {
         'POST /api/v1/rag/chat',
         'POST /api/v1/rag/chat/stream',
         'GET /api/v1/chat-sessions',
-        'POST /api/v1/chat-sessions',
         'GET /api/v1/chat-sessions/{id}',
         'PATCH /api/v1/chat-sessions/{id}',
         'DELETE /api/v1/chat-sessions/{id}',

@@ -18,6 +18,6 @@ import { SESSION_STORE } from './session-store.port';
     ChatSessionsService,
     { provide: SESSION_STORE, useExisting: ChatSessionsService },
   ],
-  exports: [SESSION_STORE],
+  exports: [SESSION_STORE, MongooseModule],
 })
 export class ChatSessionsModule {}

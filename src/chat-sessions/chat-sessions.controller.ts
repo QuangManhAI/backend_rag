@@ -7,13 +7,11 @@ import {
   HttpStatus,
   Param,
   Patch,
-  Post,
   Query,
   UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
-  ApiCreatedResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -21,11 +19,9 @@ import {
 } from '@nestjs/swagger';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import type { Page } from '../common/pagination';
 import type { AuthUser } from '../types/auth-user';
 import { ChatSessionsService } from './chat-sessions.service';
 import {
-  CreateSessionDto,
   ListSessionsQueryDto,
   RenameSessionDto,
   SessionDto,
@@ -45,17 +41,8 @@ export class ChatSessionsController {
   list(
     @Query() q: ListSessionsQueryDto,
     @CurrentUser() me: AuthUser,
-  ): Promise<Page<SessionSummaryDto>> {
-    return this.sessions.list(me.id, q.limit, q.cursor, q.q);
-  }
-
-  @Post()
-  @ApiCreatedResponse({ type: SessionSummaryDto })
-  create(
-    @Body() dto: CreateSessionDto,
-    @CurrentUser() me: AuthUser,
-  ): Promise<SessionSummaryDto> {
-    return this.sessions.create(me.id, dto.title);
+  ): Promise<SessionPageDto> {
+    return this.sessions.list(me.id, q.cursor, q.q);
   }
 
   @Get(':id')

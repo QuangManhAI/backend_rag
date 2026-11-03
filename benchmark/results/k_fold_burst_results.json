@@ -1,0 +1,773 @@
+{
+  "k_trials": 5,
+  "burst_users": 16,
+  "slot_statistics": [
+    {
+      "slot": 1,
+      "mean_s": 30.53,
+      "std_s": 2.51,
+      "min_s": 26.27,
+      "max_s": 32.78,
+      "raw_durations": [
+        31.67,
+        26.27,
+        31.37,
+        30.57,
+        32.78
+      ],
+      "status": 200
+    },
+    {
+      "slot": 2,
+      "mean_s": 30.53,
+      "std_s": 2.51,
+      "min_s": 26.27,
+      "max_s": 32.78,
+      "raw_durations": [
+        31.67,
+        26.27,
+        31.37,
+        30.57,
+        32.78
+      ],
+      "status": 200
+    },
+    {
+      "slot": 3,
+      "mean_s": 30.53,
+      "std_s": 2.51,
+      "min_s": 26.27,
+      "max_s": 32.78,
+      "raw_durations": [
+        31.68,
+        26.27,
+        31.37,
+        30.57,
+        32.78
+      ],
+      "status": 200
+    },
+    {
+      "slot": 4,
+      "mean_s": 55.59,
+      "std_s": 1.07,
+      "min_s": 54.01,
+      "max_s": 57.01,
+      "raw_durations": [
+        57.01,
+        55.48,
+        55.87,
+        54.01,
+        55.59
+      ],
+      "status": 200
+    },
+    {
+      "slot": 5,
+      "mean_s": 55.59,
+      "std_s": 1.07,
+      "min_s": 54.01,
+      "max_s": 57.01,
+      "raw_durations": [
+        57.01,
+        55.48,
+        55.87,
+        54.01,
+        55.59
+      ],
+      "status": 200
+    },
+    {
+      "slot": 6,
+      "mean_s": 55.59,
+      "std_s": 1.07,
+      "min_s": 54.01,
+      "max_s": 57.02,
+      "raw_durations": [
+        57.02,
+        55.48,
+        55.87,
+        54.01,
+        55.59
+      ],
+      "status": 200
+    },
+    {
+      "slot": 7,
+      "mean_s": 79.18,
+      "std_s": 2.54,
+      "min_s": 75.96,
+      "max_s": 82.82,
+      "raw_durations": [
+        82.82,
+        78.17,
+        78.79,
+        80.17,
+        75.96
+      ],
+      "status": 200
+    },
+    {
+      "slot": 8,
+      "mean_s": 79.18,
+      "std_s": 2.54,
+      "min_s": 75.96,
+      "max_s": 82.82,
+      "raw_durations": [
+        82.82,
+        78.17,
+        78.79,
+        80.17,
+        75.96
+      ],
+      "status": 200
+    },
+    {
+      "slot": 9,
+      "mean_s": 79.18,
+      "std_s": 2.54,
+      "min_s": 75.96,
+      "max_s": 82.82,
+      "raw_durations": [
+        82.82,
+        78.17,
+        78.79,
+        80.17,
+        75.96
+      ],
+      "status": 200
+    },
+    {
+      "slot": 10,
+      "mean_s": 85.8,
+      "std_s": 0.41,
+      "min_s": 85.07,
+      "max_s": 85.99,
+      "raw_durations": [
+        85.07,
+        85.98,
+        85.98,
+        85.99,
+        85.99
+      ],
+      "status": 500
+    },
+    {
+      "slot": 11,
+      "mean_s": 85.8,
+      "std_s": 0.41,
+      "min_s": 85.07,
+      "max_s": 85.99,
+      "raw_durations": [
+        85.07,
+        85.98,
+        85.98,
+        85.99,
+        85.99
+      ],
+      "status": 500
+    },
+    {
+      "slot": 12,
+      "mean_s": 85.8,
+      "std_s": 0.41,
+      "min_s": 85.07,
+      "max_s": 85.99,
+      "raw_durations": [
+        85.07,
+        85.98,
+        85.98,
+        85.99,
+        85.99
+      ],
+      "status": 500
+    },
+    {
+      "slot": 13,
+      "mean_s": 85.8,
+      "std_s": 0.41,
+      "min_s": 85.07,
+      "max_s": 85.99,
+      "raw_durations": [
+        85.07,
+        85.98,
+        85.98,
+        85.99,
+        85.99
+      ],
+      "status": 500
+    },
+    {
+      "slot": 14,
+      "mean_s": 85.8,
+      "std_s": 0.41,
+      "min_s": 85.07,
+      "max_s": 85.99,
+      "raw_durations": [
+        85.07,
+        85.98,
+        85.98,
+        85.99,
+        85.99
+      ],
+      "status": 500
+    },
+    {
+      "slot": 15,
+      "mean_s": 85.8,
+      "std_s": 0.41,
+      "min_s": 85.07,
+      "max_s": 85.99,
+      "raw_durations": [
+        85.07,
+        85.98,
+        85.98,
+        85.99,
+        85.99
+      ],
+      "status": 500
+    },
+    {
+      "slot": 16,
+      "mean_s": 85.8,
+      "std_s": 0.41,
+      "min_s": 85.07,
+      "max_s": 85.99,
+      "raw_durations": [
+        85.07,
+        85.98,
+        85.98,
+        85.99,
+        85.99
+      ],
+      "status": 500
+    }
+  ],
+  "raw_trials": [
+    [
+      {
+        "req_id": 14,
+        "status": 200,
+        "duration_s": 31.67419340000015,
+        "success": true
+      },
+      {
+        "req_id": 4,
+        "status": 200,
+        "duration_s": 31.674217400000998,
+        "success": true
+      },
+      {
+        "req_id": 1,
+        "status": 200,
+        "duration_s": 31.677852499999062,
+        "success": true
+      },
+      {
+        "req_id": 2,
+        "status": 200,
+        "duration_s": 57.01477199999863,
+        "success": true
+      },
+      {
+        "req_id": 6,
+        "status": 200,
+        "duration_s": 57.01492549999966,
+        "success": true
+      },
+      {
+        "req_id": 16,
+        "status": 200,
+        "duration_s": 57.01537729999836,
+        "success": true
+      },
+      {
+        "req_id": 13,
+        "status": 200,
+        "duration_s": 82.817696600001,
+        "success": true
+      },
+      {
+        "req_id": 3,
+        "status": 200,
+        "duration_s": 82.81871040000078,
+        "success": true
+      },
+      {
+        "req_id": 5,
+        "status": 200,
+        "duration_s": 82.81906759999947,
+        "success": true
+      },
+      {
+        "req_id": 10,
+        "status": 500,
+        "duration_s": 85.06573769999886,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 15,
+        "status": 500,
+        "duration_s": 85.06578730000001,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 8,
+        "status": 500,
+        "duration_s": 85.0658499000001,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 11,
+        "status": 500,
+        "duration_s": 85.06585710000036,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 12,
+        "status": 500,
+        "duration_s": 85.06587669999863,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 9,
+        "status": 500,
+        "duration_s": 85.06587860000036,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 7,
+        "status": 500,
+        "duration_s": 85.065900900001,
+        "success": false,
+        "error": ""
+      }
+    ],
+    [
+      {
+        "req_id": 2,
+        "status": 200,
+        "duration_s": 26.27282650000052,
+        "success": true
+      },
+      {
+        "req_id": 11,
+        "status": 200,
+        "duration_s": 26.27323459999934,
+        "success": true
+      },
+      {
+        "req_id": 15,
+        "status": 200,
+        "duration_s": 26.273820200000046,
+        "success": true
+      },
+      {
+        "req_id": 16,
+        "status": 200,
+        "duration_s": 55.480606799999805,
+        "success": true
+      },
+      {
+        "req_id": 9,
+        "status": 200,
+        "duration_s": 55.481306499999846,
+        "success": true
+      },
+      {
+        "req_id": 3,
+        "status": 200,
+        "duration_s": 55.482329800001025,
+        "success": true
+      },
+      {
+        "req_id": 1,
+        "status": 200,
+        "duration_s": 78.16826609999953,
+        "success": true
+      },
+      {
+        "req_id": 6,
+        "status": 200,
+        "duration_s": 78.16881970000031,
+        "success": true
+      },
+      {
+        "req_id": 4,
+        "status": 200,
+        "duration_s": 78.16982269999971,
+        "success": true
+      },
+      {
+        "req_id": 10,
+        "status": 500,
+        "duration_s": 85.97722089999843,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 14,
+        "status": 500,
+        "duration_s": 85.97726469999907,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 13,
+        "status": 500,
+        "duration_s": 85.97726719999991,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 12,
+        "status": 500,
+        "duration_s": 85.97733539999899,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 8,
+        "status": 500,
+        "duration_s": 85.97734350000064,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 7,
+        "status": 500,
+        "duration_s": 85.97738550000031,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 5,
+        "status": 500,
+        "duration_s": 85.97748200000024,
+        "success": false,
+        "error": ""
+      }
+    ],
+    [
+      {
+        "req_id": 8,
+        "status": 200,
+        "duration_s": 31.37305799999922,
+        "success": true
+      },
+      {
+        "req_id": 16,
+        "status": 200,
+        "duration_s": 31.373347400000057,
+        "success": true
+      },
+      {
+        "req_id": 5,
+        "status": 200,
+        "duration_s": 31.373592300000382,
+        "success": true
+      },
+      {
+        "req_id": 10,
+        "status": 200,
+        "duration_s": 55.865936399999555,
+        "success": true
+      },
+      {
+        "req_id": 15,
+        "status": 200,
+        "duration_s": 55.866300699999556,
+        "success": true
+      },
+      {
+        "req_id": 2,
+        "status": 200,
+        "duration_s": 55.86665829999947,
+        "success": true
+      },
+      {
+        "req_id": 7,
+        "status": 200,
+        "duration_s": 78.78884149999976,
+        "success": true
+      },
+      {
+        "req_id": 14,
+        "status": 200,
+        "duration_s": 78.79000120000092,
+        "success": true
+      },
+      {
+        "req_id": 1,
+        "status": 200,
+        "duration_s": 78.79017620000013,
+        "success": true
+      },
+      {
+        "req_id": 13,
+        "status": 500,
+        "duration_s": 85.98278799999935,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 11,
+        "status": 500,
+        "duration_s": 85.98287840000012,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 12,
+        "status": 500,
+        "duration_s": 85.98288479999974,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 9,
+        "status": 500,
+        "duration_s": 85.98290129999987,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 4,
+        "status": 500,
+        "duration_s": 85.98295590000089,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 6,
+        "status": 500,
+        "duration_s": 85.98299439999937,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 3,
+        "status": 500,
+        "duration_s": 85.98304129999997,
+        "success": false,
+        "error": ""
+      }
+    ],
+    [
+      {
+        "req_id": 2,
+        "status": 200,
+        "duration_s": 30.565290700000332,
+        "success": true
+      },
+      {
+        "req_id": 5,
+        "status": 200,
+        "duration_s": 30.5657930999987,
+        "success": true
+      },
+      {
+        "req_id": 6,
+        "status": 200,
+        "duration_s": 30.566541199999847,
+        "success": true
+      },
+      {
+        "req_id": 3,
+        "status": 200,
+        "duration_s": 54.0084425999994,
+        "success": true
+      },
+      {
+        "req_id": 1,
+        "status": 200,
+        "duration_s": 54.009147400000074,
+        "success": true
+      },
+      {
+        "req_id": 13,
+        "status": 200,
+        "duration_s": 54.00936030000048,
+        "success": true
+      },
+      {
+        "req_id": 14,
+        "status": 200,
+        "duration_s": 80.17260250000072,
+        "success": true
+      },
+      {
+        "req_id": 7,
+        "status": 200,
+        "duration_s": 80.17341099999976,
+        "success": true
+      },
+      {
+        "req_id": 4,
+        "status": 200,
+        "duration_s": 80.17417600000044,
+        "success": true
+      },
+      {
+        "req_id": 16,
+        "status": 500,
+        "duration_s": 85.9939329000008,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 15,
+        "status": 500,
+        "duration_s": 85.99396850000085,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 10,
+        "status": 500,
+        "duration_s": 85.99398800000017,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 11,
+        "status": 500,
+        "duration_s": 85.9940256000009,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 12,
+        "status": 500,
+        "duration_s": 85.99404529999993,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 9,
+        "status": 500,
+        "duration_s": 85.99406110000018,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 8,
+        "status": 500,
+        "duration_s": 85.9940843000004,
+        "success": false,
+        "error": ""
+      }
+    ],
+    [
+      {
+        "req_id": 11,
+        "status": 200,
+        "duration_s": 32.78029240000069,
+        "success": true
+      },
+      {
+        "req_id": 6,
+        "status": 200,
+        "duration_s": 32.781250800000635,
+        "success": true
+      },
+      {
+        "req_id": 5,
+        "status": 200,
+        "duration_s": 32.78209219999917,
+        "success": true
+      },
+      {
+        "req_id": 16,
+        "status": 200,
+        "duration_s": 55.59298579999995,
+        "success": true
+      },
+      {
+        "req_id": 8,
+        "status": 200,
+        "duration_s": 55.59389209999972,
+        "success": true
+      },
+      {
+        "req_id": 4,
+        "status": 200,
+        "duration_s": 55.594635699999344,
+        "success": true
+      },
+      {
+        "req_id": 2,
+        "status": 200,
+        "duration_s": 75.95546869999998,
+        "success": true
+      },
+      {
+        "req_id": 7,
+        "status": 200,
+        "duration_s": 75.95657000000028,
+        "success": true
+      },
+      {
+        "req_id": 1,
+        "status": 200,
+        "duration_s": 75.9566906,
+        "success": true
+      },
+      {
+        "req_id": 13,
+        "status": 500,
+        "duration_s": 85.98501659999965,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 14,
+        "status": 500,
+        "duration_s": 85.9850320000005,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 10,
+        "status": 500,
+        "duration_s": 85.98504099999991,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 15,
+        "status": 500,
+        "duration_s": 85.98504169999978,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 12,
+        "status": 500,
+        "duration_s": 85.9851118000006,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 9,
+        "status": 500,
+        "duration_s": 85.98514240000077,
+        "success": false,
+        "error": ""
+      },
+      {
+        "req_id": 3,
+        "status": 500,
+        "duration_s": 85.98526159999892,
+        "success": false,
+        "error": ""
+      }
+    ]
+  ]
+}

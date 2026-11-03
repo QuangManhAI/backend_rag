@@ -13,7 +13,7 @@ import type { ChunkPayload, ScoredChunk } from '../types/scientific-rag';
 
 export const QDRANT_UNAVAILABLE = 'qdrant unavailable';
 export const MAX_CHUNKS_PER_PAPER = 500;
-export const QDRANT_TIMEOUT_MS = 3000;
+export const QDRANT_TIMEOUT_MS = 15000;
 
 /** arXiv-style category code, e.g. `cs.LG`, `stat.ML`, `math-ph`. */
 export const CATEGORY_RE = /^[a-z-]+(\.[A-Za-z-]+)?$/;

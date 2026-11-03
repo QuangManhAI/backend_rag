@@ -22,7 +22,8 @@
     "sync:r2": "ts-node scripts/sync-r2.ts",
     "sync:minio": "ts-node scripts/sync-minio.ts",
     "mirror:r2:minio": "ts-node scripts/mirror-r2-to-minio.ts",
-    "migrate:qdrant": "ts-node scripts/migrate-lance-to-qdrant.ts"
+    "migrate:qdrant": "ts-node scripts/migrate-lance-to-qdrant.ts",
+    "create:admin": "ts-node scripts/create-admin.ts"
   },
   "dependencies": {
     "@huggingface/transformers": "^4.3.1",
@@ -32,11 +33,13 @@
     "@nestjs/mongoose": "^11.0.4",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.4.7",
+    "@nestjs/throttler": "^6.7.1",
     "@qdrant/js-client-rest": "^1.19.0",
     "argon2": "^0.45.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "dotenv": "^18.0.8",
+    "helmet": "^8.3.0",
     "lru-cache": "^11.5.3",
     "mongoose": "^8.24.5",
     "nestjs-pino": "^5.3.1",

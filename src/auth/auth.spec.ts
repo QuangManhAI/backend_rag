@@ -2,7 +2,7 @@ import { Controller, Get, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { getModelToken } from '@nestjs/mongoose';
 import type { MongoMemoryReplSet } from 'mongodb-memory-server';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import request from 'supertest';
 import {
   createTestApp,
@@ -12,6 +12,7 @@ import {
 } from '../testing/test-app';
 import type { AuthUser } from '../types/auth-user';
 import { AuthModule } from './auth.module';
+import { AuthService } from './auth.service';
 import { CurrentUser } from './current-user.decorator';
 import { JwtAuthGuard, OptionalJwtAuthGuard } from './guards/jwt-auth.guard';
 import { Roles, RolesGuard } from './guards/roles.guard';
@@ -285,6 +286,8 @@ describe('Auth (integration)', () => {
   describe('guards', () => {
     let probe: TestApp;
     let jwt: JwtService;
+    let userId: string;
+    let adminId: string;
 
     beforeAll(async () => {
       probe = await createTestApp(mongo, {
@@ -292,6 +295,17 @@ describe('Auth (integration)', () => {
         controllers: [ProbeController],
       });
       jwt = probe.app.get(JwtService);
+      // The guards now look the account up in the database (prompt_security S3), so the probe
+      // needs two real accounts.
+      const plain = await register();
+      userId = plain.user.id;
+      const admin = await register();
+      adminId = admin.user.id;
+      const users = probe.app.get<Model<User>>(getModelToken(User.name));
+      await users.updateOne(
+        { _id: new Types.ObjectId(adminId) },
+        { $set: { roles: ['user', 'admin'] } },
+      );
     });
 
     afterAll(() => probe.close());
@@ -311,11 +325,11 @@ describe('Auth (integration)', () => {
     it('OptionalJwtAuthGuard: none ➔ anonymous, valid ➔ user, bad ➔ 401', async () => {
       const s = () => request(probe.server()).get('/api/v1/probe/optional');
       expect((await s().expect(200)).body).toEqual({ user_id: null });
-      const tok = sign({ sub: 'u1', roles: ['user'] }, 60);
+      const tok = sign({ sub: userId, roles: ['user'] }, 60);
       expect(
         (await s().set('Authorization', `Bearer ${tok}`).expect(200)).body,
       ).toEqual({
-        user_id: 'u1',
+        user_id: userId,
       });
       const bad = await s()
         .set('Authorization', 'Bearer not.a.jwt')
@@ -325,12 +339,32 @@ describe('Auth (integration)', () => {
 
     it('RolesGuard: user ➔ 403, admin ➔ 200, none ➔ 401', async () => {
       const s = () => request(probe.server()).get('/api/v1/probe/admin');
-      const user = sign({ sub: 'u1', roles: ['user'] }, 60);
+      const user = sign({ sub: userId, roles: ['user'] }, 60);
       const r = await s().set('Authorization', `Bearer ${user}`).expect(403);
       expect(r.body.message).toBe('admin role required');
-      const admin = sign({ sub: 'u2', roles: ['user', 'admin'] }, 60);
+      const admin = sign({ sub: adminId, roles: ['user', 'admin'] }, 60);
       await s().set('Authorization', `Bearer ${admin}`).expect(200);
       await s().expect(401);
+    });
+
+    it('a token issued before a role change stops working (token_version)', async () => {
+      const users = probe.app.get<Model<User>>(getModelToken(User.name));
+      const auth = probe.app.get(AuthService);
+      const tok = sign({ sub: adminId, roles: ['user', 'admin'], ver: 0 }, 60);
+      await request(probe.server())
+        .get('/api/v1/probe/admin')
+        .set('Authorization', `Bearer ${tok}`)
+        .expect(200);
+      await users.updateOne(
+        { _id: new Types.ObjectId(adminId) },
+        { $inc: { token_version: 1 } },
+      );
+      // The account-state cache is dropped, exactly like an admin role change does.
+      auth.invalidateUserCaches(adminId);
+      await request(probe.server())
+        .get('/api/v1/probe/admin')
+        .set('Authorization', `Bearer ${tok}`)
+        .expect(401);
     });
   });
 });

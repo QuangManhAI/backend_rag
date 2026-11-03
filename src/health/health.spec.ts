@@ -1,10 +1,16 @@
 import { Logger } from '@nestjs/common';
 import type { Connection } from 'mongoose';
+import { AppConfigService } from '../config/app-config.service';
 import type { LlmPort } from '../llm/llm.service';
 import type { TreeRouterService } from '../tree-router/tree-router.service';
 import type { VectorStorePort } from '../vector-store/vector-store.service';
 import { HealthController } from './health.controller';
-import { HealthService, overallStatus } from './health.service';
+import { Health, HealthService, overallStatus } from './health.service';
+
+/** A non-production config, so the controller returns the detailed payload. */
+const config = {
+  get: (k: string) => (k === 'NODE_ENV' ? 'test' : undefined),
+} as unknown as AppConfigService;
 
 function deps() {
   const state = { mongo: true, qdrant: true, llm: true, world: false };
@@ -97,7 +103,7 @@ describe('HealthService', () => {
 
   it('ready ➔ 503 when down, live never touches dependencies', async () => {
     const { state, svc } = deps();
-    const ctl = new HealthController(svc);
+    const ctl = new HealthController(svc, config);
     expect(ctl.live()).toEqual({ status: 'ok' });
     const res = { status: jest.fn() };
     await svc.check();
@@ -105,8 +111,21 @@ describe('HealthService', () => {
     expect(res.status).not.toHaveBeenCalled();
     state.mongo = false;
     await svc.check();
-    const h = await ctl.ready(res as never);
+    const h = (await ctl.ready(res as never)) as Health;
     expect(res.status).toHaveBeenCalledWith(503);
     expect(h.status).toBe('down');
+  });
+
+  it('masks the detailed payload in production', async () => {
+    const { svc } = deps();
+    const prod = new HealthController(svc, config);
+    (prod as unknown as { config: AppConfigService }).config = {
+      get: (k: string) => (k === 'NODE_ENV' ? 'production' : undefined),
+    } as unknown as AppConfigService;
+    await svc.check();
+    const masked = (await prod.get()) as Record<string, unknown>;
+    expect(masked.status).toBeDefined();
+    expect(masked).not.toHaveProperty('llm');
+    expect(masked).not.toHaveProperty('world_version');
   });
 });

@@ -58,3 +58,6 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# benchmark streaming metrics (large raw json files)
+benchmark/results/*metrics.json

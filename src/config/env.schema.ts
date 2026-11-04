@@ -52,7 +52,40 @@ export const envSchema = z.object({
    * value. `auto` is the conventional choice for S3-compatible stores.
    */
   MINIO_REGION: z.string().min(1).default('auto'),
-});
+})
+  /** Placeholders shipped in `.env.example`; forbidden once the app runs for real. */
+  .superRefine((v, ctx) => {
+    const PLACEHOLDER_MARKERS = ['change-me', 'your-secret', 'replace-me'];
+    // Production-only guards (prompt_security S1.1): a placeholder or shared secret must never
+    // reach a real deployment, and MongoDB must be reached with credentials.
+    if (v.NODE_ENV !== 'production') return;
+    for (const [name, value] of [
+      ['JWT_ACCESS_SECRET', v.JWT_ACCESS_SECRET],
+      ['JWT_REFRESH_SECRET', v.JWT_REFRESH_SECRET],
+    ] as const) {
+      if (PLACEHOLDER_MARKERS.some((m) => value.toLowerCase().includes(m))) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: [name],
+          message: `${name} still contains a placeholder value`,
+        });
+      }
+    }
+    if (v.JWT_ACCESS_SECRET === v.JWT_REFRESH_SECRET) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['JWT_REFRESH_SECRET'],
+        message: 'JWT_ACCESS_SECRET and JWT_REFRESH_SECRET must differ',
+      });
+    }
+    if (v.MONGO_URI.startsWith('mongodb://') && !v.MONGO_URI.includes('@')) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['MONGO_URI'],
+        message: 'MONGO_URI must contain credentials in production',
+      });
+    }
+  });
 
 export type AppConfig = z.infer<typeof envSchema>;
 

@@ -72,3 +72,39 @@
 - [FE-live] Chạy thật với FE: Qwen hay chép nguyên tiêu đề ngữ cảnh `[Paper ID: x | Title …]` và viết toán bằng `\(…\)`. Đã đổi tiêu đề ngữ cảnh thành `--- [Paper: id] "Title" — Section: … ---` (đúng tag cần trích), quy tắc 3–4 của system prompt nói rõ định dạng; `extractCitations` chấp nhận thêm `[Paper ID: id | …]`.
 - [FE-live] `CORS_ORIGINS` mặc định `http://localhost:5174` — cổng 5173 là frontend của pipeline UTH, FE RAG_TS chuyển sang 5174.
 - [FE-live] Compose map Mongo ra host cổng 27018 (`RAGTS_MONGO_PORT`) để chạy app ngoài Docker: `MONGO_URI=mongodb://localhost:27018/rag_ts?replicaSet=rs0&directConnection=true`.
+
+---
+
+## Nhóm S — Security Hardening & RBAC (`docs/prompt_security.md`)
+
+- [S1] `helmet` 8.3 + `@nestjs/throttler` 6.7.1 được phép thêm mới — nhóm đã đồng ý cho phép 2 dependency này (không thêm gì khác).
+- [S1] `trust proxy` được đặt qua `app.getHttpAdapter().getInstance().set('trust proxy', …)` chứ không phải `app.set(...)` — `INestApplication` không khai báo `set`, chỉ Express instance mới có. Giá trị: `1` (production, 1 reverse proxy), `'loopback'` (test), `false` (dev, để `@Ip()` là IP thật).
+- [S1] `@nestjs/throttler` 6 chỉ đăng ký **một** throttler tên `default` ở `ThrottlerModule.forRoot([...])` và `ThrottlerGuard` gắn qua `APP_GUARD`. Đăng ký nhiều throttler (mỗi route một cái) sẽ áp **tất cả** limit lên **mọi** route — sai ý định. Route hẹp giới hạn bằng `@RateLimit('login')` (ghi đè limit của throttler `default` qua metadata).
+- [S1] Chỉ **một** `ThrottlerModule.forRoot` được gọi (ở `AppModule`) — `ThrottlerModule` là `@Global()`, gọi lần hai sẽ tạo bộ provider trùng tên.
+- [S1] `trust proxy` phải được set **trước** khi Express đọc IP của request — `app.use()` theo thứ tự trong `configureApp`.
+- [S1] `DUMMY_HASH` được tính **lazy** (`argon2.hash` là async, không thể tính trong constructor) — cache lại promise để chỉ hash 1 lần cho cả vòng đời process.
+- [S1] Swagger bị **tắt hoàn toàn** ở production (cả `/api/v1/docs` lẫn `/api/v1/docs-json`) — surface API đầy đủ là thông tin trinh sát. Chi tiết health đầy đủ (`llm.model_id`, `gpu`, `world_version`) cũng bị mask ở production; bản đầy đủ chỉ mở cho admin qua `GET /api/v1/admin/health`.
+- [S1] Env schema chỉ siết thêm trong `NODE_ENV=production`: secret chứa `change-me` bị từ chối, 2 JWT secret phải khác nhau, `MONGO_URI` phải có credential. Ở dev/test các quy tắc này không áp dụng để `backend_rag/.env` cũ vẫn chạy được.
+- [S1] Credential MongoDB plaintext đã bị dọn khỏi `README.md` và `backend_rag/benchmark/seed_prod_auth_data.js` — script giờ **thoát với code 1** nếu thiếu `MONGO_URI`/`JWT_ACCESS_SECRET` thay vì fallback về giá trị hard-code.
+- [S2] Password policy: tối thiểu **10** ký tự (không phải 8) — theo OWASP. Trên 200 ký tự bị từ chối vì đó là trần payload của Argon2.
+- [S2] Blacklist 200 mật khẩu phổ biến được **nhúng trong mã** (không thêm dependency runtime) — danh sách là hằng số, không cần tải về.
+- [S2] Kiểm tra "mật khẩu chứa email" so khớp với **local-part** của email (trước `@`), đã bỏ `.`/`-`/`_` — so khớp cả domain sẽ chặn gần như mọi mật khẩu hợp lệ. Needle dưới 3 ký tự thì bỏ qua (quá ngắn, độ chính xác rất thấp).
+- [S2] Thứ tự kiểm tra policy: **blacklist trước**, rồi độ dài — nếu kiểm tra độ dài trước thì `password` (8 ký tự, nằm trong blacklist) trả về `password too short` thay vì `password too common`, làm thông điệp sai.
+- [S2] `users` thêm 6 field: `is_active`, `disabled_at`, `disabled_by`, `disabled_reason`, `token_version`, `last_login_at`. `token_version` mặc định 0 (tương thích ngược với user đã tồn tại — claim `ver` cũ vắng mặt được đọc như 0).
+- [S3] `JwtAuthGuard` **có** tra DB mỗi request (đảo ngược giả định của [B2]) — cần phát hiện khoá tài khoản và thay đổi quyền ngay lập tức. Bù lại: cache LRU 5 s trong `AuthService` + `invalidateUserCaches()` được gọi tức thì bởi mọi hành động admin.
+- [S3] Claim mới trong access token: `ver` (= `users.token_version` lúc issue). Không dùng `token_version` làm tên claim vì dễ nhầm với số version của chính token.
+- [S3] Mọi thay đổi quyền / khoá / đổi mật khẩu đều gọi `revokeAllForUser()`: thu hồi toàn bộ refresh token **và** `$inc token_version` ⇒ access token đã phát ra chết ngay thay vì sống tới hết TTL 15 phút.
+- [S3] `assertNotLastAdmin` **không** bỏ qua qua account đã bị khoá (`if (!target.is_active) return;` bị gỡ bỏ) — một admin đã bị khoá vẫn là admin đang đứng, và hệ thống phải giữ ít nhất một admin **đang hoạt động**.
+- [S4] `admin_audit_logs` là collection **append-only**: không có service method hay endpoint nào sửa/xoá. Mọi hành động admin — kể cả read-only (xem danh sách, xem health) — đều được ghi lại.
+- [S4] `AdminModule` được tách thành 3 service theo trách nhiệm (`AdminAuditService`, `AdminIdentityService`, `AdminOpsService`) thay vì một `AdminService` lớn — mỗi service test độc lập và phần audit không bị "kéo" đi khi sửa nghiệp vụ danh tính.
+- [S4] Audit lưu **snapshot** `actor_email` tại thời điểm hành động (không join lại `users`) — nếu admin sau này bị xoá, dấu vết vẫn còn.
+- [S5] **Không** có A5 (admin reset password) — nhóm đã loại vì rủi ro. Admin không có bất kỳ endpoint nào ghi `password_hash`.
+- [S5] Admin tự hạ quyền của chính mình ➔ 409 `SELF_LOCKOUT_FORBIDDEN`; admin cuối cùng bị hạ quyền hoặc khoá ➔ 409 `LAST_ADMIN_PROTECTED`.
+- [S5] Đổi role bắt buộc có `user` trong danh sách (mọi tài khoản luôn là user) — `roles: ['admin']` một mình bị từ chối 400.
+- [S6] Admin surface **chỉ đọc** với nội dung: không có endpoint xoá session/message (nhóm yêu cầu "chỉ cần xem"). Test xác nhận `DELETE /api/v1/admin/sessions/*` ➔ 404.
+- [S7] Bootstrap admin bằng **CLI script** (`scripts/create-admin.ts` + `npm run create:admin`), không qua HTTP endpoint — không tồn tại đường nâng quyền qua mạng.
+- [S7] Script idempotent: nếu email đã tồn tại thì nâng role lên `['user','admin']`, đặt lại mật khẩu và `$inc token_version` (token cũ chết ngay) — chạy lại không tạo user trùng.
+- [S7] `argon2.Options` không tồn tại trong bản `argon2` 0.45 — kiểu đúng là `argon2.HashOptions`, và `type` nhận **số** (`argon2.argon2id` = 2), không phải chuỗi `'argon2id'`.
+- [S8] `LlmStatus` thêm field `running` (số turn đang sinh) để `/admin/stats` hiển thị được tải LLM — `LlmQueue.running` đã có sẵn từ B6.
+- [S8] Mọi spec cũ (B2/B7/B8) phải **seed user thật** trong MongoDB (`seedUser()` trong `src/testing/test-app.ts`) vì guard giờ tra DB. `seedUser` dùng hash Argon2id thật (`SEED_PASSWORD`) — hash giả khiến `argon2.verify` ném lỗi (500) thay vì trả 401.
+- [S8] `escapeRegex` được tách ra `src/common/sanitize.ts` và dùng chung cho tìm kiếm admin — chống ReDoS khi `q` chứa ký tự đặc biệt.

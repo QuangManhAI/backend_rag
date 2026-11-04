@@ -13,9 +13,11 @@ export const REFRESH_TTL_SECONDS = 7 * 24 * 60 * 60;
 export const TOKEN_EXPIRED = 'token expired';
 export const UNAUTHORIZED = 'unauthorized';
 
-interface AccessClaims {
+export interface AccessClaims {
   sub: string;
   roles: Role[];
+  /** `users.token_version` at issue time — a mismatch invalidates the token (S3). */
+  ver?: number;
 }
 
 export interface IssuedTokens {
@@ -51,18 +53,24 @@ export class TokenService {
   }
 
   async issue(user: AuthUser, familyId: string): Promise<IssuedTokens> {
-    const claims: AccessClaims = { sub: user.id, roles: user.roles };
-    const access_token = await this.jwt.signAsync(claims, {
-      secret: this.config.get('JWT_ACCESS_SECRET'),
-      expiresIn: ACCESS_TTL_SECONDS,
-    });
+    const claims: AccessClaims = {
+      sub: user.id,
+      roles: user.roles,
+      ver: user.tokenVersion ?? 0,
+    };
     const raw = randomBytes(32).toString('base64url');
-    await this.refreshTokens.create({
-      user_id: new Types.ObjectId(user.id),
-      token_hash: this.hashRefresh(raw),
-      family_id: familyId,
-      expires_at: new Date(Date.now() + REFRESH_TTL_SECONDS * 1000),
-    });
+    const [access_token] = await Promise.all([
+      this.jwt.signAsync(claims, {
+        secret: this.config.get('JWT_ACCESS_SECRET'),
+        expiresIn: ACCESS_TTL_SECONDS,
+      }),
+      this.refreshTokens.create({
+        user_id: new Types.ObjectId(user.id),
+        token_hash: this.hashRefresh(raw),
+        family_id: familyId,
+        expires_at: new Date(Date.now() + REFRESH_TTL_SECONDS * 1000),
+      }),
+    ]);
     return {
       access_token,
       token_type: 'Bearer',
@@ -80,7 +88,11 @@ export class TokenService {
       if (typeof c.sub !== 'string' || !Array.isArray(c.roles)) {
         throw new UnauthorizedException(UNAUTHORIZED);
       }
-      return { id: c.sub, roles: c.roles };
+      return {
+        id: c.sub,
+        roles: c.roles,
+        tokenVersion: typeof c.ver === 'number' ? c.ver : 0,
+      };
     } catch (e) {
       throw new UnauthorizedException(
         e instanceof TokenExpiredError ? TOKEN_EXPIRED : UNAUTHORIZED,
@@ -95,24 +107,29 @@ export class TokenService {
    */
   async consume(raw: string): Promise<ConsumeResult> {
     const hash = this.hashRefresh(raw);
+    const now = new Date();
+    const won = await this.refreshTokens
+      .findOneAndUpdate(
+        { token_hash: hash, revoked_at: null, expires_at: { $gt: now } },
+        { $set: { revoked_at: now } },
+      )
+      .lean();
+    if (won) {
+      return {
+        ok: true,
+        userId: won.user_id.toString(),
+        familyId: won.family_id,
+      };
+    }
     const rec = await this.refreshTokens.findOne({ token_hash: hash }).lean();
     if (!rec) return { ok: false, reason: 'invalid' };
-    if (rec.expires_at.getTime() <= Date.now())
+    if (rec.expires_at.getTime() <= now.getTime())
       return { ok: false, reason: 'expired' };
     if (rec.revoked_at) {
       await this.revokeFamily(rec.family_id);
       return { ok: false, reason: 'reused' };
     }
-    const won = await this.refreshTokens.findOneAndUpdate(
-      { _id: rec._id, revoked_at: null },
-      { $set: { revoked_at: new Date() } },
-    );
-    if (!won) return { ok: false, reason: 'race' };
-    return {
-      ok: true,
-      userId: rec.user_id.toString(),
-      familyId: rec.family_id,
-    };
+    return { ok: false, reason: 'race' };
   }
 
   async revokeOne(raw: string, userId: string): Promise<void> {
@@ -133,10 +150,12 @@ export class TokenService {
     );
   }
 
-  async revokeAllForUser(userId: string): Promise<void> {
-    await this.refreshTokens.updateMany(
+  /** Revokes every active refresh token of a user and returns how many were revoked. */
+  async revokeAllForUser(userId: string): Promise<number> {
+    const res = await this.refreshTokens.updateMany(
       { user_id: new Types.ObjectId(userId), revoked_at: null },
       { $set: { revoked_at: new Date() } },
     );
+    return res.modifiedCount;
   }
 }

@@ -20,6 +20,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import type { AuthUser } from '../types/auth-user';
+import { RateLimit } from '../common/throttler';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './current-user.decorator';
 import {
@@ -39,14 +40,17 @@ export class AuthController {
   constructor(private readonly auth: AuthService) {}
 
   @Post('register')
+  @RateLimit('register')
   @ApiCreatedResponse({ type: AuthResponseDto })
   @ApiConflictResponse({ description: 'email already exists' })
+  @ApiTooManyRequestsResponse({ description: 'too many requests' })
   register(@Body() dto: RegisterDto): Promise<AuthResponseDto> {
     return this.auth.register(dto);
   }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
+  @RateLimit('login')
   @ApiOkResponse({ type: AuthResponseDto })
   @ApiUnauthorizedResponse({ description: 'invalid credentials' })
   @ApiTooManyRequestsResponse({ description: 'too many login attempts' })
@@ -56,6 +60,7 @@ export class AuthController {
 
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
+  @RateLimit('refresh')
   @ApiOkResponse({ type: AuthResponseDto })
   @ApiUnauthorizedResponse({ description: 'refresh token invalid or expired' })
   refresh(@Body() dto: RefreshDto): Promise<AuthResponseDto> {
@@ -94,6 +99,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
+  @RateLimit('changePassword')
   @ApiNoContentResponse()
   @ApiUnauthorizedResponse({ description: 'old password incorrect' })
   changePassword(

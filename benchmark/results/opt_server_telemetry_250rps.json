@@ -1,0 +1,1848 @@
+{
+  "logicalCores": 16,
+  "samples": [
+    {
+      "elapsedSec": 0,
+      "timestamp": "2026-10-29T11:14:49.5999035Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 0,
+        "cpuPctTotalSystem": 0,
+        "workingSetMB": 3414.2,
+        "privateMB": 7741.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0,
+        "cpuPctTotalSystem": 0,
+        "workingSetMB": 38.4,
+        "privateMB": 84.3
+      }
+    },
+    {
+      "elapsedSec": 2.2,
+      "timestamp": "2026-10-29T11:14:51.6279755Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 64.6,
+        "cpuPctTotalSystem": 4,
+        "workingSetMB": 3411.4,
+        "privateMB": 7754.2
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 2.8,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 38.5,
+        "privateMB": 84.3
+      }
+    },
+    {
+      "elapsedSec": 4.3,
+      "timestamp": "2026-10-29T11:14:53.6562485Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 57.3,
+        "cpuPctTotalSystem": 3.6,
+        "workingSetMB": 3267.6,
+        "privateMB": 7770.2
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3.8,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 38.5,
+        "privateMB": 84.3
+      }
+    },
+    {
+      "elapsedSec": 6.3,
+      "timestamp": "2026-10-29T11:14:55.6823793Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 68,
+        "cpuPctTotalSystem": 4.3,
+        "workingSetMB": 3285.6,
+        "privateMB": 7787.8
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 10.9,
+        "cpuPctTotalSystem": 0.7,
+        "workingSetMB": 38.7,
+        "privateMB": 84.4
+      }
+    },
+    {
+      "elapsedSec": 8.3,
+      "timestamp": "2026-10-29T11:14:57.7151974Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 71.1,
+        "cpuPctTotalSystem": 4.4,
+        "workingSetMB": 3304.4,
+        "privateMB": 7807.5
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 2.3,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 39.4,
+        "privateMB": 85.1
+      }
+    },
+    {
+      "elapsedSec": 10.3,
+      "timestamp": "2026-10-29T11:14:59.7347772Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 77.3,
+        "cpuPctTotalSystem": 4.8,
+        "workingSetMB": 3323.9,
+        "privateMB": 7827.4
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 8.6,
+        "cpuPctTotalSystem": 0.5,
+        "workingSetMB": 40.5,
+        "privateMB": 86.2
+      }
+    },
+    {
+      "elapsedSec": 12.4,
+      "timestamp": "2026-10-29T11:15:01.7684279Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 76.6,
+        "cpuPctTotalSystem": 4.8,
+        "workingSetMB": 3346.5,
+        "privateMB": 7850.4
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3.7,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 40.5,
+        "privateMB": 86.3
+      }
+    },
+    {
+      "elapsedSec": 14.4,
+      "timestamp": "2026-10-29T11:15:03.7897265Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 75.8,
+        "cpuPctTotalSystem": 4.7,
+        "workingSetMB": 3368.9,
+        "privateMB": 7872.9
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3.9,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 40.5,
+        "privateMB": 86.3
+      }
+    },
+    {
+      "elapsedSec": 16.4,
+      "timestamp": "2026-10-29T11:15:05.8168790Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 78.1,
+        "cpuPctTotalSystem": 4.9,
+        "workingSetMB": 3328,
+        "privateMB": 7894.6
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 2.3,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 40.6,
+        "privateMB": 86.3
+      }
+    },
+    {
+      "elapsedSec": 18.5,
+      "timestamp": "2026-10-29T11:15:07.8572154Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 88.5,
+        "cpuPctTotalSystem": 5.5,
+        "workingSetMB": 3330.3,
+        "privateMB": 7897
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.5,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 40.7,
+        "privateMB": 86.3
+      }
+    },
+    {
+      "elapsedSec": 20.5,
+      "timestamp": "2026-10-29T11:15:09.9147954Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 64.8,
+        "cpuPctTotalSystem": 4.1,
+        "workingSetMB": 3169.9,
+        "privateMB": 7897
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 5.5,
+        "cpuPctTotalSystem": 0.3,
+        "workingSetMB": 41.1,
+        "privateMB": 86.7
+      }
+    },
+    {
+      "elapsedSec": 22.5,
+      "timestamp": "2026-10-29T11:15:11.9472676Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 64.1,
+        "cpuPctTotalSystem": 4,
+        "workingSetMB": 3088.8,
+        "privateMB": 7897.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 5.5,
+        "cpuPctTotalSystem": 0.3,
+        "workingSetMB": 41.2,
+        "privateMB": 86.8
+      }
+    },
+    {
+      "elapsedSec": 24.6,
+      "timestamp": "2026-10-29T11:15:13.9860088Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 60.3,
+        "cpuPctTotalSystem": 3.8,
+        "workingSetMB": 3004.1,
+        "privateMB": 7897.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0.8,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 41.2,
+        "privateMB": 86.8
+      }
+    },
+    {
+      "elapsedSec": 26.6,
+      "timestamp": "2026-10-29T11:15:16.0614853Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 71.1,
+        "cpuPctTotalSystem": 4.4,
+        "workingSetMB": 3004.2,
+        "privateMB": 7897.3
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 2.3,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 41.2,
+        "privateMB": 86.8
+      }
+    },
+    {
+      "elapsedSec": 28.7,
+      "timestamp": "2026-10-29T11:15:18.0878772Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 70.7,
+        "cpuPctTotalSystem": 4.4,
+        "workingSetMB": 2976.9,
+        "privateMB": 7899.6
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3.7,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 41.2,
+        "privateMB": 86.8
+      }
+    },
+    {
+      "elapsedSec": 30.7,
+      "timestamp": "2026-10-29T11:15:20.1580458Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 60.2,
+        "cpuPctTotalSystem": 3.8,
+        "workingSetMB": 2928.1,
+        "privateMB": 7899.6
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3.9,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 41.2,
+        "privateMB": 86.8
+      }
+    },
+    {
+      "elapsedSec": 32.8,
+      "timestamp": "2026-10-29T11:15:22.2102228Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 57.3,
+        "cpuPctTotalSystem": 3.6,
+        "workingSetMB": 2912.3,
+        "privateMB": 7899.6
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 40.4,
+        "privateMB": 86.8
+      }
+    },
+    {
+      "elapsedSec": 34.8,
+      "timestamp": "2026-10-29T11:15:24.2391056Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 69.5,
+        "cpuPctTotalSystem": 4.3,
+        "workingSetMB": 2899.5,
+        "privateMB": 7899.6
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3.9,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 40.4,
+        "privateMB": 86.8
+      }
+    },
+    {
+      "elapsedSec": 36.9,
+      "timestamp": "2026-10-29T11:15:26.2635252Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 69.2,
+        "cpuPctTotalSystem": 4.3,
+        "workingSetMB": 2703.7,
+        "privateMB": 7900.5
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 2.2,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 40.4,
+        "privateMB": 86.8
+      }
+    },
+    {
+      "elapsedSec": 38.9,
+      "timestamp": "2026-10-29T11:15:28.3174976Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 68,
+        "cpuPctTotalSystem": 4.3,
+        "workingSetMB": 2456.8,
+        "privateMB": 7900.5
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.6,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 40.5,
+        "privateMB": 86.8
+      }
+    },
+    {
+      "elapsedSec": 40.9,
+      "timestamp": "2026-10-29T11:15:30.3372931Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 66.4,
+        "cpuPctTotalSystem": 4.2,
+        "workingSetMB": 2457.2,
+        "privateMB": 7901
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3.1,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 40.5,
+        "privateMB": 86.8
+      }
+    },
+    {
+      "elapsedSec": 43,
+      "timestamp": "2026-10-29T11:15:32.4194099Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 69.2,
+        "cpuPctTotalSystem": 4.3,
+        "workingSetMB": 2457.6,
+        "privateMB": 7901
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 5.2,
+        "cpuPctTotalSystem": 0.3,
+        "workingSetMB": 40.5,
+        "privateMB": 86.8
+      }
+    },
+    {
+      "elapsedSec": 45.1,
+      "timestamp": "2026-10-29T11:15:34.4892237Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 63.2,
+        "cpuPctTotalSystem": 4,
+        "workingSetMB": 2470.9,
+        "privateMB": 7915.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 40.5,
+        "privateMB": 86.8
+      }
+    },
+    {
+      "elapsedSec": 47.1,
+      "timestamp": "2026-10-29T11:15:36.5307975Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 64.1,
+        "cpuPctTotalSystem": 4,
+        "workingSetMB": 2489.5,
+        "privateMB": 7933.8
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 2.3,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 40.5,
+        "privateMB": 86.8
+      }
+    },
+    {
+      "elapsedSec": 49.2,
+      "timestamp": "2026-10-29T11:15:38.5530410Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 61,
+        "cpuPctTotalSystem": 3.8,
+        "workingSetMB": 2506.1,
+        "privateMB": 7951.2
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0.8,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 40.5,
+        "privateMB": 86.8
+      }
+    },
+    {
+      "elapsedSec": 51.2,
+      "timestamp": "2026-10-29T11:15:40.5734862Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 65.6,
+        "cpuPctTotalSystem": 4.1,
+        "workingSetMB": 2523,
+        "privateMB": 7968.9
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0.8,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 40.6,
+        "privateMB": 86.8
+      }
+    },
+    {
+      "elapsedSec": 53.2,
+      "timestamp": "2026-10-29T11:15:42.5954346Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 61.7,
+        "cpuPctTotalSystem": 3.9,
+        "workingSetMB": 2539.4,
+        "privateMB": 7985.8
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0.8,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 40.6,
+        "privateMB": 86.8
+      }
+    },
+    {
+      "elapsedSec": 55.2,
+      "timestamp": "2026-10-29T11:15:44.6247325Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 69.5,
+        "cpuPctTotalSystem": 4.3,
+        "workingSetMB": 2531,
+        "privateMB": 7976.6
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.6,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 40.6,
+        "privateMB": 86.8
+      }
+    },
+    {
+      "elapsedSec": 57.3,
+      "timestamp": "2026-10-29T11:15:46.7233579Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 66.2,
+        "cpuPctTotalSystem": 4.1,
+        "workingSetMB": 2531.4,
+        "privateMB": 7977.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3.7,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 40.6,
+        "privateMB": 86.8
+      }
+    },
+    {
+      "elapsedSec": 59.4,
+      "timestamp": "2026-10-29T11:15:48.7531768Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 62.5,
+        "cpuPctTotalSystem": 3.9,
+        "workingSetMB": 2531.5,
+        "privateMB": 7977.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.5,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 40.7,
+        "privateMB": 86.9
+      }
+    },
+    {
+      "elapsedSec": 61.4,
+      "timestamp": "2026-10-29T11:15:50.7841723Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 64.1,
+        "cpuPctTotalSystem": 4,
+        "workingSetMB": 2531.7,
+        "privateMB": 7977.2
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.6,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 40.9,
+        "privateMB": 87.1
+      }
+    },
+    {
+      "elapsedSec": 63.4,
+      "timestamp": "2026-10-29T11:15:52.8099764Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 64.1,
+        "cpuPctTotalSystem": 4,
+        "workingSetMB": 2535,
+        "privateMB": 7980.9
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.6,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 41.1,
+        "privateMB": 87.3
+      }
+    },
+    {
+      "elapsedSec": 65.4,
+      "timestamp": "2026-10-29T11:15:54.8398219Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 71.1,
+        "cpuPctTotalSystem": 4.4,
+        "workingSetMB": 2535.1,
+        "privateMB": 7980.9
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.6,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 41.1,
+        "privateMB": 87.3
+      }
+    },
+    {
+      "elapsedSec": 67.5,
+      "timestamp": "2026-10-29T11:15:56.8578632Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 63.2,
+        "cpuPctTotalSystem": 4,
+        "workingSetMB": 2535.2,
+        "privateMB": 7980.9
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.5,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 41.2,
+        "privateMB": 87.5
+      }
+    },
+    {
+      "elapsedSec": 69.5,
+      "timestamp": "2026-10-29T11:15:58.9006166Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 60.9,
+        "cpuPctTotalSystem": 3.8,
+        "workingSetMB": 2535.2,
+        "privateMB": 7980.9
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3.9,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 41.5,
+        "privateMB": 87.8
+      }
+    },
+    {
+      "elapsedSec": 71.5,
+      "timestamp": "2026-10-29T11:16:00.9281197Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 63.3,
+        "cpuPctTotalSystem": 4,
+        "workingSetMB": 2535.2,
+        "privateMB": 7980.9
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0,
+        "cpuPctTotalSystem": 0,
+        "workingSetMB": 41.7,
+        "privateMB": 88
+      }
+    },
+    {
+      "elapsedSec": 73.6,
+      "timestamp": "2026-10-29T11:16:02.9581259Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 67,
+        "cpuPctTotalSystem": 4.2,
+        "workingSetMB": 2535.3,
+        "privateMB": 7981.2
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 2.2,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 41.8,
+        "privateMB": 88.1
+      }
+    },
+    {
+      "elapsedSec": 75.6,
+      "timestamp": "2026-10-29T11:16:04.9973866Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 61.7,
+        "cpuPctTotalSystem": 3.9,
+        "workingSetMB": 2535.3,
+        "privateMB": 7981.2
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 2.3,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 41.9,
+        "privateMB": 88.2
+      }
+    },
+    {
+      "elapsedSec": 77.6,
+      "timestamp": "2026-10-29T11:16:07.0239433Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 81.3,
+        "cpuPctTotalSystem": 5.1,
+        "workingSetMB": 2535.4,
+        "privateMB": 7981.2
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.6,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 41.9,
+        "privateMB": 88.2
+      }
+    },
+    {
+      "elapsedSec": 79.7,
+      "timestamp": "2026-10-29T11:16:09.0715449Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 53.6,
+        "cpuPctTotalSystem": 3.4,
+        "workingSetMB": 2535.4,
+        "privateMB": 7981.2
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3.7,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 41.9,
+        "privateMB": 88.2
+      }
+    },
+    {
+      "elapsedSec": 81.7,
+      "timestamp": "2026-10-29T11:16:11.1340866Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 66.4,
+        "cpuPctTotalSystem": 4.2,
+        "workingSetMB": 2535.4,
+        "privateMB": 7981.2
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.6,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42,
+        "privateMB": 88.3
+      }
+    },
+    {
+      "elapsedSec": 83.8,
+      "timestamp": "2026-10-29T11:16:13.2136804Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 59.5,
+        "cpuPctTotalSystem": 3.7,
+        "workingSetMB": 2535.4,
+        "privateMB": 7981.2
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0.8,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42,
+        "privateMB": 88.3
+      }
+    },
+    {
+      "elapsedSec": 85.8,
+      "timestamp": "2026-10-29T11:16:15.2486955Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 65.7,
+        "cpuPctTotalSystem": 4.1,
+        "workingSetMB": 2535.4,
+        "privateMB": 7981.2
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 2.3,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 87.9,
+      "timestamp": "2026-10-29T11:16:17.3080459Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 54.3,
+        "cpuPctTotalSystem": 3.4,
+        "workingSetMB": 2535.5,
+        "privateMB": 7981.2
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 4.4,
+        "cpuPctTotalSystem": 0.3,
+        "workingSetMB": 42,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 89.9,
+      "timestamp": "2026-10-29T11:16:19.3409700Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 62.5,
+        "cpuPctTotalSystem": 3.9,
+        "workingSetMB": 2504,
+        "privateMB": 7981.2
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 2.3,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 92,
+      "timestamp": "2026-10-29T11:16:21.3777967Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 69.9,
+        "cpuPctTotalSystem": 4.4,
+        "workingSetMB": 2346.2,
+        "privateMB": 7991.4
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 42,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 94,
+      "timestamp": "2026-10-29T11:16:23.4931989Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 66.4,
+        "cpuPctTotalSystem": 4.2,
+        "workingSetMB": 2363,
+        "privateMB": 8008.9
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.6,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 96.1,
+      "timestamp": "2026-10-29T11:16:25.5278123Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 77.4,
+        "cpuPctTotalSystem": 4.8,
+        "workingSetMB": 2371.7,
+        "privateMB": 8020.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0.8,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 98.2,
+      "timestamp": "2026-10-29T11:16:27.5556802Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 58,
+        "cpuPctTotalSystem": 3.6,
+        "workingSetMB": 2371.8,
+        "privateMB": 8020.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 100.2,
+      "timestamp": "2026-10-29T11:16:29.5913320Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 64.9,
+        "cpuPctTotalSystem": 4.1,
+        "workingSetMB": 2371.8,
+        "privateMB": 8020.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3.1,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 102.2,
+      "timestamp": "2026-10-29T11:16:31.6400250Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 61.7,
+        "cpuPctTotalSystem": 3.9,
+        "workingSetMB": 2371.9,
+        "privateMB": 8020.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0.8,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 104.3,
+      "timestamp": "2026-10-29T11:16:33.6747408Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 58.8,
+        "cpuPctTotalSystem": 3.7,
+        "workingSetMB": 2371.9,
+        "privateMB": 8020.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.5,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 106.3,
+      "timestamp": "2026-10-29T11:16:35.7622271Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 66.4,
+        "cpuPctTotalSystem": 4.2,
+        "workingSetMB": 2371.9,
+        "privateMB": 8020.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.6,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 108.4,
+      "timestamp": "2026-10-29T11:16:37.7930987Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 65.5,
+        "cpuPctTotalSystem": 4.1,
+        "workingSetMB": 2371.9,
+        "privateMB": 8020.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.5,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 110.4,
+      "timestamp": "2026-10-29T11:16:39.8328608Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 72.6,
+        "cpuPctTotalSystem": 4.5,
+        "workingSetMB": 2372,
+        "privateMB": 8020.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0.8,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 112.5,
+      "timestamp": "2026-10-29T11:16:41.8665537Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 58.8,
+        "cpuPctTotalSystem": 3.7,
+        "workingSetMB": 2372,
+        "privateMB": 8020.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 114.5,
+      "timestamp": "2026-10-29T11:16:43.9226823Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 75.8,
+        "cpuPctTotalSystem": 4.7,
+        "workingSetMB": 2372,
+        "privateMB": 8020.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 2.3,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 116.6,
+      "timestamp": "2026-10-29T11:16:45.9822973Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 66.2,
+        "cpuPctTotalSystem": 4.1,
+        "workingSetMB": 2372,
+        "privateMB": 8020.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0.7,
+        "cpuPctTotalSystem": 0,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 118.6,
+      "timestamp": "2026-10-29T11:16:48.0695804Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 72.6,
+        "cpuPctTotalSystem": 4.5,
+        "workingSetMB": 2372,
+        "privateMB": 8020.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3.1,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 120.7,
+      "timestamp": "2026-10-29T11:16:50.1133197Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 58,
+        "cpuPctTotalSystem": 3.6,
+        "workingSetMB": 2372,
+        "privateMB": 8020.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 2.2,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 122.7,
+      "timestamp": "2026-10-29T11:16:52.1544929Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 72.7,
+        "cpuPctTotalSystem": 4.5,
+        "workingSetMB": 2372,
+        "privateMB": 8020.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 2.3,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 124.8,
+      "timestamp": "2026-10-29T11:16:54.2093409Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 67,
+        "cpuPctTotalSystem": 4.2,
+        "workingSetMB": 2372,
+        "privateMB": 8020.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 2.2,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 126.8,
+      "timestamp": "2026-10-29T11:16:56.2522340Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 57.8,
+        "cpuPctTotalSystem": 3.6,
+        "workingSetMB": 2372,
+        "privateMB": 8020.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.6,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 128.9,
+      "timestamp": "2026-10-29T11:16:58.2787907Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 67,
+        "cpuPctTotalSystem": 4.2,
+        "workingSetMB": 2372.1,
+        "privateMB": 8020.1
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0.7,
+        "cpuPctTotalSystem": 0,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 130.9,
+      "timestamp": "2026-10-29T11:17:00.3405122Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 60.9,
+        "cpuPctTotalSystem": 3.8,
+        "workingSetMB": 2372.3,
+        "privateMB": 8020.4
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.6,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 133,
+      "timestamp": "2026-10-29T11:17:02.3799397Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 69.2,
+        "cpuPctTotalSystem": 4.3,
+        "workingSetMB": 2372.6,
+        "privateMB": 8020.4
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0.7,
+        "cpuPctTotalSystem": 0,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 135,
+      "timestamp": "2026-10-29T11:17:04.4103403Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 58.6,
+        "cpuPctTotalSystem": 3.7,
+        "workingSetMB": 2372.9,
+        "privateMB": 8020.8
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3.1,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 137,
+      "timestamp": "2026-10-29T11:17:06.4499695Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 68.8,
+        "cpuPctTotalSystem": 4.3,
+        "workingSetMB": 2376.6,
+        "privateMB": 8025.6
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3.1,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 139.1,
+      "timestamp": "2026-10-29T11:17:08.4983666Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 80.4,
+        "cpuPctTotalSystem": 5,
+        "workingSetMB": 2382.7,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 141.1,
+      "timestamp": "2026-10-29T11:17:10.5413336Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 62.5,
+        "cpuPctTotalSystem": 3.9,
+        "workingSetMB": 2382.7,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0.8,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 143.2,
+      "timestamp": "2026-10-29T11:17:12.6407730Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 64,
+        "cpuPctTotalSystem": 4,
+        "workingSetMB": 2383.5,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0.8,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 145.3,
+      "timestamp": "2026-10-29T11:17:14.6703307Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 59.5,
+        "cpuPctTotalSystem": 3.7,
+        "workingSetMB": 2383.5,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 147.3,
+      "timestamp": "2026-10-29T11:17:16.6937310Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 64.1,
+        "cpuPctTotalSystem": 4,
+        "workingSetMB": 2383.6,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 4.7,
+        "cpuPctTotalSystem": 0.3,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 149.3,
+      "timestamp": "2026-10-29T11:17:18.7256257Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 60.9,
+        "cpuPctTotalSystem": 3.8,
+        "workingSetMB": 2383.7,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.6,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 151.3,
+      "timestamp": "2026-10-29T11:17:20.7485721Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 73.4,
+        "cpuPctTotalSystem": 4.6,
+        "workingSetMB": 2351.7,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.6,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 153.4,
+      "timestamp": "2026-10-29T11:17:22.7830321Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 62.5,
+        "cpuPctTotalSystem": 3.9,
+        "workingSetMB": 2351.7,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.5,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 155.4,
+      "timestamp": "2026-10-29T11:17:24.8458205Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 64.8,
+        "cpuPctTotalSystem": 4.1,
+        "workingSetMB": 2351.7,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3.1,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 157.5,
+      "timestamp": "2026-10-29T11:17:26.9044741Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 60.3,
+        "cpuPctTotalSystem": 3.8,
+        "workingSetMB": 2351.8,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.5,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 159.5,
+      "timestamp": "2026-10-29T11:17:28.9545611Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 70.3,
+        "cpuPctTotalSystem": 4.4,
+        "workingSetMB": 2351.9,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0.8,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 161.6,
+      "timestamp": "2026-10-29T11:17:31.0096866Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 65.5,
+        "cpuPctTotalSystem": 4.1,
+        "workingSetMB": 2327.5,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0.7,
+        "cpuPctTotalSystem": 0,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 163.6,
+      "timestamp": "2026-10-29T11:17:33.0568391Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 61.8,
+        "cpuPctTotalSystem": 3.9,
+        "workingSetMB": 2281.5,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.6,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 165.7,
+      "timestamp": "2026-10-29T11:17:35.1128077Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 60.2,
+        "cpuPctTotalSystem": 3.8,
+        "workingSetMB": 2281.5,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 167.7,
+      "timestamp": "2026-10-29T11:17:37.3365091Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 68,
+        "cpuPctTotalSystem": 4.3,
+        "workingSetMB": 2281.5,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0.8,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 170,
+      "timestamp": "2026-10-29T11:17:39.3705186Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 59.1,
+        "cpuPctTotalSystem": 3.7,
+        "workingSetMB": 2281.5,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 2.7,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 172,
+      "timestamp": "2026-10-29T11:17:41.4286805Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 63.3,
+        "cpuPctTotalSystem": 4,
+        "workingSetMB": 2281.5,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3.9,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 174.1,
+      "timestamp": "2026-10-29T11:17:43.4502022Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 66.2,
+        "cpuPctTotalSystem": 4.1,
+        "workingSetMB": 2281.5,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 2.2,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 176.1,
+      "timestamp": "2026-10-29T11:17:45.4707476Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 60.9,
+        "cpuPctTotalSystem": 3.8,
+        "workingSetMB": 2281.8,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.6,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 178.1,
+      "timestamp": "2026-10-29T11:17:47.5088427Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 64.1,
+        "cpuPctTotalSystem": 4,
+        "workingSetMB": 2281.8,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0,
+        "cpuPctTotalSystem": 0,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 180.1,
+      "timestamp": "2026-10-29T11:17:49.6120682Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 67.2,
+        "cpuPctTotalSystem": 4.2,
+        "workingSetMB": 2281.9,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0,
+        "cpuPctTotalSystem": 0,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 182.2,
+      "timestamp": "2026-10-29T11:17:51.7009362Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 70.7,
+        "cpuPctTotalSystem": 4.4,
+        "workingSetMB": 2281.9,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.5,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 184.3,
+      "timestamp": "2026-10-29T11:17:53.7192308Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 56.6,
+        "cpuPctTotalSystem": 3.5,
+        "workingSetMB": 2281.9,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 2.2,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 186.4,
+      "timestamp": "2026-10-29T11:17:55.7533907Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 68.5,
+        "cpuPctTotalSystem": 4.3,
+        "workingSetMB": 2281.9,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 0.8,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 188.4,
+      "timestamp": "2026-10-29T11:17:57.8057749Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 65.6,
+        "cpuPctTotalSystem": 4.1,
+        "workingSetMB": 2281.9,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 1.6,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 190.4,
+      "timestamp": "2026-10-29T11:17:59.8359115Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 63.3,
+        "cpuPctTotalSystem": 4,
+        "workingSetMB": 2281.9,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3.1,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 192.5,
+      "timestamp": "2026-10-29T11:18:01.9987887Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 64,
+        "cpuPctTotalSystem": 4,
+        "workingSetMB": 2281.9,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 2.2,
+        "cpuPctTotalSystem": 0.1,
+        "workingSetMB": 42.1,
+        "privateMB": 88.4
+      }
+    },
+    {
+      "elapsedSec": 194.6,
+      "timestamp": "2026-10-29T11:18:04.0405333Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 49.1,
+        "cpuPctTotalSystem": 3.1,
+        "workingSetMB": 2281.9,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3.7,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 36.3,
+        "privateMB": 82
+      }
+    },
+    {
+      "elapsedSec": 196.7,
+      "timestamp": "2026-10-29T11:18:06.0697899Z",
+      "node": {
+        "pid": 34536,
+        "cpuPctSingleCoreEquiv": 41.7,
+        "cpuPctTotalSystem": 2.6,
+        "workingSetMB": 2281.9,
+        "privateMB": 8031.7
+      },
+      "dbTunnel": {
+        "pid": 26132,
+        "processName": "cloudflared",
+        "cpuPctSingleCoreEquiv": 3,
+        "cpuPctTotalSystem": 0.2,
+        "workingSetMB": 36.3,
+        "privateMB": 82
+      }
+    }
+  ]
+}

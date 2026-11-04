@@ -6,7 +6,12 @@ import { AuthModule } from '../auth/auth.module';
 import { TokenService } from '../auth/token.service';
 import { encodeCursor } from '../common/pagination';
 import { isUuid, uuidv7 } from '../common/uuid';
-import { createTestApp, startMongo, TestApp } from '../testing/test-app';
+import {
+  createTestApp,
+  seedUser,
+  startMongo,
+  TestApp,
+} from '../testing/test-app';
 import { ChatSessionsModule } from './chat-sessions.module';
 import {
   ChatSessionsService,
@@ -66,6 +71,8 @@ describe('Chat sessions (integration)', () => {
       imports: [AuthModule, ChatSessionsModule],
     });
     const tokens = t.app.get(TokenService);
+    await seedUser(t.app, ALICE);
+    await seedUser(t.app, BOB);
     alice = (await tokens.issue({ id: ALICE, roles: ['user'] }, 'f1'))
       .access_token;
     bob = (await tokens.issue({ id: BOB, roles: ['user'] }, 'f2')).access_token;

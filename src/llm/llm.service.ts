@@ -25,6 +25,8 @@ export interface LlmStatus {
   model_id: string;
   gpu: string;
   queue_length: number;
+  /** Turns currently generating (the queue holds `queue_length` in total). */
+  running: number;
 }
 
 /** What the RAG pipeline needs from the LLM; mocked in tests. */
@@ -85,6 +87,7 @@ export class LlmService implements LlmPort, OnModuleInit {
       model_id: this.modelId,
       gpu: this.gpu,
       queue_length: this.queue.length,
+      running: this.queue.running,
     };
   }
 

@@ -55,4 +55,48 @@ describe('parseEnv', () => {
       EnvValidationError,
     );
   });
+
+  describe('production guards', () => {
+    const prod = { ...valid, NODE_ENV: 'production' };
+
+    it('rejects a placeholder secret', () => {
+      expect(() =>
+        parseEnv({
+          ...prod,
+          JWT_ACCESS_SECRET: 'change-me-access-secret-32-chars!!',
+        }),
+      ).toThrow(/placeholder/);
+    });
+
+    it('rejects two identical secrets', () => {
+      expect(() =>
+        parseEnv({
+          ...prod,
+          JWT_REFRESH_SECRET: 'a'.repeat(32),
+        }),
+      ).toThrow(/must differ/);
+    });
+
+    it('rejects a MongoDB URI without credentials', () => {
+      expect(() =>
+        parseEnv({ ...prod, MONGO_URI: 'mongodb://localhost:27017/rag_ts' }),
+      ).toThrow(/must contain credentials/);
+    });
+
+    it('accepts a proper production configuration', () => {
+      const c = parseEnv({
+        ...prod,
+        MONGO_URI: 'mongodb://user:pass@localhost:27017/rag_ts',
+      });
+      expect(c.NODE_ENV).toBe('production');
+    });
+
+    it('does not apply the guards outside production', () => {
+      const c = parseEnv({
+        ...valid,
+        JWT_ACCESS_SECRET: 'change-me-access-secret-32-chars!!',
+      });
+      expect(c.NODE_ENV).toBe('development');
+    });
+  });
 });

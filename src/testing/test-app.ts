@@ -11,6 +11,7 @@ import { MongoMemoryReplSet } from 'mongodb-memory-server';
 import { configureApp } from '../app.setup';
 import { LoggerModule } from '../common/logger.module';
 import { AppConfigModule } from '../config/app-config.service';
+import { CORPUS_CONNECTION } from '../corpus/corpus.module';
 
 export const TEST_ENV = {
   NODE_ENV: 'test',
@@ -20,6 +21,12 @@ export const TEST_ENV = {
   MODEL_PATH: '/nonexistent/model.gguf',
   WORLD_DATA_DIR: '/nonexistent/world',
   MINING_DIR: '/nonexistent/mining',
+  // The MinIO client is configured but never used in tests — the ingest jobs
+  // that talk to it are not part of the test suite.
+  MINIO_ENDPOINT: 'http://127.0.0.1:1',
+  MINIO_ACCESS_KEY: 'test-access-key',
+  MINIO_SECRET_KEY: 'test-secret-key',
+  MINIO_BUCKET_NAME: 'test-bucket',
 };
 
 /** In-memory single-node replica set (transactions work like in docker compose). */
@@ -53,6 +60,14 @@ export async function createTestApp(
       AppConfigModule,
       LoggerModule,
       MongooseModule.forRoot(mongo.getUri('rag_ts_test')),
+      /**
+       * The corpus lives on its own connection in the application, so the
+       * test app needs the second one too — otherwise the modules that
+       * inject a corpus model fail to resolve their dependency.
+       */
+      MongooseModule.forRoot(mongo.getUri('rag_ts_corpus_test'), {
+        connectionName: CORPUS_CONNECTION,
+      }),
       ...opts.imports,
     ],
     providers: opts.providers ?? [],

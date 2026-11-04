@@ -1,13 +1,14 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit, Optional } from '@nestjs/common';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { AppConfigService } from '../config/app-config.service';
+import { CorpusReaderService } from '../corpus/corpus-reader.service';
 import {
   GroundedChunk,
   ScoredChunk,
   toSectionType,
 } from '../types/scientific-rag';
-import { normalizeName, tokenize } from './name-normalizer';
+import { normalizeName, tokenize, itemToWords } from './name-normalizer';
 
 export const SIMILARITY_WEIGHT = 0.85;
 export const AUTHORITY_WEIGHT = 0.15;
@@ -54,12 +55,7 @@ export function parseAuthority(raw: unknown): AuthorityTable {
 }
 
 /** `tag:large-language-models` ➔ ["large","language","models"]; `cat:*` is not text ➔ null. */
-export function itemToWords(item: string): string[] | null {
-  const m = /^([a-z]+):(.*)$/.exec(item);
-  if (m && m[1] !== 'tag') return null;
-  const words = tokenize(m ? m[2] : item);
-  return words.length ? words : null;
-}
+export { itemToWords };
 
 /** Text rules from association_rules.json, strongest first (confidence × lift). */
 export function parseRules(raw: unknown): TextRule[] {
@@ -162,18 +158,52 @@ export class MiningService implements OnModuleInit {
   private authority: AuthorityTable = { pagerank: new Map(), max: 0 };
   private rules: TextRule[] = [];
 
-  constructor(private readonly config: AppConfigService) {}
+  constructor(
+    private readonly config: AppConfigService,
+    @Optional()
+    private readonly corpus?: CorpusReaderService,
+  ) {}
 
+  /**
+   * Loads the authority table and the mining rules **once**, at startup.
+   *
+   * MongoDB is preferred; the JSON files in `MINING_DIR` are the fallback
+   * while the corpus is still being migrated. Either way the data ends up in
+   * memory, so the request path never touches the corpus database.
+   */
   async onModuleInit(): Promise<void> {
+    const fromCorpus = await this.loadFromCorpus();
+    if (!fromCorpus) await this.loadFromFiles();
+    this.logger.log(
+      { authors: this.authority.pagerank.size, text_rules: this.rules.length },
+      'MINING_LOADED',
+    );
+  }
+
+  private async loadFromCorpus(): Promise<boolean> {
+    if (!this.corpus) return false;
+    try {
+      const authority = await this.corpus.readAuthority();
+      const rules = await this.corpus.readRules();
+      if (authority.pagerank.size === 0 && rules.length === 0) return false;
+      this.authority = authority;
+      this.rules = rules;
+      return true;
+    } catch (e) {
+      this.logger.warn(
+        { err: e },
+        'MINING_CORPUS_UNAVAILABLE: falling back to the JSON files',
+      );
+      return false;
+    }
+  }
+
+  private async loadFromFiles(): Promise<void> {
     const dir = this.config.get('MINING_DIR');
     const graph = await this.readJson(join(dir, 'graph_coauthorship.json'));
     if (graph !== undefined) this.authority = parseAuthority(graph);
     const rules = await this.readJson(join(dir, 'association_rules.json'));
     if (rules !== undefined) this.rules = parseRules(rules);
-    this.logger.log(
-      { authors: this.authority.pagerank.size, text_rules: this.rules.length },
-      'MINING_LOADED',
-    );
   }
 
   getAuthorityScore(authors: string[]): number {

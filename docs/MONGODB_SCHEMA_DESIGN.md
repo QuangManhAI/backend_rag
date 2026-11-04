@@ -6,7 +6,7 @@
 - **Detailed Plan**: Part I — §1 Hybrid Design Stance & Reconciliation Matrix; §2 Entity-Relationship Diagram; §3 Collection Specifications (`users`, `chat_sessions`, `chat_messages`); §4 Indexing, Sorting & TTL Retention Strategy; §5 Data Integrity & Lifecycle Rules; §6 Self-Review Checklist. Part II — §7 Corpus Design Stance & Store Roles; §8 Corpus Entity-Relationship Diagram; §9 Corpus Collection Specifications; §10 Corpus Indexing & Validation Strategy; §11 Corpus Checksum & Integrity Model; §12 Corpus Ingest Pipeline & Runtime Read-Path; §13 Corpus Self-Review Checklist.
 - **References**: [`agents/rules/MD_CONVENTION.md`](../../agents/rules/MD_CONVENTION.md), [`agents/rules/COMMIT_CONVENTION.md`](../../agents/rules/COMMIT_CONVENTION.md), [`docs/DECISION_LOG.md`](../../docs/DECISION_LOG.md), [`docs/RAG.md`](../../docs/RAG.md), [`backend_rag/src/auth/schemas/user.schema.ts`](../src/auth/schemas/user.schema.ts), [`backend_rag/src/chat-sessions/schemas/chat-session.schema.ts`](../src/chat-sessions/schemas/chat-session.schema.ts), [`backend_rag/src/chat-sessions/schemas/chat-message.schema.ts`](../src/chat-sessions/schemas/chat-message.schema.ts), [`backend_rag/src/common/uuid.ts`](../src/common/uuid.ts), [`backend_rag/src/papers/papers.service.ts`](../src/papers/papers.service.ts), [`backend_rag/src/tree-router/tree-router.service.ts`](../src/tree-router/tree-router.service.ts), [`backend_rag/src/mining/mining.service.ts`](../src/mining/mining.service.ts), [`backend_rag/src/mining/name-normalizer.ts`](../src/mining/name-normalizer.ts), [`backend_rag/src/vector-store/vector-store.service.ts`](../src/vector-store/vector-store.service.ts), [`backend_rag/src/types/scientific-rag.ts`](../src/types/scientific-rag.ts), [`backend_rag/src/config/env.schema.ts`](../src/config/env.schema.ts), [`backend_rag/src/app.module.ts`](../src/app.module.ts), [`backend_rag/src/health/health.service.ts`](../src/health/health.service.ts), [`backend_rag/docs/CHAT_SESSIONS_SPECIFICATION.md`](CHAT_SESSIONS_SPECIFICATION.md), [`backend_rag/docs/AUTH_AND_SECURITY_ARCHITECTURE.md`](AUTH_AND_SECURITY_ARCHITECTURE.md), [`backend_rag/docs/PERFORMANCE_AND_CACHING.md`](PERFORMANCE_AND_CACHING.md), [`frontend_rag/src/components/auth/AuthOverlay.tsx`](../../frontend_rag/src/components/auth/AuthOverlay.tsx), [`frontend_rag/src/theme/tokens.ts`](../../frontend_rag/src/theme/tokens.ts).
 - **Created**: 2026-10-22T17:20:08+07:00
-- **Last Updated**: 2026-11-02T23:02:41+07:00
+- **Last Updated**: 2026-11-04T22:15:00+07:00
 
 ---
 
@@ -211,7 +211,7 @@ Phần II định nghĩa lớp dữ liệu **corpus khoa học** — toàn bộ 
 | :--- | :--- | :--- |
 | **Đường nóng (hot path)** | **Phương án A** — Qdrant giữ bản sao vật liệu hoá (payload: `text` + siêu dữ liệu cốt lõi); MongoDB giữ bản ghi chuẩn (canonical). | `POST /api/v1/rag/chat` chỉ cần **1 vòng tròn mạng (RTT) tới Qdrant**. Không thêm RTT nào vào đường nóng, nên ngưỡng P95 < 500 ms được giữ nguyên (xem [`backend_rag/docs/PERFORMANCE_AND_CACHING.md`](PERFORMANCE_AND_CACHING.md)). |
 | **Toàn vẹn văn bản** | **Checksum SHA-256** ở ba cấp: chunk, paper, dataset. | Cho phép phát hiện **lệch dữ liệu (drift)** giữa MongoDB và Qdrant một cách *tường minh*, thay vì để nó diễn ra trong im lặng. |
-| **Phạm vi MinIO** | **Chỉ Silver + tách nguồn riêng** — Siêu dữ liệu Silver Parquet chuyển vào MongoDB; **Bronze HTML/PDF vẫn nằm trong MinIO** và chỉ được tham chiếu trong collection riêng `source_objects` (bucket, key, size, sha256, media_type, họ nguồn). | Không sao chép byte thô vào MongoDB. Mỗi đối tượng Bronze có vòng đời (lifecycle) khác với siêu dữ liệu bài báo: một bài báo có thể có 0, 1 hoặc nhiều đối tượng thô. |
+| **Phạm vi MinIO** | **Chỉ Silver + tách nguồn riêng** — Siêu dữ liệu Silver Parquet chuyển vào MongoDB; **Bronze HTML/PDF vẫn nằm trong MinIO** và chỉ được tham chiếu trong collection riêng `source_objects` (bucket, key, size, `etag`, media_type, họ nguồn). | Không sao chép byte thô vào MongoDB. Mỗi đối tượng Bronze có vòng đời (lifecycle) khác với siêu dữ liệu bài báo: một bài báo có thể có 0, 1 hoặc nhiều đối tượng thô. |
 | **Kho vector** | Qdrant được giữ lại (MongoDB tự host không có ANN). Nó là **chỉ mục dựng lại được**, không phải SoT. | Vector 768 chiều **không bao giờ** được ghi vào MongoDB. Vector được tái tạo bằng cách chạy lại embedder trên `paper_chunks.text` mỗi khi cần dựng lại Qdrant. |
 | **Đường đọc corpus** | **Không có vòng tròn mạng nào tới corpus trên đường nóng.** Cây thế giới, luật khai phá và bảng uy tín được nạp **một lần lúc khởi động** vào bộ nhớ đệm. | Giữ nguyên đặc tính đã được kiểm chứng qua benchmark: chat không chậm thêm dù nguồn dữ liệu chuyển từ tệp JSON sang MongoDB. |
 
@@ -220,9 +220,9 @@ Phần II định nghĩa lớp dữ liệu **corpus khoa học** — toàn bộ 
 ```mermaid
 flowchart TD
     subgraph SoT["MongoDB — chuẩn duy nhất (DB: corpus)"]
-        Papers["papers ~13k"]
-        Chunks["paper_chunks ~820k"]
-        Authors["authors ~140k"]
+        Papers["papers ~70.6k"]
+        Chunks["paper_chunks ~1.04M"]
+        Authors["authors (số tác giả có PageRank)"]
         World["world_nodes (cây + centroid)"]
         Mining["categories + association_rules"]
         Datasets["datasets / materializations"]
@@ -242,7 +242,7 @@ flowchart TD
     Papers --> Qdrant
     Chunks --> Qdrant
     Chunks -->|text_sha256| Qdrant
-    MinIO -.->|bucket + key + sha256| Sources
+    MinIO -.->|bucket + key + etag| Sources
     Sources -->|paper_id| Papers
     Chat --> Qdrant
     PaperSvc --> Papers
@@ -255,7 +255,7 @@ flowchart TD
 Ba quyết định then chốt được nhấn mạnh trong sơ đồ:
 
 1. **Vector không bị nhân bản.** Chúng chỉ tồn tại trong Qdrant và được tái tạo từ `paper_chunks.text`. Vì `paper_chunks.text` chính là *đầu vào* mà embedder tiêu thụ, MongoDB vẫn là nguồn sự thật cho *nội dung* sinh ra chúng.
-2. **Đối tượng Bronze được tách riêng.** Byte thô vẫn ở MinIO; MongoDB chỉ giữ *tham chiếu* (bucket, key, size, sha256, media_type) cùng thông tin nguồn gốc. Nhờ vậy tài liệu `papers` hoàn toàn không mang trường có hình dạng đường dẫn hệ thống tệp.
+2. **Đối tượng Bronze được tách riêng.** Byte thô vẫn ở MinIO; MongoDB chỉ giữ *tham chiếu* (bucket, key, size, `etag`, media_type) cùng thông tin nguồn gốc. Nhờ vậy tài liệu `papers` hoàn toàn không mang trường có hình dạng đường dẫn hệ thống tệp.
 3. **Đối chiếu hai chiều.** Job `reconcile-qdrant.ts` đọc `text` từ payload Qdrant (chỉ đọc theo chính sách), tính `sha256` cục bộ, rồi so với `text_sha256` lưu trong MongoDB. Kết quả được ghi vào `datasets.qdrant_drift_count`.
 
 ## 8. Corpus Entity-Relationship Diagram
@@ -310,7 +310,7 @@ erDiagram
         string source_id "Định danh gốc trong nguồn (2403.01234)"
         string media_type "text/html | application/pdf | application/json"
         int size "Kích thước đối tượng (byte)"
-        string sha256 "Checksum byte thô (KHÔNG phải _id)"
+        string etag "ETag của đối tượng (MD5 cho upload một phần — KHÔNG phải SHA-256, KHÔNG phải _id)"
         string paper_id FK "Tham chiếu papers._id (một chiều)"
         string dataset_version "Phiên bản dữ liệu đã nạp"
         int schema_version "Kiểm soát trôi dạng schema"
@@ -371,7 +371,7 @@ Module mới: `backend_rag/src/corpus/` kèm thư mục `schemas/`. Toàn bộ `
 
 ### 9.1 `papers` Collection (Bài báo khoa học)
 
-Nguồn: Silver Parquet (arXiv / OpenAlex / CVF / Zenodo / OpenReview). Số lượng ước tính ~13.000 tài liệu. Dùng **mẫu đa hình (polymorphic pattern)**: một collection duy nhất với trường phân biệt `source`, vì các họ nguồn có bộ trường khác nhau.
+Nguồn: Silver Parquet (arXiv / OpenAlex / CVF / Zenodo / OpenReview). Số lượng thực tế **~70.590** tài liệu (đo trên `rag_ts_corpus`: 70.590 `paper_id` phân biệt trong `paper_chunks`). Dùng **mẫu đa hình (polymorphic pattern)**: một collection duy nhất với trường phân biệt `source`, vì các họ nguồn có bộ trường khác nhau.
 
 | Trường | Kiểu dữ liệu | Ràng buộc | Ghi chú |
 | :--- | :--- | :--- | :--- |
@@ -400,7 +400,7 @@ Nguồn: Silver Parquet (arXiv / OpenAlex / CVF / Zenodo / OpenReview). Số lư
 
 ### 9.2 `paper_chunks` Collection (Đoạn văn bản)
 
-Nguồn: payload của Qdrant (`scientific_papers_gold`). Số lượng ước tính ~820.000 tài liệu.
+Nguồn: payload của Qdrant (`scientific_papers_gold`) + Silver Parquet. Số lượng thực tế **1.042.767** tài liệu.
 
 **Vì sao tách thành collection riêng** (đã được đối chiếu với quy tắc *embed vs reference* của MongoDB): quan hệ một–nhiều, phần tử con không có giới hạn trên (một bài báo có tới 500 đoạn); tài liệu con lớn hơn nhiều so với tài liệu cha; nhúng vào sẽ buộc phải ghi lại toàn bộ tài liệu cha mỗi kần nạp lại cấp đoạn và đẩy các bài báo lớn về phía giới hạn 16 MB của BSON.
 
@@ -433,14 +433,16 @@ Nguồn: các đối tượng Bronze trong MinIO (HTML arXiv, JSON thu thập Op
 | `source_id` | `string` | `required: true` | Định danh gốc trong nguồn (VD `2403.01234`, `W2594538354`). |
 | `media_type` | `enum` | `required: true`, `enum: ['text/html','application/pdf','application/json']` | Kiểu nội dung. |
 | `size` | `int` (`number`) | `required: true`, `>= 0` | Kích thước đối tượng (đơn vị: byte). |
-| `sha256` | `string` | `required: true` | Checksum của byte thô — **trường toàn vẹn, KHÔNG phải `_id`**. |
+| `etag` | `string \| null` | | ETag do object store báo — **MD5 32 hex cho upload một phần, KHÔNG phải SHA-256**. *(Đã sửa: trước đây là `sha256`.)* |
 | `paper_id` | `string \| null` | Indexed | Khoá ngoại trỏ tới `papers._id`; **quan hệ một chiều**, không có mảng trỏ ngược. |
 | `dataset_version` | `string` | Indexed | Phiên bản tập dữ liệu đã nạp. |
 | `schema_version` | `int` (`number`) | `required: true` | Kiểm soát trôi dạng schema. |
 
-**Byte vẫn nằm trong MinIO.** Collection này chỉ lưu *tham chiếu* (bucket, key, size, hash, media_type) — không bao giờ lưu nội dung. Trường `sha256` ghim tham chiếu vào một phiên bản cụ thể của byte tệp.
+**Byte vẫn nằm trong MinIO.** Collection này chỉ lưu *tham chiếu* (bucket, key, size, etag, media_type) — không bao giờ lưu nội dung. Trường `etag` ghim tham chiếu vào một phiên bản cụ thể của byte tệp.
 
-**Vì sao `_id` là `${bucket}/${key}` chứ không phải `sha256(bytes)`.** Định danh theo nội dung (content-addressing) sẽ gộp hai bài báo có byte trùng nhau vào một tài liệu, khiến một bài báo mất liên kết tới tệp thô của nó. `bucket/key` là danh tính tự nhiên của đối tượng trong MinIO; `sha256` giữ vai trò trường toàn vẹn và có index riêng.
+**Vì sao trường tên là `etag` chứ không phải `sha256`.** Listing `ListObjectsV2` chỉ trả về **ETag** — với upload một phần, ETag của S3/MinIO là **MD5** của byte thô (32 ký tự hex), *không phải* SHA-256. Đặt tên là `sha256` sẽ nói dối người đọc và khiến mọi đối chiếu toàn vẹn sau này phải giả định sai. SHA-256 thật đòi hỏi một `GetObject` cho mỗi tệp (3.8 GB lưu lượng) và đã bị loại khỏi phạm vi — xem [`backend_rag/docs/CORPUS_SCHEMA_DESIGN.md`](CORPUS_SCHEMA_DESIGN.md) §6.1. Vì vậy `etag` là **nullable**: một đối tượng không có ETag (multipart upload) vẫn được ghi, chỉ là không có handle toàn vẹn.
+
+**Vì sao `_id` là `${bucket}/${key}` chứ không phải `sha256(bytes)`.** Định danh theo nội dung (content-addressing) sẽ gộp hai bài báo có byte trùng nhau vào một tài liệu, khiến một bài báo mất liên kết tới tệp thô của nó. `bucket/key` là danh tính tự nhiên của đối tượng trong MinIO; `etag` giữ vai trò trường toàn vẹn và có index riêng.
 
 **Vì sao không có mảng `paper_ids[]` trỏ ngược.** Quan hệ thực tế là nhiều–một (một tệp Bronze thuộc về một bài báo). Mảng trỏ ngược sẽ biến quan hệ thành hai chiều, mà để duy trì nhất quán thì cần **transaction** — nhưng MongoDB production đang chạy ở chế độ **standalone** (không có replica set), nên không dùng được transaction. Liên kết một chiều `paper_id` + index `{ paper_id: 1 }` phục vụ đúng truy vấn cần thiết ("các tệp thô của bài báo này") trong **một** vòng tròn mạng.
 
@@ -455,11 +457,15 @@ Nguồn: các đối tượng Bronze trong MinIO (HTML arXiv, JSON thu thập Op
 | `paper_count` | `int` (`number`) | `>= 0` | Số bài (computed pattern). |
 | `schema_version` | `int` (`number`) | `required: true` | Kiểm soát trôi dạng schema. |
 
+Collection này chỉ chứa **những tác giả có PageRank** — số lượng thực tế phụ thuộc vào bảng `gold/mining/graph_coauthorship.json` mà pipeline xuất ra (đo gần nhất: **120** tác giả có xếp hạng). Danh sách hàng trăm nghìn influencer đầy đủ **không** được nạp; chỉ mục `{ pagerank: -1 }` phục vụ đúng truy vấn lúc khởi động. Vì vậy con số "~140.000" trong các bản mô tả trước đây là **sai** — nó đếm từ một nguồn khác và không phản ánh nội dung collection này.
+
 `MiningService.getAuthorityScore` ([`backend_rag/src/mining/mining.service.ts`](../src/mining/mining.service.ts)) chuyển từ quét và so khớp chuỗi con trên toàn bộ danh sách người ảnh hưởng, sang **tra cứu khoá chính xác**. Bộ nhớ đệm trong tiến trình vẫn giữ nguyên cơ chế `Map` như hiện tại (xem §12).
 
 ### 9.5 `categories` Collection (Danh mục)
 
-`_id` = chỉ số danh mục (dạng số), `code`, `name`, `color`. Thay thế tệp `categories.json`; `TreeRouterService.categoryIndex()` đọc từ MongoDB. Trường `color` đồng bộ với bảng 12 màu của giao diện tối ([`frontend_rag/src/theme/tokens.ts`](../../frontend_rag/src/theme/tokens.ts)).
+`_id` = chỉ số danh mục (dạng số), `code`, `name`, `color`, `schema_version`. Thay thế tệp `categories.json`; `TreeRouterService.categoryIndex()` đọc từ MongoDB. Trường `color` đồng bộ với bảng 12 màu của giao diện tối ([`frontend_rag/src/theme/tokens.ts`](../../frontend_rag/src/theme/tokens.ts)).
+
+**Trạng thái hiện tại: collection chưa tồn tại.** Tệp `categories.json` không có trong `WORLD_DATA_DIR` và cũng không có trong MinIO, nên Pha 3 chưa tạo được collection này. Cho tới khi có tệp, `TreeRouterService` rơi về đường đọc tệp và cờ `world: false` của health endpoint vẫn đúng. Xem [`backend_rag/docs/CORPUS_SCHEMA_DESIGN.md`](CORPUS_SCHEMA_DESIGN.md) §9.
 
 ### 9.6 `world_nodes` Collection (Cây thế giới & centroid)
 
@@ -477,9 +483,11 @@ Nguồn: các đối tượng Bronze trong MinIO (HTML arXiv, JSON thu thập Op
 
 Collection `world_centroids` bị loại bỏ. Bộ nạp vẫn tạo ra cùng dạng ma trận `Float32Array` liên tục, nên `parseCentroids` / `parseTree` giữ nguyên hợp đồng hình dạng dữ liệu ([`backend_rag/src/tree-router/tree-router.service.ts`](../src/tree-router/tree-router.service.ts)).
 
+**Trạng thái hiện tại: collection chưa tồn tại.** `tree.json`, `centroids_l1.json` và `centroids_l2.json` không có trong `WORLD_DATA_DIR` và cũng không có trong MinIO, nên Pha 3 chưa tạo được collection này. Xem [`backend_rag/docs/CORPUS_SCHEMA_DESIGN.md`](CORPUS_SCHEMA_DESIGN.md) §9.
+
 ### 9.7 `association_rules` Collection (Luật FP-Growth)
 
-`antecedents[]`, `consequents[]`, `support`, `confidence`, `lift`, `score`, `item_prefix` (`tag:` / `cat:`). Nạp một lần lúc khởi động vào mảng luật trong bộ nhớ.
+`antecedents[]`, `consequents[]`, `support`, `confidence`, `lift`, `score`, `item_prefix` (`tag:` / `cat:`), `schema_version`. Nạp một lần lúc khởi động vào mảng luật trong bộ nhớ. Số luật thực tế đo được: **40**.
 
 ### 9.8 `datasets` Collection (Mốc đối chiếu)
 
@@ -509,7 +517,7 @@ Collection `world_centroids` bị loại bỏ. Bộ nạp vẫn tạo ra cùng d
 | `paper_chunks` | `{ dataset_version: 1 }` | | Phạm vi truy vấn của job đối chiếu. |
 | `source_objects` | `{ paper_id: 1 }` | | "Các tệp thô của bài báo này". |
 | `source_objects` | `{ source: 1, source_id: 1 }` | Compound Index | Tra cứu nguồn gốc. |
-| `source_objects` | `{ sha256: 1 }` | Non-unique | Kiểm chứng toàn vẹn và **báo cáo** trùng lặp. |
+| `source_objects` | `{ etag: 1 }` | Non-unique | Kiểm chứng toàn vẹn và **báo cáo** trùng lặp. |
 | `source_objects` | `{ dataset_version: 1 }` | | Phạm vi truy vấn của job đối chiếu. |
 | `authors` | `{ pagerank: -1 }` | | **Phục vụ lần nạp lúc khởi động**: runtime chỉ cần những tác giả có xếp hạng. |
 | `world_nodes` | `{ depth: 1 }` | | Bộ nạp đọc theo cấp độ (tập L1, rồi tập L2). |
@@ -534,8 +542,8 @@ Quy tắc băm chuẩn hoá (không mơ hồ do nối chuỗi):
 | :--- | :--- | :--- |
 | **Đoạn văn bản** | `paper_chunks.text_sha256` | `sha256(chunk.text)` trên byte UTF-8. Tính lúc nạp; sau đó không bao giờ bị sửa. |
 | **Bài báo** | `papers.content_sha256` | `sha256( join("\n", [chunk_id + ":" + text_sha256] theo thứ tự chunk_index) )`. Bất kỳ thay đổi nào về nội dung hoặc thứ tự đoạn đều làm đổi giá trị này. |
-| **Tập dữ liệu** | `datasets.content_sha256` | `sha256( join("\n", sorted(paper_id + ":" + content_sha256)) + "|" + counts )`. |
-| **Tệp Bronze** | `source_objects.sha256` | `sha256` của byte đối tượng lấy từ MinIO. **Không** phải `_id` — `_id` là `bucket/key`. |
+| **Tập dữ liệu** | `datasets.content_sha256` | `sha256( join("\n", sorted(paper_id + ":" + content_sha256)) + "\|" + join(",", sorted("<key>=<value>")) )`. `counts` được serialize với **khoá đã sắp xếp** và dạng `k=v` (nguồn sự thật: [`backend_rag/src/corpus/checksum.ts`](../src/corpus/checksum.ts) — hàm `datasetContentSha256`). |
+| **Tệp Bronze** | `source_objects.etag` | ETag do object store báo — **MD5 32 hex** cho upload một phần. **Không** phải SHA-256, và **không** phải `_id` — `_id` là `bucket/key`. |
 
 **Vì sao không cần quyền ghi vào Qdrant.** RAG_TS chỉ đọc Qdrant theo chính sách (`scripts/seed-qdrant.ts` từ chối mọi collection không mang hậu tố `_test`). Vì vậy job đối chiếu **không** yêu cầu pipeline dập checksum vào payload: nó đọc `text` ra từ payload Qdrant, tính `sha256` cục bộ, rồi so với `text_sha256` lưu trong MongoDB. Cùng một phép kiểm tra, **không** thay đổi pipeline, **không** ghi Qdrant.
 
@@ -545,16 +553,17 @@ Cần phân biệt rõ với `abstract_hash` sẵn có của Silver: đó là *k
 
 ### 12.1 Các pha nạp
 
-Tất cả script nằm trong `backend_rag/scripts/ingest/`. Mọi script đều **idempotent** (upsert theo `_id`), có thể chạy lại an toàn, và dùng **kết nối MongoDB trực tiếp** — không bao giờ đi qua tunnel Cloudflare `localhost:27018` (nạp 820.000 tài liệu qua tunnel có RTT ~114 ms là không khả thi).
+Tất cả script nằm trong `backend_rag/scripts/ingest/`. Mọi script đều **idempotent** (upsert theo `_id`), có thể chạy lại an toàn, và dùng **kết nối MongoDB trực tiếp** — không bao giờ đi qua tunnel Cloudflare `localhost:27018` (nạp 1.042.767 tài liệu qua tunnel có RTT ~114 ms là không khả thi).
 
 | Pha | Script | Nguồn ➔ Đích | Điều kiện nghiệm thu (Gate) |
 | :--- | :--- | :--- | :--- |
 | 0 | `corpus.module.ts` + schemas + env | — | Schema biên dịch được; `MONGO_CORPUS_URI` / `MONGO_CORPUS_DB` có trong [`backend_rag/src/config/env.schema.ts`](../src/config/env.schema.ts). |
 | 0b | `apply-validators.ts` | — | Mọi collection báo cáo có validator; `db.getCollectionInfos()` hiển thị `strict`/`error`. |
+| 0c | `apply-corpus-indexes.ts` | — | Mọi chỉ mục §10.1 tồn tại trên DB thật; `collStats` xác nhận `nindexes` khớp. |
 | 1 | `backfill-qdrant-to-mongo.ts` | Qdrant `scroll` ➔ `papers` + `paper_chunks` | Số đoạn khớp Qdrant; đối chiếu mẫu 100 bài báo. |
-| 2 | `enrich-from-silver.ts` | MinIO Silver Parquet (DuckDB) ➔ `papers` | Báo cáo tỉ lệ khớp `paper_id`; mục tiêu 100%. |
+| 2 | `enrich-from-silver.ts` | MinIO Silver Parquet (DuckDB) ➔ `papers` + `paper_chunks` | Báo cáo tỉ lệ khớp `paper_id`; mục tiêu 100%. |
 | 3 | `migrate-world-mining.ts` | tree / centroid / categories / coauthorship / rules ➔ Mongo | `TreeRouterService` cho ra kết quả định tuyến **giống hệt từng byte** trước và sau. |
-| 4 | `ingest-source-objects.ts` | Đối tượng MinIO Bronze ➔ `source_objects` | Mỗi đối tượng Bronze có đúng một tài liệu; đối chiếu mẫu sha256 của 100 đối tượng. |
+| 4 | `ingest-source-objects.ts` | Đối tượng MinIO Bronze ➔ `source_objects` | Mỗi đối tượng Bronze có đúng một tài liệu; đối chiếu mẫu ETag của 100 đối tượng. |
 | 5 | `reconcile-qdrant.ts` | MongoDB ↔ Qdrant | Lệch = 0 sau một chu kỳ đầy đủ. |
 
 Thuật toán đối chiếu (Pha 5):
@@ -589,8 +598,8 @@ Chạy theo yêu cầu (CI / trước khi triển khai) và có thể chạy đ�
 
 - `world_nodes.find({ depth: 0 })` và `world_nodes.find({ depth: { $in: [1, 2] } })` ➔ hai ma trận centroid.
 - `categories.find({})` ➔ 10 tài liệu.
-- `association_rules.find({})` ➔ 41 tài liệu.
-- `authors.find({ pagerank: { $gt: 0 } }).sort({ pagerank: -1 })` ➔ bảng uy tín, **chỉ những tác giả có xếp hạng** (chỉ mục `{ pagerank: -1 }` phục vụ truy vấn này). Danh sách 140.000 tác giả **không bao giờ** được nạp toàn bộ.
+- `association_rules.find({})` ➔ 40 tài liệu.
+- `authors.find({ pagerank: { $gt: 0 } }).sort({ pagerank: -1 })` ➔ bảng uy tín, **chỉ những tác giả có xếp hạng** (chỉ mục `{ pagerank: -1 }` phục vụ truy vấn này). Danh sách tác giả đầy đủ **không bao giờ** được nạp toàn bộ.
 
 Ứng dụng vẫn phục vụ xác thực và health trong lúc các dữ liệu này đang nạp, y hệt cách nó phục vụ trong lúc LLM đang nạp.
 
@@ -599,10 +608,10 @@ Chạy theo yêu cầu (CI / trước khi triển khai) và có thể chạy đ�
 ## 13. Corpus Self-Review Checklist
 
 - [x] Toàn bộ collection của corpus dùng `_id` dạng chuỗi (khoá tự nhiên bên ngoài), theo đúng quy ước của Part I.
-- [x] Mọi collection đều có `schema_version` và bộ kiểm định `$jsonSchema` ở mức `strict`/`error` (§10.2).
+- [x] Mọi collection đều có `schema_version` và bộ kiểm định `$jsonSchema` ở mức `strict`/`error` (§10.2). *(Cài đặt bằng [`backend_rag/scripts/ingest/apply-validators.ts`](../scripts/ingest/apply-validators.ts); validator chỉ kiểm tra các lần ghi **sau** khi nó được cài, nên phải nạp dữ liệu trước rồi mới cài validator.)*
 - [x] Không có `$lookup` nào trên đường đọc lúc chạy — `PaperDetail` được dựng từ hai lượt đọc có chỉ mục.
 - [x] Quan hệ giữa `source_objects` và `papers` là **một chiều**, nhất quán với việc MongoDB production chạy ở chế độ standalone (không transaction).
-- [x] Byte thô (Bronze) **không** được sao chép vào MongoDB hay GridFS; chỉ lưu tham chiếu `bucket` / `key` / `size` / `sha256` / `media_type`.
+- [x] Byte thô (Bronze) **không** được sao chép vào MongoDB hay GridFS; chỉ lưu tham chiếu `bucket` / `key` / `size` / `etag` / `media_type`.
 - [x] Vector 768 chiều **không** được ghi vào MongoDB; Qdrant giữ bản duy nhất và được tái tạo từ `paper_chunks.text`.
 - [x] Mọi trường trong tài liệu là đường dẫn tương đối đang hoạt động, theo [`agents/rules/MD_CONVENTION.md`](../../agents/rules/MD_CONVENTION.md).
 - [x] Đường nóng RAG giữ nguyên đặc tính độ trễ: **không** thêm vòng tròn mạng nào vào `POST /api/v1/rag/chat`.

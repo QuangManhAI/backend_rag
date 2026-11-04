@@ -17,6 +17,9 @@ export const envSchema = z.object({
     .enum(['development', 'production', 'test'])
     .default('development'),
   MONGO_URI: required('MONGO_URI'),
+  /** Corpus database. Falls back to MONGO_URI when unset. */
+  MONGO_CORPUS_URI: z.string().min(1).optional(),
+  MONGO_CORPUS_DB: z.string().min(1).default('rag_ts_corpus'),
   QDRANT_URL: required('QDRANT_URL'),
   QDRANT_API_KEY: z.string().optional(),
   QDRANT_COLLECTION: z.string().min(1).default('scientific_papers_gold'),
@@ -31,6 +34,24 @@ export const envSchema = z.object({
   WORLD_DATA_DIR: required('WORLD_DATA_DIR'),
   MINING_DIR: required('MINING_DIR'),
   CORS_ORIGINS: z.string().default('http://localhost:5174'),
+
+  /**
+   * MinIO (S3-compatible) — Bronze raw artefacts and Silver Parquet.
+   *
+   * Optional: only the ingest scripts need the object store, and they are
+   * standalone processes. The running application reads the corpus from
+   * MongoDB and never touches MinIO, so an unset value must not stop the
+   * server from booting.
+   */
+  MINIO_ENDPOINT: z.string().min(1).optional(),
+  MINIO_ACCESS_KEY: z.string().min(1).optional(),
+  MINIO_SECRET_KEY: z.string().min(1).optional(),
+  MINIO_BUCKET_NAME: z.string().min(1).optional(),
+  /**
+   * The S3 SDK requires a region to sign requests, but MinIO ignores its
+   * value. `auto` is the conventional choice for S3-compatible stores.
+   */
+  MINIO_REGION: z.string().min(1).default('auto'),
 });
 
 export type AppConfig = z.infer<typeof envSchema>;

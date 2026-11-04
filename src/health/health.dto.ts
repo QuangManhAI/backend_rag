@@ -3,6 +3,11 @@ import type { Components, Health, HealthStatus } from './health.service';
 
 class ComponentsDto implements Components {
   @ApiProperty() mongo: boolean;
+  @ApiProperty({
+    description:
+      'Corpus database reachable and populated (papers + chunks present)',
+  })
+  corpus: boolean;
   @ApiProperty() qdrant: boolean;
   @ApiProperty() llm: boolean;
   @ApiProperty({

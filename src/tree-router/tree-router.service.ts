@@ -1,7 +1,8 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit, Optional } from '@nestjs/common';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { AppConfigService } from '../config/app-config.service';
+import { CorpusReaderService } from '../corpus/corpus-reader.service';
 import { EMBEDDING_DIM } from '../embedding/embedding.service';
 import { round4 } from '../mining/mining.service';
 import type { RouteCandidate, RouteStep } from '../types/scientific-rag';
@@ -176,9 +177,68 @@ export class TreeRouterService implements OnModuleInit {
   private index: WorldIndex | null = null;
   private categories: Category[] = [];
 
-  constructor(private readonly config: AppConfigService) {}
+  constructor(
+    private readonly config: AppConfigService,
+    @Optional() private readonly corpus?: CorpusReaderService,
+  ) {}
 
   async onModuleInit(): Promise<void> {
+    const loaded = await this.loadFromCorpus();
+    if (!loaded) await this.loadFromFiles();
+  }
+
+  /**
+   * Loads the tree and the centroids from MongoDB.
+   *
+   * One query per depth level, at startup only — the routing itself is pure
+   * in-memory arithmetic.
+   */
+  private async loadFromCorpus(): Promise<boolean> {
+    if (!this.corpus) return false;
+    try {
+      const { nodes } = await this.corpus.readWorldNodes();
+      if (nodes.length === 0) return false;
+      const categories = await this.corpus.readCategories();
+      if (categories.length > 0) this.categories = categories;
+
+      const l1 = this.matrixOf(nodes.filter((n) => n.depth === 1));
+      const l2 = this.matrixOf(nodes.filter((n) => n.depth === 2));
+      this.load({ version: null, nodes: nodes }, l1, l2);
+      return true;
+    } catch (e) {
+      this.logger.warn(
+        { err: e },
+        'WORLD_CORPUS_UNAVAILABLE: falling back to the JSON files',
+      );
+      return false;
+    }
+  }
+
+  /** Builds the contiguous centroid matrix the router expects. */
+  private matrixOf(
+    nodes: Array<{
+      id: number;
+      vector: Float32Array | null;
+    }>,
+  ): CentroidMatrix {
+    const withVector = nodes.filter(
+      (n): n is { id: number; vector: Float32Array } => n.vector !== null,
+    );
+    const ids: number[] = [];
+    const chunks: Float32Array[] = [];
+    for (const node of withVector) {
+      ids.push(node.id);
+      chunks.push(node.vector);
+    }
+    const dim = chunks.length > 0 ? chunks[0].length : 0;
+    const data = new Float32Array(ids.length * dim);
+    chunks.forEach((v, row) => {
+      data.set(v.subarray(0, dim), row * dim);
+    });
+    return { ids, data };
+  }
+
+  private async loadFromFiles(): Promise<void> {
     const dir = this.config.get('WORLD_DATA_DIR');
     const read = async (f: string): Promise<unknown> =>
       JSON.parse(await readFile(join(dir, f), 'utf8')) as unknown;

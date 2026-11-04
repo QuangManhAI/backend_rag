@@ -1,5 +1,11 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  Optional,
+} from '@nestjs/common';
 import { LRUCache } from 'lru-cache';
+import { CorpusReaderService } from '../corpus/corpus-reader.service';
 import { TreeRouterService } from '../tree-router/tree-router.service';
 import {
   ChunkPayload,
@@ -60,7 +66,13 @@ export function buildPaperDetail(
   };
 }
 
-/** `GET /papers/:paper_id`: built from the paper's Qdrant chunks, nothing stored in MongoDB. */
+/**
+ * `GET /papers/:paper_id`.
+ *
+ * The corpus in MongoDB is the source of truth: it holds the chunk text that
+ * Qdrant's payload no longer carries. Qdrant remains the fallback, so the
+ * endpoint keeps working before the corpus has been ingested.
+ */
 @Injectable()
 export class PapersService {
   private readonly cache = new LRUCache<string, PaperDetail>({
@@ -71,6 +83,7 @@ export class PapersService {
   constructor(
     @Inject(VECTOR_STORE_PORT) private readonly vectors: VectorStorePort,
     private readonly router: TreeRouterService,
+    @Optional() private readonly corpus?: CorpusReaderService,
   ) {}
 
   async get(paperId: string): Promise<PaperDetail> {
@@ -79,12 +92,62 @@ export class PapersService {
       throw new NotFoundException(PAPER_NOT_FOUND);
     const hit = this.cache.get(id);
     if (hit) return hit;
-    const chunks = await this.vectors.scrollByPaper(id);
-    if (!chunks.length) throw new NotFoundException(PAPER_NOT_FOUND);
-    const detail = buildPaperDetail(id, chunks, (code) =>
-      this.router.categoryIndex(code),
-    );
+
+    const detail = (await this.fromCorpus(id)) ?? (await this.fromVectors(id));
+    if (!detail) throw new NotFoundException(PAPER_NOT_FOUND);
     this.cache.set(id, detail);
     return detail;
+  }
+
+  /**
+   * Reads the paper from the corpus — two indexed queries, no `$lookup`.
+   *
+   * The corpus is the source of truth, but it is filled progressively, so a
+   * paper can be half ingested. A partial read is *not* served: the endpoint
+   * would show the client an incomplete paper with no indication that
+   * anything is missing. When the corpus copy is incomplete the caller falls
+   * back to Qdrant instead.
+   */
+  private async fromCorpus(paperId: string): Promise<PaperDetail | null> {
+    if (!this.corpus) return null;
+    const read = await this.corpus.readPaper(paperId);
+    if (!read || read.chunks.length === 0) return null;
+    const { paper, chunks } = read;
+
+    // `chunk_count` is the number of chunks the corpus knows about for this
+    // paper. When it is known and the read returned fewer, the corpus copy is
+    // still being written.
+    if (
+      typeof paper.chunk_count === 'number' &&
+      paper.chunk_count > 0 &&
+      chunks.length < paper.chunk_count
+    ) {
+      return null;
+    }
+
+    const payload: ChunkPayload[] = chunks.map((c) => ({
+      chunk_id: c.chunk_id,
+      paper_id: c.paper_id,
+      title: paper.title,
+      authors: paper.authors,
+      primary_category: paper.primary_category,
+      year: paper.year,
+      section_title: c.section_title ?? '',
+      section_type: c.section_type ?? '',
+      text: c.text,
+      chunk_index: c.chunk_index ?? undefined,
+    }));
+    return buildPaperDetail(paperId, payload, (code) =>
+      this.router.categoryIndex(code),
+    );
+  }
+
+  /** Falls back to the vector store while the corpus is still being filled. */
+  private async fromVectors(paperId: string): Promise<PaperDetail | null> {
+    const chunks = await this.vectors.scrollByPaper(paperId);
+    if (!chunks.length) return null;
+    return buildPaperDetail(paperId, chunks, (code) =>
+      this.router.categoryIndex(code),
+    );
   }
 }

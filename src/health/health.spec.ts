@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import type { Connection } from 'mongoose';
+import type { CorpusReaderService } from '../corpus/corpus-reader.service';
 import type { LlmPort } from '../llm/llm.service';
 import type { TreeRouterService } from '../tree-router/tree-router.service';
 import type { VectorStorePort } from '../vector-store/vector-store.service';
@@ -7,7 +8,13 @@ import { HealthController } from './health.controller';
 import { HealthService, overallStatus } from './health.service';
 
 function deps() {
-  const state = { mongo: true, qdrant: true, llm: true, world: false };
+  const state = {
+    mongo: true,
+    corpus: true,
+    qdrant: true,
+    llm: true,
+    world: false,
+  };
   const mongo = {
     get readyState() {
       return state.mongo ? 1 : 0;
@@ -29,15 +36,30 @@ function deps() {
     isLoaded: () => state.world,
     worldVersion: () => null,
   } as unknown as TreeRouterService;
-  return { state, svc: new HealthService(mongo, vectors, llm, router) };
+  const corpus = {
+    isReady: () => Promise.resolve(state.corpus),
+  } as unknown as CorpusReaderService;
+  return { state, svc: new HealthService(mongo, vectors, llm, router, corpus) };
 }
 
 describe('overallStatus', () => {
   it.each([
-    [{ mongo: true, qdrant: true, llm: true, world: false }, 'ok'],
-    [{ mongo: true, qdrant: true, llm: false, world: true }, 'degraded'],
-    [{ mongo: false, qdrant: true, llm: true, world: true }, 'down'],
-    [{ mongo: true, qdrant: false, llm: false, world: true }, 'down'],
+    [
+      { mongo: true, corpus: true, qdrant: true, llm: true, world: false },
+      'ok',
+    ],
+    [
+      { mongo: true, corpus: true, qdrant: true, llm: false, world: true },
+      'degraded',
+    ],
+    [
+      { mongo: false, corpus: true, qdrant: true, llm: true, world: true },
+      'down',
+    ],
+    [
+      { mongo: true, corpus: true, qdrant: false, llm: false, world: true },
+      'down',
+    ],
   ])('%j ➔ %s', (c, s) => expect(overallStatus(c)).toBe(s));
 });
 
@@ -55,7 +77,13 @@ describe('HealthService', () => {
     await svc.check();
     expect(await svc.health()).toMatchObject({
       status: 'ok',
-      components: { mongo: true, qdrant: true, llm: true, world: false },
+      components: {
+        mongo: true,
+        corpus: true,
+        qdrant: true,
+        llm: true,
+        world: false,
+      },
       llm: { model_id: 'qwen', gpu: 'metal', queue_length: 2 },
       world_version: null,
     });

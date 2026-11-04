@@ -24,3 +24,16 @@ export function tokenize(text: string): string[] {
     .split(/[^a-z0-9]+/)
     .filter(Boolean);
 }
+
+/**
+ * `tag:large-language-models` ➔ ["large","language","models"].
+ *
+ * `cat:*` is not text, so it yields `null` — only `tag:` items become query
+ * expansion terms.
+ */
+export function itemToWords(item: string): string[] | null {
+  const m = /^([a-z]+):(.*)$/.exec(item);
+  if (m && m[1] !== 'tag') return null;
+  const words = tokenize(m ? m[2] : item);
+  return words.length ? words : null;
+}

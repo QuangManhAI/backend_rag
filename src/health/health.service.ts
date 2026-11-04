@@ -9,6 +9,7 @@ import { InjectConnection } from '@nestjs/mongoose';
 import { readFileSync } from 'fs';
 import { Connection, ConnectionStates } from 'mongoose';
 import { join } from 'path';
+import { CorpusReaderService } from '../corpus/corpus-reader.service';
 import { LLM_PORT, type LlmPort } from '../llm/llm.service';
 import { TreeRouterService } from '../tree-router/tree-router.service';
 import {
@@ -23,6 +24,7 @@ export type HealthStatus = 'ok' | 'degraded' | 'down';
 
 export interface Components {
   mongo: boolean;
+  corpus: boolean;
   qdrant: boolean;
   llm: boolean;
   world: boolean;
@@ -71,6 +73,7 @@ export class HealthService implements OnApplicationBootstrap, OnModuleDestroy {
     @Inject(VECTOR_STORE_PORT) private readonly vectors: VectorStorePort,
     @Inject(LLM_PORT) private readonly llm: LlmPort,
     private readonly router: TreeRouterService,
+    private readonly corpus: CorpusReaderService,
   ) {}
 
   async onApplicationBootstrap(): Promise<void> {
@@ -123,16 +126,27 @@ export class HealthService implements OnApplicationBootstrap, OnModuleDestroy {
   }
 
   private async probe(): Promise<Components> {
-    const [mongo, qdrant] = await Promise.all([
+    const [mongo, corpus, qdrant] = await Promise.all([
       this.pingMongo(),
+      this.pingCorpus(),
       this.vectors.ping(),
     ]);
     return {
       mongo,
+      corpus,
       qdrant,
       llm: this.llm.status().ready,
       world: this.router.isLoaded(),
     };
+  }
+
+  /** True when the corpus database is reachable and holds an ingested corpus. */
+  private async pingCorpus(): Promise<boolean> {
+    try {
+      return await this.corpus.isReady();
+    } catch {
+      return false;
+    }
   }
 
   private async pingMongo(): Promise<boolean> {

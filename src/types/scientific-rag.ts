@@ -91,6 +91,8 @@ export type RagStreamEvent =
       timings: Timings;
       session_id: string | null;
       message_id: string | null;
+      /** Added by the controller on the stream (API_DESIGN §1.6). */
+      _links?: Record<string, { href: string; method?: string }>;
     }
   | { type: 'error'; message: string; status: number };
 

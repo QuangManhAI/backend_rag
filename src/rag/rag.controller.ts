@@ -1,6 +1,8 @@
 import {
+  BadRequestException,
   Body,
   Controller,
+  Headers,
   HttpCode,
   HttpException,
   HttpStatus,
@@ -11,6 +13,8 @@ import {
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiConflictResponse,
+  ApiHeader,
   ApiOkResponse,
   ApiProduces,
   ApiServiceUnavailableResponse,
@@ -20,8 +24,11 @@ import {
 import type { Request, Response } from 'express';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { OptionalJwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { chatLinks, WithLinks } from '../common/hateoas';
 import { toErrorBody } from '../common/http-exception.filter';
 import { logEvent, requestIdOf } from '../common/request-context';
+import { RateLimit } from '../common/throttler';
+import { isUuid } from '../common/uuid';
 import { AbortedError } from '../llm/llm-queue';
 import type { AuthUser } from '../types/auth-user';
 import { ChatRequestDto } from './dto/chat-request.dto';
@@ -35,14 +42,36 @@ function statusOf(e: unknown): number {
   return e instanceof HttpException ? e.getStatus() : 500;
 }
 
+/** A client-generated UUID; anything else is a client bug, so it is rejected, not ignored. */
+function parseIdempotencyKey(raw: string | undefined): string | undefined {
+  if (raw === undefined) return undefined;
+  if (!isUuid(raw)) throw new BadRequestException('invalid Idempotency-Key');
+  return raw.toLowerCase();
+}
+
+const REPLAYED_HEADER = 'Idempotent-Replayed';
+
+const IDEMPOTENCY_HEADER = {
+  name: 'Idempotency-Key',
+  required: false,
+  description:
+    'UUID. With a JWT, repeating a finished request replays the stored answer for 24 h.',
+};
+
 @ApiTags('RAG')
 @ApiBearerAuth()
+@ApiHeader(IDEMPOTENCY_HEADER)
+@ApiConflictResponse({
+  description: 'request already in progress / key reused with another body',
+})
+@RateLimit('ragChat')
 @Controller('rag')
 @UseGuards(OptionalJwtAuthGuard)
 export class RagController {
   constructor(private readonly rag: RagService) {}
 
   @Post('chat')
+  @WithLinks({ resource: (r: ChatResponseDto) => chatLinks(r) })
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: ChatResponseDto })
   @ApiTooManyRequestsResponse({ description: 'llm queue is full' })
@@ -52,13 +81,16 @@ export class RagController {
   async chat(
     @Body() dto: ChatRequestDto,
     @CurrentUser() user: AuthUser | undefined,
+    @Headers('idempotency-key') rawKey: string | undefined,
     @Res({ passthrough: true }) res: Response,
   ): Promise<ChatResponseDto> {
+    const key = parseIdempotencyKey(rawKey);
     const t0 = performance.now();
     const ctrl = abortOnClientClose(res, 'CHAT_ABORTED');
     const result: Partial<PipelineResult> = {};
     try {
-      for await (const _ of this.rag.run(dto, user, ctrl.signal, result, t0)) {
+      const events = this.rag.run(dto, user, ctrl.signal, result, t0, key);
+      for await (const _ of events) {
         if (ctrl.signal.aborted) break;
       }
     } catch (e) {
@@ -75,6 +107,7 @@ export class RagController {
     }
     logEvent('CHAT_OK');
     const r = result as PipelineResult;
+    if (r.replayed) res.setHeader(REPLAYED_HEADER, 'true');
     return {
       session_id: r.session_id,
       message_id: r.message_id,
@@ -99,12 +132,15 @@ export class RagController {
   async stream(
     @Body() dto: ChatRequestDto,
     @CurrentUser() user: AuthUser | undefined,
+    @Headers('idempotency-key') rawKey: string | undefined,
     @Req() req: Request,
     @Res() res: Response,
   ): Promise<void> {
+    const key = parseIdempotencyKey(rawKey);
     const t0 = performance.now();
     const ctrl = abortOnClientClose(res, 'CHAT_STREAM_ABORTED');
-    const events = this.rag.run(dto, user, ctrl.signal, {}, t0);
+    const result: Partial<PipelineResult> = {};
+    const events = this.rag.run(dto, user, ctrl.signal, result, t0, key);
     let r: IteratorResult<PipelineEvent>;
     try {
       r = await events.next();
@@ -113,12 +149,17 @@ export class RagController {
       throw e; // headers not sent yet: the exception filter answers with HTTP status + §1.2 body
     }
 
+    if (result.replayed) res.setHeader(REPLAYED_HEADER, 'true');
     const sse = new SseWriter(res);
     sse.open();
     try {
       while (!r.done) {
         if (ctrl.signal.aborted) throw new AbortedError();
-        sse.send(r.value);
+        sse.send(
+          r.value.type === 'done'
+            ? { ...r.value, _links: chatLinks(r.value) }
+            : r.value,
+        );
         r = await events.next();
       }
       logEvent('CHAT_STREAM_OK');

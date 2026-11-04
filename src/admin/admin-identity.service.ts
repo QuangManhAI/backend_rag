@@ -10,11 +10,20 @@ import { Model, Types } from 'mongoose';
 import { AuthService } from '../auth/auth.service';
 import { RefreshToken } from '../auth/schemas/refresh-token.schema';
 import { User } from '../auth/schemas/user.schema';
-import { decodeCursor, encodeCursor } from '../common/pagination';
+import {
+  allOf,
+  FilterField,
+  keysetFilter,
+  ListSpec,
+  mongoSort,
+  parseFilters,
+  parseSort,
+  toCursorPage,
+} from '../common/pagination';
 import { escapeRegex } from '../common/sanitize';
-import { isUuid } from '../common/uuid';
 import type { AuthUser, Role } from '../types/auth-user';
 import { AdminAuditService, type AuditRequest } from './admin-audit.service';
+import { ADMIN_ROLES, ListAdminUsersQueryDto } from './admin.dto';
 
 export const USER_NOT_FOUND = 'user not found';
 export const ADMIN_ROLE_REQUIRED = 'admin role required';
@@ -24,17 +33,25 @@ export const VALIDATION_ERROR = 'validation error';
 
 type LeanUser = User & { _id: Types.ObjectId };
 
-interface Cursor {
-  m: string;
-  id: string;
-}
+const USER_LIST: ListSpec = {
+  sortable: { created_at: 'date', email: 'string' },
+  defaultSort: [{ field: 'created_at', dir: 'desc' }],
+  idType: 'objectId',
+};
+const USER_FILTERS: Record<string, FilterField> = {
+  role: {
+    type: 'string',
+    path: 'roles',
+    ops: ['eq', 'ne'],
+    values: ADMIN_ROLES,
+  },
+  is_active: { type: 'boolean' },
+  email: { type: 'string' },
+  created_at: { type: 'date' },
+};
 
-const isCursor = (v: unknown): v is Cursor =>
-  typeof v === 'object' &&
-  v !== null &&
-  typeof (v as Cursor).m === 'string' &&
-  !Number.isNaN(Date.parse((v as Cursor).m)) &&
-  isUuid((v as Cursor).id);
+const sameSet = (a: readonly string[], b: readonly string[]) =>
+  a.length === b.length && a.every((x) => b.includes(x));
 
 /**
  * Identity management for admins (prompt_security S5): list / inspect users, change roles, lock and
@@ -108,44 +125,32 @@ export class AdminIdentityService {
 
   async listUsers(
     actor: AuthUser,
-    q: string | undefined,
-    limit: number,
-    cursor: string | undefined,
-    role: Role | undefined,
-    active: boolean | undefined,
+    query: ListAdminUsersQueryDto,
     req?: AuditRequest,
   ): Promise<{
     items: Record<string, unknown>[];
     next_cursor: string | null;
     has_more: boolean;
   }> {
-    const filter: Record<string, unknown> = {};
-    const trimmedQ = q?.trim() ?? '';
+    const terms = parseSort(query.sort, USER_LIST);
+    const conditions = parseFilters(query, USER_FILTERS);
+    const trimmedQ = query.q?.trim() ?? '';
     if (trimmedQ) {
-      filter.$or = [
-        { email: { $regex: escapeRegex(trimmedQ), $options: 'i' } },
-        { display_name: { $regex: escapeRegex(trimmedQ), $options: 'i' } },
-      ];
+      conditions.push({
+        $or: [
+          { email: { $regex: escapeRegex(trimmedQ), $options: 'i' } },
+          { display_name: { $regex: escapeRegex(trimmedQ), $options: 'i' } },
+        ],
+      });
     }
-    if (role) filter.roles = role;
-    if (active !== undefined) filter.is_active = active;
-    if (cursor) {
-      const c = decodeCursor(cursor, isCursor);
-      const m = new Date(c.m);
-      filter.$or = [
-        ...(filter.$or ? [filter.$or] : []),
-        { created_at: { $lt: m } },
-        { created_at: m, _id: { $lt: new Types.ObjectId(c.id) } },
-      ];
+    if (query.cursor) {
+      conditions.push(keysetFilter(query.cursor, terms, USER_LIST));
     }
     const rows = await this.users
-      .find(filter)
-      .sort({ created_at: -1, _id: -1 })
-      .limit(limit + 1)
+      .find(allOf({}, conditions))
+      .sort(mongoSort(terms))
+      .limit(query.limit + 1)
       .lean();
-    const hasMore = rows.length > limit;
-    const page = rows.slice(0, limit);
-    const last = page.at(-1);
     await this.audit.writeAudit(
       actor,
       'USER_LIST_VIEW',
@@ -155,17 +160,7 @@ export class AdminIdentityService {
       null,
       req,
     );
-    return {
-      items: page.map(toAdminUserDto),
-      next_cursor:
-        hasMore && last
-          ? encodeCursor({
-              m: last.created_at.toISOString(),
-              id: last._id.toString(),
-            })
-          : null,
-      has_more: hasMore,
-    };
+    return toCursorPage(rows as LeanUser[], query.limit, terms, toAdminUserDto);
   }
 
   // ---------------------------------------------------------------- A2 · user detail
@@ -223,6 +218,8 @@ export class AdminIdentityService {
     if (target.roles.includes('admin') && !unique.includes('admin')) {
       await this.assertNotLastAdmin(target);
     }
+    // Idempotent PUT: the same roles again must not kill the user's live tokens.
+    if (sameSet(target.roles, unique)) return toAdminUserDto(target);
     const before = { roles: target.roles };
     await this.users.updateOne(
       { _id: target._id },
@@ -245,14 +242,56 @@ export class AdminIdentityService {
 
   // ---------------------------------------------------------------- A4 · lock / unlock
 
-  async disableUser(
+  /**
+   * `PUT /admin/users/:id/status`. Idempotent: asking for the state the account is already in writes
+   * nothing, so it neither kills live tokens nor overwrites who locked the account nor adds audit
+   * noise. The one exception is locking again with another reason, which only updates the reason.
+   */
+  async setUserStatus(
     actor: AuthUser,
     id: string,
+    active: boolean,
     reason: string | undefined,
     req?: AuditRequest,
   ): Promise<Record<string, unknown>> {
+    if (active && reason !== undefined) {
+      throw new BadRequestException('reason is only allowed when locking');
+    }
     this.assertNotSelf(actor, id);
     const target = await this.resolveUser(id);
+    if (active) {
+      if (target.is_active) return toAdminUserDto(target);
+      return this.enableUser(actor, id, target, req);
+    }
+    if (target.is_active)
+      return this.disableUser(actor, id, target, reason, req);
+    if (reason === undefined || reason === target.disabled_reason) {
+      return toAdminUserDto(target);
+    }
+    await this.users.updateOne(
+      { _id: target._id },
+      { $set: { disabled_reason: reason } },
+    );
+    this.invalidateAuthCaches(id, target.email);
+    await this.audit.writeAudit(
+      actor,
+      'USER_DISABLE',
+      'user',
+      id,
+      { disabled_reason: target.disabled_reason },
+      { disabled_reason: reason },
+      req,
+    );
+    return toAdminUserDto(await this.resolveUser(id));
+  }
+
+  private async disableUser(
+    actor: AuthUser,
+    id: string,
+    target: LeanUser,
+    reason: string | undefined,
+    req?: AuditRequest,
+  ): Promise<Record<string, unknown>> {
     await this.assertNotLastAdmin(target);
     const before = {
       is_active: target.is_active,
@@ -291,13 +330,12 @@ export class AdminIdentityService {
     return toAdminUserDto(updated);
   }
 
-  async enableUser(
+  private async enableUser(
     actor: AuthUser,
     id: string,
+    target: LeanUser,
     req?: AuditRequest,
   ): Promise<Record<string, unknown>> {
-    this.assertNotSelf(actor, id);
-    const target = await this.resolveUser(id);
     const before = {
       is_active: target.is_active,
       disabled_at: target.disabled_at,

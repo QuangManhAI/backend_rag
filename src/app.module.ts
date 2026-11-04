@@ -3,6 +3,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AdminModule } from './admin/admin.module';
+import { ApiRootController } from './api-root/api-root.controller';
 import { AuthModule } from './auth/auth.module';
 import { ChatSessionsModule } from './chat-sessions/chat-sessions.module';
 import { LoggerModule } from './common/logger.module';
@@ -38,6 +39,7 @@ import { RagModule } from './rag/rag.module';
     PapersModule,
     HealthModule,
   ],
+  controllers: [ApiRootController],
   providers: [
     // The guard is registered globally so every route is rate limited, including the ones
     // added later without anyone remembering to attach a decorator.

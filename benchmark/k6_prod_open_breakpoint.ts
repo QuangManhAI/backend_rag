@@ -125,8 +125,8 @@ export default function () {
       },
     });
   } else if (rand < 0.85) {
-    // 15%: GET /api/v1/auth/me
-    res = http.get(`${BASE_URL}/api/v1/auth/me`, {
+    // 15%: GET /api/v1/users/me
+    res = http.get(`${BASE_URL}/api/v1/users/me`, {
       headers: authHeaders,
       timeout: '2s',
       tags: { endpoint: 'auth_me' },
@@ -151,11 +151,11 @@ export default function () {
       'session_rename 200': (r) => r.status === 200,
     });
   } else {
-    // 5%: PATCH /api/v1/auth/me (Profile update write)
+    // 5%: PATCH /api/v1/users/me (Profile update write)
     const payload = JSON.stringify({
       display_name: `Researcher VU ${userIdx}`,
     });
-    res = http.patch(`${BASE_URL}/api/v1/auth/me`, payload, {
+    res = http.patch(`${BASE_URL}/api/v1/users/me`, payload, {
       headers: authHeaders,
       timeout: '2s',
       tags: { endpoint: 'profile_patch' },

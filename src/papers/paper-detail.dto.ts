@@ -31,3 +31,8 @@ export class PaperDetailDto implements PaperDetail {
   @ApiProperty() has_fulltext: boolean;
   @ApiProperty({ type: [ChunkDto] }) chunks: Chunk[];
 }
+
+export class PaperBatchDto {
+  @ApiProperty({ type: [PaperDetailDto] }) items: PaperDetailDto[];
+  @ApiProperty({ type: [String] }) not_found: string[];
+}

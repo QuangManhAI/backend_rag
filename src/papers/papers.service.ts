@@ -13,6 +13,7 @@ import {
 
 export const PAPER_NOT_FOUND = 'paper not found';
 export const PAPER_ID_MAX = 200;
+export const PAPER_BATCH_MAX = 20;
 
 const isAbstract = (c: ChunkPayload) =>
   c.section_type.toLowerCase().startsWith('abstract');
@@ -86,5 +87,23 @@ export class PapersService {
     );
     this.cache.set(id, detail);
     return detail;
+  }
+
+  /** Batch read: unknown papers are reported, not failed; a Qdrant outage fails the whole call. */
+  async getMany(
+    ids: string[],
+  ): Promise<{ items: PaperDetail[]; not_found: string[] }> {
+    const results = await Promise.all(
+      ids.map((id) =>
+        this.get(id).catch((e: unknown) => {
+          if (e instanceof NotFoundException) return id;
+          throw e;
+        }),
+      ),
+    );
+    return {
+      items: results.filter((r) => typeof r !== 'string'),
+      not_found: results.filter((r) => typeof r === 'string'),
+    };
   }
 }

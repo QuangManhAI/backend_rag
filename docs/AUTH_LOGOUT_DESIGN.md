@@ -2,7 +2,7 @@
 
 ## 1. Route & Controller
 
-- **Endpoint:** `POST /api/v1/auth/logout`
+- **Endpoint:** `POST /api/v1/auth/token-revocations`
 - **Controller:** `AuthController.logout()` (`src/auth/auth.controller.ts`)
 - **Guard:** `JwtAuthGuard` (yêu cầu Access Token hợp lệ của user)
 - **Cơ chế Monolith:**

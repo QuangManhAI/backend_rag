@@ -127,6 +127,10 @@ class Fakes {
         assistant_message_id: 'a1',
       });
     },
+    beginRequest: () => Promise.resolve({ state: 'started' }),
+    releaseRequest: () => Promise.resolve(),
+    getExchange: () =>
+      Promise.reject(new NotFoundException('session not found')),
   };
 }
 

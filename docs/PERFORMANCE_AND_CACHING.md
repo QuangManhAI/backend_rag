@@ -6,7 +6,7 @@
 - **Detailed Plan**: Section 1 explains Generation-Versioned `LRUCache` & $O(1)$ Invalidation; Section 2 details `Singleflight` Coalescing & Sliding TTL Stampede Prevention; Section 3 covers Query Parallelization, `.lean()`, and Compound Indexes; Section 4 documents HTTP Keep-Alive & MongoDB Pool Tuning; Section 5 provides the 3-Stage SRE Qualification Playbook (Rule L1).
 - **References**: [../AGENTS.md](../AGENTS.md), [AUTH_AND_SECURITY_ARCHITECTURE.md](AUTH_AND_SECURITY_ARCHITECTURE.md), [MONGODB_SCHEMA_DESIGN.md](MONGODB_SCHEMA_DESIGN.md), [../benchmark/BOTTLENECK_ANALYSIS_AND_OPTIMIZATION.md](../benchmark/BOTTLENECK_ANALYSIS_AND_OPTIMIZATION.md), [../benchmark/README.md](../benchmark/README.md), [../../docs/AI_chat_log/Vuong_chat_logs.md](../../docs/AI_chat_log/Vuong_chat_logs.md).
 - **Created**: 2026-10-29T19:46:30+07:00
-- **Last Updated**: 2026-10-29T19:46:30+07:00
+- **Last Updated**: 2026-11-04T22:27:54+07:00
 
 [STATUS: ACTIVE]
 
@@ -36,7 +36,7 @@ flowchart LR
 ### Invalidation Rules for Engineers & AI Agents
 Whenever you add or modify any method in [`ChatSessionsService`](../src/chat-sessions/chat-sessions.service.ts) that mutates session metadata or messages:
 1. **Always call `this.bumpUserGen(userId)`** immediately after the MongoDB write completes (`saveExchange`, `remove`, `rename`).
-2. For `rename(userId, sessionId, title)`, you may optionally update the cached detail entry under the new generation key so an immediate `GET /chat-sessions/:id` after rename is still a cache hit.
+2. Do not patch one cached list page in place: filtered and later pages may hold the same row. For `rename(userId, sessionId, title)`, you may optionally update the cached detail entry under the new generation key so an immediate `GET /chat-sessions/:id` after rename is still a cache hit.
 
 ---
 

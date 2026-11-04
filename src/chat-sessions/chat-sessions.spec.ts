@@ -22,6 +22,7 @@ import {
 } from './chat-sessions.service';
 import { ChatMessage } from './schemas/chat-message.schema';
 import { ChatSession } from './schemas/chat-session.schema';
+import { ChatRequest } from './schemas/chat-request.schema';
 import { SESSION_STORE, SessionStorePort } from './session-store.port';
 
 const ALICE = new Types.ObjectId().toString();
@@ -112,7 +113,7 @@ describe('Chat sessions (integration)', () => {
       .get('/api/v1/chat-sessions')
       .set(as(alice))
       .expect(200);
-    expect(list.body).toEqual({
+    expect(list.body).toMatchObject({
       items: [],
       next_cursor: null,
       has_more: false,
@@ -124,7 +125,7 @@ describe('Chat sessions (integration)', () => {
       .post('/api/v1/chat-sessions')
       .set(as(alice))
       .send({})
-      .expect(404);
+      .expect(405);
   });
 
   it('lazy-create via saveExchange, get, rename, soft-delete (with 3d tombstones on session and messages)', async () => {
@@ -364,16 +365,192 @@ describe('Chat sessions (integration)', () => {
     expect([...seen].sort()).toEqual([...ids].sort());
   });
 
-  it('bad cursor ➔ 400 invalid cursor; client limit query param is rejected ➔ 400', async () => {
+  it('bad cursor ➔ 400 invalid cursor; limit out of range ➔ 400', async () => {
     const r = await http()
       .get('/api/v1/chat-sessions?cursor=abc!!')
       .set(as(alice))
       .expect(400);
     expect(r.body.message).toBe('invalid cursor');
     await http()
-      .get('/api/v1/chat-sessions?limit=5')
+      .get('/api/v1/chat-sessions?limit=51')
       .set(as(alice))
       .expect(400);
+  });
+
+  it('limit, sort, filter and a cursor bound to its sort order', async () => {
+    const ids: string[] = [];
+    for (const title of ['b', 'c', 'a']) {
+      const saved = await svc.saveExchange(ALICE, null, title, answer);
+      await svc.rename(ALICE, saved.session_id, title);
+      ids.push(saved.session_id);
+    }
+    const first = await http()
+      .get('/api/v1/chat-sessions?limit=2&sort=title:asc')
+      .set(as(alice))
+      .expect(200);
+    expect(first.body.items.map((s: { title: string }) => s.title)).toEqual([
+      'a',
+      'b',
+    ]);
+    const next = await http()
+      .get(
+        `/api/v1/chat-sessions?limit=2&sort=title:asc&cursor=${first.body.next_cursor}`,
+      )
+      .set(as(alice))
+      .expect(200);
+    expect(next.body.items.map((s: { title: string }) => s.title)).toEqual([
+      'c',
+    ]);
+    expect(next.body.has_more).toBe(false);
+
+    await http()
+      .get(`/api/v1/chat-sessions?cursor=${first.body.next_cursor}`)
+      .set(as(alice))
+      .expect(400);
+    await http()
+      .get('/api/v1/chat-sessions?sort=user_id:asc')
+      .set(as(alice))
+      .expect(400);
+
+    const none = await http()
+      .get('/api/v1/chat-sessions?created_at=gt:2999-01-01')
+      .set(as(alice))
+      .expect(200);
+    expect(none.body.items).toEqual([]);
+    const counted = await http()
+      .get('/api/v1/chat-sessions?message_count=gte:2,lte:2')
+      .set(as(alice))
+      .expect(200);
+    expect(counted.body.items).toHaveLength(3);
+    const bad = await http()
+      .get('/api/v1/chat-sessions?message_count=match:x')
+      .set(as(alice))
+      .expect(400);
+    expect(bad.body.message).toBe('invalid filter: message_count');
+  });
+
+  it('batch read and batch delete only ever touch the sessions of the caller', async () => {
+    const a1 = await svc.saveExchange(ALICE, null, 'q', answer);
+    const a2 = await svc.saveExchange(ALICE, null, 'q', answer);
+    const b1 = await svc.saveExchange(BOB, null, 'q', answer);
+    const ids = [a1, a2, b1].map((s) => s.session_id).join(',');
+
+    const read = await http()
+      .get(`/api/v1/chat-sessions?ids=${ids}`)
+      .set(as(alice))
+      .expect(200);
+    expect(read.body.items.map((s: { id: string }) => s.id).sort()).toEqual(
+      [a1.session_id, a2.session_id].sort(),
+    );
+
+    await http()
+      .delete(`/api/v1/chat-sessions?ids=${ids}`)
+      .set(as(alice))
+      .expect(204);
+    await http()
+      .delete(`/api/v1/chat-sessions?ids=${ids}`)
+      .set(as(alice))
+      .expect(204);
+    await http()
+      .get(`/api/v1/chat-sessions/${a1.session_id}`)
+      .set(as(alice))
+      .expect(404);
+    await http()
+      .get(`/api/v1/chat-sessions/${b1.session_id}`)
+      .set(as(bob))
+      .expect(200);
+
+    await http().delete('/api/v1/chat-sessions').set(as(alice)).expect(400);
+    await http()
+      .delete('/api/v1/chat-sessions?ids=not-a-uuid')
+      .set(as(alice))
+      .expect(400);
+  });
+
+  it('messages are a paginated sub-resource, 404 for a session of someone else', async () => {
+    const s = await svc.saveExchange(ALICE, null, 'q1', answer);
+    await svc.saveExchange(ALICE, s.session_id, 'q2', answer);
+    const url = `/api/v1/chat-sessions/${s.session_id}/messages`;
+    const first = await http().get(`${url}?limit=3`).set(as(alice)).expect(200);
+    expect(first.body.items.map((m: { content: string }) => m.content)).toEqual(
+      ['q1', answer.content, 'q2'],
+    );
+    expect(first.body.has_more).toBe(true);
+    const rest = await http()
+      .get(`${url}?limit=3&cursor=${first.body.next_cursor}`)
+      .set(as(alice))
+      .expect(200);
+    expect(rest.body.items).toHaveLength(1);
+    expect(rest.body.has_more).toBe(false);
+    const newest = await http()
+      .get(`${url}?limit=1&sort=created_at:desc`)
+      .set(as(alice))
+      .expect(200);
+    expect(newest.body.items[0].role).toBe('assistant');
+    await http().get(url).set(as(bob)).expect(404);
+  });
+
+  describe('Idempotency-Key store', () => {
+    const KEY = '0199f0c2-7a3e-7c1d-9a52-3c9d8f1e2b99';
+
+    beforeEach(async () => {
+      await t.app
+        .get<Model<ChatRequest>>(getModelToken(ChatRequest.name))
+        .deleteMany({});
+    });
+
+    it('reserves once, then 409 while running and with another body', async () => {
+      expect(await svc.beginRequest(ALICE, KEY, 'fp')).toEqual({
+        state: 'started',
+      });
+      await expect(svc.beginRequest(ALICE, KEY, 'fp')).rejects.toThrow(
+        'request already in progress',
+      );
+      await expect(svc.beginRequest(ALICE, KEY, 'other')).rejects.toThrow(
+        'idempotency key reused',
+      );
+      // The same key of another user is another request.
+      expect(await svc.beginRequest(BOB, KEY, 'other')).toEqual({
+        state: 'started',
+      });
+    });
+
+    it('a released key can be retried; a finished one returns its stored answer', async () => {
+      await svc.beginRequest(ALICE, KEY, 'fp');
+      await svc.releaseRequest(ALICE, KEY);
+      await svc.beginRequest(ALICE, KEY, 'fp');
+      const saved = await svc.saveExchange(ALICE, null, 'q', answer, KEY);
+      const begun = await svc.beginRequest(ALICE, KEY, 'fp');
+      expect(begun).toEqual({
+        state: 'completed',
+        session_id: saved.session_id,
+        message_id: saved.assistant_message_id,
+      });
+      await svc.releaseRequest(ALICE, KEY);
+      const stored = await svc.getExchange(
+        ALICE,
+        saved.session_id,
+        saved.assistant_message_id,
+      );
+      expect(stored.content).toBe(answer.content);
+      await expect(
+        svc.getExchange(BOB, saved.session_id, saved.assistant_message_id),
+      ).rejects.toThrow('session not found');
+    });
+
+    it('a crashed run does not lock its key forever', async () => {
+      await svc.beginRequest(ALICE, KEY, 'fp');
+      const requests = t.app.get<Model<ChatRequest>>(
+        getModelToken(ChatRequest.name),
+      );
+      await requests.updateOne(
+        { _id: `${ALICE}:${KEY}` },
+        { $set: { locked_until: new Date(Date.now() - 1) } },
+      );
+      expect(await svc.beginRequest(ALICE, KEY, 'fp')).toEqual({
+        state: 'started',
+      });
+    });
   });
 
   it('q searches titles case-insensitively, regex characters are literal', async () => {
@@ -446,7 +623,8 @@ describe('Chat sessions (integration)', () => {
 
     // Cross-user cursor: Bob uses Alice's cursor -> Bob only sees Bob's sessions
     const fakeCursorFromAlice = encodeCursor({
-      m: new Date().toISOString(),
+      s: 'last_message_at:desc',
+      v: [new Date(Date.now() + 60_000).toISOString()],
       id: sAlice.session_id,
     });
     const bobList = await http()

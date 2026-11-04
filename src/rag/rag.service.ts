@@ -1,4 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { createHash } from 'crypto';
 import { logFields } from '../common/request-context';
 import {
   EMBEDDING_PORT,
@@ -43,6 +44,8 @@ export interface PipelineResult {
   timings: Timings;
   session_id: string | null;
   message_id: string | null;
+  /** The answer comes from an earlier run with the same `Idempotency-Key`. */
+  replayed?: boolean;
 }
 
 /** Best score per paper, highest first, at most `limit` papers. */
@@ -61,10 +64,29 @@ export function topPapers(
     .map(([paper_id, score]) => ({ paper_id, score: round4(score) }));
 }
 
+/** Identifies the request body behind an `Idempotency-Key`. */
+export function requestFingerprint(req: ChatRequestDto): string {
+  return createHash('sha256')
+    .update(
+      JSON.stringify([
+        req.query,
+        req.session_id ?? null,
+        req.top_k,
+        req.nprobe,
+        req.category ?? null,
+        req.use_authority_boost,
+        req.expand_query,
+      ]),
+    )
+    .digest('hex');
+}
+
 const since = (t: number) => Math.round(performance.now() - t);
 
 @Injectable()
 export class RagService {
+  private readonly logger = new Logger(RagService.name);
+
   constructor(
     @Inject(EMBEDDING_PORT) private readonly embedding: EmbeddingPort,
     @Inject(VECTOR_STORE_PORT) private readonly vectors: VectorStorePort,
@@ -77,6 +99,9 @@ export class RagService {
   /**
    * The full RAG run as an event stream (API_DESIGN §3.1). `result` is filled in before `done`.
    * Nothing is saved when the run fails or `signal` aborts.
+   *
+   * With an `idempotencyKey` (authenticated callers only: anonymous runs store nothing) a repeated
+   * request replays the stored answer instead of running the LLM and saving a second exchange.
    */
   async *run(
     req: ChatRequestDto,
@@ -84,6 +109,84 @@ export class RagService {
     signal: AbortSignal,
     result: Partial<PipelineResult> = {},
     t0 = performance.now(),
+    idempotencyKey?: string,
+  ): AsyncGenerator<PipelineEvent> {
+    logFields({ query_len: req.query.length, top_k: req.top_k });
+    const sessionId = user && req.session_id ? req.session_id : null;
+    if (user && sessionId) await this.sessions.assertOwned(sessionId, user.id);
+
+    const key = user ? idempotencyKey : undefined;
+    if (!user || !key) {
+      yield* this.execute(req, user, sessionId, signal, result, t0);
+      return;
+    }
+    const begun = await this.sessions.beginRequest(
+      user.id,
+      key,
+      requestFingerprint(req),
+    );
+    if (begun.state === 'completed') {
+      yield* this.replay(req, user, begun, result);
+      return;
+    }
+    try {
+      yield* this.execute(req, user, sessionId, signal, result, t0, key);
+    } finally {
+      if (!result.message_id) {
+        // Best effort: a key that stays locked is taken over once its lock expires.
+        await this.sessions.releaseRequest(user.id, key).catch((e: unknown) => {
+          this.logger.warn({ err: e }, 'CHAT_REQUEST_RELEASE_FAILED');
+        });
+      }
+    }
+  }
+
+  private async *replay(
+    req: ChatRequestDto,
+    user: AuthUser,
+    stored: { session_id: string; message_id: string },
+    result: Partial<PipelineResult>,
+  ): AsyncGenerator<PipelineEvent> {
+    const m = await this.sessions.getExchange(
+      user.id,
+      stored.session_id,
+      stored.message_id,
+    );
+    Object.assign(result, {
+      answer: m.content,
+      citations: m.citations,
+      grounded_chunks: m.grounded_chunks,
+      expanded_terms: [],
+      timings: m.timings,
+      session_id: m.session_id,
+      message_id: m.message_id,
+      replayed: true,
+    } satisfies PipelineResult);
+    logFields({ query_len: req.query.length, replayed: true });
+    yield {
+      type: 'retrieval',
+      grounded_chunks: m.grounded_chunks,
+      expanded_terms: [],
+    };
+    yield { type: 'phase', phase: 'generating' };
+    yield { type: 'token', text: m.content };
+    yield {
+      type: 'done',
+      citations: m.citations,
+      timings: m.timings,
+      session_id: m.session_id,
+      message_id: m.message_id,
+    };
+  }
+
+  private async *execute(
+    req: ChatRequestDto,
+    user: AuthUser | undefined,
+    sessionId: string | null,
+    signal: AbortSignal,
+    result: Partial<PipelineResult>,
+    t0: number,
+    requestKey?: string,
   ): AsyncGenerator<PipelineEvent> {
     const timings: Timings = {
       embed_ms: 0,
@@ -93,9 +196,6 @@ export class RagService {
       llm_ms: 0,
       total_ms: 0,
     };
-    logFields({ query_len: req.query.length, top_k: req.top_k });
-    const sessionId = user && req.session_id ? req.session_id : null;
-    if (user && sessionId) await this.sessions.assertOwned(sessionId, user.id);
 
     yield { type: 'phase', phase: 'embedding' };
     const question = req.query;
@@ -165,12 +265,18 @@ export class RagService {
       null;
     if (user && !signal.aborted) {
       timings.total_ms = since(t0);
-      saved = await this.sessions.saveExchange(user.id, sessionId, question, {
-        content: answer,
-        citations,
-        grounded_chunks: grounded,
-        timings,
-      });
+      saved = await this.sessions.saveExchange(
+        user.id,
+        sessionId,
+        question,
+        {
+          content: answer,
+          citations,
+          grounded_chunks: grounded,
+          timings,
+        },
+        requestKey,
+      );
     }
     timings.total_ms = since(t0);
     logFields({ timings });

@@ -6,7 +6,7 @@
 - **Detailed Plan**: Section 1 maps the `src/` Module Directory; Section 2 enforces the 7 Non-Negotiable Backend Invariants; Section 3 documents the Caching & Invalidation Contract; Section 4 specifies the Error & Validation Contract; Section 5 lists Unit, Integration, and SRE Benchmark Commands.
 - **References**: [../AGENTS.md](../AGENTS.md), [../docs/INDEX.md](../docs/INDEX.md), [../docs/prompt_security.md](../docs/prompt_security.md), [docs/AUTH_AND_SECURITY_ARCHITECTURE.md](docs/AUTH_AND_SECURITY_ARCHITECTURE.md), [docs/PERFORMANCE_AND_CACHING.md](docs/PERFORMANCE_AND_CACHING.md), [docs/MONGODB_SCHEMA_DESIGN.md](docs/MONGODB_SCHEMA_DESIGN.md), [docs/CHAT_SESSIONS_SPECIFICATION.md](docs/CHAT_SESSIONS_SPECIFICATION.md), [benchmark/BOTTLENECK_ANALYSIS_AND_OPTIMIZATION.md](benchmark/BOTTLENECK_ANALYSIS_AND_OPTIMIZATION.md).
 - **Created**: 2026-10-29T19:44:00+07:00
-- **Last Updated**: 2026-11-02T11:15:00+07:00
+- **Last Updated**: 2026-11-04T22:27:06+07:00
 
 [STATUS: ACTIVE]
 
@@ -113,7 +113,7 @@ All exceptions are caught by [`HttpExceptionFilter`](src/common/http-exception.f
   "message": "Refresh token has already been used; token family revoked",
   "details": null,
   "timestamp": "2026-10-29T18:00:00.000Z",
-  "path": "/api/v1/auth/refresh"
+  "path": "/api/v1/auth/token-rotations"
 }
 ```
 

@@ -6,7 +6,7 @@
 - **Detailed Plan**: Section 1 covers Password Cryptography & Threadpool Tuning; Section 2 details Dual-Token JWT & 1-RTT Refresh Rotation with Family Reuse Revocation; Section 3 explains Progressive Brute-Force Lockout; Section 4 documents Auth Cache Coherency Rules; Section 5 maps all `/api/v1/auth/*` Endpoints & Error Codes.
 - **References**: [../AGENTS.md](../AGENTS.md), [AUTH_LOGOUT_DESIGN.md](AUTH_LOGOUT_DESIGN.md), [PERFORMANCE_AND_CACHING.md](PERFORMANCE_AND_CACHING.md), [MONGODB_SCHEMA_DESIGN.md](MONGODB_SCHEMA_DESIGN.md), [../benchmark/BOTTLENECK_ANALYSIS_AND_OPTIMIZATION.md](../benchmark/BOTTLENECK_ANALYSIS_AND_OPTIMIZATION.md).
 - **Created**: 2026-10-29T19:46:00+07:00
-- **Last Updated**: 2026-10-29T19:46:00+07:00
+- **Last Updated**: 2026-11-04T22:47:55+07:00
 
 [STATUS: ACTIVE]
 
@@ -31,7 +31,7 @@ const ARGON2_OPTIONS: argon2.Options = {
 Because `argon2.hash()` and `argon2.verify()` execute asynchronously in C++ on Node.js's `libuv` worker threadpool:
 - [`src/main.ts`](../src/main.ts) pins `process.env.UV_THREADPOOL_SIZE = '4'` at the very top of the file before importing NestJS modules.
 - **Why `4` instead of `12`?** Each active `Argon2id` job allocates and sweeps a `64 MB` memory matrix (`4 × 64 MB = 256 MB` concurrent working set). Empirical Stage C testing (`D-022`) proved that raising `UV_THREADPOOL_SIZE` to `12` (`768 MB` concurrent working set) saturated DRAM memory bandwidth and L3 cache lines, **degrading `POST /auth/login` P50 latency from `2.62s` to `3.32s` (`+26.7%` slower)**.
-- **Zero Event Loop Starvation**: Because `Argon2id` runs off the main V8 Event Loop on those 4 worker threads, concurrent `GET /api/v1/auth/me` requests during a heavy login storm maintain a `P95` latency of **`48.03ms`** (`0.00%` errors).
+- **Zero Event Loop Starvation**: Because `Argon2id` runs off the main V8 Event Loop on those 4 worker threads, concurrent `GET /api/v1/users/me` requests during a heavy login storm maintain a `P95` latency of **`48.03ms`** (`0.00%` errors).
 
 ---
 
@@ -53,7 +53,7 @@ Previously, `consume()` performed 2 sequential MongoDB round-trips (`findOne` fo
 
 ```mermaid
 flowchart TD
-    A["Client sends POST /api/v1/auth/refresh { refresh_token }"] --> B["Compute SHA-256(refresh_token) -> token_hash"]
+    A["Client sends POST /api/v1/auth/token-rotations { refresh_token }"] --> B["Compute SHA-256(refresh_token) -> token_hash"]
     B --> C["1-RTT Atomic Query:\nfindOneAndUpdate({ token_hash, revoked_at: null, expires_at: { $gt: now } },\n{ $set: { revoked_at: now } }).lean()"]
     C -->|"Document Returned (Happy Path — 99.99%)"| D["Issue new Access JWT + new Refresh Token\nin same family_id (1 RTT total)"]
     C -->|"Returns null (Edge Case)"| E["Inspect existing doc:\nfindOne({ token_hash }).lean()"]
@@ -95,11 +95,11 @@ To protect accounts against credential stuffing without allowing attackers to Do
 
 | Method & Route | Guard | Rate Limit (`@nestjs/throttler`) | Description |
 | :--- | :--- | :--- | :--- |
-| `POST /api/v1/auth/register` | Public | `5 req / 60s` | Validates email/password, hashes with `Argon2id`, creates user, and returns `201` with `user + access_token + refresh_token`. |
-| `POST /api/v1/auth/login` | Public | `10 req / 60s` | Verifies lockout & `Argon2id` password, updates `last_login_at`, and returns `200` with `user + access_token + refresh_token`. |
-| `POST /api/v1/auth/refresh` | Public | `30 req / 60s` | Atomically consumes `refresh_token` (`1 RTT`) and rotates a new token pair in the same `family_id`. |
-| `POST /api/v1/auth/logout` | [`JwtAuthGuard`](../src/auth/guards/jwt-auth.guard.ts) | Default | Revokes the single provided `refresh_token` (`204 No Content`). See [`AUTH_LOGOUT_DESIGN.md`](AUTH_LOGOUT_DESIGN.md). |
-| `POST /api/v1/auth/logout-all` | [`JwtAuthGuard`](../src/auth/guards/jwt-auth.guard.ts) | Default | Revokes **all** active refresh tokens for `req.user.sub` across all devices (`200 { revoked_count }`). |
-| `GET /api/v1/auth/me` | [`JwtAuthGuard`](../src/auth/guards/jwt-auth.guard.ts) | Default | Returns `UserResponseDto` from `userCache` (`~0.1ms` hit) or `.lean()` MongoDB lookup. |
-| `PATCH /api/v1/auth/me` | [`JwtAuthGuard`](../src/auth/guards/jwt-auth.guard.ts) | Default | Updates `full_name` via `.findOneAndUpdate(...).lean()` and updates `userCache` & `userByEmailCache` in-place. |
-| `POST /api/v1/auth/change-password` | [`JwtAuthGuard`](../src/auth/guards/jwt-auth.guard.ts) | `5 req / 60s` | Verifies `current_password`, hashes `new_password` with `Argon2id`, invalidates `userByEmailCache`, and revokes all existing refresh tokens (`revokeAllForUser`). |
+| `POST /api/v1/users` | Public | `5 req / 60s` | Validates email/password, hashes with `Argon2id`, creates user, and returns `201` with `user + access_token + refresh_token`. |
+| `POST /api/v1/auth/tokens` | Public | `10 req / 60s` | Verifies lockout & `Argon2id` password, updates `last_login_at`, and returns `200` with `user + access_token + refresh_token`. |
+| `POST /api/v1/auth/token-rotations` | Public | `30 req / 60s` | Atomically consumes `refresh_token` (`1 RTT`) and rotates a new token pair in the same `family_id`. |
+| `POST /api/v1/auth/token-revocations` | [`JwtAuthGuard`](../src/auth/guards/jwt-auth.guard.ts) | Default | Revokes the single provided `refresh_token` (`204 No Content`). See [`AUTH_LOGOUT_DESIGN.md`](AUTH_LOGOUT_DESIGN.md). |
+| `POST /api/v1/auth/token-revocations-all` | [`JwtAuthGuard`](../src/auth/guards/jwt-auth.guard.ts) | Default | Revokes **all** active refresh tokens for `req.user.sub` across all devices (`200 { revoked_count }`). |
+| `GET /api/v1/users/me` | [`JwtAuthGuard`](../src/auth/guards/jwt-auth.guard.ts) | Default | Returns `UserResponseDto` from `userCache` (`~0.1ms` hit) or `.lean()` MongoDB lookup. |
+| `PATCH /api/v1/users/me` | [`JwtAuthGuard`](../src/auth/guards/jwt-auth.guard.ts) | Default | Updates `full_name` via `.findOneAndUpdate(...).lean()` and updates `userCache` & `userByEmailCache` in-place. |
+| `PUT /api/v1/users/me/password` | [`JwtAuthGuard`](../src/auth/guards/jwt-auth.guard.ts) | `5 req / 60s` | Verifies `current_password`, hashes `new_password` with `Argon2id`, invalidates `userByEmailCache`, and revokes all existing refresh tokens (`revokeAllForUser`). |

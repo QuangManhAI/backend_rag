@@ -5,29 +5,47 @@ import { LoginAttempt } from '../auth/schemas/login-attempt.schema';
 import { User } from '../auth/schemas/user.schema';
 import { ChatMessage } from '../chat-sessions/schemas/chat-message.schema';
 import { ChatSession } from '../chat-sessions/schemas/chat-session.schema';
-import { decodeCursor, encodeCursor } from '../common/pagination';
+import {
+  allOf,
+  FilterField,
+  keysetFilter,
+  ListQueryDto,
+  ListSpec,
+  mongoSort,
+  parseFilters,
+  parseSort,
+  toCursorPage,
+} from '../common/pagination';
 import { escapeRegex } from '../common/sanitize';
 import { isUuid } from '../common/uuid';
 import { HealthService } from '../health/health.service';
 import { LLM_PORT, type LlmPort } from '../llm/llm.service';
 import type { AuthUser } from '../types/auth-user';
 import { AdminAuditService, type AuditRequest } from './admin-audit.service';
+import { ListSessionsQueryDto, LoginAttemptsQueryDto } from './admin.dto';
 
 export const SESSION_NOT_FOUND = 'session not found';
 
 const MAX_ADMIN_MESSAGES = 200;
 
-interface Cursor {
-  m: string;
-  id: string;
-}
-
-const isCursor = (v: unknown): v is Cursor =>
-  typeof v === 'object' &&
-  v !== null &&
-  typeof (v as Cursor).m === 'string' &&
-  !Number.isNaN(Date.parse((v as Cursor).m)) &&
-  isUuid((v as Cursor).id);
+const SESSION_LIST: ListSpec = {
+  sortable: { last_message_at: 'date', created_at: 'date', title: 'string' },
+  defaultSort: [{ field: 'last_message_at', dir: 'desc' }],
+  idType: 'uuid',
+};
+const MESSAGE_LIST: ListSpec = {
+  sortable: { created_at: 'date' },
+  defaultSort: [{ field: 'created_at', dir: 'asc' }],
+  idType: 'uuid',
+};
+const ATTEMPT_LIST: ListSpec = {
+  sortable: { created_at: 'date' },
+  defaultSort: [{ field: 'created_at', dir: 'desc' }],
+  idType: 'objectId',
+};
+const CREATED_AT_FILTER: Record<string, FilterField> = {
+  created_at: { type: 'date' },
+};
 
 /**
  * Operational read-only views for admins (prompt_security S6): chat sessions, system statistics,
@@ -56,9 +74,7 @@ export class AdminOpsService {
   async listUserSessions(
     actor: AuthUser,
     userId: string,
-    q: string | undefined,
-    limit: number,
-    cursor: string | undefined,
+    query: ListSessionsQueryDto,
     req?: AuditRequest,
   ): Promise<{
     items: Record<string, unknown>[];
@@ -68,30 +84,27 @@ export class AdminOpsService {
     if (!Types.ObjectId.isValid(userId)) {
       throw new NotFoundException('user not found');
     }
-    const filter: Record<string, unknown> = {
-      user_id: new Types.ObjectId(userId),
-      deleted_at: null,
-    };
-    const trimmedQ = q?.trim() ?? '';
+    const terms = parseSort(query.sort, SESSION_LIST);
+    const conditions = parseFilters(query, CREATED_AT_FILTER);
+    const trimmedQ = query.q?.trim() ?? '';
     if (trimmedQ) {
-      filter.title = { $regex: escapeRegex(trimmedQ), $options: 'i' };
+      conditions.push({
+        title: { $regex: escapeRegex(trimmedQ), $options: 'i' },
+      });
     }
-    if (cursor) {
-      const c = decodeCursor(cursor, isCursor);
-      const m = new Date(c.m);
-      filter.$or = [
-        { last_message_at: { $lt: m } },
-        { last_message_at: m, _id: { $lt: c.id } },
-      ];
+    if (query.cursor) {
+      conditions.push(keysetFilter(query.cursor, terms, SESSION_LIST));
     }
     const rows = await this.sessions
-      .find(filter)
-      .sort({ last_message_at: -1, _id: -1 })
-      .limit(limit + 1)
+      .find(
+        allOf(
+          { user_id: new Types.ObjectId(userId), deleted_at: null },
+          conditions,
+        ),
+      )
+      .sort(mongoSort(terms))
+      .limit(query.limit + 1)
       .lean();
-    const hasMore = rows.length > limit;
-    const page = rows.slice(0, limit);
-    const last = page.at(-1);
     await this.audit.writeAudit(
       actor,
       'USER_SESSIONS_VIEW',
@@ -101,24 +114,14 @@ export class AdminOpsService {
       null,
       req,
     );
-    return {
-      items: page.map((s) => ({
-        id: s._id,
-        user_id: s.user_id.toString(),
-        title: s.title,
-        message_count: s.message_count,
-        last_message_at: (s.last_message_at ?? s.created_at).toISOString(),
-        created_at: s.created_at.toISOString(),
-      })),
-      next_cursor:
-        hasMore && last
-          ? encodeCursor({
-              m: (last.last_message_at ?? last.created_at).toISOString(),
-              id: last._id,
-            })
-          : null,
-      has_more: hasMore,
-    };
+    return toCursorPage(rows, query.limit, terms, (s) => ({
+      id: s._id,
+      user_id: s.user_id.toString(),
+      title: s.title,
+      message_count: s.message_count,
+      last_message_at: (s.last_message_at ?? s.created_at).toISOString(),
+      created_at: s.created_at.toISOString(),
+    }));
   }
 
   // ---------------------------------------------------------------- B1b · session detail
@@ -163,6 +166,53 @@ export class AdminOpsService {
         created_at: m.created_at.toISOString(),
       })),
     };
+  }
+
+  // ---------------------------------------------------------------- B1c · session messages
+
+  async listSessionMessages(
+    actor: AuthUser,
+    sessionId: string,
+    query: ListQueryDto,
+    req?: AuditRequest,
+  ): Promise<{
+    items: Record<string, unknown>[];
+    next_cursor: string | null;
+    has_more: boolean;
+  }> {
+    if (!isUuid(sessionId)) throw new NotFoundException(SESSION_NOT_FOUND);
+    const terms = parseSort(query.sort, MESSAGE_LIST);
+    const [session, rows] = await Promise.all([
+      this.sessions.exists({ _id: sessionId, deleted_at: null }),
+      this.messages
+        .find(
+          allOf(
+            { session_id: sessionId, deleted_at: null },
+            query.cursor
+              ? [keysetFilter(query.cursor, terms, MESSAGE_LIST)]
+              : [],
+          ),
+        )
+        .sort(mongoSort(terms))
+        .limit(query.limit + 1)
+        .lean(),
+    ]);
+    if (!session) throw new NotFoundException(SESSION_NOT_FOUND);
+    await this.audit.writeAudit(
+      actor,
+      'SESSION_VIEW',
+      'session',
+      sessionId,
+      null,
+      null,
+      req,
+    );
+    return toCursorPage(rows, query.limit, terms, (m) => ({
+      id: m._id,
+      role: m.role,
+      content: m.content,
+      created_at: m.created_at.toISOString(),
+    }));
   }
 
   // ---------------------------------------------------------------- C1 · stats
@@ -217,13 +267,22 @@ export class AdminOpsService {
 
   async listLoginAttempts(
     actor: AuthUser,
-    limit: number,
+    query: LoginAttemptsQueryDto,
     req?: AuditRequest,
-  ): Promise<{ items: Record<string, unknown>[] }> {
+  ): Promise<{
+    items: Record<string, unknown>[];
+    next_cursor: string | null;
+    has_more: boolean;
+  }> {
+    const terms = parseSort(query.sort, ATTEMPT_LIST);
+    const conditions = parseFilters(query, CREATED_AT_FILTER);
+    if (query.cursor) {
+      conditions.push(keysetFilter(query.cursor, terms, ATTEMPT_LIST));
+    }
     const rows = await this.attempts
-      .find({})
-      .sort({ created_at: -1 })
-      .limit(limit)
+      .find(allOf({}, conditions))
+      .sort(mongoSort(terms))
+      .limit(query.limit + 1)
       .lean();
     await this.audit.writeAudit(
       actor,
@@ -234,12 +293,10 @@ export class AdminOpsService {
       null,
       req,
     );
-    return {
-      items: rows.map((r) => ({
-        key: r.key,
-        created_at: r.created_at.toISOString(),
-      })),
-    };
+    return toCursorPage(rows, query.limit, terms, (r) => ({
+      key: r.key,
+      created_at: r.created_at.toISOString(),
+    }));
   }
 
   // ---------------------------------------------------------------- C3 · health

@@ -12,16 +12,18 @@ import { Throttle } from '@nestjs/throttler';
  * every route, which is not what we want.
  */
 export const RATE_LIMITS = {
-  /** `POST /auth/register` — mass account creation + Argon2 CPU exhaustion. */
+  /** `POST /users` — mass account creation + Argon2 CPU exhaustion. */
   register: { limit: 5, ttl: 60_000 },
-  /** `POST /auth/login` — credential stuffing. */
+  /** `POST /auth/tokens` — credential stuffing. */
   login: { limit: 10, ttl: 60_000 },
-  /** `POST /auth/refresh` — token minting. */
+  /** `POST /auth/token-rotations` — token minting. */
   refresh: { limit: 30, ttl: 60_000 },
-  /** `POST /auth/change-password` — credential rotation. */
+  /** `PUT /users/me/password` — credential rotation. */
   changePassword: { limit: 5, ttl: 60_000 },
   /** `POST /rag/chat` and `POST /rag/chat/stream` — the LLM queue has a single slot. */
   ragChat: { limit: 20, ttl: 60_000 },
+  /** `GET /papers?ids=` — one request fans out to up to 20 Qdrant scrolls. */
+  papersBatch: { limit: 30, ttl: 60_000 },
   /** Global fallback for every other route. */
   default: { limit: 120, ttl: 60_000 },
 } as const;

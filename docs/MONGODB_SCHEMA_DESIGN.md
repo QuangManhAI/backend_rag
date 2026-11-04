@@ -6,7 +6,7 @@
 - **Detailed Plan**: §1 Hybrid Design Stance & Reconciliation Matrix; §2 Entity-Relationship Diagram; §3 Collection Specifications (`users`, `chat_sessions`, `chat_messages`); §4 Indexing, Sorting & TTL Retention Strategy; §5 Data Integrity & Lifecycle Rules; §6 Self-Review Checklist.
 - **References**: [`agents/rules/MD_CONVENTION.md`](../agents/rules/MD_CONVENTION.md), [`agents/rules/COMMIT_CONVENTION.md`](../agents/rules/COMMIT_CONVENTION.md), [`docs/CHAT_SESSIONS_SPECIFICATION.md`](CHAT_SESSIONS_SPECIFICATION.md), [`docs/DECISION_LOG.md`](DECISION_LOG.md), [`backend_rag/src/auth/schemas/user.schema.ts`](../backend_rag/src/auth/schemas/user.schema.ts), [`backend_rag/src/chat-sessions/schemas/chat-session.schema.ts`](../backend_rag/src/chat-sessions/schemas/chat-session.schema.ts), [`backend_rag/src/chat-sessions/schemas/chat-message.schema.ts`](../backend_rag/src/chat-sessions/schemas/chat-message.schema.ts), [`backend_rag/src/common/uuid.ts`](../backend_rag/src/common/uuid.ts), [`frontend_rag/src/components/auth/AuthOverlay.tsx`](../frontend_rag/src/components/auth/AuthOverlay.tsx).
 - **Created**: 2026-10-22T17:20:08+07:00
-- **Last Updated**: 2026-10-28T10:28:30+07:00
+- **Last Updated**: 2026-11-04T22:47:55+07:00
 
 ---
 
@@ -141,6 +141,20 @@ Defined in [`backend_rag/src/chat-sessions/schemas/chat-message.schema.ts`](../b
 | `deleted_at` | `Date \| null` | `default: null`, TTL Index (`3d`) | Thời điểm xóa mềm theo phiên chat cha (giúp MongoDB TTL tự động dọn sạch tin nhắn sau 3 ngày, tránh dữ liệu mồ côi). |
 
 ---
+
+### 3.4 `chat_requests` Collection (Idempotency-Key)
+
+One document per `Idempotency-Key` of `POST /rag/chat*` ([API_DESIGN §3](../../docs/API_DESIGN.md)). The insert is the atomic reservation.
+
+| Field | Type | Notes |
+| :--- | :--- | :--- |
+| `_id` | `string` | `<user_id>:<key>`, so keys of different users cannot collide |
+| `user_id` | `ObjectId` | Owner |
+| `fingerprint` | `string` | SHA-256 of the request body; another body under the same key ➔ `409` |
+| `status` | `in_progress` \| `completed` | `completed` is written in the same transaction as the messages |
+| `locked_until` | `Date` | A crashed run can be taken over after this instant (5 minutes) |
+| `session_id`, `message_id` | `string` \| `null` | Where the stored answer lives |
+| `created_at` | `Date` | TTL index: removed after 24 hours |
 
 ## 4. Indexing, Sorting & TTL Retention Strategy
 

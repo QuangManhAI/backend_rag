@@ -43,12 +43,12 @@ export default function () {
   let res;
 
   if (rand < 0.50) {
-    res = http.get(`${BASE_URL}/api/v1/auth/me`, { headers: authHeaders, tags: { endpoint: 'me' } });
+    res = http.get(`${BASE_URL}/api/v1/users/me`, { headers: authHeaders, tags: { endpoint: 'me' } });
   } else if (rand < 0.90) {
     res = http.get(`${BASE_URL}/api/v1/chat-sessions`, { headers: authHeaders, tags: { endpoint: 'sessions' } });
   } else {
     const payload = JSON.stringify({ display_name: `VU ${user.id.slice(-4)}` });
-    res = http.patch(`${BASE_URL}/api/v1/auth/me`, payload, { headers: authHeaders, tags: { endpoint: 'patch' } });
+    res = http.patch(`${BASE_URL}/api/v1/users/me`, payload, { headers: authHeaders, tags: { endpoint: 'patch' } });
   }
 
   const duration = res.timings.duration;

@@ -1,19 +1,16 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Transform, Type } from 'class-transformer';
+import { Transform } from 'class-transformer';
 import {
   ArrayMinSize,
   ArrayUnique,
   IsArray,
   IsBoolean,
   IsIn,
-  IsInt,
   IsOptional,
   IsString,
-  Max,
   MaxLength,
-  Min,
-  MinLength,
 } from 'class-validator';
+import { ListQueryDto } from '../common/pagination';
 import type { Role } from '../types/auth-user';
 
 const trim = ({ value }: { value: unknown }) =>
@@ -21,21 +18,11 @@ const trim = ({ value }: { value: unknown }) =>
 
 export const ADMIN_ROLES: Role[] = ['user', 'admin'];
 
-export class ListAdminUsersQueryDto {
-  @ApiPropertyOptional({ minimum: 1, maximum: 50, default: 20 })
-  @IsOptional()
-  @Type(() => Number)
-  @Max(50, { message: 'limit must be between 1 and 50' })
-  @Min(1, { message: 'limit must be between 1 and 50' })
-  @IsInt({ message: 'limit must be an integer' })
-  limit: number = 20;
+const filterMessage = (name: string) => ({
+  message: `invalid filter: ${name}`,
+});
 
-  @ApiPropertyOptional({ description: 'Opaque cursor from `next_cursor`' })
-  @IsOptional()
-  @IsString()
-  @MaxLength(512)
-  cursor?: string;
-
+export class ListAdminUsersQueryDto extends ListQueryDto {
   @ApiPropertyOptional({ description: 'Search in email or display_name' })
   @IsOptional()
   @Transform(trim)
@@ -43,21 +30,29 @@ export class ListAdminUsersQueryDto {
   @MaxLength(120, { message: 'q must be at most 120 characters' })
   q?: string;
 
-  @ApiPropertyOptional({ enum: ADMIN_ROLES })
+  @ApiPropertyOptional({ example: 'eq:admin', description: 'user or admin' })
   @IsOptional()
-  @IsIn(ADMIN_ROLES, { message: 'role must be user or admin' })
-  role?: Role;
+  @IsString(filterMessage('role'))
+  @MaxLength(32, filterMessage('role'))
+  role?: string;
 
-  @ApiPropertyOptional({ description: 'Filter by account state' })
+  @ApiPropertyOptional({ example: 'eq:true' })
   @IsOptional()
-  @Transform(({ value }: { value: unknown }) => {
-    if (value === undefined || value === null || value === '') return undefined;
-    if (value === true || value === 'true') return true;
-    if (value === false || value === 'false') return false;
-    return value;
-  })
-  @IsBoolean({ message: 'active must be a boolean' })
-  active?: boolean;
+  @IsString(filterMessage('is_active'))
+  @MaxLength(32, filterMessage('is_active'))
+  is_active?: string;
+
+  @ApiPropertyOptional({ example: 'match:lisa' })
+  @IsOptional()
+  @IsString(filterMessage('email'))
+  @MaxLength(260, filterMessage('email'))
+  email?: string;
+
+  @ApiPropertyOptional({ example: 'gte:2026-01-01,lt:2026-02-01' })
+  @IsOptional()
+  @IsString(filterMessage('created_at'))
+  @MaxLength(120, filterMessage('created_at'))
+  created_at?: string;
 }
 
 export class UpdateRolesDto {
@@ -69,8 +64,13 @@ export class UpdateRolesDto {
   roles: Role[];
 }
 
-export class DisableUserDto {
-  @ApiPropertyOptional({ maxLength: 200 })
+/** Full state of the account's lock: repeating the same request changes nothing. */
+export class UpdateUserStatusDto {
+  @ApiProperty({ description: 'false locks the account, true unlocks it' })
+  @IsBoolean({ message: 'active must be a boolean' })
+  active: boolean;
+
+  @ApiPropertyOptional({ maxLength: 200, description: 'Only when locking' })
   @IsOptional()
   @Transform(trim)
   @IsString({ message: 'reason must be a string' })
@@ -92,8 +92,6 @@ export class AdminUserDto {
 }
 
 export class AdminUserDetailDto extends AdminUserDto {
-  @ApiProperty() session_count: number;
-  @ApiProperty() message_count: number;
   @ApiProperty() active_token_count: number;
 }
 
@@ -109,31 +107,27 @@ export class TokenFamilyDto {
   @ApiProperty() expires_at: string;
 }
 
+export class TokenFamilyListDto {
+  @ApiProperty({ type: [TokenFamilyDto] }) items: TokenFamilyDto[];
+}
+
 export class RevokeTokensResultDto {
   @ApiProperty({ example: 3 }) revoked_count: number;
 }
 
-export class ListSessionsQueryDto {
-  @ApiPropertyOptional({ minimum: 1, maximum: 50, default: 20 })
-  @IsOptional()
-  @Type(() => Number)
-  @Max(50, { message: 'limit must be between 1 and 50' })
-  @Min(1, { message: 'limit must be between 1 and 50' })
-  @IsInt({ message: 'limit must be an integer' })
-  limit: number = 20;
-
-  @ApiPropertyOptional({ description: 'Opaque cursor from `next_cursor`' })
-  @IsOptional()
-  @IsString()
-  @MaxLength(512)
-  cursor?: string;
-
+export class ListSessionsQueryDto extends ListQueryDto {
   @ApiPropertyOptional({ description: 'Search in session title' })
   @IsOptional()
   @Transform(trim)
   @IsString({ message: 'q must be a string' })
   @MaxLength(120, { message: 'q must be at most 120 characters' })
   q?: string;
+
+  @ApiPropertyOptional({ example: 'gte:2026-01-01' })
+  @IsOptional()
+  @IsString(filterMessage('created_at'))
+  @MaxLength(120, filterMessage('created_at'))
+  created_at?: string;
 }
 
 export class AdminSessionDto {
@@ -150,6 +144,12 @@ export class AdminMessageDto {
   @ApiProperty({ enum: ['user', 'assistant'] }) role: 'user' | 'assistant';
   @ApiProperty() content: string;
   @ApiProperty({ nullable: true, type: String }) created_at: string;
+}
+
+export class AdminMessagePageDto {
+  @ApiProperty({ type: [AdminMessageDto] }) items: AdminMessageDto[];
+  @ApiProperty({ nullable: true, type: String }) next_cursor: string | null;
+  @ApiProperty() has_more: boolean;
 }
 
 export class AdminSessionDetailDto extends AdminSessionDto {
@@ -186,6 +186,12 @@ export class LoginAttemptDto {
   @ApiProperty() created_at: string;
 }
 
+export class LoginAttemptPageDto {
+  @ApiProperty({ type: [LoginAttemptDto] }) items: LoginAttemptDto[];
+  @ApiProperty({ nullable: true, type: String }) next_cursor: string | null;
+  @ApiProperty() has_more: boolean;
+}
+
 export class AuditLogDto {
   @ApiProperty() id: string;
   @ApiProperty() actor_id: string;
@@ -206,49 +212,39 @@ export class AuditLogPageDto {
   @ApiProperty() has_more: boolean;
 }
 
-export class ListAuditLogsQueryDto {
-  @ApiPropertyOptional({ minimum: 1, maximum: 50, default: 20 })
+export class ListAuditLogsQueryDto extends ListQueryDto {
+  @ApiPropertyOptional({
+    description: 'The admin who acted',
+    example: 'eq:64b0',
+  })
   @IsOptional()
-  @Type(() => Number)
-  @Max(50, { message: 'limit must be between 1 and 50' })
-  @Min(1, { message: 'limit must be between 1 and 50' })
-  @IsInt({ message: 'limit must be an integer' })
-  limit: number = 20;
-
-  @ApiPropertyOptional({ description: 'Opaque cursor from `next_cursor`' })
-  @IsOptional()
-  @IsString()
-  @MaxLength(512)
-  cursor?: string;
-
-  @ApiPropertyOptional({ description: 'Filter by the admin who acted' })
-  @IsOptional()
-  @IsString()
-  @MaxLength(64)
+  @IsString(filterMessage('actor_id'))
+  @MaxLength(64, filterMessage('actor_id'))
   actor_id?: string;
 
-  @ApiPropertyOptional({ description: 'Filter by exact audit action' })
+  @ApiPropertyOptional({ example: 'eq:USER_DISABLE' })
   @IsOptional()
-  @IsString()
-  @MaxLength(64)
+  @IsString(filterMessage('action'))
+  @MaxLength(64, filterMessage('action'))
   action?: string;
-}
 
-export class LoginAttemptsQueryDto {
-  @ApiPropertyOptional({ minimum: 1, maximum: 200, default: 50 })
+  @ApiPropertyOptional({ example: 'eq:user' })
   @IsOptional()
-  @Type(() => Number)
-  @Max(200, { message: 'limit must be between 1 and 200' })
-  @Min(1, { message: 'limit must be between 1 and 200' })
-  @IsInt({ message: 'limit must be an integer' })
-  limit: number = 50;
+  @IsString(filterMessage('target_type'))
+  @MaxLength(32, filterMessage('target_type'))
+  target_type?: string;
+
+  @ApiPropertyOptional({ example: 'gte:2026-01-01,lt:2026-02-01' })
+  @IsOptional()
+  @IsString(filterMessage('created_at'))
+  @MaxLength(120, filterMessage('created_at'))
+  created_at?: string;
 }
 
-export class ForbiddenReasonDto {
-  @ApiProperty({ minLength: 1, maxLength: 200 })
-  @Transform(trim)
-  @IsString({ message: 'reason must be a string' })
-  @MinLength(1, { message: 'reason must not be empty' })
-  @MaxLength(200, { message: 'reason must be at most 200 characters' })
-  reason: string;
+export class LoginAttemptsQueryDto extends ListQueryDto {
+  @ApiPropertyOptional({ example: 'gte:2026-01-01' })
+  @IsOptional()
+  @IsString(filterMessage('created_at'))
+  @MaxLength(120, filterMessage('created_at'))
+  created_at?: string;
 }

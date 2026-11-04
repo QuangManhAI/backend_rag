@@ -1,9 +1,18 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { decodeCursor, encodeCursor } from '../common/pagination';
-import { isUuid } from '../common/uuid';
+import {
+  allOf,
+  FilterField,
+  keysetFilter,
+  ListSpec,
+  mongoSort,
+  parseFilters,
+  parseSort,
+  toCursorPage,
+} from '../common/pagination';
 import type { AuthUser } from '../types/auth-user';
+import type { ListAuditLogsQueryDto } from './admin.dto';
 import {
   AdminAuditLog,
   AUDIT_ACTIONS,
@@ -13,17 +22,17 @@ import {
 
 export const USER_NOT_FOUND = 'user not found';
 
-interface Cursor {
-  m: string;
-  id: string;
-}
-
-const isCursor = (v: unknown): v is Cursor =>
-  typeof v === 'object' &&
-  v !== null &&
-  typeof (v as Cursor).m === 'string' &&
-  !Number.isNaN(Date.parse((v as Cursor).m)) &&
-  isUuid((v as Cursor).id);
+const AUDIT_LIST: ListSpec = {
+  sortable: { created_at: 'date' },
+  defaultSort: [{ field: 'created_at', dir: 'desc' }],
+  idType: 'objectId',
+};
+const AUDIT_FILTERS: Record<string, FilterField> = {
+  actor_id: { type: 'objectId' },
+  action: { type: 'string' },
+  target_type: { type: 'string' },
+  created_at: { type: 'date' },
+};
 
 /** The request shape the controller hands to the service for audit purposes. */
 export interface AuditRequest {
@@ -82,40 +91,23 @@ export class AdminAuditService {
   /** Cursor-paginated read of the trail. */
   async listAuditLogs(
     actor: AuthUser,
-    limit: number,
-    cursor: string | undefined,
-    actorId: string | undefined,
-    action: string | undefined,
+    query: ListAuditLogsQueryDto,
     req?: AuditRequest,
   ): Promise<{
     items: Record<string, unknown>[];
     next_cursor: string | null;
     has_more: boolean;
   }> {
-    const filter: Record<string, unknown> = {};
-    if (actorId) {
-      if (!Types.ObjectId.isValid(actorId)) {
-        throw new NotFoundException(USER_NOT_FOUND);
-      }
-      filter.actor_id = new Types.ObjectId(actorId);
-    }
-    if (action) filter.action = action;
-    if (cursor) {
-      const c = decodeCursor(cursor, isCursor);
-      const m = new Date(c.m);
-      filter.$or = [
-        { created_at: { $lt: m } },
-        { created_at: m, _id: { $lt: new Types.ObjectId(c.id) } },
-      ];
+    const terms = parseSort(query.sort, AUDIT_LIST);
+    const conditions = parseFilters(query, AUDIT_FILTERS);
+    if (query.cursor) {
+      conditions.push(keysetFilter(query.cursor, terms, AUDIT_LIST));
     }
     const rows = await this.auditLogs
-      .find(filter)
-      .sort({ created_at: -1, _id: -1 })
-      .limit(limit + 1)
+      .find(allOf({}, conditions))
+      .sort(mongoSort(terms))
+      .limit(query.limit + 1)
       .lean();
-    const hasMore = rows.length > limit;
-    const page = rows.slice(0, limit);
-    const last = page.at(-1);
     await this.writeAudit(
       actor,
       AUDIT_ACTIONS.AUDIT_LOG_VIEW,
@@ -125,28 +117,18 @@ export class AdminAuditService {
       null,
       req,
     );
-    return {
-      items: page.map((r) => ({
-        id: r._id.toString(),
-        actor_id: r.actor_id.toString(),
-        actor_email: r.actor_email,
-        action: r.action,
-        target_type: r.target_type,
-        target_id: r.target_id,
-        before: r.before ?? null,
-        after: r.after ?? null,
-        ip: r.ip,
-        request_id: r.request_id,
-        created_at: r.created_at.toISOString(),
-      })),
-      next_cursor:
-        hasMore && last
-          ? encodeCursor({
-              m: last.created_at.toISOString(),
-              id: last._id.toString(),
-            })
-          : null,
-      has_more: hasMore,
-    };
+    return toCursorPage(rows, query.limit, terms, (r) => ({
+      id: r._id.toString(),
+      actor_id: r.actor_id.toString(),
+      actor_email: r.actor_email,
+      action: r.action,
+      target_type: r.target_type,
+      target_id: r.target_id,
+      before: r.before ?? null,
+      after: r.after ?? null,
+      ip: r.ip,
+      request_id: r.request_id,
+      created_at: r.created_at.toISOString(),
+    }));
   }
 }

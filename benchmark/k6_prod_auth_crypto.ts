@@ -39,9 +39,9 @@ export default function () {
     'Accept': 'application/json',
   };
 
-  // Step 1: POST /api/v1/auth/login (Argon2id verification + family token issuance)
+  // Step 1: POST /api/v1/auth/tokens (Argon2id verification + family token issuance)
   const loginRes = http.post(
-    `${BASE_URL}/api/v1/auth/login`,
+    `${BASE_URL}/api/v1/auth/tokens`,
     JSON.stringify({
       email: user.email,
       password: BENCH_PASSWORD,
@@ -53,7 +53,7 @@ export default function () {
   let refreshToken = null;
   let accessToken = null;
   const loginOk = check(loginRes, {
-    'login 200': (r) => r.status === 200,
+    'login 201': (r) => r.status === 201,
     'login returns tokens': (r) => {
       try {
         const b = JSON.parse(r.body);
@@ -72,8 +72,8 @@ export default function () {
     return;
   }
 
-  // Step 2: Probe Event Loop Responsiveness via lightweight GET /api/v1/auth/me while Argon2id is active
-  const meRes = http.get(`${BASE_URL}/api/v1/auth/me`, {
+  // Step 2: Probe Event Loop Responsiveness via lightweight GET /api/v1/users/me while Argon2id is active
+  const meRes = http.get(`${BASE_URL}/api/v1/users/me`, {
     headers: {
       ...headers,
       'Authorization': `Bearer ${accessToken}`,
@@ -83,16 +83,16 @@ export default function () {
   });
   AuthMeProbeDuration.add(meRes.timings.duration);
 
-  // Step 3: POST /api/v1/auth/refresh (SHA-256 token lookup, single-use consume, family rotation)
+  // Step 3: POST /api/v1/auth/token-rotations (SHA-256 token lookup, single-use consume, family rotation)
   const refreshRes = http.post(
-    `${BASE_URL}/api/v1/auth/refresh`,
+    `${BASE_URL}/api/v1/auth/token-rotations`,
     JSON.stringify({ refresh_token: refreshToken }),
     { headers, timeout: '5s', tags: { endpoint: 'auth_refresh' } },
   );
   RefreshRotateDuration.add(refreshRes.timings.duration);
 
   const refreshOk = check(refreshRes, {
-    'refresh 200': (r) => r.status === 200,
+    'refresh 201': (r) => r.status === 201,
     'refresh rotates token': (r) => {
       try {
         const b = JSON.parse(r.body);

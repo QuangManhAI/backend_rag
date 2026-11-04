@@ -41,7 +41,7 @@ describe('HttpExceptionFilter', () => {
       json: jest.fn(),
       end: jest.fn(),
     };
-    const req = { id: 'rid' };
+    const req = { id: 'rid', accepts: () => 'application/json' };
     const h = {
       switchToHttp: () => ({ getRequest: () => req, getResponse: () => res }),
     } as unknown as ArgumentsHost;

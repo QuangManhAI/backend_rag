@@ -5,6 +5,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import type { Response } from 'express';
+import { healthLinks, WithLinks } from '../common/hateoas';
 import { AppConfigService } from '../config/app-config.service';
 import { HealthDto } from './health.dto';
 import { Health, HealthService } from './health.service';
@@ -27,6 +28,7 @@ export class HealthController {
 
   /** Always 200: read `status`. */
   @Get()
+  @WithLinks({ resource: healthLinks })
   @ApiOkResponse({ type: HealthDto })
   async get(): Promise<Health | Record<string, unknown>> {
     const h = await this.health.health();
@@ -42,6 +44,7 @@ export class HealthController {
 
   /** Readiness: 503 when Mongo or Qdrant is down. */
   @Get('ready')
+  @WithLinks({ resource: healthLinks })
   @ApiOkResponse({ type: HealthDto })
   @ApiServiceUnavailableResponse({ type: HealthDto })
   async ready(@Res({ passthrough: true }) res: Response): Promise<unknown> {

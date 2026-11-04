@@ -4,10 +4,13 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
+  MethodNotAllowedException,
+  NotFoundException,
 } from '@nestjs/common';
 import type { Request, Response } from 'express';
 import { STATUS_CODES } from 'http';
 import { requestIdOf } from './request-context';
+import { toXml, wantsXml } from './xml';
 
 /** Error body of every endpoint (API_DESIGN §1.2). */
 export interface ErrorBody {
@@ -46,17 +49,41 @@ export function toErrorBody(
   };
 }
 
+/** An error in the format the client asked for. */
+export function sendError(req: Request, res: Response, body: ErrorBody): void {
+  res.status(body.statusCode);
+  if (wantsXml(req)) res.type('application/xml').send(toXml(body));
+  else res.json(body);
+}
+
+/** The 404 of the framework's router, as opposed to a resource a handler did not find. */
+function isRouteNotFound(e: unknown): boolean {
+  return e instanceof NotFoundException && /^Cannot [A-Z]+ /.test(e.message);
+}
+
 /**
  * Turns every thrown error into the §1.2 body. Unexpected errors become 500 without leaking the
  * stack; the error is attached to the response so the request log line carries it.
  */
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
+  /** `methodsOf` lists the methods a path answers to, which turns a wrong method into a 405. */
+  constructor(private readonly methodsOf?: (path: string) => string[]) {}
+
   catch(exception: unknown, host: ArgumentsHost): void {
     const http = host.switchToHttp();
     const req = http.getRequest<Request>();
     const res = http.getResponse<Response & { err?: unknown }>();
-    const body = toErrorBody(exception, requestIdOf(req));
+    const allowed = isRouteNotFound(exception)
+      ? (this.methodsOf?.(req.path) ?? [])
+      : [];
+    if (allowed.length) res.setHeader('Allow', allowed.join(', '));
+    const body = toErrorBody(
+      allowed.length
+        ? new MethodNotAllowedException('method not allowed')
+        : exception,
+      requestIdOf(req),
+    );
     if (body.statusCode >= 500) {
       res.err =
         exception instanceof Error ? exception : new Error(String(exception));
@@ -65,6 +92,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
       res.end();
       return;
     }
-    res.status(body.statusCode).json(body);
+    sendError(req, res, body);
   }
 }

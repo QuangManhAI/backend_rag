@@ -119,6 +119,46 @@ describe('Admin (integration)', () => {
       ).toBe(true);
     });
 
+    it('walks every page with a cursor, also combined with q (ObjectId ids)', async () => {
+      const seen: string[] = [];
+      let cursor: string | null = null;
+      do {
+        const query: string = cursor
+          ? `&cursor=${encodeURIComponent(cursor)}`
+          : '';
+        const page = await http()
+          .get(`/api/v1/admin/users?limit=1&q=example${query}`)
+          .set(asAdmin())
+          .expect(200);
+        seen.push(...page.body.items.map((u: { id: string }) => u.id));
+        cursor = page.body.next_cursor as string | null;
+      } while (cursor);
+      expect(seen.length).toBeGreaterThanOrEqual(4);
+      expect(new Set(seen).size).toBe(seen.length);
+    });
+
+    it('sorts and filters with the shared query language', async () => {
+      const sorted = await http()
+        .get('/api/v1/admin/users?sort=email:asc&is_active=eq:true&limit=50')
+        .set(asAdmin())
+        .expect(200);
+      const emails = sorted.body.items.map((u: { email: string }) => u.email);
+      expect(emails).toEqual([...emails].sort());
+      const byEmail = await http()
+        .get('/api/v1/admin/users?email=match:TARGET@')
+        .set(asAdmin())
+        .expect(200);
+      expect(byEmail.body.items).toHaveLength(1);
+      await http()
+        .get('/api/v1/admin/users?sort=password_hash:asc')
+        .set(asAdmin())
+        .expect(400);
+      await http()
+        .get('/api/v1/admin/users?is_active=maybe')
+        .set(asAdmin())
+        .expect(400);
+    });
+
     it('rejects a bad role filter with 400', async () => {
       await http()
         .get('/api/v1/admin/users?role=root')
@@ -154,12 +194,12 @@ describe('Admin (integration)', () => {
       ).access_token;
       // The token works before the promotion (probed on a route every user may call).
       await http()
-        .get('/api/v1/auth/me')
+        .get('/api/v1/users/me')
         .set('Authorization', `Bearer ${stale}`)
         .expect(200);
 
       const res = await http()
-        .patch(`/api/v1/admin/users/${targetId}/roles`)
+        .put(`/api/v1/admin/users/${targetId}/roles`)
         .set(asAdmin())
         .send({ roles: ['user', 'admin'] })
         .expect(200);
@@ -167,14 +207,14 @@ describe('Admin (integration)', () => {
 
       // ... and stops working right after it.
       await http()
-        .get('/api/v1/auth/me')
+        .get('/api/v1/users/me')
         .set('Authorization', `Bearer ${stale}`)
         .expect(401);
     });
 
     it('an admin cannot demote itself (self lockout)', async () => {
       const res = await http()
-        .patch(`/api/v1/admin/users/${ADMIN_ID}/roles`)
+        .put(`/api/v1/admin/users/${ADMIN_ID}/roles`)
         .set(asAdmin())
         .send({ roles: ['user'] })
         .expect(409);
@@ -185,7 +225,7 @@ describe('Admin (integration)', () => {
       // `targetId` is an admin by now, so demoting it is allowed — there would still be one
       // admin left. The guard only fires for the very last one.
       await http()
-        .patch(`/api/v1/admin/users/${targetId}/roles`)
+        .put(`/api/v1/admin/users/${targetId}/roles`)
         .set(asAdmin())
         .send({ roles: ['user'] })
         .expect(200);
@@ -199,12 +239,12 @@ describe('Admin (integration)', () => {
 
     it('400 when the role list is invalid', async () => {
       await http()
-        .patch(`/api/v1/admin/users/${targetId}/roles`)
+        .put(`/api/v1/admin/users/${targetId}/roles`)
         .set(asAdmin())
         .send({ roles: ['root'] })
         .expect(400);
       await http()
-        .patch(`/api/v1/admin/users/${targetId}/roles`)
+        .put(`/api/v1/admin/users/${targetId}/roles`)
         .set(asAdmin())
         .send({ roles: [] })
         .expect(400);
@@ -219,9 +259,9 @@ describe('Admin (integration)', () => {
       ).access_token;
 
       const locked = await http()
-        .post(`/api/v1/admin/users/${USER_ID}/disable`)
+        .put(`/api/v1/admin/users/${USER_ID}/status`)
         .set(asAdmin())
-        .send({ reason: 'spam' })
+        .send({ active: false, reason: 'spam' })
         .expect(200);
       expect(locked.body.is_active).toBe(false);
       expect(locked.body.disabled_reason).toBe('spam');
@@ -233,22 +273,85 @@ describe('Admin (integration)', () => {
 
       // A locked account cannot log in either.
       await http()
-        .post('/api/v1/auth/login')
+        .post('/api/v1/auth/tokens')
         .send({ email: `${USER_ID}@example.com`, password: SEED_PASSWORD })
         .expect(401);
 
       const enabled = await http()
-        .post(`/api/v1/admin/users/${USER_ID}/enable`)
+        .put(`/api/v1/admin/users/${USER_ID}/status`)
         .set(asAdmin())
+        .send({ active: true })
         .expect(200);
       expect(enabled.body.is_active).toBe(true);
     });
 
+    it('repeating a status PUT writes nothing: tokens stay alive, no new audit record', async () => {
+      const users = t.app.get<Model<User>>(getModelToken(User.name));
+      const put = (body: object) =>
+        http()
+          .put(`/api/v1/admin/users/${targetId}/status`)
+          .set(asAdmin())
+          .send(body)
+          .expect(200);
+      const before = await users.findById(targetId).lean();
+      const auditsBefore = await auditLogs().countDocuments();
+      await put({ active: true });
+      expect((await users.findById(targetId).lean())?.token_version).toBe(
+        before?.token_version,
+      );
+      expect(await auditLogs().countDocuments()).toBe(auditsBefore);
+
+      await put({ active: false, reason: 'first' });
+      const locked = await users.findById(targetId).lean();
+      const auditsLocked = await auditLogs().countDocuments();
+      await put({ active: false });
+      const again = await users.findById(targetId).lean();
+      expect(again?.token_version).toBe(locked?.token_version);
+      expect(again?.disabled_at).toEqual(locked?.disabled_at);
+      expect(again?.disabled_reason).toBe('first');
+      expect(await auditLogs().countDocuments()).toBe(auditsLocked);
+      await put({ active: true });
+    });
+
+    it('offers the lock action that fits the state of the account', async () => {
+      const links = async (active: boolean) =>
+        (
+          await http()
+            .put(`/api/v1/admin/users/${targetId}/status`)
+            .set(asAdmin())
+            .send({ active })
+            .expect(200)
+        ).body._links as Record<string, unknown>;
+      expect(Object.keys(await links(false))).toContain('unlock');
+      expect(Object.keys(await links(true))).toContain('lock');
+    });
+
+    it('rejects a reason when unlocking', async () => {
+      await http()
+        .put(`/api/v1/admin/users/${targetId}/status`)
+        .set(asAdmin())
+        .send({ active: true, reason: 'nope' })
+        .expect(400);
+    });
+
+    it('repeating a roles PUT does not revoke tokens', async () => {
+      const users = t.app.get<Model<User>>(getModelToken(User.name));
+      const before = await users.findById(targetId).lean();
+      await http()
+        .put(`/api/v1/admin/users/${targetId}/roles`)
+        .set(asAdmin())
+        .send({ roles: before?.roles })
+        .expect(200);
+      expect((await users.findById(targetId).lean())?.token_version).toBe(
+        before?.token_version,
+      );
+    });
+
     it('an admin cannot lock itself', async () => {
       const res = await http()
-        .post(`/api/v1/admin/users/${ADMIN_ID}/disable`)
+        .put(`/api/v1/admin/users/${ADMIN_ID}/status`)
         .set(asAdmin())
-        .send({ reason: 'oops' })
+        .send({ active: false, reason: 'oops' })
         .expect(409);
       expect(res.body.message).toBe('SELF_LOCKOUT_FORBIDDEN');
     });
@@ -268,13 +371,13 @@ describe('Admin (integration)', () => {
       expect(before.body.items.length).toBeGreaterThan(0);
 
       const res = await http()
-        .post(`/api/v1/admin/users/${OTHER_ID}/revoke-tokens`)
+        .delete(`/api/v1/admin/users/${OTHER_ID}/tokens`)
         .set(asAdmin())
         .expect(200);
       expect(res.body.revoked_count).toBeGreaterThan(0);
 
       await http()
-        .post('/api/v1/auth/refresh')
+        .post('/api/v1/auth/token-rotations')
         .send({ refresh_token: issued.refresh_token })
         .expect(401);
     });
@@ -302,14 +405,14 @@ describe('Admin (integration)', () => {
       });
 
       const list = await http()
-        .get(`/api/v1/admin/users/${USER_ID}/sessions`)
+        .get(`/api/v1/admin/users/${USER_ID}/chat-sessions`)
         .set(asAdmin())
         .expect(200);
       expect(list.body.items).toHaveLength(1);
       expect(list.body.items[0].title).toBe('violating content');
 
       const detail = await http()
-        .get(`/api/v1/admin/sessions/${sessionId}`)
+        .get(`/api/v1/admin/chat-sessions/${sessionId}`)
         .set(asAdmin())
         .expect(200);
       expect(detail.body.messages[0].content).toBe('please review this');
@@ -317,9 +420,9 @@ describe('Admin (integration)', () => {
 
     it('there is no delete endpoint for content', async () => {
       await http()
-        .delete('/api/v1/admin/sessions/whatever')
+        .delete('/api/v1/admin/chat-sessions/whatever')
         .set(asAdmin())
-        .expect(404);
+        .expect(405);
     });
   });
 
@@ -355,15 +458,16 @@ describe('Admin (integration)', () => {
     });
 
     it('the trail is append-only: no delete or update endpoint exists', async () => {
-      await http()
+      const del = await http()
         .delete('/api/v1/admin/audit-logs')
         .set(asAdmin())
-        .expect(404);
+        .expect(405);
+      expect(del.headers.allow).toBe('GET');
       await http()
         .patch('/api/v1/admin/audit-logs')
         .set(asAdmin())
         .send({})
-        .expect(404);
+        .expect(405);
     });
 
     it('the raw collection has no service method that mutates a record', async () => {

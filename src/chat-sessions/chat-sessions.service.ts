@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   Logger,
   NotFoundException,
@@ -7,25 +8,41 @@ import {
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { LRUCache } from 'lru-cache';
 import { ClientSession, Connection, Model, Types } from 'mongoose';
-import { decodeCursor, encodeCursor } from '../common/pagination';
+import {
+  allOf,
+  FilterField,
+  keysetFilter,
+  ListSpec,
+  mongoSort,
+  parseFilters,
+  parseIds,
+  parseSort,
+  toCursorPage,
+} from '../common/pagination';
 import { escapeRegex } from '../common/sanitize';
 import { logEvent } from '../common/request-context';
 import { isUuid, uuidv7 } from '../common/uuid';
 import {
+  ListMessagesQueryDto,
+  ListSessionsQueryDto,
   MessageDto,
+  MessagePageDto,
   SessionDto,
   SessionPageDto,
   SessionSummaryDto,
 } from './dto/chat-session.dto';
 import { ChatMessage } from './schemas/chat-message.schema';
+import { ChatRequest } from './schemas/chat-request.schema';
 import {
   ChatSession,
   ChatSessionDocument,
 } from './schemas/chat-session.schema';
 import type {
   AssistantMessageInput,
+  BeginRequestResult,
   SavedExchange,
   SessionStorePort,
+  StoredExchange,
 } from './session-store.port';
 
 export const SESSION_NOT_FOUND = 'session not found';
@@ -35,17 +52,31 @@ export const MAX_MESSAGES = 200;
 export const UTC7_OFFSET_MS = 7 * 60 * 60 * 1000;
 const SESSION_CACHE_TTL_MS = 300_000;
 
-interface SessionCursor {
-  m: string;
-  id: string;
-}
+export const SESSION_BATCH_MAX = 50;
+export const MESSAGE_PAGE_SIZE = 50;
+export const REQUEST_IN_PROGRESS = 'request already in progress';
+export const REQUEST_KEY_REUSED =
+  'idempotency key reused with a different request';
+const REQUEST_LOCK_MS = 5 * 60 * 1000;
 
-const isCursor = (v: unknown): v is SessionCursor =>
-  typeof v === 'object' &&
-  v !== null &&
-  typeof (v as SessionCursor).m === 'string' &&
-  !Number.isNaN(Date.parse((v as SessionCursor).m)) &&
-  isUuid((v as SessionCursor).id);
+const SESSION_LIST: ListSpec = {
+  sortable: { last_message_at: 'date', created_at: 'date', title: 'string' },
+  defaultSort: [{ field: 'last_message_at', dir: 'desc' }],
+  idType: 'uuid',
+};
+const SESSION_FILTERS: Record<string, FilterField> = {
+  created_at: { type: 'date' },
+  last_message_at: { type: 'date' },
+  message_count: { type: 'number' },
+};
+const MESSAGE_LIST: ListSpec = {
+  sortable: { created_at: 'date' },
+  defaultSort: [{ field: 'created_at', dir: 'asc' }],
+  idType: 'uuid',
+};
+
+const isDuplicateKey = (e: unknown) =>
+  (e as { code?: unknown })?.code === 11000;
 
 /** Unicode-aware length (an emoji counts as one character). */
 const charLength = (s: string) => Array.from(s).length;
@@ -137,6 +168,8 @@ export class ChatSessionsService implements SessionStorePort {
     private readonly sessions: Model<ChatSession>,
     @InjectModel(ChatMessage.name)
     private readonly messages: Model<ChatMessage>,
+    @InjectModel(ChatRequest.name)
+    private readonly requests: Model<ChatRequest>,
     @InjectConnection() private readonly connection: Connection,
   ) {}
 
@@ -146,54 +179,78 @@ export class ChatSessionsService implements SessionStorePort {
 
   async list(
     userId: string,
-    cursor?: string,
-    q?: string,
+    query: Partial<ListSessionsQueryDto> = {},
   ): Promise<SessionPageDto> {
-    const trimmedQ = q?.trim() ?? '';
+    const limit = query.limit ?? SESSION_PAGE_SIZE;
+    const trimmedQ = query.q?.trim() ?? '';
     const gen = this.userGen.get(userId) ?? 0;
-    const cacheKey = `${userId}:${gen}:${cursor ?? ''}:${trimmedQ.toLowerCase()}`;
+    const cacheKey = `${userId}:${gen}:${JSON.stringify([
+      limit,
+      query.cursor,
+      query.sort,
+      trimmedQ.toLowerCase(),
+      query.ids,
+      query.created_at,
+      query.last_message_at,
+      query.message_count,
+    ])}`;
     if (this.cacheEnabled) {
       const cached = this.listCache.get(cacheKey);
       if (cached) return cached;
     }
-    const filter: Record<string, unknown> = {
-      user_id: new Types.ObjectId(userId),
-      deleted_at: null,
-      message_count: { $gt: 0 },
-    };
+    const terms = parseSort(query.sort, SESSION_LIST);
+    const conditions = parseFilters(query, SESSION_FILTERS);
+    if (query.cursor) {
+      conditions.push(keysetFilter(query.cursor, terms, SESSION_LIST));
+    }
+    const filter = allOf(
+      {
+        user_id: new Types.ObjectId(userId),
+        deleted_at: null,
+        message_count: { $gt: 0 },
+      },
+      conditions,
+    );
     if (trimmedQ)
       filter.title = { $regex: escapeRegex(trimmedQ), $options: 'i' };
-    if (cursor) {
-      const c = decodeCursor(cursor, isCursor);
-      const m = new Date(c.m);
-      filter.$or = [
-        { last_message_at: { $lt: m } },
-        { last_message_at: m, _id: { $lt: c.id } },
-      ];
+    if (query.ids) {
+      filter._id = {
+        $in: parseIds(query.ids, SESSION_BATCH_MAX, isUuid),
+      };
     }
     const rows = await this.sessions
       .find(filter)
-      .sort({ last_message_at: -1, _id: -1 })
-      .limit(SESSION_PAGE_SIZE + 1)
+      .sort(mongoSort(terms))
+      .limit(limit + 1)
       .lean();
-    const hasMore = rows.length > SESSION_PAGE_SIZE;
-    const page = rows.slice(0, SESSION_PAGE_SIZE);
-    const last = page.at(-1);
-    const result: SessionPageDto = {
-      items: page.map(toSummary),
-      next_cursor:
-        hasMore && last
-          ? encodeCursor({
-              m: (last.last_message_at ?? last.created_at).toISOString(),
-              id: last._id,
-            })
-          : null,
-      has_more: hasMore,
-    };
+    const result: SessionPageDto = toCursorPage(rows, limit, terms, toSummary);
     if (this.cacheEnabled) {
       this.listCache.set(cacheKey, result);
     }
     return result;
+  }
+
+  /** The messages of one owned session, oldest first by default. */
+  async listMessages(
+    userId: string,
+    id: string,
+    query: Partial<ListMessagesQueryDto> = {},
+  ): Promise<MessagePageDto> {
+    const limit = query.limit ?? MESSAGE_PAGE_SIZE;
+    const terms = parseSort(query.sort, MESSAGE_LIST);
+    const filter = allOf(
+      { session_id: id, deleted_at: null },
+      query.cursor ? [keysetFilter(query.cursor, terms, MESSAGE_LIST)] : [],
+    );
+    const [, rows] = await Promise.all([
+      this.findOwned(id, userId),
+      this.messages
+        .find(filter)
+        .sort(mongoSort(terms))
+        .limit(limit + 1)
+        .lean(),
+    ]);
+    return toCursorPage(rows, limit, terms, toMessage);
   }
 
   async get(userId: string, id: string): Promise<SessionDto> {
@@ -264,24 +321,12 @@ export class ChatSessionsService implements SessionStorePort {
       .lean();
     if (!s) throw new NotFoundException(SESSION_NOT_FOUND);
     logEvent('SESSION_RENAMED', { session_id: id });
-    const summary = toSummary(s);
     if (this.cacheEnabled) {
-      const gen = this.userGen.get(userId) ?? 0;
-      const page1 = this.listCache.get(`${userId}:${gen}::`);
-      if (page1) {
-        const idx = page1.items.findIndex((item) => item.id === id);
-        if (idx !== -1) {
-          page1.items[idx] = summary;
-        }
-      }
-      const detailKey = `${userId}:${id}`;
-      const detail = this.sessionDetailCache.get(detailKey);
-      if (detail) {
-        detail.title = summary.title;
-        detail.updated_at = summary.updated_at;
-      }
+      // Every cached page may hold this title (filtered and later pages too), so all of them go.
+      this.bumpUserGen(userId);
+      this.sessionDetailCache.delete(`${userId}:${id}`);
     }
-    return summary;
+    return toSummary(s);
   }
 
   /** Idempotent soft delete (3-day TTL): unknown ids and other users' sessions are silently ignored. */
@@ -309,6 +354,116 @@ export class ChatSessionsService implements SessionStorePort {
     }
   }
 
+  /** Batch soft delete. Ids that are unknown or belong to someone else are silently ignored. */
+  async removeMany(userId: string, rawIds: string): Promise<void> {
+    const ids = parseIds(rawIds, SESSION_BATCH_MAX, isUuid);
+    const owned = { user_id: new Types.ObjectId(userId), deleted_at: null };
+    const rows = await this.sessions
+      .find({ ...owned, _id: { $in: ids } }, { _id: 1 })
+      .lean();
+    if (this.cacheEnabled) {
+      this.bumpUserGen(userId);
+      for (const id of ids) this.sessionDetailCache.delete(`${userId}:${id}`);
+    }
+    if (!rows.length) return;
+    const found = rows.map((r) => r._id);
+    const now = new Date();
+    await Promise.all([
+      this.sessions.updateMany(
+        { ...owned, _id: { $in: found } },
+        { $set: { deleted_at: now } },
+      ),
+      this.messages.updateMany(
+        { session_id: { $in: found }, deleted_at: null },
+        { $set: { deleted_at: now } },
+      ),
+    ]);
+    logEvent('SESSIONS_DELETED', { count: found.length });
+  }
+
+  async beginRequest(
+    userId: string,
+    key: string,
+    fingerprint: string,
+  ): Promise<BeginRequestResult> {
+    const _id = `${userId}:${key}`;
+    const now = Date.now();
+    const lockedUntil = new Date(now + REQUEST_LOCK_MS);
+    try {
+      await this.requests.create({
+        _id,
+        user_id: new Types.ObjectId(userId),
+        fingerprint,
+        status: 'in_progress',
+        locked_until: lockedUntil,
+      });
+      return { state: 'started' };
+    } catch (e) {
+      if (!isDuplicateKey(e)) throw e;
+    }
+    const existing = await this.requests.findById(_id).lean();
+    // Released between the failed insert and this read: the client may simply retry.
+    if (!existing) throw new ConflictException(REQUEST_IN_PROGRESS);
+    if (existing.fingerprint !== fingerprint) {
+      throw new ConflictException(REQUEST_KEY_REUSED);
+    }
+    if (
+      existing.status === 'completed' &&
+      existing.session_id &&
+      existing.message_id
+    ) {
+      return {
+        state: 'completed',
+        session_id: existing.session_id,
+        message_id: existing.message_id,
+      };
+    }
+    const takenOver = await this.requests.findOneAndUpdate(
+      {
+        _id,
+        status: 'in_progress',
+        locked_until: { $lte: new Date(now) },
+      },
+      { $set: { locked_until: lockedUntil } },
+    );
+    if (!takenOver) throw new ConflictException(REQUEST_IN_PROGRESS);
+    return { state: 'started' };
+  }
+
+  async releaseRequest(userId: string, key: string): Promise<void> {
+    await this.requests.deleteOne({
+      _id: `${userId}:${key}`,
+      status: 'in_progress',
+    });
+  }
+
+  async getExchange(
+    userId: string,
+    sessionId: string,
+    messageId: string,
+  ): Promise<StoredExchange> {
+    const [, m] = await Promise.all([
+      this.findOwned(sessionId, userId),
+      this.messages
+        .findOne({
+          _id: messageId,
+          session_id: sessionId,
+          role: 'assistant',
+          deleted_at: null,
+        })
+        .lean(),
+    ]);
+    if (!m) throw new NotFoundException(SESSION_NOT_FOUND);
+    return {
+      session_id: sessionId,
+      message_id: m._id,
+      content: m.content,
+      citations: m.citations ?? [],
+      grounded_chunks: m.grounded_chunks ?? [],
+      timings: m.timings as StoredExchange['timings'],
+    };
+  }
+
   async assertOwned(sessionId: string, userId: string): Promise<void> {
     await this.findOwned(sessionId, userId);
   }
@@ -324,13 +479,21 @@ export class ChatSessionsService implements SessionStorePort {
     sessionId: string | null,
     question: string,
     answer: AssistantMessageInput,
+    requestKey?: string,
   ): Promise<SavedExchange> {
     if (this.cacheEnabled) {
       this.bumpUserGen(userId);
       if (sessionId) this.sessionDetailCache.delete(`${userId}:${sessionId}`);
     }
     if (!this.transactions) {
-      return this.writeExchange(null, userId, sessionId, question, answer);
+      return this.writeExchange(
+        null,
+        userId,
+        sessionId,
+        question,
+        answer,
+        requestKey,
+      );
     }
     const db = await this.connection.startSession();
     try {
@@ -342,6 +505,7 @@ export class ChatSessionsService implements SessionStorePort {
           sessionId,
           question,
           answer,
+          requestKey,
         );
       });
       if (!saved) throw new Error('transaction produced no result');
@@ -352,7 +516,14 @@ export class ChatSessionsService implements SessionStorePort {
       this.logger.warn(
         'MONGO_NO_TRANSACTIONS: standalone MongoDB, chat writes are not atomic',
       );
-      return this.writeExchange(null, userId, sessionId, question, answer);
+      return this.writeExchange(
+        null,
+        userId,
+        sessionId,
+        question,
+        answer,
+        requestKey,
+      );
     } finally {
       await db.endSession();
     }
@@ -364,6 +535,7 @@ export class ChatSessionsService implements SessionStorePort {
     sessionId: string | null,
     question: string,
     answer: AssistantMessageInput,
+    requestKey?: string,
   ): Promise<SavedExchange> {
     const uid = new Types.ObjectId(userId);
     const now = Date.now();
@@ -434,6 +606,20 @@ export class ChatSessionsService implements SessionStorePort {
         { session: db ?? undefined, timestamps: false },
       );
       logEvent('SESSION_CREATED', { session_id: targetSessionId });
+    }
+    if (requestKey) {
+      // In the same transaction as the messages: a key is never `completed` without its answer.
+      await this.requests.updateOne(
+        { _id: `${userId}:${requestKey}` },
+        {
+          $set: {
+            status: 'completed',
+            session_id: targetSessionId,
+            message_id: assistantMsg._id,
+          },
+        },
+        { session: db ?? undefined },
+      );
     }
     return {
       session_id: targetSessionId,

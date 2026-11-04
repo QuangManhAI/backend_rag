@@ -68,7 +68,7 @@ describe('Auth (integration)', () => {
 
   async function register(email = newEmail(), password = 'correct horse') {
     const res = await http()
-      .post('/api/v1/auth/register')
+      .post('/api/v1/users')
       .send({ email, password, display_name: 'Manh' })
       .expect(201);
     return res.body as AuthBody;
@@ -87,7 +87,7 @@ describe('Auth (integration)', () => {
     it('409 on duplicate email (case and spaces ignored)', async () => {
       await register('dup@example.com');
       const res = await http()
-        .post('/api/v1/auth/register')
+        .post('/api/v1/users')
         .send({
           email: ' DUP@example.com',
           password: 'correct horse',
@@ -111,10 +111,7 @@ describe('Auth (integration)', () => {
         'invalid display_name',
       ],
     ])('400 %#', async (body, message) => {
-      const res = await http()
-        .post('/api/v1/auth/register')
-        .send(body)
-        .expect(400);
+      const res = await http().post('/api/v1/users').send(body).expect(400);
       expect(res.body).toMatchObject({
         statusCode: 400,
         error: 'Bad Request',
@@ -141,9 +138,9 @@ describe('Auth (integration)', () => {
       const email = newEmail();
       await register(email);
       await http()
-        .post('/api/v1/auth/login')
+        .post('/api/v1/auth/tokens')
         .send({ email, password: 'correct horse' })
-        .expect(200);
+        .expect(201);
     });
 
     it('5 failures then 429', async () => {
@@ -151,13 +148,13 @@ describe('Auth (integration)', () => {
       await register(email);
       for (let i = 0; i < 5; i++) {
         const r = await http()
-          .post('/api/v1/auth/login')
+          .post('/api/v1/auth/tokens')
           .send({ email, password: 'wrong password' })
           .expect(401);
         expect(r.body.message).toBe('invalid credentials');
       }
       const r = await http()
-        .post('/api/v1/auth/login')
+        .post('/api/v1/auth/tokens')
         .send({ email, password: 'correct horse' })
         .expect(429);
       expect(r.body.message).toBe('too many login attempts');
@@ -165,7 +162,7 @@ describe('Auth (integration)', () => {
 
     it('401 for an unknown email', async () => {
       await http()
-        .post('/api/v1/auth/login')
+        .post('/api/v1/auth/tokens')
         .send({ email: 'ghost@example.com', password: 'whatever1' })
         .expect(401);
     });
@@ -176,20 +173,20 @@ describe('Auth (integration)', () => {
       const first = await register();
       const second = (
         await http()
-          .post('/api/v1/auth/refresh')
+          .post('/api/v1/auth/token-rotations')
           .send({ refresh_token: first.refresh_token })
-          .expect(200)
+          .expect(201)
       ).body as AuthBody;
       expect(second.refresh_token).not.toBe(first.refresh_token);
 
       const reuse = await http()
-        .post('/api/v1/auth/refresh')
+        .post('/api/v1/auth/token-rotations')
         .send({ refresh_token: first.refresh_token })
         .expect(401);
       expect(reuse.body.message).toBe('refresh token invalid or expired');
 
       await http()
-        .post('/api/v1/auth/refresh')
+        .post('/api/v1/auth/token-rotations')
         .send({ refresh_token: second.refresh_token })
         .expect(401);
     });
@@ -199,16 +196,16 @@ describe('Auth (integration)', () => {
       const results = await Promise.all(
         [1, 2].map(() =>
           http()
-            .post('/api/v1/auth/refresh')
+            .post('/api/v1/auth/token-rotations')
             .send({ refresh_token: b.refresh_token }),
         ),
       );
-      expect(results.map((r) => r.status).sort()).toEqual([200, 401]);
+      expect(results.map((r) => r.status).sort()).toEqual([201, 401]);
     });
 
     it('401 for an unknown token', async () => {
       await http()
-        .post('/api/v1/auth/refresh')
+        .post('/api/v1/auth/token-rotations')
         .send({ refresh_token: 'nope' })
         .expect(401);
     });
@@ -216,34 +213,34 @@ describe('Auth (integration)', () => {
     it('logout revokes the token', async () => {
       const b = await register();
       await http()
-        .post('/api/v1/auth/logout')
+        .post('/api/v1/auth/token-revocations')
         .set('Authorization', `Bearer ${b.access_token}`)
         .send({ refresh_token: b.refresh_token })
         .expect(204);
       await http()
-        .post('/api/v1/auth/refresh')
+        .post('/api/v1/auth/token-rotations')
         .send({ refresh_token: b.refresh_token })
         .expect(401);
     });
   });
 
   describe('me / profile / password', () => {
-    it('GET and PATCH /auth/me', async () => {
+    it('GET and PATCH /users/me', async () => {
       const b = await register();
       const auth = `Bearer ${b.access_token}`;
       const me = await http()
-        .get('/api/v1/auth/me')
+        .get('/api/v1/users/me')
         .set('Authorization', auth)
         .expect(200);
       expect(me.body.id).toBe(b.user.id);
       const upd = await http()
-        .patch('/api/v1/auth/me')
+        .patch('/api/v1/users/me')
         .set('Authorization', auth)
         .send({ display_name: '  New name ' })
         .expect(200);
       expect(upd.body.display_name).toBe('New name');
       const bad = await http()
-        .patch('/api/v1/auth/me')
+        .patch('/api/v1/users/me')
         .set('Authorization', auth)
         .send({ display_name: 'x'.repeat(61) })
         .expect(400);
@@ -255,31 +252,31 @@ describe('Auth (integration)', () => {
       const a = await register(email);
       const b = (
         await http()
-          .post('/api/v1/auth/login')
+          .post('/api/v1/auth/tokens')
           .send({ email, password: 'correct horse' })
-          .expect(200)
+          .expect(201)
       ).body as AuthBody;
       const wrong = await http()
-        .post('/api/v1/auth/change-password')
+        .put('/api/v1/users/me/password')
         .set('Authorization', `Bearer ${a.access_token}`)
         .send({ old_password: 'not it!!', new_password: 'brand new pass' })
         .expect(401);
       expect(wrong.body.message).toBe('old password incorrect');
       await http()
-        .post('/api/v1/auth/change-password')
+        .put('/api/v1/users/me/password')
         .set('Authorization', `Bearer ${a.access_token}`)
         .send({ old_password: 'correct horse', new_password: 'brand new pass' })
         .expect(204);
       for (const tok of [a.refresh_token, b.refresh_token]) {
         await http()
-          .post('/api/v1/auth/refresh')
+          .post('/api/v1/auth/token-rotations')
           .send({ refresh_token: tok })
           .expect(401);
       }
       await http()
-        .post('/api/v1/auth/login')
+        .post('/api/v1/auth/tokens')
         .send({ email, password: 'brand new pass' })
-        .expect(200);
+        .expect(201);
     });
   });
 

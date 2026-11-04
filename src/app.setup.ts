@@ -1,18 +1,38 @@
 import type { INestApplication } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
-import type { Express } from 'express';
+import {
+  text as textBody,
+  type Express,
+  type Request,
+  type Response,
+} from 'express';
 import { AppConfigService } from './config/app-config.service';
-import { HttpExceptionFilter } from './common/http-exception.filter';
+import { API_PREFIX, LinksInterceptor } from './common/hateoas';
+import { allowedMethods } from './common/http-contract';
+import {
+  HttpExceptionFilter,
+  sendError,
+  toErrorBody,
+} from './common/http-exception.filter';
 import {
   REQUEST_ID_HEADER,
   requestIdMiddleware,
+  requestIdOf,
 } from './common/request-context';
 import { securityHeaders, trustProxySetting } from './common/security';
 import { RATE_LIMITS } from './common/throttler';
 import { createValidationPipe } from './common/validation';
+import {
+  ContentNegotiationInterceptor,
+  UNSUPPORTED_BODY,
+  unsupportedBody,
+  XML_MEDIA_TYPES,
+  xmlBodyMiddleware,
+} from './common/xml';
 
-export const API_PREFIX = 'api/v1';
+export { API_PREFIX };
 
 /** Shared by main.ts and the e2e tests so both run the exact same pipeline. */
 export function configureApp(app: INestApplication): void {
@@ -26,14 +46,29 @@ export function configureApp(app: INestApplication): void {
   express.set('trust proxy', trustProxySetting(nodeEnv));
   app.use(requestIdMiddleware);
   app.use(securityHeaders(isProduction));
+  const respondError = (req: Request, res: Response, e: unknown) =>
+    sendError(req, res, toErrorBody(e, requestIdOf(req)));
+  app.use((req: Request, res: Response, next: () => void) => {
+    if (unsupportedBody(req)) respondError(req, res, UNSUPPORTED_BODY());
+    else next();
+  });
+  app.use(textBody({ type: XML_MEDIA_TYPES, limit: '100kb' }));
+  app.use(xmlBodyMiddleware(respondError));
   app.useLogger(app.get(Logger));
   app.setGlobalPrefix(API_PREFIX);
   app.enableCors({
     origin: config.corsOrigins,
-    exposedHeaders: [REQUEST_ID_HEADER],
+    exposedHeaders: [REQUEST_ID_HEADER, 'Idempotent-Replayed', 'Retry-After'],
   });
   app.useGlobalPipes(createValidationPipe());
-  app.useGlobalFilters(new HttpExceptionFilter());
+  // The first interceptor wraps the second, so links are added before the body is serialized.
+  app.useGlobalInterceptors(
+    new ContentNegotiationInterceptor(),
+    new LinksInterceptor(app.get(Reflector)),
+  );
+  app.useGlobalFilters(
+    new HttpExceptionFilter((path) => allowedMethods(express, path)),
+  );
   app.enableShutdownHooks();
 
   // Swagger is a development aid: it exposes the full API surface, so it stays off in production.

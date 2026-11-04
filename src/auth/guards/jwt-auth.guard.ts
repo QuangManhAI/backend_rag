@@ -30,14 +30,18 @@ export class JwtAuthGuard implements CanActivate {
     const token = bearerToken(req);
     if (!token) throw new UnauthorizedException(UNAUTHORIZED);
     const claims = await this.tokens.verifyAccess(token);
-    // The account state is checked on every request (cached 60 s): a disabled account or a token
+    // The account state is checked on every request (cached a few seconds): a disabled account or a token
     // issued before a permission change must stop working immediately (prompt_security S3).
     const user = await this.auth.getActiveUser(claims.id);
     if (!user || !user.is_active) throw new UnauthorizedException(UNAUTHORIZED);
     if ((user.token_version ?? 0) !== (claims.tokenVersion ?? 0)) {
       throw new UnauthorizedException(UNAUTHORIZED);
     }
-    req.user = { id: user._id.toString(), roles: user.roles };
+    req.user = {
+      id: user._id.toString(),
+      roles: user.roles,
+      email: user.email,
+    };
     return true;
   }
 }
@@ -60,7 +64,11 @@ export class OptionalJwtAuthGuard implements CanActivate {
     if ((user.token_version ?? 0) !== (claims.tokenVersion ?? 0)) {
       throw new UnauthorizedException(UNAUTHORIZED);
     }
-    req.user = { id: user._id.toString(), roles: user.roles };
+    req.user = {
+      id: user._id.toString(),
+      roles: user.roles,
+      email: user.email,
+    };
     return true;
   }
 }

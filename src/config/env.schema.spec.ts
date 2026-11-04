@@ -91,6 +91,17 @@ describe('parseEnv', () => {
       expect(c.NODE_ENV).toBe('production');
     });
 
+    it('trusts no proxy unless the deployment declares one', () => {
+      const base = {
+        ...prod,
+        MONGO_URI: 'mongodb://user:pass@localhost:27017/rag_ts',
+      };
+      expect(parseEnv(base).TRUST_PROXY_HOPS).toBe(0);
+      expect(
+        parseEnv({ ...base, TRUST_PROXY_HOPS: '1' }).TRUST_PROXY_HOPS,
+      ).toBe(1);
+    });
+
     it('does not apply the guards outside production', () => {
       const c = parseEnv({
         ...valid,

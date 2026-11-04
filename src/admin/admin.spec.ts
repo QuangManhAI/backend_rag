@@ -1,3 +1,4 @@
+import { ForbiddenException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import type { MongoMemoryReplSet } from 'mongodb-memory-server';
 import { Model, Types } from 'mongoose';
@@ -16,6 +17,9 @@ import {
   startMongo,
   TestApp,
 } from '../testing/test-app';
+import { AdminAuditService } from './admin-audit.service';
+import { AdminIdentityService } from './admin-identity.service';
+import { AdminOpsService } from './admin-ops.service';
 import { AdminModule } from './admin.module';
 import { AdminAuditLog } from './schemas/admin-audit-log.schema';
 
@@ -455,6 +459,41 @@ describe('Admin (integration)', () => {
       expect(actions).toContain('USER_LIST_VIEW');
       expect(actions).toContain('USER_ROLE_CHANGE');
       expect(actions).toContain('USER_DISABLE');
+    });
+
+    it('records who acted: the admin email, not "unknown"', async () => {
+      await http().get('/api/v1/admin/stats').set(asAdmin()).expect(200);
+      const last = await auditLogs()
+        .findOne({ action: 'STATS_VIEW' })
+        .sort({ created_at: -1 })
+        .lean();
+      expect(last?.actor_email).toBe(`${ADMIN_ID}@example.com`);
+    });
+
+    it('every service entry point re-checks the role on its own', async () => {
+      const notAdmin = { id: USER_ID, roles: ['user' as const] };
+      const identity = t.app.get(AdminIdentityService);
+      const ops = t.app.get(AdminOpsService);
+      const audit = t.app.get(AdminAuditService);
+      const list = { limit: 1 } as never;
+      const calls: Array<() => Promise<unknown>> = [
+        () => identity.listUsers(notAdmin, list),
+        () => identity.getUser(notAdmin, targetId),
+        () => identity.changeRoles(notAdmin, targetId, ['user']),
+        () => identity.setUserStatus(notAdmin, targetId, true, undefined),
+        () => identity.revokeUserTokens(notAdmin, targetId),
+        () => identity.listUserTokens(notAdmin, targetId),
+        () => ops.listUserSessions(notAdmin, targetId, list),
+        () => ops.getSession(notAdmin, uuidv7()),
+        () => ops.listSessionMessages(notAdmin, uuidv7(), list),
+        () => ops.getStats(notAdmin),
+        () => ops.listLoginAttempts(notAdmin, list),
+        () => ops.getHealth(notAdmin),
+        () => audit.listAuditLogs(notAdmin, list),
+      ];
+      for (const call of calls) {
+        await expect(call()).rejects.toThrow(ForbiddenException);
+      }
     });
 
     it('the trail is append-only: no delete or update endpoint exists', async () => {

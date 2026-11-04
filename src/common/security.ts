@@ -36,11 +36,17 @@ export function securityHeaders(isProduction: boolean) {
   });
 }
 
-/** `trust proxy` value for the current environment. */
+/**
+ * `trust proxy` value. `hops` is the number of reverse proxies really in front of the app, set by
+ * the deployment (`TRUST_PROXY_HOPS`): trusting a proxy that is not there lets any client choose
+ * its own IP with `X-Forwarded-For`, which defeats the rate limiter and the login lockout and
+ * forges the IP in the audit trail. Behind an undeclared proxy the failure is the safe one: every
+ * client shares one bucket.
+ */
 export function trustProxySetting(
   nodeEnv: string,
+  hops: number,
 ): number | 'loopback' | false {
-  if (nodeEnv === 'production') return 1; // one reverse proxy hop in front of the app
   if (nodeEnv === 'test') return 'loopback';
-  return false; // dev: the client IP must stay the real one so `@Ip()` is meaningful
+  return hops > 0 ? hops : false;
 }

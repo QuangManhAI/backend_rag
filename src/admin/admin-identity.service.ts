@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   ConflictException,
-  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -24,9 +23,9 @@ import { escapeRegex } from '../common/sanitize';
 import type { AuthUser, Role } from '../types/auth-user';
 import { AdminAuditService, type AuditRequest } from './admin-audit.service';
 import { ADMIN_ROLES, ListAdminUsersQueryDto } from './admin.dto';
+import { assertAdmin } from './assert-admin';
 
 export const USER_NOT_FOUND = 'user not found';
-export const ADMIN_ROLE_REQUIRED = 'admin role required';
 export const SELF_LOCKOUT_FORBIDDEN = 'SELF_LOCKOUT_FORBIDDEN';
 export const LAST_ADMIN_PROTECTED = 'LAST_ADMIN_PROTECTED';
 export const VALIDATION_ERROR = 'validation error';
@@ -69,13 +68,6 @@ export class AdminIdentityService {
     private readonly auth: AuthService,
     private readonly audit: AdminAuditService,
   ) {}
-
-  /** Defense in depth: `RolesGuard` already rejects non-admins at the HTTP layer. */
-  assertAdmin(actor: AuthUser): void {
-    if (!actor.roles.includes('admin')) {
-      throw new ForbiddenException(ADMIN_ROLE_REQUIRED);
-    }
-  }
 
   /** An admin may not remove their own admin role or lock their own account. */
   assertNotSelf(actor: AuthUser, targetId: string): void {
@@ -132,6 +124,7 @@ export class AdminIdentityService {
     next_cursor: string | null;
     has_more: boolean;
   }> {
+    assertAdmin(actor);
     const terms = parseSort(query.sort, USER_LIST);
     const conditions = parseFilters(query, USER_FILTERS);
     const trimmedQ = query.q?.trim() ?? '';
@@ -170,6 +163,7 @@ export class AdminIdentityService {
     id: string,
     req?: AuditRequest,
   ): Promise<Record<string, unknown>> {
+    assertAdmin(actor);
     const user = await this.resolveUser(id);
     const uid = new Types.ObjectId(user._id);
     const activeTokenCount = await this.refreshTokens.countDocuments({
@@ -200,6 +194,7 @@ export class AdminIdentityService {
     nextRoles: Role[],
     req?: AuditRequest,
   ): Promise<Record<string, unknown>> {
+    assertAdmin(actor);
     if (!Array.isArray(nextRoles) || nextRoles.length === 0) {
       throw new BadRequestException(VALIDATION_ERROR);
     }
@@ -254,6 +249,7 @@ export class AdminIdentityService {
     reason: string | undefined,
     req?: AuditRequest,
   ): Promise<Record<string, unknown>> {
+    assertAdmin(actor);
     if (active && reason !== undefined) {
       throw new BadRequestException('reason is only allowed when locking');
     }
@@ -374,6 +370,7 @@ export class AdminIdentityService {
     id: string,
     req?: AuditRequest,
   ): Promise<{ revoked_count: number }> {
+    assertAdmin(actor);
     const target = await this.resolveUser(id);
     const revoked = await this.revokeAllTokens(id);
     this.invalidateAuthCaches(id, target.email);
@@ -396,6 +393,7 @@ export class AdminIdentityService {
     id: string,
     req?: AuditRequest,
   ): Promise<{ items: Record<string, unknown>[] }> {
+    assertAdmin(actor);
     const target = await this.resolveUser(id);
     const rows = await this.refreshTokens
       .find({

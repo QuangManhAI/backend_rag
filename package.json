@@ -99,5 +99,10 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "overrides": {
+    "simple-git": "^4.0.2",
+    "multer": "^2.5.0",
+    "undici": "^7.30.1"
   }
 }

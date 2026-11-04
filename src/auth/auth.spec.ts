@@ -222,6 +222,31 @@ describe('Auth (integration)', () => {
         .send({ refresh_token: b.refresh_token })
         .expect(401);
     });
+
+    it('a locked account cannot refresh, also when its profile is cached', async () => {
+      const b = await register();
+      const auth = t.app.get(AuthService);
+      await t.app
+        .get<Model<User>>(getModelToken(User.name))
+        .updateOne({ _id: b.user.id }, { $set: { is_active: false } });
+      // Only the account-state entry is gone: the refresh runs through the cached-profile branch.
+      (
+        auth as unknown as { tokenVersionCache: { delete(k: string): void } }
+      ).tokenVersionCache.delete(b.user.id);
+      await http()
+        .post('/api/v1/auth/token-rotations')
+        .send({ refresh_token: b.refresh_token })
+        .expect(401);
+    });
+
+    it('the account-state cache has a fixed lifetime: a busy client cannot keep it alive', () => {
+      const cache = (
+        t.app.get(AuthService) as unknown as {
+          tokenVersionCache: { updateAgeOnGet: boolean };
+        }
+      ).tokenVersionCache;
+      expect(cache.updateAgeOnGet).toBe(false);
+    });
   });
 
   describe('me / profile / password', () => {

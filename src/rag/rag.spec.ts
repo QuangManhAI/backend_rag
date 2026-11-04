@@ -377,6 +377,65 @@ describe('RAG endpoints', () => {
     ]);
   });
 
+  describe('concurrent requests per client', () => {
+    /** Holds every LLM turn open until the returned function is called. */
+    function holdLlm(): { open: () => void; started: () => number } {
+      let open = () => {};
+      const gate = new Promise<void>((r) => (open = r));
+      let started = 0;
+      f.llm.generate = () =>
+        (async function* () {
+          started++;
+          await gate;
+          yield 'x';
+        })();
+      return { open, started: () => started };
+    }
+    const until = async (done: () => boolean) => {
+      while (!done()) await new Promise((r) => setTimeout(r, 5));
+    };
+    const chat = (auth?: string) => {
+      const r = http().post('/api/v1/rag/chat');
+      if (auth) void r.set('Authorization', `Bearer ${auth}`);
+      return r.send({ query: 'x' });
+    };
+
+    it('one IP cannot occupy the LLM queue, and the slots come back', async () => {
+      const llm = holdLlm();
+      const running = [chat(), chat(), chat()].map((r) => r.then((x) => x));
+      await until(() => llm.started() === 3);
+      const refused = await chat().expect(429);
+      expect(refused.body.message).toBe('too many concurrent requests');
+      llm.open();
+      for (const r of await Promise.all(running)) expect(r.status).toBe(200);
+      await chat().expect(200);
+    });
+
+    it('applies to the stream route too, and a failed run frees its slot', async () => {
+      const llm = holdLlm();
+      const running = [chat(), chat(), chat()].map((r) => r.then((x) => x));
+      await until(() => llm.started() === 3);
+      await stream({ query: 'x' }).expect(429);
+      llm.open();
+      await Promise.all(running);
+      f.llm.generate = () => {
+        throw new HttpException('llm queue is full', 429);
+      };
+      for (let i = 0; i < 4; i++) await chat().expect(429);
+      holdLlm().open();
+      await chat().expect(200);
+    });
+
+    it('caps one user', async () => {
+      const llm = holdLlm();
+      const running = [chat(token), chat(token)].map((r) => r.then((x) => x));
+      await until(() => llm.started() === 2);
+      await chat(token).expect(429);
+      llm.open();
+      await Promise.all(running);
+    });
+  });
+
   it('non-stream: LLM 429 is passed through', async () => {
     f.llmError = new HttpException('llm queue is full', 429);
     const res = await http()

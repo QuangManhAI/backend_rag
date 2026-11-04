@@ -40,6 +40,8 @@ export const envSchema = z
     WORLD_DATA_DIR: required('WORLD_DATA_DIR'),
     MINING_DIR: required('MINING_DIR'),
     CORS_ORIGINS: z.string().default('http://localhost:5174'),
+    /** Reverse proxies really in front of the app; 0 means `X-Forwarded-For` is ignored. */
+    TRUST_PROXY_HOPS: int(0, 0),
   })
   .superRefine((v, ctx) => {
     // Production-only guards (prompt_security S1.1): a placeholder or shared secret must never

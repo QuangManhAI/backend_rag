@@ -97,13 +97,13 @@ export class AuthService {
     ttl: 15 * 60 * 1000,
   });
   /**
-   * `token_version` + `is_active` per user, cached for 60 s so the JWT guard does not hit MongoDB
-   * on every request (prompt_security S3).
+   * `token_version` + `is_active` per user, so the JWT guard does not hit MongoDB on every request
+   * (prompt_security S3). The TTL must not slide: a busy client would otherwise keep a stale entry
+   * alive for as long as it keeps calling, and the grace window above would have no upper bound.
    */
   private readonly tokenVersionCache = new LRUCache<string, LeanUser>({
     max: 5000,
     ttl: TOKEN_VERSION_CACHE_TTL_MS,
-    updateAgeOnGet: true,
   });
   /**
    * A valid Argon2id hash of a random secret. Verifying a password against it costs the same as a
@@ -230,7 +230,7 @@ export class AuthService {
     const cachedUser = this.userCache.get(r.userId);
     if (cachedUser) {
       const live = await this.getActiveUser(r.userId);
-      if (!live) {
+      if (!live || !live.is_active) {
         await this.tokens.revokeFamily(r.familyId);
         logEvent('REFRESH_FAILED', { reason: 'user_gone' });
         throw new UnauthorizedException('refresh token invalid or expired');
@@ -306,7 +306,7 @@ export class AuthService {
 
   /**
    * The account state the JWT guard checks on every request: existence, `is_active` and
-   * `token_version`. Cached for 60 s so a busy user does not query MongoDB on each request (S3).
+   * `token_version`. Cached for a few seconds so a busy user does not query MongoDB on each request (S3).
    */
   async getActiveUser(id: string): Promise<LeanUser | null> {
     if (!isValidObjectId(id)) return null;

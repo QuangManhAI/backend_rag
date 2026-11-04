@@ -13,6 +13,7 @@ import {
 } from '../common/pagination';
 import type { AuthUser } from '../types/auth-user';
 import type { ListAuditLogsQueryDto } from './admin.dto';
+import { assertAdmin } from './assert-admin';
 import {
   AdminAuditLog,
   AUDIT_ACTIONS,
@@ -98,6 +99,7 @@ export class AdminAuditService {
     next_cursor: string | null;
     has_more: boolean;
   }> {
+    assertAdmin(actor);
     const terms = parseSort(query.sort, AUDIT_LIST);
     const conditions = parseFilters(query, AUDIT_FILTERS);
     if (query.cursor) {

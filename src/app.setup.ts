@@ -43,7 +43,10 @@ export function configureApp(app: INestApplication): void {
   // `trust proxy` must be set before Express reads the client IP, because the rate limiter keys
   // on it (prompt_security S1.1).
   const express = app.getHttpAdapter().getInstance() as Express;
-  express.set('trust proxy', trustProxySetting(nodeEnv));
+  express.set(
+    'trust proxy',
+    trustProxySetting(nodeEnv, config.get('TRUST_PROXY_HOPS')),
+  );
   app.use(requestIdMiddleware);
   app.use(securityHeaders(isProduction));
   const respondError = (req: Request, res: Response, e: unknown) =>

@@ -23,6 +23,7 @@ import { LLM_PORT, type LlmPort } from '../llm/llm.service';
 import type { AuthUser } from '../types/auth-user';
 import { AdminAuditService, type AuditRequest } from './admin-audit.service';
 import { ListSessionsQueryDto, LoginAttemptsQueryDto } from './admin.dto';
+import { assertAdmin } from './assert-admin';
 
 export const SESSION_NOT_FOUND = 'session not found';
 
@@ -81,6 +82,7 @@ export class AdminOpsService {
     next_cursor: string | null;
     has_more: boolean;
   }> {
+    assertAdmin(actor);
     if (!Types.ObjectId.isValid(userId)) {
       throw new NotFoundException('user not found');
     }
@@ -131,6 +133,7 @@ export class AdminOpsService {
     sessionId: string,
     req?: AuditRequest,
   ): Promise<Record<string, unknown>> {
+    assertAdmin(actor);
     if (!isUuid(sessionId)) throw new NotFoundException(SESSION_NOT_FOUND);
     const session = await this.sessions
       .findOne({ _id: sessionId, deleted_at: null })
@@ -180,6 +183,7 @@ export class AdminOpsService {
     next_cursor: string | null;
     has_more: boolean;
   }> {
+    assertAdmin(actor);
     if (!isUuid(sessionId)) throw new NotFoundException(SESSION_NOT_FOUND);
     const terms = parseSort(query.sort, MESSAGE_LIST);
     const [session, rows] = await Promise.all([
@@ -221,6 +225,7 @@ export class AdminOpsService {
     actor: AuthUser,
     req?: AuditRequest,
   ): Promise<Record<string, unknown>> {
+    assertAdmin(actor);
     const [
       usersTotal,
       usersActive,
@@ -274,6 +279,7 @@ export class AdminOpsService {
     next_cursor: string | null;
     has_more: boolean;
   }> {
+    assertAdmin(actor);
     const terms = parseSort(query.sort, ATTEMPT_LIST);
     const conditions = parseFilters(query, CREATED_AT_FILTER);
     if (query.cursor) {
@@ -305,6 +311,7 @@ export class AdminOpsService {
     actor: AuthUser,
     req?: AuditRequest,
   ): Promise<Record<string, unknown>> {
+    assertAdmin(actor);
     const h = await this.health.health();
     await this.audit.writeAudit(
       actor,

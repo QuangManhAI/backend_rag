@@ -27,13 +27,14 @@ import { OptionalJwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { chatLinks, WithLinks } from '../common/hateoas';
 import { toErrorBody } from '../common/http-exception.filter';
 import { logEvent, requestIdOf } from '../common/request-context';
-import { RateLimit } from '../common/throttler';
+import { RateLimitChat } from '../common/throttler';
 import { isUuid } from '../common/uuid';
 import { AbortedError } from '../llm/llm-queue';
 import type { AuthUser } from '../types/auth-user';
 import { ChatRequestDto } from './dto/chat-request.dto';
 import { ChatResponseDto } from './dto/chat-response.dto';
 import { PipelineEvent, PipelineResult, RagService } from './rag.service';
+import { ClientSlots, TOO_MANY_INFLIGHT } from './client-slots';
 import { abortOnClientClose, SseWriter } from './sse';
 
 const CLIENT_CLOSED = 499;
@@ -64,11 +65,22 @@ const IDEMPOTENCY_HEADER = {
 @ApiConflictResponse({
   description: 'request already in progress / key reused with another body',
 })
-@RateLimit('ragChat')
+@RateLimitChat()
 @Controller('rag')
 @UseGuards(OptionalJwtAuthGuard)
 export class RagController {
+  private readonly slots = new ClientSlots();
+
   constructor(private readonly rag: RagService) {}
+
+  private acquireSlot(req: Request, user: AuthUser | undefined): () => void {
+    const release = this.slots.acquire(req.ip, user?.id);
+    if (!release) {
+      logEvent('CHAT_TOO_MANY_INFLIGHT');
+      throw new HttpException(TOO_MANY_INFLIGHT, HttpStatus.TOO_MANY_REQUESTS);
+    }
+    return release;
+  }
 
   @Post('chat')
   @WithLinks({ resource: (r: ChatResponseDto) => chatLinks(r) })
@@ -82,9 +94,11 @@ export class RagController {
     @Body() dto: ChatRequestDto,
     @CurrentUser() user: AuthUser | undefined,
     @Headers('idempotency-key') rawKey: string | undefined,
+    @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ): Promise<ChatResponseDto> {
     const key = parseIdempotencyKey(rawKey);
+    const release = this.acquireSlot(req, user);
     const t0 = performance.now();
     const ctrl = abortOnClientClose(res, 'CHAT_ABORTED');
     const result: Partial<PipelineResult> = {};
@@ -100,6 +114,8 @@ export class RagController {
       }
       logEvent('CHAT_FAILED', { error_status: statusOf(e) });
       throw e;
+    } finally {
+      release();
     }
     if (ctrl.signal.aborted) {
       logEvent('CHAT_ABORTED');
@@ -137,6 +153,7 @@ export class RagController {
     @Res() res: Response,
   ): Promise<void> {
     const key = parseIdempotencyKey(rawKey);
+    const release = this.acquireSlot(req, user);
     const t0 = performance.now();
     const ctrl = abortOnClientClose(res, 'CHAT_STREAM_ABORTED');
     const result: Partial<PipelineResult> = {};
@@ -145,6 +162,7 @@ export class RagController {
     try {
       r = await events.next();
     } catch (e) {
+      release();
       logEvent('CHAT_FAILED', { error_status: statusOf(e) });
       throw e; // headers not sent yet: the exception filter answers with HTTP status + §1.2 body
     }
@@ -180,8 +198,12 @@ export class RagController {
         }
       }
     } finally {
-      await events.return(undefined);
-      sse.close();
+      try {
+        await events.return(undefined);
+      } finally {
+        release();
+        sse.close();
+      }
     }
   }
 }

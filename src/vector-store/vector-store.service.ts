@@ -4,10 +4,17 @@ import {
   Injectable,
   Logger,
   OnModuleInit,
+  Optional,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import type { QdrantClient } from '@qdrant/js-client-rest';
 import { AppConfigService } from '../config/app-config.service';
+import {
+  CORPUS_PORT,
+  type ChunkContent,
+  type ChunkRef,
+  type CorpusPort,
+} from '../corpus/corpus.service';
 import { EMBEDDING_DIM } from '../embedding/embedding.service';
 import type { ChunkPayload, ScoredChunk } from '../types/scientific-rag';
 
@@ -76,9 +83,19 @@ export function toChunkPayload(p: Payload): ChunkPayload | null {
   return chunk;
 }
 
+/** The ids of a point that keeps its text in the corpus; null when it has text or lacks ids. */
+export function toChunkRef(p: Payload): ChunkRef | null {
+  if (!p || typeof p.text === 'string') return null;
+  const { chunk_id, paper_id } = p;
+  return typeof chunk_id === 'string' && typeof paper_id === 'string'
+    ? { chunk_id, paper_id }
+    : null;
+}
+
 /**
  * Read-only access to `scientific_papers_gold` (written by the UTH pipeline). Filters are always
- * structured Qdrant conditions, never strings built from user input.
+ * structured Qdrant conditions, never strings built from user input. Points hold only the vector
+ * and the filter fields; the text comes from `rag_ts_corpus` in one batched read per page.
  */
 @Injectable()
 export class VectorStoreService implements VectorStorePort, OnModuleInit {
@@ -89,6 +106,7 @@ export class VectorStoreService implements VectorStorePort, OnModuleInit {
   constructor(
     @Inject(QDRANT_CLIENT) private readonly client: QdrantReader,
     config: AppConfigService,
+    @Optional() @Inject(CORPUS_PORT) private readonly corpus?: CorpusPort,
   ) {
     this.collection = config.get('QDRANT_COLLECTION');
   }
@@ -137,9 +155,10 @@ export class VectorStoreService implements VectorStorePort, OnModuleInit {
         with_vector: false,
       }),
     );
+    const contents = await this.contentOf(res.points);
     const out: ScoredChunk[] = [];
     for (const p of res.points) {
-      const chunk = this.mapOrWarn(p.payload, p.id);
+      const chunk = this.mapOrWarn(this.merge(p.payload, contents), p.id);
       if (chunk) out.push({ ...chunk, score: p.score });
     }
     return out;
@@ -158,8 +177,9 @@ export class VectorStoreService implements VectorStorePort, OnModuleInit {
           with_vector: false,
         }),
       );
+      const contents = await this.contentOf(page.points);
       for (const p of page.points) {
-        const chunk = this.mapOrWarn(p.payload, p.id);
+        const chunk = this.mapOrWarn(this.merge(p.payload, contents), p.id);
         if (chunk) out.push(chunk);
       }
       offset = page.next_page_offset;
@@ -185,6 +205,24 @@ export class VectorStoreService implements VectorStorePort, OnModuleInit {
     } catch {
       return false;
     }
+  }
+
+  private async contentOf(
+    points: Array<{ payload?: Payload }>,
+  ): Promise<Map<string, ChunkContent>> {
+    const refs = points
+      .map((p) => toChunkRef(p.payload))
+      .filter((r): r is ChunkRef => r !== null);
+    return this.corpus ? this.corpus.hydrate(refs) : new Map();
+  }
+
+  private merge(
+    payload: Payload,
+    contents: Map<string, ChunkContent>,
+  ): Payload {
+    const id = payload?.chunk_id;
+    const content = typeof id === 'string' ? contents.get(id) : undefined;
+    return content ? { ...payload, ...content } : payload;
   }
 
   private mapOrWarn(

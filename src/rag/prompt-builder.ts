@@ -13,6 +13,19 @@ CRITICAL OPERATIONAL RULES:
 4. PRESERVE LATEX: Write inline math as $...$ and display math as $$...$$. Never use \\(...\\) or \\[...\\].
 5. DIRECT & CONCISE: Answer directly without conversational pleasantries.`;
 
+export const REWRITE_SYSTEM_PROMPT = `You rewrite a user's question into a search query for a database of scientific papers.
+Use precise technical terms and name the concept being asked about. Answer the question in no way.
+Output only the query, on one line, in English, at most 25 words.`;
+
+/** First line of the LLM output, without quotes; empty when it is unusable as a query. */
+export function cleanRewrite(raw: string): string {
+  const line = raw.trim().split('\n')[0] ?? '';
+  return line
+    .replace(/^["'`]+|["'`]+$/g, '')
+    .trim()
+    .slice(0, 300);
+}
+
 export function buildUserPrompt(
   chunks: GroundedChunk[],
   question: string,

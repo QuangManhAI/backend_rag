@@ -1,21 +1,24 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { createHash } from 'crypto';
 import { logFields } from '../common/request-context';
 import {
   EMBEDDING_PORT,
   type EmbeddingPort,
 } from '../embedding/embedding.service';
+import { JUDGE_PORT, type JudgePort } from '../judge/judge.service';
 import { LLM_PORT, type LlmPort } from '../llm/llm.service';
 import { MiningService, round4 } from '../mining/mining.service';
 import {
   SESSION_STORE,
   type SessionStorePort,
 } from '../chat-sessions/session-store.port';
+import { AppConfigService } from '../config/app-config.service';
 import { TreeRouterService } from '../tree-router/tree-router.service';
 import type { AuthUser } from '../types/auth-user';
 import type {
   CompareCandidate,
   GroundedChunk,
+  Quality,
   RagStreamEvent,
   ScoredChunk,
   Timings,
@@ -28,7 +31,9 @@ import { extractCitations } from './citations';
 import type { ChatRequestDto } from './dto/chat-request.dto';
 import {
   buildUserPrompt,
+  cleanRewrite,
   NO_CONTEXT_ANSWER,
+  REWRITE_SYSTEM_PROMPT,
   SYSTEM_PROMPT,
 } from './prompt-builder';
 
@@ -42,6 +47,7 @@ export interface PipelineResult {
   grounded_chunks: GroundedChunk[];
   expanded_terms: string[];
   timings: Timings;
+  quality?: Quality;
   session_id: string | null;
   message_id: string | null;
   /** The answer comes from an earlier run with the same `Idempotency-Key`. */
@@ -83,6 +89,45 @@ export function requestFingerprint(req: ChatRequestDto): string {
 
 const since = (t: number) => Math.round(performance.now() - t);
 
+/** Candidates the judge reads: enough to reorder, few enough to keep the wait in seconds. */
+export const judgedPoolSize = (topK: number) =>
+  Math.min(20, Math.max(10, topK * 2));
+/** Evidence passages for the groundedness check. */
+export const GROUNDED_PASSAGES = 3;
+/** The usual constant of reciprocal rank fusion. */
+export const RRF_K = 60;
+
+/**
+ * Fuses the existing order with Laya's order (reciprocal rank fusion): on our evaluation either
+ * order alone ranked worse than the two together (`benchmark/eval-laya-variants.mjs`). `pool` is
+ * best first and `scores` follow it by index. `final_score` is the fused score scaled to 0–1.
+ */
+export function fuseRanks(
+  pool: GroundedChunk[],
+  scores: number[],
+): GroundedChunk[] {
+  const byRelevance = pool
+    .map((_, i) => i)
+    .sort((a, b) => scores[b] - scores[a] || a - b);
+  const relevanceRank = new Map(
+    byRelevance.map((poolIndex, rank) => [poolIndex, rank]),
+  );
+  const best = 2 / (RRF_K + 1);
+  return pool
+    .map((c, i) => ({
+      c,
+      i,
+      fused:
+        1 / (RRF_K + i + 1) + 1 / (RRF_K + (relevanceRank.get(i) ?? i) + 1),
+    }))
+    .sort((a, b) => b.fused - a.fused || a.i - b.i)
+    .map(({ c, i, fused }) => ({
+      ...c,
+      relevance_score: round4(scores[i]),
+      final_score: round4(fused / best),
+    }));
+}
+
 @Injectable()
 export class RagService {
   private readonly logger = new Logger(RagService.name);
@@ -94,6 +139,8 @@ export class RagService {
     @Inject(SESSION_STORE) private readonly sessions: SessionStorePort,
     private readonly mining: MiningService,
     private readonly router: TreeRouterService,
+    @Optional() @Inject(JUDGE_PORT) private readonly judge?: JudgePort,
+    @Optional() private readonly config?: AppConfigService,
   ) {}
 
   /**
@@ -226,10 +273,28 @@ export class RagService {
 
     yield { type: 'phase', phase: 'found' };
     t = performance.now();
-    const grounded = this.mining
-      .rerank(hits, req.use_authority_boost)
-      .slice(0, req.top_k);
+    const judged = await this.rank(question, hits, req);
     timings.rerank_ms = since(t);
+    let grounded = judged.chunks;
+    let evidence = judged.evidence;
+    let refinedQuery: string | null = null;
+    let abstained = false;
+
+    // Evidence gate: not enough ➔ refine the query once ➔ still not enough ➔ abstain.
+    if (evidence !== null && evidence < this.threshold('EVIDENCE')) {
+      t = performance.now();
+      const refined = await this.refine(question, req, signal);
+      timings.refine_ms = since(t);
+      if (refined && (refined.evidence ?? 0) > evidence) {
+        grounded = refined.chunks;
+        evidence = refined.evidence;
+        refinedQuery = refined.query;
+      }
+      if ((evidence ?? 0) < this.threshold('EVIDENCE')) {
+        abstained = true;
+        grounded = [];
+      }
+    }
     yield {
       type: 'retrieval',
       grounded_chunks: grounded,
@@ -253,6 +318,36 @@ export class RagService {
       }
     }
     timings.llm_ms = since(t);
+
+    // Groundedness check: what the LLM wrote must be supported by the evidence it was given.
+    let groundedScore: number | null = null;
+    if (evidence !== null && grounded.length && !signal.aborted) {
+      t = performance.now();
+      groundedScore = await this.judge!.groundedness(
+        question,
+        answer,
+        grounded.slice(0, GROUNDED_PASSAGES),
+      );
+      timings.grounded_ms = since(t);
+      if (
+        groundedScore !== null &&
+        groundedScore < this.threshold('GROUNDED')
+      ) {
+        abstained = true;
+        answer = NO_CONTEXT_ANSWER;
+        yield { type: 'answer_replaced', answer };
+      }
+    }
+    const quality: Quality | undefined =
+      evidence === null
+        ? undefined
+        : {
+            evidence_score: round4(evidence),
+            refined_query: refinedQuery,
+            grounded_score:
+              groundedScore === null ? null : round4(groundedScore),
+            abstained,
+          };
 
     const citations = extractCitations(answer);
     const inContext = new Set(grounded.map((g) => g.paper_id));
@@ -287,6 +382,7 @@ export class RagService {
       grounded_chunks: grounded,
       expanded_terms: expanded,
       timings,
+      ...(quality ? { quality } : {}),
       session_id: saved?.session_id ?? null,
       message_id: saved?.assistant_message_id ?? null,
     } satisfies PipelineResult);
@@ -295,8 +391,88 @@ export class RagService {
       type: 'done',
       citations,
       timings,
+      ...(quality ? { quality } : {}),
       session_id: saved?.session_id ?? null,
       message_id: saved?.assistant_message_id ?? null,
     };
+  }
+
+  /** `mining.rerank`, then the judge over the best candidates. `evidence` null = no verdict. */
+  private async rank(
+    question: string,
+    hits: ScoredChunk[],
+    req: ChatRequestDto,
+  ): Promise<{ chunks: GroundedChunk[]; evidence: number | null }> {
+    const ranked = this.mining.rerank(hits, req.use_authority_boost);
+    const fallback = {
+      chunks: ranked.slice(0, req.top_k),
+      evidence: null,
+    };
+    if (!this.judge?.enabled || !ranked.length) return fallback;
+    if (!this.config?.get('LAYA_RERANK')) {
+      // Judge only what the LLM will read: the evidence gate is about this exact context.
+      const scores = await this.judge.relevance(question, fallback.chunks);
+      if (!scores) return fallback;
+      return {
+        chunks: fallback.chunks.map((c, i) => ({
+          ...c,
+          relevance_score: round4(scores[i]),
+        })),
+        evidence: Math.max(...scores),
+      };
+    }
+    const pool = ranked.slice(0, judgedPoolSize(req.top_k));
+    const scores = await this.judge.relevance(question, pool);
+    if (!scores) return fallback;
+    const chunks = fuseRanks(pool, scores).slice(0, req.top_k);
+    // The gate is about this exact context, not about the candidates left out of it.
+    return {
+      chunks,
+      evidence: Math.max(...chunks.map((c) => c.relevance_score ?? 0)),
+    };
+  }
+
+  /** One rewrite through the LLM, then a second search. Null when it could not be tried. */
+  private async refine(
+    question: string,
+    req: ChatRequestDto,
+    signal: AbortSignal,
+  ): Promise<{
+    query: string;
+    chunks: GroundedChunk[];
+    evidence: number | null;
+  } | null> {
+    let raw = '';
+    try {
+      for await (const token of this.llm.generate(
+        REWRITE_SYSTEM_PROMPT,
+        question,
+        signal,
+      )) {
+        raw += token;
+      }
+    } catch (e) {
+      if (signal.aborted) throw e;
+      this.logger.warn({ err: e }, 'QUERY_REWRITE_FAILED');
+      return null;
+    }
+    const query = cleanRewrite(raw);
+    if (!query || query.toLowerCase() === question.trim().toLowerCase())
+      return null;
+    const vector = await this.embedding.embedQuery(query);
+    const { steps } = this.router.route(vector, req.nprobe);
+    const twigIds = steps.find((s) => s.depth === 2)?.chosen;
+    const hits = await this.vectors.search(vector, {
+      limit: Math.max(40, req.top_k * 8),
+      category: req.category,
+      twigIds: twigIds?.length ? twigIds : undefined,
+    });
+    // Judged against the user's question: the rewrite only widens what can be found.
+    const { chunks, evidence } = await this.rank(question, hits, req);
+    return { query, chunks, evidence };
+  }
+
+  private threshold(kind: 'EVIDENCE' | 'GROUNDED'): number {
+    return this.config?.get(`LAYA_${kind}_THRESHOLD`) ?? 0.5;
   }
 }

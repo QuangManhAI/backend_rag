@@ -133,6 +133,7 @@ export class RagController {
       grounded_chunks: r.grounded_chunks,
       expanded_terms: r.expanded_terms,
       timings: r.timings,
+      ...(r.quality ? { quality: r.quality } : {}),
     };
   }
 

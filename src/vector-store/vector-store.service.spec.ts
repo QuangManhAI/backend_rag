@@ -207,3 +207,80 @@ describe('toChunkPayload', () => {
     expect(toChunkPayload(null)).toBeNull();
   });
 });
+
+describe('VectorStoreService with the corpus', () => {
+  const point = (id: string, score = 0.9) => ({
+    id,
+    score,
+    payload: {
+      chunk_id: id,
+      paper_id: `paper-${id}`,
+      year: 2024,
+      section_type: 'other',
+      primary_category: 'cs.LG',
+    },
+  });
+
+  function withPoints(points: ReturnType<typeof point>[]) {
+    const f = fakeClient();
+    f.query.mockResolvedValue({ points });
+    return f;
+  }
+
+  it('takes text and metadata from the corpus in one batched read', async () => {
+    const f = withPoints([point('c1'), point('c2')]);
+    const hydrate = jest.fn().mockResolvedValue(
+      new Map([
+        [
+          'c1',
+          {
+            text: 'from mongo',
+            section_title: 'Sec',
+            section_type: 'method',
+            chunk_index: 3,
+            title: 'Title',
+            authors: ['A'],
+          },
+        ],
+      ]),
+    );
+    const s = new VectorStoreService(f.client, config, { hydrate });
+    const hits = await s.search([0], { limit: 5 });
+    expect(hydrate).toHaveBeenCalledTimes(1);
+    expect(hydrate).toHaveBeenCalledWith([
+      { chunk_id: 'c1', paper_id: 'paper-c1' },
+      { chunk_id: 'c2', paper_id: 'paper-c2' },
+    ]);
+    // c2 is not synced yet: skipped rather than sent to the LLM empty.
+    expect(hits).toHaveLength(1);
+    expect(hits[0]).toMatchObject({
+      chunk_id: 'c1',
+      text: 'from mongo',
+      title: 'Title',
+      authors: ['A'],
+      section_type: 'method',
+      chunk_index: 3,
+      score: 0.9,
+    });
+  });
+
+  it('does not read the corpus for a point that still has its text', async () => {
+    const f = fakeClient();
+    const hydrate = jest.fn().mockResolvedValue(new Map());
+    const s = new VectorStoreService(f.client, config, { hydrate });
+    const hits = await s.search([0], { limit: 5 });
+    expect(hydrate).toHaveBeenCalledWith([]);
+    expect(hits[0].text).toBe('text 1');
+  });
+
+  it('a corpus outage fails the search', async () => {
+    const f = withPoints([point('c1')]);
+    const s = new VectorStoreService(f.client, config, {
+      hydrate: () =>
+        Promise.reject(new ServiceUnavailableException('corpus unavailable')),
+    });
+    await expect(s.search([0], { limit: 5 })).rejects.toThrow(
+      'corpus unavailable',
+    );
+  });
+});

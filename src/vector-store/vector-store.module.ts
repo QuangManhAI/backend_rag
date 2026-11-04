@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { QdrantClient } from '@qdrant/js-client-rest';
 import { AppConfigService } from '../config/app-config.service';
+import { CorpusModule } from '../corpus/corpus.module';
 import {
   QDRANT_CLIENT,
   QDRANT_TIMEOUT_MS,
@@ -9,6 +10,7 @@ import {
 } from './vector-store.service';
 
 @Module({
+  imports: [CorpusModule],
   providers: [
     {
       provide: QDRANT_CLIENT,

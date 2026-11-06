@@ -47,8 +47,8 @@ export default function () {
   const rand = Math.random();
 
   if (rand < 0.50) {
-    // 50% Traffic: GET /api/v1/auth/me
-    const res = http.get(`${BASE_URL}/api/v1/auth/me`, {
+    // 50% Traffic: GET /api/v1/users/me
+    const res = http.get(`${BASE_URL}/api/v1/users/me`, {
       headers: authHeaders,
       tags: { endpoint: 'auth_me' },
     });
@@ -91,11 +91,11 @@ export default function () {
 
     AuthenticatedErrors.add(!ok);
   } else {
-    // 10% Traffic: PATCH /api/v1/auth/me
+    // 10% Traffic: PATCH /api/v1/users/me
     const newName = `Bench VU ${user.id.slice(-4)} ${Math.floor(Math.random() * 1000)}`;
     const payload = JSON.stringify({ display_name: newName });
 
-    const res = http.patch(`${BASE_URL}/api/v1/auth/me`, payload, {
+    const res = http.patch(`${BASE_URL}/api/v1/users/me`, payload, {
       headers: authHeaders,
       tags: { endpoint: 'profile_patch' },
     });

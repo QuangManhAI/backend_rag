@@ -6,7 +6,7 @@ from pathlib import Path
 # Paths
 ROOT_DIR = Path(r"C:\document\Study documents\backend_rag\RAG_TS")
 RESULTS_DIR = ROOT_DIR / "backend_rag" / "benchmark" / "results"
-OUTPUT_HTML = ROOT_DIR / "docs" / "report_slides.html"
+OUTPUT_HTML = ROOT_DIR / "docs" / "slides" / "report_slides_benchmark.html"
 USER_LIGHTHOUSE_IMG = Path(r"C:\Users\TDV\.gemini\antigravity-cli\brain\4db53373-1ab6-43ef-a7e9-7bb3fed98130\.user_uploaded\uploaded_media_1_1793185932105.png")
 
 def get_base64_img(path: Path) -> str:
@@ -851,9 +851,9 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
         <div class="card">
           <div class="label">Tài liệu tham chiếu trong Repository</div>
           <ul style="padding-left: 1.2em; display: flex; flex-direction: column; gap: 0.35em; font-size: var(--small-size);">
-            <li><b>Báo cáo chi tiết:</b> <code>docs/REPORT.md</code></li>
-            <li><b>Đặc tả API &amp; Swagger:</b> <code>docs/API_DESIGN.md</code></li>
-            <li><b>Hướng dẫn khởi chạy:</b> <code>README.md</code> &amp; <code>docs/RUN_GUIDE.md</code></li>
+            <li><b>Báo cáo chi tiết:</b> <code>docs/reports/REPORT.md</code></li>
+            <li><b>Đặc tả API &amp; Swagger:</b> <code>docs/api/API_DESIGN.md</code></li>
+            <li><b>Hướng dẫn khởi chạy:</b> <code>README.md</code> &amp; <code>docs/guides/RUN_GUIDE.md</code></li>
             <li><b>Dữ liệu Benchmark k6:</b> <code>backend_rag/benchmark/results/</code></li>
             <li><b>Nhật ký quyết định:</b> <code>docs/AI_chat_log/Vuong_chat_logs.md</code></li>
           </ul>

@@ -11,8 +11,8 @@ import type { Server } from 'http';
 import { MongoMemoryReplSet } from 'mongodb-memory-server';
 import { Model, Types } from 'mongoose';
 import { configureApp } from '../app.setup';
-import { User } from '../auth/schemas/user.schema';
-import { LoggerModule } from '../common/logger.module';
+import { User } from '../modules/auth/schemas/user.schema';
+import { LoggerModule } from '../common/logging/logger.module';
 import { AppConfigModule } from '../config/app-config.service';
 
 export const TEST_ENV = {

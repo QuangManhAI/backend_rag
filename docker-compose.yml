@@ -5,30 +5,45 @@
 # with the developer's .env, which compose reads automatically. `--profile standalone` also starts an empty
 # Qdrant for running without the pipeline (seed a `_test` collection with scripts/seed-qdrant.ts).
 #
-#   JWT_ACCESS_SECRET=... JWT_REFRESH_SECRET=... QDRANT_API_KEY=... docker compose up --build
+#   JWT_ACCESS_SECRET=... JWT_REFRESH_SECRET=... QDRANT_API_KEY=... RAGTS_MONGO_ROOT_USER=...
+#   RAGTS_MONGO_ROOT_PASSWORD=... RAGTS_MONGO_APP_USER=... RAGTS_MONGO_APP_PASSWORD=...
+#   RAGTS_MONGO_KEY=... docker compose up --build
 #
 # Volumes: ../model (GGUF), ../data (world + mining files exported by the pipeline).
 
 services:
   mongo:
     image: mongo:7
-    command: ['--replSet', 'rs0', '--bind_ip_all']
-    # Host port for running the app outside Docker (27017 is often taken):
-    # MONGO_URI=mongodb://localhost:27018/rag_ts?replicaSet=rs0&directConnection=true
+    # A replica set with authentication needs a key file, which must be private to the mongod user.
+    entrypoint:
+      - bash
+      - -c
+      - |
+        umask 077
+        printf '%s' "$$RAGTS_MONGO_KEY" > /tmp/rs.key
+        chown mongodb:mongodb /tmp/rs.key
+        exec docker-entrypoint.sh mongod --replSet rs0 --bind_ip_all --keyFile /tmp/rs.key
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${RAGTS_MONGO_ROOT_USER:?set RAGTS_MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${RAGTS_MONGO_ROOT_PASSWORD:?set RAGTS_MONGO_ROOT_PASSWORD}
+      RAGTS_MONGO_APP_USER: ${RAGTS_MONGO_APP_USER:?set RAGTS_MONGO_APP_USER}
+      RAGTS_MONGO_APP_PASSWORD: ${RAGTS_MONGO_APP_PASSWORD:?set RAGTS_MONGO_APP_PASSWORD}
+      RAGTS_MONGO_KEY: ${RAGTS_MONGO_KEY:?set RAGTS_MONGO_KEY (openssl rand -base64 756)}
+    # Host port for running the app outside Docker (27017 is often taken). Loopback only:
+    # MONGO_URI=mongodb://<app user>:<password>@localhost:27018/rag_ts?authSource=admin&replicaSet=rs0&directConnection=true
     ports:
-      - '${RAGTS_MONGO_PORT:-27018}:27017'
+      - '127.0.0.1:${RAGTS_MONGO_PORT:-27018}:27017'
     volumes:
       - mongo-data:/data/db
+      - ./docker/mongo-init-app-user.js:/docker-entrypoint-initdb.d/app-user.js:ro
     healthcheck:
       # Initiates the replica set on first start, then just reports it.
       test:
-        [
-          'CMD',
-          'mongosh',
-          '--quiet',
-          '--eval',
-          "try { rs.status().ok } catch (e) { rs.initiate({ _id: 'rs0', members: [{ _id: 0, host: 'mongo:27017' }] }).ok }",
-        ]
+        - CMD-SHELL
+        - >-
+          mongosh --quiet -u "$$MONGO_INITDB_ROOT_USERNAME" -p "$$MONGO_INITDB_ROOT_PASSWORD"
+          --authenticationDatabase admin --eval
+          "try { rs.status().ok } catch (e) { rs.initiate({ _id: 'rs0', members: [{ _id: 0, host: 'mongo:27017' }] }).ok }"
       interval: 5s
       timeout: 5s
       retries: 30
@@ -41,10 +56,13 @@ services:
 
   app:
     build: .
+    # Loopback by default: a reverse proxy or tunnel on this host reaches it, the network does not.
     ports:
-      - '${RAGTS_PORT:-3000}:3000'
+      - '${RAGTS_BIND_HOST:-127.0.0.1}:${RAGTS_PORT:-3000}:3000'
     environment:
-      MONGO_URI: mongodb://mongo:27017/rag_ts?replicaSet=rs0
+      MONGO_URI: mongodb://${RAGTS_MONGO_APP_USER}:${RAGTS_MONGO_APP_PASSWORD}@mongo:27017/rag_ts?replicaSet=rs0&authSource=admin
+      # Reverse proxies really in front of the app. 0 = X-Forwarded-For is ignored.
+      TRUST_PROXY_HOPS: ${RAGTS_TRUST_PROXY_HOPS:-0}
       QDRANT_URL: ${RAGTS_QDRANT_URL:-http://host.docker.internal:6333}
       QDRANT_API_KEY: ${QDRANT_API_KEY:-}
       QDRANT_COLLECTION: ${RAGTS_QDRANT_COLLECTION:-scientific_papers_gold}

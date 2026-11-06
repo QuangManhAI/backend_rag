@@ -2,8 +2,8 @@
 
 Backend hỏi đáp khoa học có trích dẫn: embed câu hỏi (Nomic v1.5) ➔ đi qua cây World 3D ➔ tìm trong Qdrant ➔ rerank theo PageRank tác giả ➔ Qwen2.5-7B trả lời, stream qua SSE cho frontend 3D.
 
-- **Hợp đồng API:** [`../docs/API_DESIGN.md`](../docs/API_DESIGN.md) — 18 route dưới `/api/v1`.
-- **Kế hoạch triển khai:** [`../docs/prompt_backend.md`](../docs/prompt_backend.md) (B1–B11, Phụ lục A đồng bộ FE, Phụ lục B yêu cầu pipeline).
+- **Hợp đồng API:** [`../docs/api/API_DESIGN.md`](../docs/api/API_DESIGN.md) — 18 route dưới `/api/v1`.
+- **Kế hoạch triển khai:** [`../docs/prompts/prompt_backend.md`](../docs/prompts/prompt_backend.md) (B1–B11, Phụ lục A đồng bộ FE, Phụ lục B yêu cầu pipeline).
 - **Giả định & tiến độ:** [`ASSUMPTIONS.md`](ASSUMPTIONS.md), [`PROGRESS.md`](PROGRESS.md).
 - **Swagger:** `http://localhost:3000/api/v1/docs` (JSON: `/api/v1/docs-json`).
 
@@ -27,7 +27,7 @@ npm ci
 npm run start:dev           # http://localhost:3000/api/v1
 ```
 
-- Cần MongoDB replica set: `docker compose up -d mongo` rồi `MONGO_URI=mongodb://localhost:27018/rag_ts?replicaSet=rs0&directConnection=true` (cổng host đổi bằng `RAGTS_MONGO_PORT`).
+- Cần MongoDB replica set: đặt các biến `RAGTS_MONGO_*` trong `.env` (xem `.env.example`), chạy `docker compose up -d mongo`, rồi `MONGO_URI=mongodb://<app user>:<password>@localhost:27018/rag_ts?authSource=admin&replicaSet=rs0&directConnection=true` (cổng host đổi bằng `RAGTS_MONGO_PORT`).
 - Qdrant: dùng Qdrant của pipeline (`QDRANT_URL=http://localhost:6333` + `QDRANT_API_KEY`).
 - Lần đầu chạy, model embedding (~550 MB) được tải từ Hugging Face (vài phút), sau đó dùng cache.
 - LLM nạp nền khoảng 5 s trên Metal; trước lúc đó `/health` báo `degraded` và chat trả 503 `llm unavailable`.
@@ -35,6 +35,7 @@ npm run start:dev           # http://localhost:3000/api/v1
 ## Chạy bằng Docker
 
 ```bash
+# Đặt JWT_*, QDRANT_API_KEY và RAGTS_MONGO_* trong .env (xem .env.example)
 export JWT_ACCESS_SECRET=... JWT_REFRESH_SECRET=...   # mỗi khoá >= 32 ký tự
 export QDRANT_API_KEY=...                              # key Qdrant của pipeline
 docker compose up --build                              # app :3000 + mongo (rs0)
@@ -49,7 +50,8 @@ Biến riêng cho compose có tiền tố `RAGTS_` (`RAGTS_QDRANT_URL`, `RAGTS_P
 
 | Biến | Bắt buộc | Mặc định | Ý nghĩa |
 | :-- | :--: | :-- | :-- |
-| `MONGO_URI` | ✓ | — | MongoDB (replica set) |
+| `MONGO_URI` | ✓ | — | MongoDB (replica set, có xác thực) |
+| `TRUST_PROXY_HOPS` | | `0` | Số reverse proxy thật sự đứng trước app; `0` = bỏ qua `X-Forwarded-For` |
 | `QDRANT_URL` | ✓ | — | Qdrant |
 | `QDRANT_API_KEY` | | — | Key Qdrant |
 | `QDRANT_COLLECTION` | | `scientific_papers_gold` | Collection đọc |
@@ -92,4 +94,4 @@ npx tsc --noEmit && npm run lint
 
 - Pipeline chưa xuất file world (`tree.json`, centroid, `categories.json`) và payload `twig_id`, `chunk_index` (Phụ lục B) ➔ `route` rỗng, `compare` không lọc theo nhánh, `category_index` = -1.
 - Huỷ stream khi LLM còn đang đọc prompt dài: slot LLM chỉ giải phóng khi sinh tới token đầu (~15 s với `top_k` 5 trên Metal).
-- `prompt_fe_3d.md` (được tham chiếu trong kế hoạch) không có trong repo — định dạng world lấy theo type FE `frontend_rag/src/types/world.ts`.
+- `prompt_fe_3d.md` (được tham chiếu trong kế hoạch) không có trong repo — định dạng world lấy theo type FE `frontend_rag/src/shared/types/world.ts`.

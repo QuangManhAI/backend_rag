@@ -1,7 +1,10 @@
 import { createHash } from 'crypto';
-import type { EmbeddingPort } from '../../src/embedding/embedding.service';
-import type { GenerateOptions, LlmEngine } from '../../src/llm/llm-engine';
-import type { QdrantReader } from '../../src/vector-store/vector-store.service';
+import type { EmbeddingPort } from '../../src/engines/embedding/embedding.service';
+import type {
+  GenerateOptions,
+  LlmEngine,
+} from '../../src/engines/llm/llm-engine';
+import type { QdrantReader } from '../../src/engines/vector-store/vector-store.service';
 import { DIM, SeedPoint, seedPoints } from '../../scripts/seed-qdrant';
 
 /** Deterministic unit vector from the text (stands in for Nomic in e2e runs). */

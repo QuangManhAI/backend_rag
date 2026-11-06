@@ -21,6 +21,8 @@ export const envSchema = z
       .enum(['development', 'production', 'test'])
       .default('development'),
     MONGO_URI: required('MONGO_URI'),
+    /** Read-only account on `rag_ts_corpus`, the source of truth for chunk text (never root). */
+    CORPUS_MONGO_URI: z.string().optional(),
     QDRANT_URL: required('QDRANT_URL'),
     QDRANT_API_KEY: z.string().optional(),
     QDRANT_COLLECTION: z.string().min(1).default('scientific_papers_gold'),
@@ -37,9 +39,23 @@ export const envSchema = z
     LLM_MAX_QUEUE: int(8, 0),
     LLM_CONCURRENCY: int(1, 1),
     LLM_TIMEOUT_MS: int(60000, 1000),
+    /** Directory of the Laya ONNX bundle; unset turns rerank and both gates off. */
+    LAYA_MODEL_DIR: z.string().optional(),
+    LAYA_TIMEOUT_MS: int(30000, 100),
+    /** Fuse the vector order with Laya's (RRF). False: keep the vector order, only gate on it. */
+    LAYA_RERANK: z
+      .enum(['true', 'false'])
+      .default('true')
+      .transform((v) => v === 'true'),
+    /** Below this best relevance the context counts as "not enough evidence". */
+    LAYA_EVIDENCE_THRESHOLD: z.coerce.number().min(0).max(1).default(0.6),
+    /** Below this best support the answer counts as "not grounded". */
+    LAYA_GROUNDED_THRESHOLD: z.coerce.number().min(0).max(1).default(0.3),
     WORLD_DATA_DIR: required('WORLD_DATA_DIR'),
     MINING_DIR: required('MINING_DIR'),
     CORS_ORIGINS: z.string().default('http://localhost:5174'),
+    /** Reverse proxies really in front of the app; 0 means `X-Forwarded-For` is ignored. */
+    TRUST_PROXY_HOPS: int(0, 0),
   })
   .superRefine((v, ctx) => {
     // Production-only guards (prompt_security S1.1): a placeholder or shared secret must never

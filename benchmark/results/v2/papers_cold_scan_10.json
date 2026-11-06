@@ -1,0 +1,36 @@
+{
+ "scn": "papers_cold",
+ "kind": "RATE",
+ "value": 10,
+ "seconds": 30,
+ "tag": "scan",
+ "k6_exit": 0,
+ "reqs": 301,
+ "rps": 10.02829044034723,
+ "p50": 17.136,
+ "p90": 31.919,
+ "p95": 44.624,
+ "p99": 84.183,
+ "max": 101.225,
+ "err": 0,
+ "throttled": 0,
+ "server_5xx": 0,
+ "dropped": 0,
+ "vus_max": 60,
+ "dropped_rate": 0,
+ "pass": true,
+ "server_cpu_avg": 5.075,
+ "server_rss_mb": 1203.46875,
+ "k6_cpu_avg": 1.2833333333333334,
+ "endpoints": {
+  "paper": {
+   "p(95)": 44.624,
+   "p(99)": 84.183,
+   "max": 101.225,
+   "avg": 18.866455149501643,
+   "med": 17.136,
+   "p(90)": 31.919
+  }
+ },
+ "chat": {}
+}

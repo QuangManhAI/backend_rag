@@ -4,9 +4,9 @@
 - **Purpose**: Define the authoritative full-stack specification for chat-session identity, versioned REST APIs, cursor pagination, MongoDB persistence, security scoping, offline caching, and lifecycle operations.
 - **Overview Pipeline**: Synthesizes the core domain model, JWT-authenticated NestJS backend contract, MongoDB schema design, and planned React/IndexedDB frontend synchronization into a single active source of truth.
 - **Detailed Plan**: §1 Input constraints and architectural stance; §2 Domain and data model; §3 Backend API contract (`/api/v1/chat-sessions`); §4 Frontend and offline behavior (target specification); §5 Lifecycle, concurrency, and consistency rules; §6 Rejected or risky interpretations; §7 Finalized architectural decisions & status; §8 Acceptance criteria and test verification.
-- **References**: [`../../frontend_rag/src/types/rag.ts`](../../frontend_rag/src/types/rag.ts), [`../src/types/scientific-rag.ts`](../src/types/scientific-rag.ts), [`MONGODB_SCHEMA_DESIGN.md`](MONGODB_SCHEMA_DESIGN.md), [`CHAT_SESSIONS-SPEC-TESTS.md`](CHAT_SESSIONS-SPEC-TESTS.md), [`../../docs/API_SPECIFICATION.md`](../../docs/API_SPECIFICATION.md), [`../../agents/rules/MD_CONVENTION.md`](../../agents/rules/MD_CONVENTION.md), [`../../docs/AI_chat_log/Khoi_chat_log.md`](../../docs/AI_chat_log/Khoi_chat_log.md)
+- **References**: [`../../frontend_rag/src/shared/types/rag.ts`](../../frontend_rag/src/shared/types/rag.ts), [`../src/types/scientific-rag.ts`](../src/types/scientific-rag.ts), [`MONGODB_SCHEMA_DESIGN.md`](MONGODB_SCHEMA_DESIGN.md), [`CHAT_SESSIONS-SPEC-TESTS.md`](CHAT_SESSIONS-SPEC-TESTS.md), [`../../docs/api/API_SPECIFICATION.md`](../../docs/api/API_SPECIFICATION.md), [`../../agents/rules/MD_CONVENTION.md`](../../agents/rules/MD_CONVENTION.md), [`../../docs/AI_chat_log/Khoi_chat_log.md`](../../docs/AI_chat_log/Khoi_chat_log.md)
 - **Created**: 2026-10-16T16:36:03+07:00
-- **Last Updated**: 2026-10-28T16:47:00+07:00
+- **Last Updated**: 2026-11-06T13:13:54+07:00
 
 ---
 
@@ -51,7 +51,7 @@ The functional requirements for chat sessions include:
 
 1. A session is initially named using a timestamp based on its creation time in `UTC+07`.
 2. The frontend offline cache retains the 10 most recent chats in local storage (IndexedDB).
-3. The session list returns lightweight summaries using server-side cursor pagination with a fixed page size of 10 items.
+3. The session list returns lightweight summaries using server-side cursor pagination with a default page size of 10 items (`limit` 1–50).
 4. Users can rename and delete their sessions.
 5. All operations are strictly authenticated and multi-tenant isolated.
 
@@ -62,8 +62,8 @@ The functional requirements for chat sessions include:
 | **Session identity** | Opaque, immutable UUIDv7 `_id` (`string`) | Time-ordered, globally unique, avoids timestamp collision, presentation-independent |
 | **Initial title** | `YY-MM-DD:HH-MM-SS` in `UTC+07` derived at creation | Meets timestamp naming requirement without coupling presentation to identity |
 | **List response** | Summaries only, sorted by `last_message_at DESC, _id DESC` | Keeps list bandwidth minimal; renaming does not reorder the session list |
-| **Pagination** | Fixed page size of 10 summaries (`SESSION_PAGE_SIZE = 10`), opaque base64url cursor | Enforces predictable payload sizes; supports optional substring search `q` (max 120 chars) |
-| **Ownership & Auth** | Authenticated JWT Bearer token (`user_id: ObjectId`) using [`JwtAuthGuard`](../src/auth/guards/jwt-auth.guard.ts) | Integrates with repository authentication module; replaces initial anonymous `device_id` cookie proposal |
+| **Pagination** | Default page size of 10 summaries (`SESSION_PAGE_SIZE = 10`, `limit` 1–50), opaque base64url cursor | Enforces predictable payload sizes; supports optional substring search `q` (max 120 chars) |
+| **Ownership & Auth** | Authenticated JWT Bearer token (`user_id: ObjectId`) using [`JwtAuthGuard`](../src/modules/auth/guards/jwt-auth.guard.ts) | Integrates with repository authentication module; replaces initial anonymous `device_id` cookie proposal |
 | **Server retention** | Uncapped active session retention in MongoDB; 10-session limit applies strictly to client IndexedDB cache | Server supports full conversation archives while browser offline cache remains lean |
 | **Persistence** | Two collections: `chat_sessions` (metadata) and `chat_messages` (ordered messages) | Eliminates unbounded document growth inside MongoDB; enforces 16 MB BSON safety |
 | **Lazy creation** | Sessions created on the first question/answer exchange via RAG chat; `POST /api/v1/chat-sessions` omitted | Prevents empty/abandoned sessions when a user visits without chatting |
@@ -146,7 +146,7 @@ Fetches paginated session summaries for the authenticated user.
 - **Query Parameters**:
   - `cursor` (optional, string, max 512 chars): Opaque base64url cursor encoding `last_message_at` and `_id`.
   - `q` (optional, string, max 120 chars): Case-insensitive substring search filter on `title` (regex-escaped).
-- **Page Size**: Fixed at 10 items (`SESSION_PAGE_SIZE = 10`). Clients cannot override the page size.
+- **Page Size**: 10 items by default (`SESSION_PAGE_SIZE = 10`); clients choose 1–50 with `limit` (D-047, reverses the earlier fixed size because the frontend sync needs larger pages).
 - **Response** (`200 OK`):
   ```json
   {
@@ -351,7 +351,7 @@ interface CachedChatSession {
 3. **Explicit empty session creation endpoint (`POST /api/v1/chat-sessions`)**: Rejected to prevent abandoned empty conversations. (Lazy creation on first message exchange adopted).
 4. **Anonymous `device_id` cookie**: Superseded by JWT `user_id` authentication to support cross-device user accounts and integrate with monolith auth.
 5. **Optimistic Locking (`409 Conflict`) for simple renames**: Rejected in favor of Last-Write-Wins (LWW) to eliminate disruptive lock errors on desktop UI.
-6. **Client-driven page size**: Rejected to keep MongoDB query complexity and response payloads strictly bounded (`SESSION_PAGE_SIZE = 10`).
+6. **Unbounded client-driven page size**: Rejected to keep response payloads strictly bounded (`limit` stops at 50).
 
 ---
 
@@ -376,7 +376,7 @@ interface CachedChatSession {
 
 All backend specification items have been implemented and verified via automated test suites:
 
-- **Specification Test Suite**: [`CHAT_SESSIONS-SPEC-TESTS.md`](CHAT_SESSIONS-SPEC-TESTS.md) covers 34 comprehensive scenarios across 20 test suites in [`chat-sessions.spec.ts`](../src/chat-sessions/chat-sessions.spec.ts).
+- **Specification Test Suite**: [`CHAT_SESSIONS-SPEC-TESTS.md`](CHAT_SESSIONS-SPEC-TESTS.md) covers 34 comprehensive scenarios across 20 test suites in [`chat-sessions.spec.ts`](../src/modules/chat-sessions/chat-sessions.spec.ts).
 - **End-to-End Test Suite**: [`test/flow.e2e-spec.ts`](../test/flow.e2e-spec.ts) validates complete registration, login, RAG query lazy session creation, list paging, rename, and soft delete.
 - **Verification Results**:
   - `npm --prefix backend_rag test -- chat-sessions.spec.ts`: 20 / 20 test suites passing (34 test cases).

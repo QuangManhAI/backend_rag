@@ -43,6 +43,8 @@ export interface GroundedChunk {
   similarity_score: number;
   authority_score: number;
   final_score: number;
+  /** Laya's P(the chunk directly answers the question); absent when the judge did not run. */
+  relevance_score?: number;
   citation_tag: string;
 }
 
@@ -52,7 +54,22 @@ export interface Timings {
   search_ms: number;
   rerank_ms: number;
   llm_ms: number;
+  /** Rewriting the query and searching again after the evidence gate said no. */
+  refine_ms?: number;
+  /** The groundedness check after the LLM. */
+  grounded_ms?: number;
   total_ms: number;
+}
+
+/** What the gates around the LLM decided; absent when the judge did not run. */
+export interface Quality {
+  /** Best relevance among the chunks used, 0–1. */
+  evidence_score: number | null;
+  /** The search query after the rewrite, when one was needed. */
+  refined_query: string | null;
+  /** Best support for the answer, 0–1; null when the check did not run. */
+  grounded_score: number | null;
+  abstained: boolean;
 }
 
 export interface RouteCandidate {
@@ -85,12 +102,17 @@ export type RagStreamEvent =
       expanded_terms: string[];
     }
   | { type: 'token'; text: string }
+  /** The groundedness check rejected what was streamed: `answer` replaces it. */
+  | { type: 'answer_replaced'; answer: string }
   | {
       type: 'done';
       citations: string[];
       timings: Timings;
+      quality?: Quality;
       session_id: string | null;
       message_id: string | null;
+      /** Added by the controller on the stream (API_DESIGN §1.6). */
+      _links?: Record<string, { href: string; method?: string }>;
     }
   | { type: 'error'; message: string; status: number };
 

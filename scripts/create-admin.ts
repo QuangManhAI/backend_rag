@@ -18,8 +18,8 @@ import * as argon2 from 'argon2';
 import {
   validatePassword,
   PASSWORD_MIN_LENGTH,
-} from '../src/auth/common-passwords';
-import { User, UserSchema } from '../src/auth/schemas/user.schema';
+} from '../src/modules/auth/common-passwords';
+import { User, UserSchema } from '../src/modules/auth/schemas/user.schema';
 
 interface Args {
   email: string;

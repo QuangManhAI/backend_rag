@@ -5,9 +5,9 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import type { Response } from 'express';
-import { healthLinks, WithLinks } from '../common/hateoas';
-import { AppConfigService } from '../config/app-config.service';
-import { HealthDto } from './health.dto';
+import { healthLinks, WithLinks } from '../../common/http/hateoas';
+import { AppConfigService } from '../../config/app-config.service';
+import { HealthDto } from './dto/health.dto';
 import { Health, HealthService } from './health.service';
 
 /**

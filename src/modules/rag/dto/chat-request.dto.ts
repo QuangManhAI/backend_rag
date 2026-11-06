@@ -11,8 +11,8 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { UUID_RE } from '../../common/uuid';
-import { CATEGORY_RE } from '../../vector-store/vector-store.service';
+import { UUID_RE } from '../../../common/utils/uuid';
+import { CATEGORY_RE } from '../../../engines/vector-store/vector-store.service';
 
 const trim = ({ value }: { value: unknown }) =>
   typeof value === 'string' ? value.trim() : value;

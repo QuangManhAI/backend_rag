@@ -9,11 +9,11 @@ import {
   startMongo,
   TEST_ENV,
   TestApp,
-} from '../testing/test-app';
-import type { AuthUser } from '../types/auth-user';
+} from '../../testing/test-app';
+import type { AuthUser } from '../../types/auth-user';
 import { AuthModule } from './auth.module';
 import { AuthService } from './auth.service';
-import { CurrentUser } from './current-user.decorator';
+import { CurrentUser } from './decorators/current-user.decorator';
 import { JwtAuthGuard, OptionalJwtAuthGuard } from './guards/jwt-auth.guard';
 import { Roles, RolesGuard } from './guards/roles.guard';
 import { RefreshToken } from './schemas/refresh-token.schema';
@@ -240,11 +240,9 @@ describe('Auth (integration)', () => {
     });
 
     it('the account-state cache has a fixed lifetime: a busy client cannot keep it alive', () => {
-      const cache = (
-        t.app.get(AuthService) as unknown as {
-          tokenVersionCache: { updateAgeOnGet: boolean };
-        }
-      ).tokenVersionCache;
+      const cache = t.app.get<{
+        tokenVersionCache: { updateAgeOnGet: boolean };
+      }>(AuthService).tokenVersionCache;
       expect(cache.updateAgeOnGet).toBe(false);
     });
   });

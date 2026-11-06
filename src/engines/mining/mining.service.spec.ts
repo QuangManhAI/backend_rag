@@ -1,7 +1,7 @@
-import { AppConfigService } from '../config/app-config.service';
-import { parseEnv } from '../config/env.schema';
-import { TEST_ENV } from '../testing/test-app';
-import type { ScoredChunk } from '../types/scientific-rag';
+import { AppConfigService } from '../../config/app-config.service';
+import { parseEnv } from '../../config/env.schema';
+import { TEST_ENV } from '../../testing/test-app';
+import type { ScoredChunk } from '../../types/scientific-rag';
 import {
   authorityOf,
   expandTerms,

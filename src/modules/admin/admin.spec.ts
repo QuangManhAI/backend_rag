@@ -9,14 +9,14 @@ import { User } from '../auth/schemas/user.schema';
 import { ChatSessionsModule } from '../chat-sessions/chat-sessions.module';
 import { ChatMessage } from '../chat-sessions/schemas/chat-message.schema';
 import { ChatSession } from '../chat-sessions/schemas/chat-session.schema';
-import { uuidv7 } from '../common/uuid';
+import { uuidv7 } from '../../common/utils/uuid';
 import {
   createTestApp,
   seedUser,
   SEED_PASSWORD,
   startMongo,
   TestApp,
-} from '../testing/test-app';
+} from '../../testing/test-app';
 import { AdminAuditService } from './admin-audit.service';
 import { AdminIdentityService } from './admin-identity.service';
 import { AdminOpsService } from './admin-ops.service';

@@ -1,6 +1,6 @@
 import type { Response } from 'express';
-import { contextOf } from '../common/request-context';
-import type { RagStreamEvent } from '../types/scientific-rag';
+import { contextOf } from '../../../common/logging/request-context';
+import type { RagStreamEvent } from '../../../types/scientific-rag';
 
 export const PING_INTERVAL_MS = 15_000;
 

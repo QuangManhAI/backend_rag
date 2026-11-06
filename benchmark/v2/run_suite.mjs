@@ -13,6 +13,9 @@ mkdirSync(OUT, { recursive: true });
 const STEP = Number(E.STEP_S ?? 60);
 const HOLD = Number(E.HOLD_S ?? 180);
 const HOLDS = Number(E.HOLDS ?? 3);
+const DEADLINE = E.DEADLINE_S ? Date.now() + Number(E.DEADLINE_S) * 1000 : Infinity;
+const MAX_FAILS = Number(E.MAX_FAILS ?? 2);
+const HOLD_TRIES = Number(E.HOLD_TRIES ?? 3);
 const SLA = { p95: 500, p99: 1000, err: 0.01, dropped: 0.01 };
 const PLANS = {
   live: { kind: 'RATE', ladder: [1000, 2000, 3000, 4000, 5000, 6000, 8000] },
@@ -88,18 +91,18 @@ function k6Step(scn, kind, value, seconds, tag) {
 const brief = (r) => (r.failed ? `FAILED ${r.failed}` : `${r.pass ? 'PASS' : 'fail'} rps=${r.rps?.toFixed(1)} p95=${r.p95?.toFixed(0)} p99=${r.p99?.toFixed(0)} err=${(r.err * 100).toFixed(2)}% 429=${r.throttled} 5xx=${r.server_5xx} drop=${r.dropped} cpu=${r.server_cpu_avg?.toFixed(0)}% k6cpu=${r.k6_cpu_avg?.toFixed(0)}%`);
 
 async function capacity(scn) {
-  const plan = PLANS[scn];
+  const plan = { ...PLANS[scn], ...(E[`LADDER_${scn}`] ? { ladder: E[`LADDER_${scn}`].split(',').map(Number) } : {}) };
   let best = null;
   let fails = 0;
   for (const value of plan.ladder) {
     const r = await k6Step(scn, plan.kind, value, STEP, 'scan');
     log(scn, plan.kind, value, brief(r));
-    if (r.pass) { best = value; fails = 0; } else if (++fails >= 2) break;
+    if (r.pass) { best = value; fails = 0; } else if (++fails >= MAX_FAILS) break;
     await sleep(15);
   }
   if (!best) { log(scn, 'NO PASSING STEP'); return null; }
   // Hold: the rate only counts if it stays inside the SLA in every hold.
-  for (let v = best, tries = 0; tries < 3; tries++, v = Math.max(1, Math.floor(v * 0.8))) {
+  for (let v = best, tries = 0; tries < HOLD_TRIES; tries++, v = Math.max(1, Math.floor(v * 0.8))) {
     const runs = [];
     for (let h = 1; h <= HOLDS; h++) {
       const r = await k6Step(scn, plan.kind, v, HOLD, `hold${h}`);
@@ -126,6 +129,7 @@ async function chat() {
 
 const certified = {};
 for (const scn of E.SUITE.split(',')) {
+  if (Date.now() > DEADLINE) { log(scn, 'SKIPPED_DEADLINE'); continue; }
   if (scn === 'chat') await chat();
   else certified[scn] = await capacity(scn);
   writeFileSync(join(OUT, `certified_${scn}.json`), JSON.stringify(certified[scn] ?? null));

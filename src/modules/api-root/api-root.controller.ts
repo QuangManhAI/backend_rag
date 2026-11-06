@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { Links, rootLinks } from '../common/hateoas';
+import { Links, rootLinks } from '../../common/http/hateoas';
 
 /** `GET /api/v1`: where a hypermedia client starts. */
 @ApiTags('API root')

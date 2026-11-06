@@ -2,16 +2,16 @@ import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { AdminModule } from './admin/admin.module';
-import { ApiRootController } from './api-root/api-root.controller';
-import { AuthModule } from './auth/auth.module';
-import { ChatSessionsModule } from './chat-sessions/chat-sessions.module';
-import { LoggerModule } from './common/logger.module';
-import { THROTTLER_NAME } from './common/throttler';
+import { AdminModule } from './modules/admin/admin.module';
+import { ApiRootController } from './modules/api-root/api-root.controller';
+import { AuthModule } from './modules/auth/auth.module';
+import { ChatSessionsModule } from './modules/chat-sessions/chat-sessions.module';
+import { LoggerModule } from './common/logging/logger.module';
+import { THROTTLER_NAME } from './common/security/throttler';
 import { AppConfigModule, AppConfigService } from './config/app-config.service';
-import { HealthModule } from './health/health.module';
-import { PapersModule } from './papers/papers.module';
-import { RagModule } from './rag/rag.module';
+import { HealthModule } from './modules/health/health.module';
+import { PapersModule } from './modules/papers/papers.module';
+import { RagModule } from './modules/rag/rag.module';
 
 @Module({
   imports: [

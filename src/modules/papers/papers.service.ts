@@ -1,15 +1,15 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { LRUCache } from 'lru-cache';
-import { TreeRouterService } from '../tree-router/tree-router.service';
+import { TreeRouterService } from '../../engines/tree-router/tree-router.service';
 import {
   ChunkPayload,
   PaperDetail,
   toSectionType,
-} from '../types/scientific-rag';
+} from '../../types/scientific-rag';
 import {
   VECTOR_STORE_PORT,
   type VectorStorePort,
-} from '../vector-store/vector-store.service';
+} from '../../engines/vector-store/vector-store.service';
 
 export const PAPER_NOT_FOUND = 'paper not found';
 export const PAPER_ID_MAX = 200;

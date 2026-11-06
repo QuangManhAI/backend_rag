@@ -15,14 +15,14 @@ import {
   parseFilters,
   parseSort,
   toCursorPage,
-} from '../common/pagination';
-import { escapeRegex } from '../common/sanitize';
-import { isUuid } from '../common/uuid';
+} from '../../common/pagination/pagination';
+import { escapeRegex } from '../../common/security/sanitize';
+import { isUuid } from '../../common/utils/uuid';
 import { HealthService } from '../health/health.service';
-import { LLM_PORT, type LlmPort } from '../llm/llm.service';
-import type { AuthUser } from '../types/auth-user';
+import { LLM_PORT, type LlmPort } from '../../engines/llm/llm.service';
+import type { AuthUser } from '../../types/auth-user';
 import { AdminAuditService, type AuditRequest } from './admin-audit.service';
-import { ListSessionsQueryDto, LoginAttemptsQueryDto } from './admin.dto';
+import { ListSessionsQueryDto, LoginAttemptsQueryDto } from './dto/admin.dto';
 import { assertAdmin } from './assert-admin';
 
 export const SESSION_NOT_FOUND = 'session not found';

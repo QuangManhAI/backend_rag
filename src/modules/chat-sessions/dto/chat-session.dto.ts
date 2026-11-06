@@ -8,9 +8,9 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { ListQueryDto } from '../../common/pagination';
+import { ListQueryDto } from '../../../common/pagination/pagination';
 import { TimingsDto } from '../../rag/dto/chat-response.dto';
-import type { GroundedChunk, Timings } from '../../types/scientific-rag';
+import type { GroundedChunk, Timings } from '../../../types/scientific-rag';
 
 const FILTER_MAX = 120;
 

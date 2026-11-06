@@ -19,10 +19,6 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "download:model": "ts-node scripts/download-model.ts",
-    "sync:r2": "ts-node scripts/sync-r2.ts",
-    "sync:minio": "ts-node scripts/sync-minio.ts",
-    "mirror:r2:minio": "ts-node scripts/mirror-r2-to-minio.ts",
-    "migrate:qdrant": "ts-node scripts/migrate-lance-to-qdrant.ts",
     "create:admin": "ts-node scripts/create-admin.ts"
   },
   "dependencies": {

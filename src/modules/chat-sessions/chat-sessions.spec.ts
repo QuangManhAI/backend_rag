@@ -4,22 +4,18 @@ import { Model, Types } from 'mongoose';
 import request from 'supertest';
 import { AuthModule } from '../auth/auth.module';
 import { TokenService } from '../auth/token.service';
-import { encodeCursor } from '../common/pagination';
-import { isUuid, uuidv7 } from '../common/uuid';
+import { encodeCursor } from '../../common/pagination/pagination';
+import { isUuid, uuidv7 } from '../../common/utils/uuid';
 import {
   createTestApp,
   seedUser,
   startMongo,
   TestApp,
-} from '../testing/test-app';
+} from '../../testing/test-app';
 import { ChatSessionsModule } from './chat-sessions.module';
-import {
-  ChatSessionsService,
-  formatTimestampTitle,
-  MAX_MESSAGES,
-  SESSION_PAGE_SIZE,
-  validTitle,
-} from './chat-sessions.service';
+import { formatTimestampTitle, validTitle } from './chat-session.mapper';
+import { MAX_MESSAGES, SESSION_PAGE_SIZE } from './chat-sessions.constants';
+import { ChatSessionsService } from './chat-sessions.service';
 import { ChatMessage } from './schemas/chat-message.schema';
 import { ChatSession } from './schemas/chat-session.schema';
 import { ChatRequest } from './schemas/chat-request.schema';

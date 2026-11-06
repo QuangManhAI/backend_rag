@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { QdrantClient } from '@qdrant/js-client-rest';
-import { AppConfigService } from '../config/app-config.service';
+import { AppConfigService } from '../../config/app-config.service';
 import { CorpusModule } from '../corpus/corpus.module';
 import {
   QDRANT_CLIENT,

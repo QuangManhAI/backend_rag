@@ -7,12 +7,12 @@ import request from 'supertest';
 import { seed } from '../scripts/seed-qdrant';
 import { AppModule } from '../src/app.module';
 import { configureApp } from '../src/app.setup';
-import { EmbeddingService } from '../src/embedding/embedding.service';
-import { HealthService } from '../src/health/health.service';
-import { LLM_ENGINE } from '../src/llm/llm-engine';
+import { EmbeddingService } from '../src/engines/embedding/embedding.service';
+import { HealthService } from '../src/modules/health/health.service';
+import { LLM_ENGINE } from '../src/engines/llm/llm-engine';
 import { startMongo } from '../src/testing/test-app';
 import type { RagStreamEvent } from '../src/types/scientific-rag';
-import { QDRANT_CLIENT } from '../src/vector-store/vector-store.service';
+import { QDRANT_CLIENT } from '../src/engines/vector-store/vector-store.service';
 import { fakeEmbedding, FakeLlmEngine, inMemoryQdrant } from './support/fakes';
 
 /**

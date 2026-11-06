@@ -1,5 +1,5 @@
 import { ForbiddenException } from '@nestjs/common';
-import type { AuthUser } from '../types/auth-user';
+import type { AuthUser } from '../../types/auth-user';
 
 export const ADMIN_ROLE_REQUIRED = 'admin role required';
 

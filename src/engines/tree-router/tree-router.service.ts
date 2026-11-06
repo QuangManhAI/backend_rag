@@ -1,10 +1,10 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
-import { AppConfigService } from '../config/app-config.service';
+import { AppConfigService } from '../../config/app-config.service';
 import { EMBEDDING_DIM } from '../embedding/embedding.service';
 import { round4 } from '../mining/mining.service';
-import type { RouteCandidate, RouteStep } from '../types/scientific-rag';
+import type { RouteCandidate, RouteStep } from '../../types/scientific-rag';
 
 export const NPROBE_MIN = 1;
 export const NPROBE_MAX = 6;

@@ -1,4 +1,4 @@
-import type { GroundedChunk } from '../types/scientific-rag';
+import type { GroundedChunk } from '../../../types/scientific-rag';
 
 export const NO_CONTEXT_ANSWER =
   'The provided literature does not contain sufficient details regarding this question.';

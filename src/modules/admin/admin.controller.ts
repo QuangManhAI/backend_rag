@@ -15,17 +15,17 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { CurrentUser } from '../auth/current-user.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Roles, RolesGuard } from '../auth/guards/roles.guard';
 import {
   adminSessionLinks,
   adminUserLinks,
   WithLinks,
-} from '../common/hateoas';
-import { ListQueryDto } from '../common/pagination';
-import { HealthDto } from '../health/health.dto';
-import type { AuthUser } from '../types/auth-user';
+} from '../../common/http/hateoas';
+import { ListQueryDto } from '../../common/pagination/pagination';
+import { HealthDto } from '../health/dto/health.dto';
+import type { AuthUser } from '../../types/auth-user';
 import { AdminAuditService, type AuditRequest } from './admin-audit.service';
 import { AdminIdentityService } from './admin-identity.service';
 import { AdminOpsService } from './admin-ops.service';
@@ -48,8 +48,8 @@ import {
   TokenFamilyListDto,
   UpdateRolesDto,
   UpdateUserStatusDto,
-} from './admin.dto';
-import { AuditContext } from './audit-context.decorator';
+} from './dto/admin.dto';
+import { AuditContext } from './decorators/audit-context.decorator';
 
 /**
  * The admin surface (prompt_security S4, S5, S6).

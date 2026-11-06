@@ -9,7 +9,7 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { basename } from 'path';
-import { AppConfigService } from '../config/app-config.service';
+import { AppConfigService } from '../../config/app-config.service';
 import { LLM_ENGINE, LlmEngine } from './llm-engine';
 import { AbortedError, LlmQueue, QueueFullError, Release } from './llm-queue';
 import { TokenChannel } from './token-channel';

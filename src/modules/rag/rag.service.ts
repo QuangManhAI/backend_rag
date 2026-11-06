@@ -1,33 +1,31 @@
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
-import { createHash } from 'crypto';
-import { logFields } from '../common/request-context';
+import { logFields } from '../../common/logging/request-context';
 import {
   EMBEDDING_PORT,
   type EmbeddingPort,
-} from '../embedding/embedding.service';
-import { JUDGE_PORT, type JudgePort } from '../judge/judge.service';
-import { LLM_PORT, type LlmPort } from '../llm/llm.service';
-import { MiningService, round4 } from '../mining/mining.service';
+} from '../../engines/embedding/embedding.service';
+import { JUDGE_PORT, type JudgePort } from '../../engines/judge/judge.service';
+import { LLM_PORT, type LlmPort } from '../../engines/llm/llm.service';
+import { MiningService, round4 } from '../../engines/mining/mining.service';
 import {
   SESSION_STORE,
   type SessionStorePort,
 } from '../chat-sessions/session-store.port';
-import { AppConfigService } from '../config/app-config.service';
-import { TreeRouterService } from '../tree-router/tree-router.service';
-import type { AuthUser } from '../types/auth-user';
+import { AppConfigService } from '../../config/app-config.service';
+import { TreeRouterService } from '../../engines/tree-router/tree-router.service';
+import type { AuthUser } from '../../types/auth-user';
 import type {
-  CompareCandidate,
   GroundedChunk,
   Quality,
-  RagStreamEvent,
+  RouteStep,
   ScoredChunk,
   Timings,
-} from '../types/scientific-rag';
+} from '../../types/scientific-rag';
 import {
   VECTOR_STORE_PORT,
   type VectorStorePort,
-} from '../vector-store/vector-store.service';
-import { extractCitations } from './citations';
+} from '../../engines/vector-store/vector-store.service';
+import { extractCitations } from './pipeline/citations';
 import type { ChatRequestDto } from './dto/chat-request.dto';
 import {
   buildUserPrompt,
@@ -35,97 +33,22 @@ import {
   NO_CONTEXT_ANSWER,
   REWRITE_SYSTEM_PROMPT,
   SYSTEM_PROMPT,
-} from './prompt-builder';
-
-/** Events the pipeline yields (errors are thrown, the controller turns them into `error`). */
-export type PipelineEvent = Exclude<RagStreamEvent, { type: 'error' }>;
-
-/** Summary of a finished run, for the non-streaming response and the request log. */
-export interface PipelineResult {
-  answer: string;
-  citations: string[];
-  grounded_chunks: GroundedChunk[];
-  expanded_terms: string[];
-  timings: Timings;
-  quality?: Quality;
-  session_id: string | null;
-  message_id: string | null;
-  /** The answer comes from an earlier run with the same `Idempotency-Key`. */
-  replayed?: boolean;
-}
-
-/** Best score per paper, highest first, at most `limit` papers. */
-export function topPapers(
-  hits: ScoredChunk[],
-  limit: number,
-): CompareCandidate[] {
-  const best = new Map<string, number>();
-  for (const h of hits) {
-    if (h.score > (best.get(h.paper_id) ?? -Infinity))
-      best.set(h.paper_id, h.score);
-  }
-  return [...best.entries()]
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, limit)
-    .map(([paper_id, score]) => ({ paper_id, score: round4(score) }));
-}
-
-/** Identifies the request body behind an `Idempotency-Key`. */
-export function requestFingerprint(req: ChatRequestDto): string {
-  return createHash('sha256')
-    .update(
-      JSON.stringify([
-        req.query,
-        req.session_id ?? null,
-        req.top_k,
-        req.nprobe,
-        req.category ?? null,
-        req.use_authority_boost,
-        req.expand_query,
-      ]),
-    )
-    .digest('hex');
-}
+} from './pipeline/prompt-builder';
+import {
+  fuseRanks,
+  GROUNDED_PASSAGES,
+  judgedPoolSize,
+  topPapers,
+} from './pipeline/ranking';
+import { requestFingerprint } from './pipeline/request-fingerprint';
+import type { PipelineEvent, PipelineResult } from './rag.types';
 
 const since = (t: number) => Math.round(performance.now() - t);
 
-/** Candidates the judge reads: enough to reorder, few enough to keep the wait in seconds. */
-export const judgedPoolSize = (topK: number) =>
-  Math.min(20, Math.max(10, topK * 2));
-/** Evidence passages for the groundedness check. */
-export const GROUNDED_PASSAGES = 3;
-/** The usual constant of reciprocal rank fusion. */
-export const RRF_K = 60;
-
-/**
- * Fuses the existing order with Laya's order (reciprocal rank fusion): on our evaluation either
- * order alone ranked worse than the two together (`benchmark/eval-laya-variants.mjs`). `pool` is
- * best first and `scores` follow it by index. `final_score` is the fused score scaled to 0–1.
- */
-export function fuseRanks(
-  pool: GroundedChunk[],
-  scores: number[],
-): GroundedChunk[] {
-  const byRelevance = pool
-    .map((_, i) => i)
-    .sort((a, b) => scores[b] - scores[a] || a - b);
-  const relevanceRank = new Map(
-    byRelevance.map((poolIndex, rank) => [poolIndex, rank]),
-  );
-  const best = 2 / (RRF_K + 1);
-  return pool
-    .map((c, i) => ({
-      c,
-      i,
-      fused:
-        1 / (RRF_K + i + 1) + 1 / (RRF_K + (relevanceRank.get(i) ?? i) + 1),
-    }))
-    .sort((a, b) => b.fused - a.fused || a.i - b.i)
-    .map(({ c, i, fused }) => ({
-      ...c,
-      relevance_score: round4(scores[i]),
-      final_score: round4(fused / best),
-    }));
+interface RankedContext {
+  chunks: GroundedChunk[];
+  /** Null = the judge gave no verdict. */
+  evidence: number | null;
 }
 
 @Injectable()
@@ -262,12 +185,7 @@ export class RagService {
 
     yield { type: 'phase', phase: 'comparing' };
     t = performance.now();
-    const twigIds = steps.find((s) => s.depth === 2)?.chosen;
-    const hits = await this.vectors.search(q, {
-      limit: Math.max(40, req.top_k * 8),
-      category: req.category,
-      twigIds: twigIds?.length ? twigIds : undefined,
-    });
+    const hits = await this.search(q, steps, req);
     timings.search_ms = since(t);
     yield { type: 'compare', candidates: topPapers(hits, req.top_k) };
 
@@ -275,26 +193,16 @@ export class RagService {
     t = performance.now();
     const judged = await this.rank(question, hits, req);
     timings.rerank_ms = since(t);
-    let grounded = judged.chunks;
-    let evidence = judged.evidence;
-    let refinedQuery: string | null = null;
-    let abstained = false;
-
-    // Evidence gate: not enough ➔ refine the query once ➔ still not enough ➔ abstain.
-    if (evidence !== null && evidence < this.threshold('EVIDENCE')) {
-      t = performance.now();
-      const refined = await this.refine(question, req, signal);
-      timings.refine_ms = since(t);
-      if (refined && (refined.evidence ?? 0) > evidence) {
-        grounded = refined.chunks;
-        evidence = refined.evidence;
-        refinedQuery = refined.query;
-      }
-      if ((evidence ?? 0) < this.threshold('EVIDENCE')) {
-        abstained = true;
-        grounded = [];
-      }
-    }
+    const gated = await this.applyEvidenceGate(
+      judged,
+      question,
+      req,
+      signal,
+      timings,
+    );
+    const { evidence, refinedQuery } = gated;
+    const grounded = gated.chunks;
+    let abstained = gated.abstained;
     yield {
       type: 'retrieval',
       grounded_chunks: grounded,
@@ -303,20 +211,7 @@ export class RagService {
 
     yield { type: 'phase', phase: 'generating' };
     t = performance.now();
-    let answer = '';
-    if (!grounded.length) {
-      answer = NO_CONTEXT_ANSWER;
-      yield { type: 'token', text: answer };
-    } else {
-      for await (const token of this.llm.generate(
-        SYSTEM_PROMPT,
-        buildUserPrompt(grounded, question),
-        signal,
-      )) {
-        answer += token;
-        yield { type: 'token', text: token };
-      }
-    }
+    let answer = yield* this.streamAnswer(grounded, question, signal);
     timings.llm_ms = since(t);
 
     // Groundedness check: what the LLM wrote must be supported by the evidence it was given.
@@ -397,12 +292,71 @@ export class RagService {
     };
   }
 
+  /** Not enough evidence ➔ refine the query once ➔ still not enough ➔ abstain. */
+  private async applyEvidenceGate(
+    judged: RankedContext,
+    question: string,
+    req: ChatRequestDto,
+    signal: AbortSignal,
+    timings: Timings,
+  ): Promise<
+    RankedContext & { refinedQuery: string | null; abstained: boolean }
+  > {
+    const threshold = this.threshold('EVIDENCE');
+    const passed = { ...judged, refinedQuery: null, abstained: false };
+    if (judged.evidence === null || judged.evidence >= threshold) return passed;
+    const t = performance.now();
+    const refined = await this.refine(question, req, signal);
+    timings.refine_ms = since(t);
+    const better = refined && (refined.evidence ?? 0) > judged.evidence;
+    const chunks = better ? refined.chunks : judged.chunks;
+    const evidence = better ? refined.evidence : judged.evidence;
+    const abstained = (evidence ?? 0) < threshold;
+    return {
+      chunks: abstained ? [] : chunks,
+      evidence,
+      refinedQuery: better ? refined.query : null,
+      abstained,
+    };
+  }
+
+  /** The answer tokens as they arrive; yields the fixed answer when there is no context. */
+  private async *streamAnswer(
+    grounded: GroundedChunk[],
+    question: string,
+    signal: AbortSignal,
+  ): AsyncGenerator<PipelineEvent, string> {
+    if (!grounded.length) {
+      yield { type: 'token', text: NO_CONTEXT_ANSWER };
+      return NO_CONTEXT_ANSWER;
+    }
+    let answer = '';
+    for await (const token of this.llm.generate(
+      SYSTEM_PROMPT,
+      buildUserPrompt(grounded, question),
+      signal,
+    )) {
+      answer += token;
+      yield { type: 'token', text: token };
+    }
+    return answer;
+  }
+
+  private search(vector: number[], steps: RouteStep[], req: ChatRequestDto) {
+    const twigIds = steps.find((s) => s.depth === 2)?.chosen;
+    return this.vectors.search(vector, {
+      limit: Math.max(40, req.top_k * 8),
+      category: req.category,
+      twigIds: twigIds?.length ? twigIds : undefined,
+    });
+  }
+
   /** `mining.rerank`, then the judge over the best candidates. `evidence` null = no verdict. */
   private async rank(
     question: string,
     hits: ScoredChunk[],
     req: ChatRequestDto,
-  ): Promise<{ chunks: GroundedChunk[]; evidence: number | null }> {
+  ): Promise<RankedContext> {
     const ranked = this.mining.rerank(hits, req.use_authority_boost);
     const fallback = {
       chunks: ranked.slice(0, req.top_k),
@@ -437,11 +391,7 @@ export class RagService {
     question: string,
     req: ChatRequestDto,
     signal: AbortSignal,
-  ): Promise<{
-    query: string;
-    chunks: GroundedChunk[];
-    evidence: number | null;
-  } | null> {
+  ): Promise<(RankedContext & { query: string }) | null> {
     let raw = '';
     try {
       for await (const token of this.llm.generate(
@@ -461,12 +411,7 @@ export class RagService {
       return null;
     const vector = await this.embedding.embedQuery(query);
     const { steps } = this.router.route(vector, req.nprobe);
-    const twigIds = steps.find((s) => s.depth === 2)?.chosen;
-    const hits = await this.vectors.search(vector, {
-      limit: Math.max(40, req.top_k * 8),
-      category: req.category,
-      twigIds: twigIds?.length ? twigIds : undefined,
-    });
+    const hits = await this.search(vector, steps, req);
     // Judged against the user's question: the rewrite only widens what can be found.
     const { chunks, evidence } = await this.rank(question, hits, req);
     return { query, chunks, evidence };

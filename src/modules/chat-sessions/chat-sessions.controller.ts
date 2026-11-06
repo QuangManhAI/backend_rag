@@ -17,12 +17,12 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { CurrentUser } from '../auth/current-user.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import type { AuthUser } from '../types/auth-user';
+import type { AuthUser } from '../../types/auth-user';
 import { ChatSessionsService } from './chat-sessions.service';
-import { sessionLinks, WithLinks } from '../common/hateoas';
-import { BatchIdsQueryDto } from '../common/pagination';
+import { sessionLinks, WithLinks } from '../../common/http/hateoas';
+import { BatchIdsQueryDto } from '../../common/pagination/pagination';
 import {
   ListMessagesQueryDto,
   ListSessionsQueryDto,

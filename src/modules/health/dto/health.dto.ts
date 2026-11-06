@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import type { Components, Health, HealthStatus } from './health.service';
+import type { Components, Health, HealthStatus } from '../health.service';
 
 class ComponentsDto implements Components {
   @ApiProperty() mongo: boolean;

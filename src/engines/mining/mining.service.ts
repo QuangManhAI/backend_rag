@@ -1,12 +1,12 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
-import { AppConfigService } from '../config/app-config.service';
+import { AppConfigService } from '../../config/app-config.service';
 import {
   GroundedChunk,
   ScoredChunk,
   toSectionType,
-} from '../types/scientific-rag';
+} from '../../types/scientific-rag';
 import { normalizeName, tokenize } from './name-normalizer';
 
 export const SIMILARITY_WEIGHT = 0.85;

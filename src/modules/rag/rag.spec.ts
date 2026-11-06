@@ -11,26 +11,30 @@ import {
   SESSION_STORE,
   SessionStorePort,
 } from '../chat-sessions/session-store.port';
-import { AppConfigService } from '../config/app-config.service';
-import { EMBEDDING_PORT, EmbeddingPort } from '../embedding/embedding.service';
-import { AbortedError } from '../llm/llm-queue';
-import { LLM_PORT, LlmPort } from '../llm/llm.service';
-import { MiningService } from '../mining/mining.service';
+import { AppConfigService } from '../../config/app-config.service';
+import {
+  EMBEDDING_PORT,
+  EmbeddingPort,
+} from '../../engines/embedding/embedding.service';
+import { AbortedError } from '../../engines/llm/llm-queue';
+import { LLM_PORT, LlmPort } from '../../engines/llm/llm.service';
+import { MiningService } from '../../engines/mining/mining.service';
 import {
   createTestApp,
   seedUser,
   startMongo,
   TestApp,
-} from '../testing/test-app';
-import { TreeRouterService } from '../tree-router/tree-router.service';
-import type { RagStreamEvent, ScoredChunk } from '../types/scientific-rag';
+} from '../../testing/test-app';
+import { TreeRouterService } from '../../engines/tree-router/tree-router.service';
+import type { RagStreamEvent, ScoredChunk } from '../../types/scientific-rag';
 import {
   VECTOR_STORE_PORT,
   VectorStorePort,
-} from '../vector-store/vector-store.service';
-import { extractCitations } from './citations';
+} from '../../engines/vector-store/vector-store.service';
+import { extractCitations } from './pipeline/citations';
 import { RagController } from './rag.controller';
-import { RagService, topPapers } from './rag.service';
+import { topPapers } from './pipeline/ranking';
+import { RagService } from './rag.service';
 
 const hit = (paper: string, score: number, i = 0): ScoredChunk => ({
   chunk_id: `${paper}_sec${i}`,

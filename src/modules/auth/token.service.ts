@@ -3,8 +3,8 @@ import { JwtService, TokenExpiredError } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { createHmac, randomBytes, randomUUID } from 'crypto';
 import { Model, Types } from 'mongoose';
-import { AppConfigService } from '../config/app-config.service';
-import type { AuthUser, Role } from '../types/auth-user';
+import { AppConfigService } from '../../config/app-config.service';
+import type { AuthUser, Role } from '../../types/auth-user';
 import { RefreshToken } from './schemas/refresh-token.schema';
 
 export const ACCESS_TTL_SECONDS = 15 * 60;

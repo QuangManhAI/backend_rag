@@ -1,5 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import type { Chunk, PaperDetail, SectionType } from '../types/scientific-rag';
+import type {
+  Chunk,
+  PaperDetail,
+  SectionType,
+} from '../../../types/scientific-rag';
 
 const SECTION_TYPES = [
   'abstract',

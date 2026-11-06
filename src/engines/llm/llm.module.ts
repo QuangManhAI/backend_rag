@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AppConfigService } from '../config/app-config.service';
+import { AppConfigService } from '../../config/app-config.service';
 import { LLM_ENGINE, NodeLlamaEngine } from './llm-engine';
 import { LLM_PORT, LlmService } from './llm.service';
 

@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ChatSessionsModule } from '../chat-sessions/chat-sessions.module';
-import { EmbeddingModule } from '../embedding/embedding.module';
-import { JudgeModule } from '../judge/judge.module';
-import { LlmModule } from '../llm/llm.module';
-import { MiningModule } from '../mining/mining.module';
-import { TreeRouterModule } from '../tree-router/tree-router.module';
-import { VectorStoreModule } from '../vector-store/vector-store.module';
+import { EmbeddingModule } from '../../engines/embedding/embedding.module';
+import { JudgeModule } from '../../engines/judge/judge.module';
+import { LlmModule } from '../../engines/llm/llm.module';
+import { MiningModule } from '../../engines/mining/mining.module';
+import { TreeRouterModule } from '../../engines/tree-router/tree-router.module';
+import { VectorStoreModule } from '../../engines/vector-store/vector-store.module';
 import { RagController } from './rag.controller';
 import { RagService } from './rag.service';
 

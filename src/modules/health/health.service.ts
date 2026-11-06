@@ -9,12 +9,12 @@ import { InjectConnection } from '@nestjs/mongoose';
 import { readFileSync } from 'fs';
 import { Connection, ConnectionStates } from 'mongoose';
 import { join } from 'path';
-import { LLM_PORT, type LlmPort } from '../llm/llm.service';
-import { TreeRouterService } from '../tree-router/tree-router.service';
+import { LLM_PORT, type LlmPort } from '../../engines/llm/llm.service';
+import { TreeRouterService } from '../../engines/tree-router/tree-router.service';
 import {
   VECTOR_STORE_PORT,
   type VectorStorePort,
-} from '../vector-store/vector-store.service';
+} from '../../engines/vector-store/vector-store.service';
 
 export const CHECK_INTERVAL_MS = 10_000;
 const MONGO_PING_TIMEOUT_MS = 2000;
@@ -47,7 +47,7 @@ export function overallStatus(c: Components): HealthStatus {
 function readVersion(): string {
   try {
     const pkg = JSON.parse(
-      readFileSync(join(__dirname, '..', '..', 'package.json'), 'utf8'),
+      readFileSync(join(__dirname, '..', '..', '..', 'package.json'), 'utf8'),
     ) as {
       version?: string;
     };

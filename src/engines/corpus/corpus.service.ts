@@ -6,7 +6,7 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import mongoose, { type Connection } from 'mongoose';
-import { AppConfigService } from '../config/app-config.service';
+import { AppConfigService } from '../../config/app-config.service';
 
 export const CORPUS_UNAVAILABLE = 'corpus unavailable';
 export const CORPUS_DB = 'rag_ts_corpus';

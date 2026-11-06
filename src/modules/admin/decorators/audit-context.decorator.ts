@@ -1,7 +1,7 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import type { Request } from 'express';
-import { requestIdOf } from '../common/request-context';
-import type { AuditRequest } from './admin-audit.service';
+import { requestIdOf } from '../../../common/logging/request-context';
+import type { AuditRequest } from '../admin-audit.service';
 
 /** Who and where an admin action comes from, as recorded in the audit trail. */
 export const AuditContext = createParamDecorator(

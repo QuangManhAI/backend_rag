@@ -1,14 +1,14 @@
 import { ServiceUnavailableException } from '@nestjs/common';
 import type { MongoMemoryReplSet } from 'mongodb-memory-server';
 import request from 'supertest';
-import { AppConfigService } from '../config/app-config.service';
-import { createTestApp, startMongo, TestApp } from '../testing/test-app';
-import { TreeRouterService } from '../tree-router/tree-router.service';
-import type { ChunkPayload } from '../types/scientific-rag';
+import { AppConfigService } from '../../config/app-config.service';
+import { createTestApp, startMongo, TestApp } from '../../testing/test-app';
+import { TreeRouterService } from '../../engines/tree-router/tree-router.service';
+import type { ChunkPayload } from '../../types/scientific-rag';
 import {
   VECTOR_STORE_PORT,
   VectorStorePort,
-} from '../vector-store/vector-store.service';
+} from '../../engines/vector-store/vector-store.service';
 import { PapersController } from './papers.controller';
 import { orderChunks, PapersService } from './papers.service';
 

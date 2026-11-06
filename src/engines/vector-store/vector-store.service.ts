@@ -8,7 +8,7 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import type { QdrantClient } from '@qdrant/js-client-rest';
-import { AppConfigService } from '../config/app-config.service';
+import { AppConfigService } from '../../config/app-config.service';
 import {
   CORPUS_PORT,
   type ChunkContent,
@@ -16,7 +16,7 @@ import {
   type CorpusPort,
 } from '../corpus/corpus.service';
 import { EMBEDDING_DIM } from '../embedding/embedding.service';
-import type { ChunkPayload, ScoredChunk } from '../types/scientific-rag';
+import type { ChunkPayload, ScoredChunk } from '../../types/scientific-rag';
 
 export const QDRANT_UNAVAILABLE = 'qdrant unavailable';
 export const MAX_CHUNKS_PER_PAPER = 500;

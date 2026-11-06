@@ -10,8 +10,8 @@ import {
   Min,
 } from 'class-validator';
 import { Types } from 'mongoose';
-import { escapeRegex } from './sanitize';
-import { isUuid } from './uuid';
+import { escapeRegex } from '../security/sanitize';
+import { isUuid } from '../utils/uuid';
 
 export const INVALID_CURSOR = 'invalid cursor';
 

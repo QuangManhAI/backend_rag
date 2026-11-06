@@ -10,8 +10,10 @@ import * as argon2 from 'argon2';
 import { createHash, randomBytes } from 'crypto';
 import { LRUCache } from 'lru-cache';
 import { isValidObjectId, Model, Types } from 'mongoose';
-import { logEvent } from '../common/request-context';
-import type { AuthUser } from '../types/auth-user';
+import { logEvent } from '../../common/logging/request-context';
+import { isDuplicateKey } from '../../common/utils/mongo-errors';
+import type { AuthUser } from '../../types/auth-user';
+import { emailHash, normalizeEmail, toUserDto } from './auth.utils';
 import {
   AuthResponseDto,
   ChangePasswordDto,
@@ -21,11 +23,10 @@ import {
 } from './dto/auth.dto';
 import { validatePassword } from './common-passwords';
 import { LoginAttempt } from './schemas/login-attempt.schema';
-import { User, UserDocument } from './schemas/user.schema';
+import { LeanUser, User, UserDocument } from './schemas/user.schema';
 import { TokenService } from './token.service';
 
 export const MAX_LOGIN_FAILURES = 5;
-const DUPLICATE_KEY = 11000;
 const USER_CACHE_TTL_MS = 300_000;
 /**
  * Grace window of the account-state cache. A revoked or demoted account keeps its old access
@@ -45,40 +46,6 @@ export const ARGON2_OPTIONS: argon2.HashOptions = {
   timeCost: 3,
   parallelism: 4,
 };
-
-export function normalizeEmail(email: string): string {
-  return email.trim().toLowerCase();
-}
-
-/** Short, non-reversible id of an email for logs (the email itself is never logged). */
-export function emailHash(email: string): string {
-  return createHash('sha256')
-    .update(normalizeEmail(email))
-    .digest('hex')
-    .slice(0, 16);
-}
-
-export function toUserDto(
-  u: UserDocument | (User & { _id: Types.ObjectId }),
-): UserDto {
-  return {
-    id: u._id.toString(),
-    email: u.email,
-    display_name: u.display_name,
-    roles: u.roles,
-    created_at: u.created_at.toISOString(),
-  };
-}
-
-function isDuplicateKey(e: unknown): boolean {
-  return (
-    typeof e === 'object' &&
-    e !== null &&
-    (e as { code?: unknown }).code === DUPLICATE_KEY
-  );
-}
-
-type LeanUser = User & { _id: Types.ObjectId };
 
 @Injectable()
 export class AuthService {
@@ -120,9 +87,10 @@ export class AuthService {
   ) {}
 
   private dummyHash(): Promise<string> {
-    this.dummyHashPromise ??= argon2
-      .hash(randomBytes(32).toString('base64url'), { ...ARGON2_OPTIONS })
-      .then((h) => h);
+    this.dummyHashPromise ??= argon2.hash(
+      randomBytes(32).toString('base64url'),
+      { ...ARGON2_OPTIONS },
+    );
     return this.dummyHashPromise;
   }
 
@@ -228,32 +196,25 @@ export class AuthService {
       throw new UnauthorizedException('refresh token invalid or expired');
     }
     const cachedUser = this.userCache.get(r.userId);
-    if (cachedUser) {
-      const live = await this.getActiveUser(r.userId);
-      if (!live || !live.is_active) {
-        await this.tokens.revokeFamily(r.familyId);
-        logEvent('REFRESH_FAILED', { reason: 'user_gone' });
-        throw new UnauthorizedException('refresh token invalid or expired');
-      }
-      logEvent('REFRESH_OK', { user_id: r.userId });
-      const tokens = await this.tokens.issue(
-        {
-          id: cachedUser.id,
-          roles: live.roles,
-          tokenVersion: live.token_version,
-        },
-        r.familyId,
-      );
-      return { ...tokens, user: cachedUser };
-    }
-    const user = await this.users.findById(r.userId).lean();
+    const user = cachedUser
+      ? await this.getActiveUser(r.userId)
+      : await this.users.findById(r.userId).lean();
     if (!user || !user.is_active) {
       await this.tokens.revokeFamily(r.familyId);
       logEvent('REFRESH_FAILED', { reason: 'user_gone' });
       throw new UnauthorizedException('refresh token invalid or expired');
     }
     logEvent('REFRESH_OK', { user_id: r.userId });
-    return this.respond(user, r.familyId);
+    if (!cachedUser) return this.respond(user, r.familyId);
+    const tokens = await this.tokens.issue(
+      {
+        id: cachedUser.id,
+        roles: user.roles,
+        tokenVersion: user.token_version,
+      },
+      r.familyId,
+    );
+    return { ...tokens, user: cachedUser };
   }
 
   async logout(raw: string, me: AuthUser): Promise<void> {

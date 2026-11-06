@@ -1,6 +1,6 @@
 import { AsyncLocalStorage } from 'async_hooks';
 import type { NextFunction, Request, Response } from 'express';
-import { isUuid, uuidv7 } from './uuid';
+import { isUuid, uuidv7 } from '../utils/uuid';
 
 /** Per-request state: the request id and the business event logged on the request line. */
 export interface RequestContext {

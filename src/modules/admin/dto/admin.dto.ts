@@ -10,8 +10,8 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
-import { ListQueryDto } from '../common/pagination';
-import type { Role } from '../types/auth-user';
+import { ListQueryDto } from '../../../common/pagination/pagination';
+import type { Role } from '../../../types/auth-user';
 
 const trim = ({ value }: { value: unknown }) =>
   typeof value === 'string' ? value.trim() : value;

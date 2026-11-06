@@ -2,8 +2,8 @@
 
 Backend hỏi đáp khoa học có trích dẫn: embed câu hỏi (Nomic v1.5) ➔ đi qua cây World 3D ➔ tìm trong Qdrant ➔ rerank theo PageRank tác giả ➔ Qwen2.5-7B trả lời, stream qua SSE cho frontend 3D.
 
-- **Hợp đồng API:** [`../docs/API_DESIGN.md`](../docs/API_DESIGN.md) — 18 route dưới `/api/v1`.
-- **Kế hoạch triển khai:** [`../docs/prompt_backend.md`](../docs/prompt_backend.md) (B1–B11, Phụ lục A đồng bộ FE, Phụ lục B yêu cầu pipeline).
+- **Hợp đồng API:** [`../docs/api/API_DESIGN.md`](../docs/api/API_DESIGN.md) — 18 route dưới `/api/v1`.
+- **Kế hoạch triển khai:** [`../docs/prompts/prompt_backend.md`](../docs/prompts/prompt_backend.md) (B1–B11, Phụ lục A đồng bộ FE, Phụ lục B yêu cầu pipeline).
 - **Giả định & tiến độ:** [`ASSUMPTIONS.md`](ASSUMPTIONS.md), [`PROGRESS.md`](PROGRESS.md).
 - **Swagger:** `http://localhost:3000/api/v1/docs` (JSON: `/api/v1/docs-json`).
 
@@ -94,4 +94,4 @@ npx tsc --noEmit && npm run lint
 
 - Pipeline chưa xuất file world (`tree.json`, centroid, `categories.json`) và payload `twig_id`, `chunk_index` (Phụ lục B) ➔ `route` rỗng, `compare` không lọc theo nhánh, `category_index` = -1.
 - Huỷ stream khi LLM còn đang đọc prompt dài: slot LLM chỉ giải phóng khi sinh tới token đầu (~15 s với `top_k` 5 trên Metal).
-- `prompt_fe_3d.md` (được tham chiếu trong kế hoạch) không có trong repo — định dạng world lấy theo type FE `frontend_rag/src/types/world.ts`.
+- `prompt_fe_3d.md` (được tham chiếu trong kế hoạch) không có trong repo — định dạng world lấy theo type FE `frontend_rag/src/shared/types/world.ts`.

@@ -1,4 +1,4 @@
-import type { GroundedChunk, Timings } from '../types/scientific-rag';
+import type { GroundedChunk, Timings } from '../../types/scientific-rag';
 
 export interface AssistantMessageInput {
   content: string;

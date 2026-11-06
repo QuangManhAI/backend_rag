@@ -1,4 +1,4 @@
-import type { Release } from '../llm/llm-queue';
+import type { Release } from '../../../engines/llm/llm-queue';
 
 export const TOO_MANY_INFLIGHT = 'too many concurrent requests';
 /** One tab streaming plus one being replaced: the abort of the old stream can lag behind. */

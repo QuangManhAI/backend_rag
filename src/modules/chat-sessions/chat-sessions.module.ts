@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ChatRequestsService } from './chat-requests.service';
 import { ChatSessionsController } from './chat-sessions.controller';
 import { ChatSessionsService } from './chat-sessions.service';
 import { ChatMessage, ChatMessageSchema } from './schemas/chat-message.schema';
@@ -17,6 +18,7 @@ import { SESSION_STORE } from './session-store.port';
   ],
   controllers: [ChatSessionsController],
   providers: [
+    ChatRequestsService,
     ChatSessionsService,
     { provide: SESSION_STORE, useExisting: ChatSessionsService },
   ],

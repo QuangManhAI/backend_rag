@@ -68,14 +68,14 @@
 - [B11] docker-compose: Qdrant mặc định là Qdrant của pipeline trên host (`host.docker.internal:6333`); service `qdrant` riêng nằm sau profile `standalone` vì cổng 6333 trên máy đã do pipeline dùng. Mongo không map cổng ra host (cổng 27017 trên máy đã có container khác).
 - [B11] Biến của compose dùng tiền tố `RAGTS_` — compose tự đọc `.env` của thư mục (đang chứa cấu hình dev cũ `QDRANT_URL=http://localhost:6333`), trùng tên sẽ trỏ container vào chính nó.
 - [B11] Kiểm chứng `docker compose up`: app `healthy`, `/health` = `degraded` (mongo ✓, qdrant ✓, chưa có model) đúng tiêu chí B11.3. Với model 7B thật, container bị kill (137) do máy ảo Docker chỉ 7,7 GB dùng chung — ghi trong README.
-- [B11] Cập nhật `docs/API_DESIGN.md`: thêm `nprobe` vào ChatReq (§3, Phụ lục A2), `world` + `world_version` vào Health (§6, Phụ lục A5/A7).
+- [B11] Cập nhật `docs/api/API_DESIGN.md`: thêm `nprobe` vào ChatReq (§3, Phụ lục A2), `world` + `world_version` vào Health (§6, Phụ lục A5/A7).
 - [FE-live] Chạy thật với FE: Qwen hay chép nguyên tiêu đề ngữ cảnh `[Paper ID: x | Title …]` và viết toán bằng `\(…\)`. Đã đổi tiêu đề ngữ cảnh thành `--- [Paper: id] "Title" — Section: … ---` (đúng tag cần trích), quy tắc 3–4 của system prompt nói rõ định dạng; `extractCitations` chấp nhận thêm `[Paper ID: id | …]`.
 - [FE-live] `CORS_ORIGINS` mặc định `http://localhost:5174` — cổng 5173 là frontend của pipeline UTH, FE RAG_TS chuyển sang 5174.
 - [FE-live] Compose map Mongo ra host cổng 27018 (`RAGTS_MONGO_PORT`) để chạy app ngoài Docker: `MONGO_URI=mongodb://localhost:27018/rag_ts?replicaSet=rs0&directConnection=true`.
 
 ---
 
-## Nhóm S — Security Hardening & RBAC (`docs/prompt_security.md`)
+## Nhóm S — Security Hardening & RBAC (`docs/prompts/prompt_security.md`)
 
 - [S1] `helmet` 8.3 + `@nestjs/throttler` 6.7.1 được phép thêm mới — nhóm đã đồng ý cho phép 2 dependency này (không thêm gì khác).
 - [S1] `trust proxy` được đặt qua `app.getHttpAdapter().getInstance().set('trust proxy', …)` chứ không phải `app.set(...)` — `INestApplication` không khai báo `set`, chỉ Express instance mới có. Giá trị: `1` (production, 1 reverse proxy), `'loopback'` (test), `false` (dev, để `@Ip()` là IP thật).

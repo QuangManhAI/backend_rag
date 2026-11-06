@@ -4,9 +4,9 @@
 - **Purpose**: Define the authoritative hybrid document-collection schemas, field constraints, B-Tree compound indexes, and TTL soft-delete retention policies for the `users`, `chat_sessions` (conversations), and `chat_messages` (messages) collections in MongoDB.
 - **Overview Pipeline**: Formulated through architectural debate and cross-verification against the existing NestJS Mongoose schemas, frontend authentication store, and multi-session draft specifications.
 - **Detailed Plan**: §1 Hybrid Design Stance & Reconciliation Matrix; §2 Entity-Relationship Diagram; §3 Collection Specifications (`users`, `chat_sessions`, `chat_messages`); §4 Indexing, Sorting & TTL Retention Strategy; §5 Data Integrity & Lifecycle Rules; §6 Self-Review Checklist.
-- **References**: [`agents/rules/MD_CONVENTION.md`](../agents/rules/MD_CONVENTION.md), [`agents/rules/COMMIT_CONVENTION.md`](../agents/rules/COMMIT_CONVENTION.md), [`docs/CHAT_SESSIONS_SPECIFICATION.md`](CHAT_SESSIONS_SPECIFICATION.md), [`docs/DECISION_LOG.md`](DECISION_LOG.md), [`backend_rag/src/auth/schemas/user.schema.ts`](../backend_rag/src/auth/schemas/user.schema.ts), [`backend_rag/src/chat-sessions/schemas/chat-session.schema.ts`](../backend_rag/src/chat-sessions/schemas/chat-session.schema.ts), [`backend_rag/src/chat-sessions/schemas/chat-message.schema.ts`](../backend_rag/src/chat-sessions/schemas/chat-message.schema.ts), [`backend_rag/src/common/uuid.ts`](../backend_rag/src/common/uuid.ts), [`frontend_rag/src/components/auth/AuthOverlay.tsx`](../frontend_rag/src/components/auth/AuthOverlay.tsx).
+- **References**: [`agents/rules/MD_CONVENTION.md`](../../agents/rules/MD_CONVENTION.md), [`agents/rules/COMMIT_CONVENTION.md`](../../agents/rules/COMMIT_CONVENTION.md), [`docs/CHAT_SESSIONS_SPECIFICATION.md`](CHAT_SESSIONS_SPECIFICATION.md), [`docs/DECISION_LOG.md`](DECISION_LOG.md), [`backend_rag/src/modules/auth/schemas/user.schema.ts`](../src/modules/auth/schemas/user.schema.ts), [`backend_rag/src/modules/chat-sessions/schemas/chat-session.schema.ts`](../src/modules/chat-sessions/schemas/chat-session.schema.ts), [`backend_rag/src/modules/chat-sessions/schemas/chat-message.schema.ts`](../src/modules/chat-sessions/schemas/chat-message.schema.ts), [`backend_rag/src/common/utils/uuid.ts`](../src/common/utils/uuid.ts), [`frontend_rag/src/features/auth/AuthOverlay.tsx`](../../frontend_rag/src/features/auth/AuthOverlay.tsx).
 - **Created**: 2026-10-22T17:20:08+07:00
-- **Last Updated**: 2026-11-04T22:47:55+07:00
+- **Last Updated**: 2026-11-06T13:13:54+07:00
 
 ---
 
@@ -28,13 +28,13 @@
 
 ## 1. Hybrid Design Stance & Reconciliation Matrix
 
-To prevent breaking the merged monolithic backend ([`backend_rag/PROGRESS.md`](../backend_rag/PROGRESS.md)) and the frontend authentication overlay ([`frontend_rag/src/components/auth/AuthOverlay.tsx`](../frontend_rag/src/components/auth/AuthOverlay.tsx)) while fulfilling the new schema requirements, this specification adopts a **Hybrid Design**:
+To prevent breaking the merged monolithic backend ([`backend_rag/PROGRESS.md`](../PROGRESS.md)) and the frontend authentication overlay ([`frontend_rag/src/features/auth/AuthOverlay.tsx`](../../frontend_rag/src/features/auth/AuthOverlay.tsx)) while fulfilling the new schema requirements, this specification adopts a **Hybrid Design**:
 
 | Design Dimension | Merged Repo State (`main`) | New Requirement | Hybrid Specification Decision |
 | :--- | :--- | :--- | :--- |
 | **Collection Naming** | `users`, `chat_sessions`, `chat_messages` | `users`, `conversations`, `messages` | Retain physical collection names `users`, `chat_sessions`, and `chat_messages` to preserve infrastructure and test compatibility. |
-| **Primary Keys (`_id`)** | MongoDB `ObjectId` across all collections | `uuidv7` required for chat sessions | Use **`uuidv7` (`_id: string`)** on `chat_sessions` and `chat_messages` via [`backend_rag/src/common/uuid.ts`](../backend_rag/src/common/uuid.ts); retain `ObjectId` on `users` to maintain compatibility with [`backend_rag/src/auth/schemas/refresh-token.schema.ts`](../backend_rag/src/auth/schemas/refresh-token.schema.ts). |
-| **User Authentication** | `email` + `display_name` + `roles: Role[]` | Dual login (`username` or `email`), `full_name`, `role` | Add `username` (`unique`, `sparse`) and allow login via **either `username` or `email`**. Keep `display_name` (aliased with `full_name`) and `roles: Role[]` so [`frontend_rag/src/store/authStore.ts`](../frontend_rag/src/store/authStore.ts) and [`backend_rag/src/auth/guards/roles.guard.ts`](../backend_rag/src/auth/guards/roles.guard.ts) remain unbroken. |
+| **Primary Keys (`_id`)** | MongoDB `ObjectId` across all collections | `uuidv7` required for chat sessions | Use **`uuidv7` (`_id: string`)** on `chat_sessions` and `chat_messages` via [`backend_rag/src/common/utils/uuid.ts`](../src/common/utils/uuid.ts); retain `ObjectId` on `users` to maintain compatibility with [`backend_rag/src/modules/auth/schemas/refresh-token.schema.ts`](../src/modules/auth/schemas/refresh-token.schema.ts). |
+| **User Authentication** | `email` + `display_name` + `roles: Role[]` | Dual login (`username` or `email`), `full_name`, `role` | Add `username` (`unique`, `sparse`) and allow login via **either `username` or `email`**. Keep `display_name` (aliased with `full_name`) and `roles: Role[]` so [`frontend_rag/src/features/auth/authStore.ts`](../../frontend_rag/src/features/auth/authStore.ts) and [`backend_rag/src/modules/auth/guards/roles.guard.ts`](../src/modules/auth/guards/roles.guard.ts) remain unbroken. |
 | **Session Ownership** | Authenticated `user_id: ObjectId` | `user_id` only (no `device_id`) | Scope all conversations strictly to `user_id` (`ObjectId` referencing `users._id`). |
 | **Session Timestamps** | Single `updated_at` (renaming reorders list) | Split `last_message_at` and `updated_at` | Separate `last_message_at` (updated **only** on message creation; drives UI sorting) from `updated_at` (updated on any mutation including title rename). |
 | **Deletion Policy** | Immediate physical hard delete | Soft delete (`deleted_at`, 3-day retention) | Apply soft delete (`deleted_at: Date \| null`) with a 3-day MongoDB TTL index (`259,200` seconds) across **both** `chat_sessions` and `chat_messages` to prevent orphaned message documents. |
@@ -91,7 +91,7 @@ erDiagram
 
 ### 3.1 `users` Collection (Người dùng)
 
-Defined in [`backend_rag/src/auth/schemas/user.schema.ts`](../backend_rag/src/auth/schemas/user.schema.ts). Supports authentication via **either `username` or `email`**.
+Defined in [`backend_rag/src/modules/auth/schemas/user.schema.ts`](../src/modules/auth/schemas/user.schema.ts). Supports authentication via **either `username` or `email`**.
 
 | Field | Data Type | Constraints | Note |
 | :--- | :--- | :--- | :--- |
@@ -99,7 +99,7 @@ Defined in [`backend_rag/src/auth/schemas/user.schema.ts`](../backend_rag/src/au
 | `password_hash` | `string` | `required: true` | Mật khẩu đã được băm bằng thuật toán `argon2id`. |
 | `email` | `string` | `required: true`, `unique: true`, `lowercase: true`, `trim: true` | Địa chỉ email đăng nhập (`unique = true`). |
 | `username` | `string` | `unique: true`, `sparse: true`, `lowercase: true`, `trim: true` | Tên đăng nhập của người dùng (`unique = true`); cho phép đăng nhập bằng `username` hoặc `email`. |
-| `display_name` (`full_name`) | `string` | `required: true`, `trim: true`, `1–60` chars | Họ và tên đầy đủ / tên hiển thị của người dùng (tương thích ngược với UI [`AuthOverlay.tsx`](../frontend_rag/src/components/auth/AuthOverlay.tsx)). |
+| `display_name` (`full_name`) | `string` | `required: true`, `trim: true`, `1–60` chars | Họ và tên đầy đủ / tên hiển thị của người dùng (tương thích ngược với UI [`AuthOverlay.tsx`](../../frontend_rag/src/features/auth/AuthOverlay.tsx)). |
 | `roles` (`role`) | `('user' \| 'admin')[]` | `default: ['user']` | Quyền hạn của người dùng (`'user'`, `'admin'`). |
 | `created_at` | `Date` | Auto (`timestamps.createdAt`) | Thời điểm lần đầu tạo tài khoản. |
 | `updated_at` | `Date` | Auto (`timestamps.updatedAt`) | Thời điểm cập nhật thông tin tài khoản lần cuối. |
@@ -108,11 +108,11 @@ Defined in [`backend_rag/src/auth/schemas/user.schema.ts`](../backend_rag/src/au
 
 ### 3.2 `chat_sessions` / `conversations` Collection (Các phiên cuộc trò chuyện)
 
-Defined in [`backend_rag/src/chat-sessions/schemas/chat-session.schema.ts`](../backend_rag/src/chat-sessions/schemas/chat-session.schema.ts).
+Defined in [`backend_rag/src/modules/chat-sessions/schemas/chat-session.schema.ts`](../src/modules/chat-sessions/schemas/chat-session.schema.ts).
 
 | Field | Data Type | Constraints | Note |
 | :--- | :--- | :--- | :--- |
-| `_id` (`id`) | `uuidv7` (`string`) | Primary Key (`default: () => uuidv7()`) | Định danh phiên chat theo chuẩn `UUIDv7` sắp xếp theo thời gian ([`backend_rag/src/common/uuid.ts`](../backend_rag/src/common/uuid.ts)). |
+| `_id` (`id`) | `uuidv7` (`string`) | Primary Key (`default: () => uuidv7()`) | Định danh phiên chat theo chuẩn `UUIDv7` sắp xếp theo thời gian ([`backend_rag/src/common/utils/uuid.ts`](../src/common/utils/uuid.ts)). |
 | `user_id` | `ObjectId` | `required: true`, Indexed | Khoá ngoại trỏ tới `users._id` xác định chủ sở hữu phiên chat (không dùng `device_id`). |
 | `title` | `string` | `required: true`, `1–120` Unicode chars | Tên phiên chat (mặc định khởi tạo theo định dạng `YY-MM-DD:HH-MM-SS` múi giờ UTC+07 cho đến khi được đổi tên). |
 | `message_count` | `int` (`number`) | `default: 0` (`>= 2` when stored) | Tổng số lượng tin nhắn trong phiên chat (Computed Pattern giúp tránh `$lookup` khi phân trang). Phiên chat chỉ được lưu khi có tin nhắn đầu tiên (`message_count >= 2`). |
@@ -125,7 +125,7 @@ Defined in [`backend_rag/src/chat-sessions/schemas/chat-session.schema.ts`](../b
 
 ### 3.3 `chat_messages` / `messages` Collection (Tin nhắn)
 
-Defined in [`backend_rag/src/chat-sessions/schemas/chat-message.schema.ts`](../backend_rag/src/chat-sessions/schemas/chat-message.schema.ts).
+Defined in [`backend_rag/src/modules/chat-sessions/schemas/chat-message.schema.ts`](../src/modules/chat-sessions/schemas/chat-message.schema.ts).
 
 | Field | Data Type | Constraints | Note |
 | :--- | :--- | :--- | :--- |
@@ -134,7 +134,7 @@ Defined in [`backend_rag/src/chat-sessions/schemas/chat-message.schema.ts`](../b
 | `role` | `'user' \| 'assistant'` | `required: true`, `enum: ['user', 'assistant']` | Xác định tin nhắn thuộc về người dùng (`user`) hay AI (`assistant`). |
 | `content` | `string` | `required: true` | Nội dung văn bản / Markdown chính của tin nhắn. |
 | `citations` | `string[]` | Optional (`role === 'assistant'` only) | Danh sách mã bài báo khoa học được trích dẫn trong câu trả lời (VD: `["2106.09685"]`). |
-| `grounded_chunks` | `GroundedChunk[]` | Optional (`role === 'assistant'` only) | Danh sách các đoạn văn bản trích xuất từ Vector Store kèm điểm `similarity_score`, `authority_score`, `final_score` ([`backend_rag/src/types/scientific-rag.ts`](../backend_rag/src/types/scientific-rag.ts)). |
+| `grounded_chunks` | `GroundedChunk[]` | Optional (`role === 'assistant'` only) | Danh sách các đoạn văn bản trích xuất từ Vector Store kèm điểm `similarity_score`, `authority_score`, `final_score` ([`backend_rag/src/types/scientific-rag.ts`](../src/types/scientific-rag.ts)). |
 | `timings` | `Timings` | Optional (`role === 'assistant'` only) | Thời gian thực thi từng pha của pipeline RAG (`embed_ms`, `route_ms`, `search_ms`, `rerank_ms`, `llm_ms`, `total_ms`). |
 | `created_at` | `Date` | Auto (`timestamps.createdAt`) | Thời điểm tin nhắn được gửi lần đầu. |
 | `updated_at` | `Date` | Auto (`timestamps.updatedAt`) | Thời điểm tin nhắn được cập nhật lần cuối. |
@@ -144,7 +144,7 @@ Defined in [`backend_rag/src/chat-sessions/schemas/chat-message.schema.ts`](../b
 
 ### 3.4 `chat_requests` Collection (Idempotency-Key)
 
-One document per `Idempotency-Key` of `POST /rag/chat*` ([API_DESIGN §3](../../docs/API_DESIGN.md)). The insert is the atomic reservation.
+One document per `Idempotency-Key` of `POST /rag/chat*` ([API_DESIGN §3](../../docs/api/API_DESIGN.md)). The insert is the atomic reservation.
 
 | Field | Type | Notes |
 | :--- | :--- | :--- |
@@ -191,5 +191,5 @@ One document per `Idempotency-Key` of `POST /rag/chat*` ([API_DESIGN §3](../../
 - [x] `Created` and `Last Updated` timestamps formatted in strict ISO 8601 with `+07:00` timezone offset.
 - [x] Document lifecycle status (`[STATUS: ACTIVE]`) declared beneath the header.
 - [x] Table of Contents anchors resolve cleanly to all major sections.
-- [x] Every file and rule mention is formatted as an active relative link per [`agents/rules/MD_CONVENTION.md`](../agents/rules/MD_CONVENTION.md).
+- [x] Every file and rule mention is formatted as an active relative link per [`agents/rules/MD_CONVENTION.md`](../../agents/rules/MD_CONVENTION.md).
 

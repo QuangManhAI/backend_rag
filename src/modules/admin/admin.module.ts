@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ChatSessionsModule } from '../chat-sessions/chat-sessions.module';
 import { HealthModule } from '../health/health.module';
-import { LlmModule } from '../llm/llm.module';
+import { LlmModule } from '../../engines/llm/llm.module';
 import { AdminAuditService } from './admin-audit.service';
 import { AdminController } from './admin.controller';
 import { AdminIdentityService } from './admin-identity.service';

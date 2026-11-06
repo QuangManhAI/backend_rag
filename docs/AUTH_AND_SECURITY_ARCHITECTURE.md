@@ -1,12 +1,12 @@
 # AUTH_AND_SECURITY_ARCHITECTURE.md — Authentication, Token Rotation & Cryptographic Architecture
 
-- **Motivation/Background**: `backend_rag` implements production-grade OWASP authentication combining memory-hard `Argon2id` password hashing (`64 MB`), short-lived stateless JWT access tokens, stateful opaque refresh tokens with family reuse detection, progressive account lockout, and write-through in-memory caching (`LRUCache`). AI agents modifying `src/auth/` must understand both the cryptographic security guarantees and the 1-RTT latency optimizations so neither security nor `400 CU` throughput is compromised.
+- **Motivation/Background**: `backend_rag` implements production-grade OWASP authentication combining memory-hard `Argon2id` password hashing (`64 MB`), short-lived stateless JWT access tokens, stateful opaque refresh tokens with family reuse detection, progressive account lockout, and write-through in-memory caching (`LRUCache`). AI agents modifying `src/modules/auth/` must understand both the cryptographic security guarantees and the 1-RTT latency optimizations so neither security nor `400 CU` throughput is compromised.
 - **Purpose**: Provide the definitive technical specification for `AuthModule` (`AuthController`, `AuthService`, `TokenService`, `JwtAuthGuard`, `OptionalJwtAuthGuard`), including database schemas, token rotation state machines, and cache coherency rules.
 - **Overview Pipeline**: Client Auth Request → `AuthService` (`userByEmailCache` / `attemptCountCache` / `Argon2id` on libuv pool `UV_THREADPOOL_SIZE=4`) → `TokenService` (Parallel JWT Sign + SHA-256 Refresh Token Store / 1-RTT Atomic `findOneAndUpdate` Rotation) → Write-Through `userCache` Update.
 - **Detailed Plan**: Section 1 covers Password Cryptography & Threadpool Tuning; Section 2 details Dual-Token JWT & 1-RTT Refresh Rotation with Family Reuse Revocation; Section 3 explains Progressive Brute-Force Lockout; Section 4 documents Auth Cache Coherency Rules; Section 5 maps all `/api/v1/auth/*` Endpoints & Error Codes.
 - **References**: [../AGENTS.md](../AGENTS.md), [AUTH_LOGOUT_DESIGN.md](AUTH_LOGOUT_DESIGN.md), [PERFORMANCE_AND_CACHING.md](PERFORMANCE_AND_CACHING.md), [MONGODB_SCHEMA_DESIGN.md](MONGODB_SCHEMA_DESIGN.md), [../benchmark/BOTTLENECK_ANALYSIS_AND_OPTIMIZATION.md](../benchmark/BOTTLENECK_ANALYSIS_AND_OPTIMIZATION.md).
 - **Created**: 2026-10-29T19:46:00+07:00
-- **Last Updated**: 2026-11-04T22:47:55+07:00
+- **Last Updated**: 2026-11-06T13:00:59+07:00
 
 [STATUS: ACTIVE]
 
@@ -15,7 +15,7 @@
 ## 1. Password Cryptography (`Argon2id`) & Threadpool Isolation
 
 ### 1.1 OWASP-Compliant `Argon2id` Parameters
-Defined in [`src/auth/auth.service.ts`](../src/auth/auth.service.ts):
+Defined in [`src/modules/auth/auth.service.ts`](../src/modules/auth/auth.service.ts):
 ```typescript
 const ARGON2_OPTIONS: argon2.Options = {
   type: argon2.argon2id,
@@ -40,11 +40,11 @@ Because `argon2.hash()` and `argon2.verify()` execute asynchronously in C++ on N
 ### 2.1 Access Token vs. Refresh Token
 | Token Type | Format | Default TTL | Storage & Verification |
 | :--- | :--- | :--- | :--- |
-| **Access Token** | Stateless JWT (`HS256`) containing `{ sub: userId, email, role }` | `15m` (`900s`) | Verified in-memory by [`JwtAuthGuard`](../src/auth/guards/jwt-auth.guard.ts) (`0` DB queries). |
+| **Access Token** | Stateless JWT (`HS256`) containing `{ sub: userId, email, role }` | `15m` (`900s`) | Verified in-memory by [`JwtAuthGuard`](../src/modules/auth/guards/jwt-auth.guard.ts) (`0` DB queries). |
 | **Refresh Token** | `48-byte` CSPRNG hex string (`96` hex chars) | `7d` | Only the **SHA-256 hash** (`token_hash`) is stored in MongoDB `refresh_tokens` along with `user_id`, `family_id`, `expires_at`, and `revoked_at`. |
 
 ### 2.2 Parallel Token Issuance (`issue()`)
-In [`src/auth/token.service.ts`](../src/auth/token.service.ts), `issue(userId, email, role, meta, familyId?)` executes JWT signing (`jwt.signAsync`) and MongoDB refresh token insertion (`refreshModel.create`) **in parallel via `Promise.all`**, saving CPU + I/O overlap on every login, registration, and token refresh.
+In [`src/modules/auth/token.service.ts`](../src/modules/auth/token.service.ts), `issue(userId, email, role, meta, familyId?)` executes JWT signing (`jwt.signAsync`) and MongoDB refresh token insertion (`refreshModel.create`) **in parallel via `Promise.all`**, saving CPU + I/O overlap on every login, registration, and token refresh.
 
 ### 2.3 1-RTT Optimistic Atomic Refresh Consumption (`consume()`, `D-021`)
 Previously, `consume()` performed 2 sequential MongoDB round-trips (`findOne` followed by `updateOne`). Over the Cloudflare TCP tunnel (`~20ms` RTT), that doubled token rotation latency.
@@ -72,16 +72,16 @@ To protect accounts against credential stuffing without allowing attackers to Do
    - Up to `MAX_FAILED_ATTEMPTS = 5` failed logins within a `15-minute` window are tracked in `login_attempts` (with a MongoDB TTL index).
    - Upon the 5th failed attempt, `users.locked_until` is set to `now + 15 minutes` (`423 Locked` / `ACCOUNT_LOCKED`).
 2. **1-RTT Fast-Path `login()` (`D-021`)**:
-   - [`AuthService.login()`](../src/auth/auth.service.ts) checks `userByEmailCache` and `attemptCountCache` first, falling back to a parallel `Promise.all` query only on a cache miss.
+   - [`AuthService.login()`](../src/modules/auth/auth.service.ts) checks `userByEmailCache` and `attemptCountCache` first, falling back to a parallel `Promise.all` query only on a cache miss.
    - If the user has `0` recent failed attempts (`attemptCount === 0`), `login()` **skips** the redundant `attempts.deleteMany({ email })` write on successful login, cutting happy-path login DB round-trips from `4 RTTs` down to **`1 RTT`** (the refresh token insert).
 3. **Timing-Attack Prevention against User Enumeration**:
    - If `login()` receives an email that does not exist in `users`, it still runs `argon2.verify(DUMMY_ARGON2_HASH, password)` so an attacker cannot distinguish "email not found" (`~2.6s`) from "wrong password" (`~2.6s`) via response timing.
 
 ---
 
-## 4. Auth In-Memory Cache Coherency (`src/auth/auth.service.ts`)
+## 4. Auth In-Memory Cache Coherency (`src/modules/auth/auth.service.ts`)
 
-[`AuthService`](../src/auth/auth.service.ts) maintains three bounded `LRUCache` instances (`max: 5000`, `ttl: 300_000` ms = `5 minutes`, `updateAgeOnGet: true`):
+[`AuthService`](../src/modules/auth/auth.service.ts) maintains three bounded `LRUCache` instances (`max: 5000`, `ttl: 300_000` ms = `5 minutes`, `updateAgeOnGet: true`):
 
 | Cache Name | Key | Cached Value | Invalidation / Update Rules |
 | :--- | :--- | :--- | :--- |
@@ -98,8 +98,8 @@ To protect accounts against credential stuffing without allowing attackers to Do
 | `POST /api/v1/users` | Public | `5 req / 60s` | Validates email/password, hashes with `Argon2id`, creates user, and returns `201` with `user + access_token + refresh_token`. |
 | `POST /api/v1/auth/tokens` | Public | `10 req / 60s` | Verifies lockout & `Argon2id` password, updates `last_login_at`, and returns `200` with `user + access_token + refresh_token`. |
 | `POST /api/v1/auth/token-rotations` | Public | `30 req / 60s` | Atomically consumes `refresh_token` (`1 RTT`) and rotates a new token pair in the same `family_id`. |
-| `POST /api/v1/auth/token-revocations` | [`JwtAuthGuard`](../src/auth/guards/jwt-auth.guard.ts) | Default | Revokes the single provided `refresh_token` (`204 No Content`). See [`AUTH_LOGOUT_DESIGN.md`](AUTH_LOGOUT_DESIGN.md). |
-| `POST /api/v1/auth/token-revocations-all` | [`JwtAuthGuard`](../src/auth/guards/jwt-auth.guard.ts) | Default | Revokes **all** active refresh tokens for `req.user.sub` across all devices (`200 { revoked_count }`). |
-| `GET /api/v1/users/me` | [`JwtAuthGuard`](../src/auth/guards/jwt-auth.guard.ts) | Default | Returns `UserResponseDto` from `userCache` (`~0.1ms` hit) or `.lean()` MongoDB lookup. |
-| `PATCH /api/v1/users/me` | [`JwtAuthGuard`](../src/auth/guards/jwt-auth.guard.ts) | Default | Updates `full_name` via `.findOneAndUpdate(...).lean()` and updates `userCache` & `userByEmailCache` in-place. |
-| `PUT /api/v1/users/me/password` | [`JwtAuthGuard`](../src/auth/guards/jwt-auth.guard.ts) | `5 req / 60s` | Verifies `current_password`, hashes `new_password` with `Argon2id`, invalidates `userByEmailCache`, and revokes all existing refresh tokens (`revokeAllForUser`). |
+| `POST /api/v1/auth/token-revocations` | [`JwtAuthGuard`](../src/modules/auth/guards/jwt-auth.guard.ts) | Default | Revokes the single provided `refresh_token` (`204 No Content`). See [`AUTH_LOGOUT_DESIGN.md`](AUTH_LOGOUT_DESIGN.md). |
+| `POST /api/v1/auth/token-revocations-all` | [`JwtAuthGuard`](../src/modules/auth/guards/jwt-auth.guard.ts) | Default | Revokes **all** active refresh tokens for `req.user.sub` across all devices (`200 { revoked_count }`). |
+| `GET /api/v1/users/me` | [`JwtAuthGuard`](../src/modules/auth/guards/jwt-auth.guard.ts) | Default | Returns `UserResponseDto` from `userCache` (`~0.1ms` hit) or `.lean()` MongoDB lookup. |
+| `PATCH /api/v1/users/me` | [`JwtAuthGuard`](../src/modules/auth/guards/jwt-auth.guard.ts) | Default | Updates `full_name` via `.findOneAndUpdate(...).lean()` and updates `userCache` & `userByEmailCache` in-place. |
+| `PUT /api/v1/users/me/password` | [`JwtAuthGuard`](../src/modules/auth/guards/jwt-auth.guard.ts) | `5 req / 60s` | Verifies `current_password`, hashes `new_password` with `Argon2id`, invalidates `userByEmailCache`, and revokes all existing refresh tokens (`revokeAllForUser`). |

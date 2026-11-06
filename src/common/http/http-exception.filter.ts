@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import type { Request, Response } from 'express';
 import { STATUS_CODES } from 'http';
-import { requestIdOf } from './request-context';
+import { requestIdOf } from '../logging/request-context';
 import { toXml, wantsXml } from './xml';
 
 /** Error body of every endpoint (API_DESIGN §1.2). */

@@ -7,11 +7,11 @@ import {
   ApiTags,
   ApiTooManyRequestsResponse,
 } from '@nestjs/swagger';
-import { paperLinks, WithLinks } from '../common/hateoas';
-import { BatchIdsQueryDto, parseIds } from '../common/pagination';
-import { RateLimit } from '../common/throttler';
-import type { PaperDetail } from '../types/scientific-rag';
-import { PaperBatchDto, PaperDetailDto } from './paper-detail.dto';
+import { paperLinks, WithLinks } from '../../common/http/hateoas';
+import { BatchIdsQueryDto, parseIds } from '../../common/pagination/pagination';
+import { RateLimit } from '../../common/security/throttler';
+import type { PaperDetail } from '../../types/scientific-rag';
+import { PaperBatchDto, PaperDetailDto } from './dto/paper-detail.dto';
 import { PAPER_BATCH_MAX, PapersService } from './papers.service';
 
 @ApiTags('Papers')

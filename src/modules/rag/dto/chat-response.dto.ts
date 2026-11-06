@@ -3,7 +3,7 @@ import type {
   GroundedChunk,
   Quality,
   Timings,
-} from '../../types/scientific-rag';
+} from '../../../types/scientific-rag';
 
 export class TimingsDto implements Timings {
   @ApiProperty({ example: 35 }) embed_ms: number;

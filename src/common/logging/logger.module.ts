@@ -3,9 +3,9 @@ import type { IncomingMessage, ServerResponse } from 'http';
 import { LoggerModule as PinoLoggerModule } from 'nestjs-pino';
 import pino from 'pino';
 import type { Request, Response } from 'express';
-import { AppConfigService } from '../config/app-config.service';
+import { AppConfigService } from '../../config/app-config.service';
 import { contextOf } from './request-context';
-import { uuidv7 } from './uuid';
+import { uuidv7 } from '../utils/uuid';
 
 /** Fields never written to logs, wherever they appear. */
 export const REDACT_PATHS = [

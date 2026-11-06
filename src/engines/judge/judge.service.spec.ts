@@ -1,6 +1,6 @@
-import { AppConfigService } from '../config/app-config.service';
-import { parseEnv } from '../config/env.schema';
-import { TEST_ENV } from '../testing/test-app';
+import { AppConfigService } from '../../config/app-config.service';
+import { parseEnv } from '../../config/env.schema';
+import { TEST_ENV } from '../../testing/test-app';
 import {
   JudgeService,
   MAX_ANSWER_CHARS,

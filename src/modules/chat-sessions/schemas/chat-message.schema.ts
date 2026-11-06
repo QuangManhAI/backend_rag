@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
-import { uuidv7 } from '../../common/uuid';
-import type { GroundedChunk, Timings } from '../../types/scientific-rag';
+import { uuidv7 } from '../../../common/utils/uuid';
+import type { GroundedChunk, Timings } from '../../../types/scientific-rag';
 import { SESSION_TTL_SECONDS } from './chat-session.schema';
 
 export type MessageRole = 'user' | 'assistant';

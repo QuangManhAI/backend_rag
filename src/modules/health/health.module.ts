@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { LlmModule } from '../llm/llm.module';
-import { TreeRouterModule } from '../tree-router/tree-router.module';
-import { VectorStoreModule } from '../vector-store/vector-store.module';
+import { LlmModule } from '../../engines/llm/llm.module';
+import { TreeRouterModule } from '../../engines/tree-router/tree-router.module';
+import { VectorStoreModule } from '../../engines/vector-store/vector-store.module';
 import { HealthController } from './health.controller';
 import { HealthService } from './health.service';
 

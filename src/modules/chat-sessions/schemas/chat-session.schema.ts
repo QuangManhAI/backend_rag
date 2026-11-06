@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
-import { uuidv7 } from '../../common/uuid';
+import { uuidv7 } from '../../../common/utils/uuid';
 
 export const SESSION_TTL_SECONDS = 3 * 24 * 60 * 60;
 

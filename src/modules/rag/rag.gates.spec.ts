@@ -1,15 +1,17 @@
-import type { AppConfigService } from '../config/app-config.service';
-import type { JudgePort } from '../judge/judge.service';
-import type { MiningService } from '../mining/mining.service';
-import type { TreeRouterService } from '../tree-router/tree-router.service';
+import type { AppConfigService } from '../../config/app-config.service';
+import type { JudgePort } from '../../engines/judge/judge.service';
+import type { MiningService } from '../../engines/mining/mining.service';
+import type { TreeRouterService } from '../../engines/tree-router/tree-router.service';
 import type {
   GroundedChunk,
   RagStreamEvent,
   ScoredChunk,
-} from '../types/scientific-rag';
+} from '../../types/scientific-rag';
 import type { ChatRequestDto } from './dto/chat-request.dto';
-import { NO_CONTEXT_ANSWER } from './prompt-builder';
-import { fuseRanks, RagService, type PipelineResult } from './rag.service';
+import { NO_CONTEXT_ANSWER } from './pipeline/prompt-builder';
+import { fuseRanks } from './pipeline/ranking';
+import { RagService } from './rag.service';
+import type { PipelineResult } from './rag.types';
 
 const chunk = (id: string, authority = 0): GroundedChunk => ({
   chunk_id: id,

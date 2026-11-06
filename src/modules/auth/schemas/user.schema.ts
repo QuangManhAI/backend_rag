@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
-import type { Role } from '../../types/auth-user';
+import type { Role } from '../../../types/auth-user';
 
 @Schema({
   collection: 'users',
@@ -48,3 +48,6 @@ export type UserDocument = HydratedDocument<User>;
 export const UserSchema = SchemaFactory.createForClass(User);
 /** Serves the admin listing filter (role + active). */
 UserSchema.index({ roles: 1, is_active: 1 });
+
+/** A user read with `.lean()`. */
+export type LeanUser = User & { _id: Types.ObjectId };

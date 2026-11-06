@@ -1,9 +1,9 @@
 import { Logger } from '@nestjs/common';
 import type { Connection } from 'mongoose';
-import { AppConfigService } from '../config/app-config.service';
-import type { LlmPort } from '../llm/llm.service';
-import type { TreeRouterService } from '../tree-router/tree-router.service';
-import type { VectorStorePort } from '../vector-store/vector-store.service';
+import { AppConfigService } from '../../config/app-config.service';
+import type { LlmPort } from '../../engines/llm/llm.service';
+import type { TreeRouterService } from '../../engines/tree-router/tree-router.service';
+import type { VectorStorePort } from '../../engines/vector-store/vector-store.service';
 import { HealthController } from './health.controller';
 import { Health, HealthService, overallStatus } from './health.service';
 

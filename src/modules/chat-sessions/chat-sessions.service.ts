@@ -1,10 +1,4 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { LRUCache } from 'lru-cache';
 import { ClientSession, Connection, Model, Types } from 'mongoose';
@@ -18,25 +12,35 @@ import {
   parseIds,
   parseSort,
   toCursorPage,
-} from '../common/pagination';
-import { escapeRegex } from '../common/sanitize';
-import { logEvent } from '../common/request-context';
-import { isUuid, uuidv7 } from '../common/uuid';
+} from '../../common/pagination/pagination';
+import { logEvent } from '../../common/logging/request-context';
+import { escapeRegex } from '../../common/security/sanitize';
+import { isTransactionUnsupported } from '../../common/utils/mongo-errors';
+import { isUuid, uuidv7 } from '../../common/utils/uuid';
+import {
+  formatTimestampTitle,
+  toMessage,
+  toSummary,
+  validTitle,
+} from './chat-session.mapper';
+import { ChatRequestsService } from './chat-requests.service';
+import {
+  MAX_MESSAGES,
+  MESSAGE_PAGE_SIZE,
+  SESSION_BATCH_MAX,
+  SESSION_NOT_FOUND,
+  SESSION_PAGE_SIZE,
+} from './chat-sessions.constants';
 import {
   ListMessagesQueryDto,
   ListSessionsQueryDto,
-  MessageDto,
   MessagePageDto,
   SessionDto,
   SessionPageDto,
   SessionSummaryDto,
 } from './dto/chat-session.dto';
 import { ChatMessage } from './schemas/chat-message.schema';
-import { ChatRequest } from './schemas/chat-request.schema';
-import {
-  ChatSession,
-  ChatSessionDocument,
-} from './schemas/chat-session.schema';
+import { ChatSession } from './schemas/chat-session.schema';
 import type {
   AssistantMessageInput,
   BeginRequestResult,
@@ -45,19 +49,7 @@ import type {
   StoredExchange,
 } from './session-store.port';
 
-export const SESSION_NOT_FOUND = 'session not found';
-export const SESSION_PAGE_SIZE = 10;
-export const TITLE_MAX = 120;
-export const MAX_MESSAGES = 200;
-export const UTC7_OFFSET_MS = 7 * 60 * 60 * 1000;
 const SESSION_CACHE_TTL_MS = 300_000;
-
-export const SESSION_BATCH_MAX = 50;
-export const MESSAGE_PAGE_SIZE = 50;
-export const REQUEST_IN_PROGRESS = 'request already in progress';
-export const REQUEST_KEY_REUSED =
-  'idempotency key reused with a different request';
-const REQUEST_LOCK_MS = 5 * 60 * 1000;
 
 const SESSION_LIST: ListSpec = {
   sortable: { last_message_at: 'date', created_at: 'date', title: 'string' },
@@ -75,74 +67,14 @@ const MESSAGE_LIST: ListSpec = {
   idType: 'uuid',
 };
 
-const isDuplicateKey = (e: unknown) =>
-  (e as { code?: unknown })?.code === 11000;
+/** A live session of this user; anything else must read as missing (404, never 403). */
+const ownedSession = (userId: string, id: string) => ({
+  _id: id,
+  user_id: new Types.ObjectId(userId),
+  deleted_at: null,
+});
 
-/** Unicode-aware length (an emoji counts as one character). */
-const charLength = (s: string) => Array.from(s).length;
-
-/** Trimmed title of 1–120 characters, else 400 `invalid title`. */
-export function validTitle(raw: string): string {
-  const t = raw.trim();
-  if (!t || charLength(t) > TITLE_MAX)
-    throw new BadRequestException('invalid title');
-  return t;
-}
-
-/** Default session title: `YY-MM-DD:HH-MM-SS` in UTC+07 (e.g. `26-10-19:14-28-33`). */
-export function formatTimestampTitle(date: Date = new Date()): string {
-  const utc7 = new Date(date.getTime() + UTC7_OFFSET_MS);
-  const yy = String(utc7.getUTCFullYear()).slice(-2);
-  const mm = String(utc7.getUTCMonth() + 1).padStart(2, '0');
-  const dd = String(utc7.getUTCDate()).padStart(2, '0');
-  const hh = String(utc7.getUTCHours()).padStart(2, '0');
-  const min = String(utc7.getUTCMinutes()).padStart(2, '0');
-  const ss = String(utc7.getUTCSeconds()).padStart(2, '0');
-  return `${yy}-${mm}-${dd}:${hh}-${min}-${ss}`;
-}
-
-function toSummary(
-  s: ChatSessionDocument | (ChatSession & { _id: string }),
-): SessionSummaryDto {
-  const lastMsgAt = s.last_message_at ?? s.created_at;
-  return {
-    id: s._id,
-    title: s.title,
-    message_count: s.message_count,
-    last_message_at: lastMsgAt.toISOString(),
-    created_at: s.created_at.toISOString(),
-    updated_at: s.updated_at.toISOString(),
-  };
-}
-
-function toMessage(m: ChatMessage & { _id: string }): MessageDto {
-  const updatedAt = m.updated_at ?? m.created_at;
-  const out: MessageDto = {
-    id: m._id,
-    role: m.role,
-    content: m.content,
-    created_at: m.created_at.toISOString(),
-    updated_at: updatedAt.toISOString(),
-  };
-  if (m.role === 'assistant') {
-    out.citations = m.citations ?? [];
-    out.grounded_chunks = m.grounded_chunks ?? [];
-    if (m.timings) out.timings = m.timings;
-  }
-  return out;
-}
-
-/** Error of a transaction on a standalone server (IllegalOperation, code 20). */
-export function isTransactionUnsupported(e: unknown): boolean {
-  const err = e as { code?: unknown; message?: unknown };
-  return (
-    err?.code === 20 ||
-    (typeof err?.message === 'string' &&
-      /Transaction numbers are only allowed on a replica set|transactions are not supported/i.test(
-        err.message,
-      ))
-  );
-}
+const detailKey = (userId: string, id: string) => `${userId}:${id}`;
 
 @Injectable()
 export class ChatSessionsService implements SessionStorePort {
@@ -168,13 +100,21 @@ export class ChatSessionsService implements SessionStorePort {
     private readonly sessions: Model<ChatSession>,
     @InjectModel(ChatMessage.name)
     private readonly messages: Model<ChatMessage>,
-    @InjectModel(ChatRequest.name)
-    private readonly requests: Model<ChatRequest>,
+    private readonly requests: ChatRequestsService,
     @InjectConnection() private readonly connection: Connection,
   ) {}
 
   private bumpUserGen(userId: string): void {
     this.userGen.set(userId, (this.userGen.get(userId) ?? 0) + 1);
+  }
+
+  /** Every write path calls this: all list pages of the user go, plus the named session details. */
+  private invalidate(userId: string, ...sessionIds: string[]): void {
+    if (!this.cacheEnabled) return;
+    this.bumpUserGen(userId);
+    for (const id of sessionIds) {
+      this.sessionDetailCache.delete(detailKey(userId, id));
+    }
   }
 
   async list(
@@ -255,54 +195,35 @@ export class ChatSessionsService implements SessionStorePort {
 
   async get(userId: string, id: string): Promise<SessionDto> {
     if (!isUuid(id)) throw new NotFoundException(SESSION_NOT_FOUND);
-    const cacheKey = `${userId}:${id}`;
-    if (this.cacheEnabled) {
-      const cached = this.sessionDetailCache.get(cacheKey);
-      if (cached) return cached;
-      const inflight = this.inflightDetail.get(cacheKey);
-      if (inflight) return inflight;
-    }
-    const fetchPromise = (async (): Promise<SessionDto> => {
-      const [s, recent] = await Promise.all([
-        this.sessions
-          .findOne({
-            _id: id,
-            user_id: new Types.ObjectId(userId),
-            deleted_at: null,
-          })
-          .lean(),
-        this.messages
-          .find({ session_id: id, deleted_at: null })
-          .sort({ created_at: -1, _id: -1 })
-          .limit(MAX_MESSAGES)
-          .lean(),
-      ]);
-      if (!s) throw new NotFoundException(SESSION_NOT_FOUND);
-      const lastMsgAt = s.last_message_at ?? s.created_at;
-      const dto: SessionDto = {
-        id: s._id,
-        title: s.title,
-        message_count: s.message_count,
-        last_message_at: lastMsgAt.toISOString(),
-        created_at: s.created_at.toISOString(),
-        updated_at: s.updated_at.toISOString(),
-        messages: recent.reverse().map(toMessage),
-      };
-      if (this.cacheEnabled) {
-        this.sessionDetailCache.set(cacheKey, dto);
-      }
+    if (!this.cacheEnabled) return this.loadDetail(userId, id);
+    const cacheKey = detailKey(userId, id);
+    const cached = this.sessionDetailCache.get(cacheKey);
+    if (cached) return cached;
+    const inflight = this.inflightDetail.get(cacheKey);
+    if (inflight) return inflight;
+    const load = this.loadDetail(userId, id).then((dto) => {
+      this.sessionDetailCache.set(cacheKey, dto);
       return dto;
-    })();
-    if (this.cacheEnabled) {
-      this.inflightDetail.set(cacheKey, fetchPromise);
-    }
+    });
+    this.inflightDetail.set(cacheKey, load);
     try {
-      return await fetchPromise;
+      return await load;
     } finally {
-      if (this.cacheEnabled) {
-        this.inflightDetail.delete(cacheKey);
-      }
+      this.inflightDetail.delete(cacheKey);
     }
+  }
+
+  private async loadDetail(userId: string, id: string): Promise<SessionDto> {
+    const [s, recent] = await Promise.all([
+      this.sessions.findOne(ownedSession(userId, id)).lean(),
+      this.messages
+        .find({ session_id: id, deleted_at: null })
+        .sort({ created_at: -1, _id: -1 })
+        .limit(MAX_MESSAGES)
+        .lean(),
+    ]);
+    if (!s) throw new NotFoundException(SESSION_NOT_FOUND);
+    return { ...toSummary(s), messages: recent.reverse().map(toMessage) };
   }
 
   async rename(
@@ -314,37 +235,26 @@ export class ChatSessionsService implements SessionStorePort {
     if (!isUuid(id)) throw new NotFoundException(SESSION_NOT_FOUND);
     const s = await this.sessions
       .findOneAndUpdate(
-        { _id: id, user_id: new Types.ObjectId(userId), deleted_at: null },
+        ownedSession(userId, id),
         { $set: { title: t } },
         { new: true },
       )
       .lean();
     if (!s) throw new NotFoundException(SESSION_NOT_FOUND);
     logEvent('SESSION_RENAMED', { session_id: id });
-    if (this.cacheEnabled) {
-      // Every cached page may hold this title (filtered and later pages too), so all of them go.
-      this.bumpUserGen(userId);
-      this.sessionDetailCache.delete(`${userId}:${id}`);
-    }
+    // Every cached page may hold this title (filtered and later pages too), so all of them go.
+    this.invalidate(userId, id);
     return toSummary(s);
   }
 
   /** Idempotent soft delete (3-day TTL): unknown ids and other users' sessions are silently ignored. */
   async remove(userId: string, id: string): Promise<void> {
     if (!isUuid(id)) return;
-    if (this.cacheEnabled) {
-      this.bumpUserGen(userId);
-      this.sessionDetailCache.delete(`${userId}:${id}`);
-    }
+    this.invalidate(userId, id);
     const now = new Date();
-    const res = await this.sessions.updateOne(
-      {
-        _id: id,
-        user_id: new Types.ObjectId(userId),
-        deleted_at: null,
-      },
-      { $set: { deleted_at: now } },
-    );
+    const res = await this.sessions.updateOne(ownedSession(userId, id), {
+      $set: { deleted_at: now },
+    });
     if (res.modifiedCount) {
       await this.messages.updateMany(
         { session_id: id, deleted_at: null },
@@ -361,10 +271,7 @@ export class ChatSessionsService implements SessionStorePort {
     const rows = await this.sessions
       .find({ ...owned, _id: { $in: ids } }, { _id: 1 })
       .lean();
-    if (this.cacheEnabled) {
-      this.bumpUserGen(userId);
-      for (const id of ids) this.sessionDetailCache.delete(`${userId}:${id}`);
-    }
+    this.invalidate(userId, ...ids);
     if (!rows.length) return;
     const found = rows.map((r) => r._id);
     const now = new Date();
@@ -381,60 +288,16 @@ export class ChatSessionsService implements SessionStorePort {
     logEvent('SESSIONS_DELETED', { count: found.length });
   }
 
-  async beginRequest(
+  beginRequest(
     userId: string,
     key: string,
     fingerprint: string,
   ): Promise<BeginRequestResult> {
-    const _id = `${userId}:${key}`;
-    const now = Date.now();
-    const lockedUntil = new Date(now + REQUEST_LOCK_MS);
-    try {
-      await this.requests.create({
-        _id,
-        user_id: new Types.ObjectId(userId),
-        fingerprint,
-        status: 'in_progress',
-        locked_until: lockedUntil,
-      });
-      return { state: 'started' };
-    } catch (e) {
-      if (!isDuplicateKey(e)) throw e;
-    }
-    const existing = await this.requests.findById(_id).lean();
-    // Released between the failed insert and this read: the client may simply retry.
-    if (!existing) throw new ConflictException(REQUEST_IN_PROGRESS);
-    if (existing.fingerprint !== fingerprint) {
-      throw new ConflictException(REQUEST_KEY_REUSED);
-    }
-    if (
-      existing.status === 'completed' &&
-      existing.session_id &&
-      existing.message_id
-    ) {
-      return {
-        state: 'completed',
-        session_id: existing.session_id,
-        message_id: existing.message_id,
-      };
-    }
-    const takenOver = await this.requests.findOneAndUpdate(
-      {
-        _id,
-        status: 'in_progress',
-        locked_until: { $lte: new Date(now) },
-      },
-      { $set: { locked_until: lockedUntil } },
-    );
-    if (!takenOver) throw new ConflictException(REQUEST_IN_PROGRESS);
-    return { state: 'started' };
+    return this.requests.begin(userId, key, fingerprint);
   }
 
-  async releaseRequest(userId: string, key: string): Promise<void> {
-    await this.requests.deleteOne({
-      _id: `${userId}:${key}`,
-      status: 'in_progress',
-    });
+  releaseRequest(userId: string, key: string): Promise<void> {
+    return this.requests.release(userId, key);
   }
 
   async getExchange(
@@ -481,32 +344,15 @@ export class ChatSessionsService implements SessionStorePort {
     answer: AssistantMessageInput,
     requestKey?: string,
   ): Promise<SavedExchange> {
-    if (this.cacheEnabled) {
-      this.bumpUserGen(userId);
-      if (sessionId) this.sessionDetailCache.delete(`${userId}:${sessionId}`);
-    }
-    if (!this.transactions) {
-      return this.writeExchange(
-        null,
-        userId,
-        sessionId,
-        question,
-        answer,
-        requestKey,
-      );
-    }
+    this.invalidate(userId, ...(sessionId ? [sessionId] : []));
+    const write = (db: ClientSession | null) =>
+      this.writeExchange(db, userId, sessionId, question, answer, requestKey);
+    if (!this.transactions) return write(null);
     const db = await this.connection.startSession();
     try {
       let saved: SavedExchange | null = null;
       await db.withTransaction(async () => {
-        saved = await this.writeExchange(
-          db,
-          userId,
-          sessionId,
-          question,
-          answer,
-          requestKey,
-        );
+        saved = await write(db);
       });
       if (!saved) throw new Error('transaction produced no result');
       return saved;
@@ -516,14 +362,7 @@ export class ChatSessionsService implements SessionStorePort {
       this.logger.warn(
         'MONGO_NO_TRANSACTIONS: standalone MongoDB, chat writes are not atomic',
       );
-      return this.writeExchange(
-        null,
-        userId,
-        sessionId,
-        question,
-        answer,
-        requestKey,
-      );
+      return write(null);
     } finally {
       await db.endSession();
     }
@@ -608,17 +447,12 @@ export class ChatSessionsService implements SessionStorePort {
       logEvent('SESSION_CREATED', { session_id: targetSessionId });
     }
     if (requestKey) {
-      // In the same transaction as the messages: a key is never `completed` without its answer.
-      await this.requests.updateOne(
-        { _id: `${userId}:${requestKey}` },
-        {
-          $set: {
-            status: 'completed',
-            session_id: targetSessionId,
-            message_id: assistantMsg._id,
-          },
-        },
-        { session: db ?? undefined },
+      await this.requests.complete(
+        db,
+        userId,
+        requestKey,
+        targetSessionId,
+        assistantMsg._id,
       );
     }
     return {
@@ -634,13 +468,7 @@ export class ChatSessionsService implements SessionStorePort {
     userId: string,
   ): Promise<ChatSession & { _id: string }> {
     const s = isUuid(id)
-      ? await this.sessions
-          .findOne({
-            _id: id,
-            user_id: new Types.ObjectId(userId),
-            deleted_at: null,
-          })
-          .lean()
+      ? await this.sessions.findOne(ownedSession(userId, id)).lean()
       : null;
     if (!s) throw new NotFoundException(SESSION_NOT_FOUND);
     return s;

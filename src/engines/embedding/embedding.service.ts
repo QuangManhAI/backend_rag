@@ -8,7 +8,7 @@ import {
 import { existsSync } from 'fs';
 import { LRUCache } from 'lru-cache';
 import { basename, dirname, resolve } from 'path';
-import { AppConfigService } from '../config/app-config.service';
+import { AppConfigService } from '../../config/app-config.service';
 
 export const EMBEDDING_DIM = 768;
 export const QUERY_PREFIX = 'search_query: ';

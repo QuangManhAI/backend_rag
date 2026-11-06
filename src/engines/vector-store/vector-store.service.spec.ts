@@ -2,9 +2,9 @@ import {
   BadRequestException,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { AppConfigService } from '../config/app-config.service';
-import { parseEnv } from '../config/env.schema';
-import { TEST_ENV } from '../testing/test-app';
+import { AppConfigService } from '../../config/app-config.service';
+import { parseEnv } from '../../config/env.schema';
+import { TEST_ENV } from '../../testing/test-app';
 import {
   QDRANT_TIMEOUT_MS,
   QdrantReader,

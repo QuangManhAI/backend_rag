@@ -9,28 +9,28 @@ import {
   type Response,
 } from 'express';
 import { AppConfigService } from './config/app-config.service';
-import { API_PREFIX, LinksInterceptor } from './common/hateoas';
-import { allowedMethods } from './common/http-contract';
+import { API_PREFIX, LinksInterceptor } from './common/http/hateoas';
+import { allowedMethods } from './common/http/http-contract';
 import {
   HttpExceptionFilter,
   sendError,
   toErrorBody,
-} from './common/http-exception.filter';
+} from './common/http/http-exception.filter';
 import {
   REQUEST_ID_HEADER,
   requestIdMiddleware,
   requestIdOf,
-} from './common/request-context';
-import { securityHeaders, trustProxySetting } from './common/security';
-import { RATE_LIMITS } from './common/throttler';
-import { createValidationPipe } from './common/validation';
+} from './common/logging/request-context';
+import { securityHeaders, trustProxySetting } from './common/security/security';
+import { RATE_LIMITS } from './common/security/throttler';
+import { createValidationPipe } from './common/http/validation';
 import {
   ContentNegotiationInterceptor,
   UNSUPPORTED_BODY,
   unsupportedBody,
   XML_MEDIA_TYPES,
   xmlBodyMiddleware,
-} from './common/xml';
+} from './common/http/xml';
 
 export { API_PREFIX };
 
@@ -79,7 +79,7 @@ export function configureApp(app: INestApplication): void {
     const doc = new DocumentBuilder()
       .setTitle('RAG_TS API')
       .setDescription(
-        'Scientific RAG backend (monolith). Contract: docs/API_DESIGN.md',
+        'Scientific RAG backend (monolith). Contract: docs/api/API_DESIGN.md',
       )
       .setVersion('1.0.0')
       .addBearerAuth()

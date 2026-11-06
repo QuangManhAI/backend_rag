@@ -22,20 +22,21 @@ import {
   ApiTooManyRequestsResponse,
 } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
-import { CurrentUser } from '../auth/current-user.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { OptionalJwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { chatLinks, WithLinks } from '../common/hateoas';
-import { toErrorBody } from '../common/http-exception.filter';
-import { logEvent, requestIdOf } from '../common/request-context';
-import { RateLimitChat } from '../common/throttler';
-import { isUuid } from '../common/uuid';
-import { AbortedError } from '../llm/llm-queue';
-import type { AuthUser } from '../types/auth-user';
+import { chatLinks, WithLinks } from '../../common/http/hateoas';
+import { toErrorBody } from '../../common/http/http-exception.filter';
+import { logEvent, requestIdOf } from '../../common/logging/request-context';
+import { RateLimitChat } from '../../common/security/throttler';
+import { isUuid } from '../../common/utils/uuid';
+import { AbortedError } from '../../engines/llm/llm-queue';
+import type { AuthUser } from '../../types/auth-user';
 import { ChatRequestDto } from './dto/chat-request.dto';
 import { ChatResponseDto } from './dto/chat-response.dto';
-import { PipelineEvent, PipelineResult, RagService } from './rag.service';
-import { ClientSlots, TOO_MANY_INFLIGHT } from './client-slots';
-import { abortOnClientClose, SseWriter } from './sse';
+import { RagService } from './rag.service';
+import type { PipelineEvent, PipelineResult } from './rag.types';
+import { ClientSlots, TOO_MANY_INFLIGHT } from './transport/client-slots';
+import { abortOnClientClose, SseWriter } from './transport/sse';
 
 const CLIENT_CLOSED = 499;
 

@@ -3,9 +3,9 @@ import {
   HttpException,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { AppConfigService } from '../config/app-config.service';
-import { parseEnv } from '../config/env.schema';
-import { TEST_ENV } from '../testing/test-app';
+import { AppConfigService } from '../../config/app-config.service';
+import { parseEnv } from '../../config/env.schema';
+import { TEST_ENV } from '../../testing/test-app';
 import type { GenerateOptions, LlmEngine } from './llm-engine';
 import { AbortedError, LlmQueue, QueueFullError } from './llm-queue';
 import { LlmService } from './llm.service';

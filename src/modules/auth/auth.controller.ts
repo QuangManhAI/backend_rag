@@ -15,11 +15,11 @@ import {
   ApiTooManyRequestsResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import type { AuthUser } from '../types/auth-user';
-import { accountLinks, WithLinks } from '../common/hateoas';
-import { RateLimit } from '../common/throttler';
+import type { AuthUser } from '../../types/auth-user';
+import { accountLinks, WithLinks } from '../../common/http/hateoas';
+import { RateLimit } from '../../common/security/throttler';
 import { AuthService } from './auth.service';
-import { CurrentUser } from './current-user.decorator';
+import { CurrentUser } from './decorators/current-user.decorator';
 import { AuthResponseDto, LoginDto, RefreshDto } from './dto/auth.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 

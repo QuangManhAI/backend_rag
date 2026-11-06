@@ -10,9 +10,9 @@ import {
   parseFilters,
   parseSort,
   toCursorPage,
-} from '../common/pagination';
-import type { AuthUser } from '../types/auth-user';
-import type { ListAuditLogsQueryDto } from './admin.dto';
+} from '../../common/pagination/pagination';
+import type { AuthUser } from '../../types/auth-user';
+import type { ListAuditLogsQueryDto } from './dto/admin.dto';
 import { assertAdmin } from './assert-admin';
 import {
   AdminAuditLog,

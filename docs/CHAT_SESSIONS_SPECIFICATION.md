@@ -4,9 +4,9 @@
 - **Purpose**: Define the authoritative full-stack specification for chat-session identity, versioned REST APIs, cursor pagination, MongoDB persistence, security scoping, offline caching, and lifecycle operations.
 - **Overview Pipeline**: Synthesizes the core domain model, JWT-authenticated NestJS backend contract, MongoDB schema design, and planned React/IndexedDB frontend synchronization into a single active source of truth.
 - **Detailed Plan**: §1 Input constraints and architectural stance; §2 Domain and data model; §3 Backend API contract (`/api/v1/chat-sessions`); §4 Frontend and offline behavior (target specification); §5 Lifecycle, concurrency, and consistency rules; §6 Rejected or risky interpretations; §7 Finalized architectural decisions & status; §8 Acceptance criteria and test verification.
-- **References**: [`../../frontend_rag/src/types/rag.ts`](../../frontend_rag/src/types/rag.ts), [`../src/types/scientific-rag.ts`](../src/types/scientific-rag.ts), [`MONGODB_SCHEMA_DESIGN.md`](MONGODB_SCHEMA_DESIGN.md), [`CHAT_SESSIONS-SPEC-TESTS.md`](CHAT_SESSIONS-SPEC-TESTS.md), [`../../docs/API_SPECIFICATION.md`](../../docs/API_SPECIFICATION.md), [`../../agents/rules/MD_CONVENTION.md`](../../agents/rules/MD_CONVENTION.md), [`../../docs/AI_chat_log/Khoi_chat_log.md`](../../docs/AI_chat_log/Khoi_chat_log.md)
+- **References**: [`../../frontend_rag/src/shared/types/rag.ts`](../../frontend_rag/src/shared/types/rag.ts), [`../src/types/scientific-rag.ts`](../src/types/scientific-rag.ts), [`MONGODB_SCHEMA_DESIGN.md`](MONGODB_SCHEMA_DESIGN.md), [`CHAT_SESSIONS-SPEC-TESTS.md`](CHAT_SESSIONS-SPEC-TESTS.md), [`../../docs/api/API_SPECIFICATION.md`](../../docs/api/API_SPECIFICATION.md), [`../../agents/rules/MD_CONVENTION.md`](../../agents/rules/MD_CONVENTION.md), [`../../docs/AI_chat_log/Khoi_chat_log.md`](../../docs/AI_chat_log/Khoi_chat_log.md)
 - **Created**: 2026-10-16T16:36:03+07:00
-- **Last Updated**: 2026-11-04T22:47:55+07:00
+- **Last Updated**: 2026-11-06T13:13:54+07:00
 
 ---
 
@@ -63,7 +63,7 @@ The functional requirements for chat sessions include:
 | **Initial title** | `YY-MM-DD:HH-MM-SS` in `UTC+07` derived at creation | Meets timestamp naming requirement without coupling presentation to identity |
 | **List response** | Summaries only, sorted by `last_message_at DESC, _id DESC` | Keeps list bandwidth minimal; renaming does not reorder the session list |
 | **Pagination** | Default page size of 10 summaries (`SESSION_PAGE_SIZE = 10`, `limit` 1–50), opaque base64url cursor | Enforces predictable payload sizes; supports optional substring search `q` (max 120 chars) |
-| **Ownership & Auth** | Authenticated JWT Bearer token (`user_id: ObjectId`) using [`JwtAuthGuard`](../src/auth/guards/jwt-auth.guard.ts) | Integrates with repository authentication module; replaces initial anonymous `device_id` cookie proposal |
+| **Ownership & Auth** | Authenticated JWT Bearer token (`user_id: ObjectId`) using [`JwtAuthGuard`](../src/modules/auth/guards/jwt-auth.guard.ts) | Integrates with repository authentication module; replaces initial anonymous `device_id` cookie proposal |
 | **Server retention** | Uncapped active session retention in MongoDB; 10-session limit applies strictly to client IndexedDB cache | Server supports full conversation archives while browser offline cache remains lean |
 | **Persistence** | Two collections: `chat_sessions` (metadata) and `chat_messages` (ordered messages) | Eliminates unbounded document growth inside MongoDB; enforces 16 MB BSON safety |
 | **Lazy creation** | Sessions created on the first question/answer exchange via RAG chat; `POST /api/v1/chat-sessions` omitted | Prevents empty/abandoned sessions when a user visits without chatting |
@@ -376,7 +376,7 @@ interface CachedChatSession {
 
 All backend specification items have been implemented and verified via automated test suites:
 
-- **Specification Test Suite**: [`CHAT_SESSIONS-SPEC-TESTS.md`](CHAT_SESSIONS-SPEC-TESTS.md) covers 34 comprehensive scenarios across 20 test suites in [`chat-sessions.spec.ts`](../src/chat-sessions/chat-sessions.spec.ts).
+- **Specification Test Suite**: [`CHAT_SESSIONS-SPEC-TESTS.md`](CHAT_SESSIONS-SPEC-TESTS.md) covers 34 comprehensive scenarios across 20 test suites in [`chat-sessions.spec.ts`](../src/modules/chat-sessions/chat-sessions.spec.ts).
 - **End-to-End Test Suite**: [`test/flow.e2e-spec.ts`](../test/flow.e2e-spec.ts) validates complete registration, login, RAG query lazy session creation, list paging, rename, and soft delete.
 - **Verification Results**:
   - `npm --prefix backend_rag test -- chat-sessions.spec.ts`: 20 / 20 test suites passing (34 test cases).

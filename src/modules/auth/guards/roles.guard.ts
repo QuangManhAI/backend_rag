@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import type { Request } from 'express';
-import type { Role } from '../../types/auth-user';
+import type { Role } from '../../../types/auth-user';
 
 export const ROLES_KEY = 'roles';
 

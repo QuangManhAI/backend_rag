@@ -6,7 +6,7 @@
 - **Detailed Plan**: Section 1 explains Generation-Versioned `LRUCache` & $O(1)$ Invalidation; Section 2 details `Singleflight` Coalescing & Sliding TTL Stampede Prevention; Section 3 covers Query Parallelization, `.lean()`, and Compound Indexes; Section 4 documents HTTP Keep-Alive & MongoDB Pool Tuning; Section 5 provides the 3-Stage SRE Qualification Playbook (Rule L1).
 - **References**: [../AGENTS.md](../AGENTS.md), [AUTH_AND_SECURITY_ARCHITECTURE.md](AUTH_AND_SECURITY_ARCHITECTURE.md), [MONGODB_SCHEMA_DESIGN.md](MONGODB_SCHEMA_DESIGN.md), [../benchmark/BOTTLENECK_ANALYSIS_AND_OPTIMIZATION.md](../benchmark/BOTTLENECK_ANALYSIS_AND_OPTIMIZATION.md), [../benchmark/README.md](../benchmark/README.md), [../../docs/AI_chat_log/Vuong_chat_logs.md](../../docs/AI_chat_log/Vuong_chat_logs.md).
 - **Created**: 2026-10-29T19:46:30+07:00
-- **Last Updated**: 2026-11-04T22:27:54+07:00
+- **Last Updated**: 2026-11-06T13:00:59+07:00
 
 [STATUS: ACTIVE]
 
@@ -14,7 +14,7 @@
 
 ## 1. Generation-Versioned `LRUCache` & $O(1)$ Write Invalidation
 
-In [`src/chat-sessions/chat-sessions.service.ts`](../src/chat-sessions/chat-sessions.service.ts), `list()` supports arbitrary combinations of `limit`, `cursor`, and regex search `q`, while `get()` fetches a specific `sessionId` and its messages. Scanning an `LRUCache` to delete all matching keys for a `userId` on every write would be $O(N)$ and slow under load.
+In [`src/modules/chat-sessions/chat-sessions.service.ts`](../src/modules/chat-sessions/chat-sessions.service.ts), `list()` supports arbitrary combinations of `limit`, `cursor`, and regex search `q`, while `get()` fetches a specific `sessionId` and its messages. Scanning an `LRUCache` to delete all matching keys for a `userId` on every write would be $O(N)$ and slow under load.
 
 Instead, `ChatSessionsService` uses a **per-user generation counter (`userListGen: Map<string, number>`)**:
 
@@ -34,7 +34,7 @@ flowchart LR
 ```
 
 ### Invalidation Rules for Engineers & AI Agents
-Whenever you add or modify any method in [`ChatSessionsService`](../src/chat-sessions/chat-sessions.service.ts) that mutates session metadata or messages:
+Whenever you add or modify any method in [`ChatSessionsService`](../src/modules/chat-sessions/chat-sessions.service.ts) that mutates session metadata or messages:
 1. **Always call `this.bumpUserGen(userId)`** immediately after the MongoDB write completes (`saveExchange`, `remove`, `rename`).
 2. Do not patch one cached list page in place: filtered and later pages may hold the same row. For `rename(userId, sessionId, title)`, you may optionally update the cached detail entry under the new generation key so an immediate `GET /chat-sessions/:id` after rename is still a cache hit.
 
@@ -46,7 +46,7 @@ During our 3-minute (`180s`) Rule L1 hold-out test at `250 RPS` (`400 CUs`), two
 
 1. **Cold-Start Thundering Herd (`t = 0s`)**:
    - When 100+ concurrent virtual users request `GET /chat-sessions/:id` on a cold cache simultaneously, all requests miss the cache in the same millisecond and launch duplicate 2-query MongoDB round-trips over the tunnel.
-   - **Solution (`Singleflight`)**: [`ChatSessionsService.get()`](../src/chat-sessions/chat-sessions.service.ts) tracks in-flight promises in `private readonly inflightDetail = new Map<string, Promise<ChatSessionDetailDto>>()`. Concurrent requests for the same `cacheKey` await the single in-flight Promise inside a `try ... finally { this.inflightDetail.delete(cacheKey); }` block.
+   - **Solution (`Singleflight`)**: [`ChatSessionsService.get()`](../src/modules/chat-sessions/chat-sessions.service.ts) tracks in-flight promises in `private readonly inflightDetail = new Map<string, Promise<ChatSessionDetailDto>>()`. Concurrent requests for the same `cacheKey` await the single in-flight Promise inside a `try ... finally { this.inflightDetail.delete(cacheKey); }` block.
 2. **Synchronized TTL Expiration Wave (`t = 120s`)**:
    - With a fixed `120s` TTL (`updateAgeOnGet: false`), all hot entries populated during the first 10 seconds of a benchmark expired simultaneously at `t = 120s`, causing a sudden spike of cache misses during minute 2 of the 3-minute hold-out.
    - **Solution (Sliding TTL)**: Both `listCache` and `sessionDetailCache` configure `ttl: 300_000` (`5 minutes`) with **`updateAgeOnGet: true`**, keeping actively read sessions warm in memory while evicting cold entries via LRU bounds (`max: 5000` and `max: 3000`).
@@ -56,7 +56,7 @@ During our 3-minute (`180s`) Rule L1 hold-out test at `250 RPS` (`400 CUs`), two
 ## 3. Query Parallelization, `.lean()` Hydration Bypass & Index Alignment
 
 ### 3.1 Parallel Ownership + Message Fetch (`Promise.all`)
-In [`ChatSessionsService.get(userId, sessionId)`](../src/chat-sessions/chat-sessions.service.ts):
+In [`ChatSessionsService.get(userId, sessionId)`](../src/modules/chat-sessions/chat-sessions.service.ts):
 - Ownership verification (`sessions.findOne({ _id: sessionId, user_id: userId, deleted_at: null }).lean()`) and message retrieval (`messages.find({ session_id: sessionId, deleted_at: null }).sort({ created_at: 1, _id: 1 }).lean()`) are completely independent queries.
 - Running them via **`Promise.all([sessionQuery, messagesQuery])`** cuts uncached `GET /chat-sessions/:id` latency in half (`2 RTTs` $\rightarrow$ `1 RTT` wall-clock time).
 - Security invariant preserved: if `session` is `null` (not found, soft-deleted, or owned by another user), `get()` immediately throws `NotFoundException` (`404`) and discards the messages array before caching or returning anything.
@@ -66,7 +66,7 @@ Mongoose `HydratedDocument` instantiation constructs change-tracking proxies, vi
 - **Rule**: Every `.find()`, `.findOne()`, and `.findOneAndUpdate()` that maps directly to a response DTO **must** chain `.lean()`.
 
 ### 3.3 Compound B-Tree Index Alignment (`chat_messages`)
-In [`src/chat-sessions/schemas/chat-message.schema.ts`](../src/chat-sessions/schemas/chat-message.schema.ts), the compound index is aligned to:
+In [`src/modules/chat-sessions/schemas/chat-message.schema.ts`](../src/modules/chat-sessions/schemas/chat-message.schema.ts), the compound index is aligned to:
 ```typescript
 ChatMessageSchema.index({ session_id: 1, deleted_at: 1, created_at: -1, _id: -1 });
 ```

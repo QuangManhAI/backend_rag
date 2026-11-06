@@ -8,7 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { AuthService } from '../auth/auth.service';
 import { RefreshToken } from '../auth/schemas/refresh-token.schema';
-import { User } from '../auth/schemas/user.schema';
+import { LeanUser, User } from '../auth/schemas/user.schema';
 import {
   allOf,
   FilterField,
@@ -18,19 +18,18 @@ import {
   parseFilters,
   parseSort,
   toCursorPage,
-} from '../common/pagination';
-import { escapeRegex } from '../common/sanitize';
-import type { AuthUser, Role } from '../types/auth-user';
+} from '../../common/pagination/pagination';
+import { escapeRegex } from '../../common/security/sanitize';
+import type { AuthUser, Role } from '../../types/auth-user';
 import { AdminAuditService, type AuditRequest } from './admin-audit.service';
-import { ADMIN_ROLES, ListAdminUsersQueryDto } from './admin.dto';
+import { ADMIN_ROLES, ListAdminUsersQueryDto } from './dto/admin.dto';
+import { lockState, toAdminUserDto } from './admin-user.mapper';
 import { assertAdmin } from './assert-admin';
 
 export const USER_NOT_FOUND = 'user not found';
 export const SELF_LOCKOUT_FORBIDDEN = 'SELF_LOCKOUT_FORBIDDEN';
 export const LAST_ADMIN_PROTECTED = 'LAST_ADMIN_PROTECTED';
 export const VALIDATION_ERROR = 'validation error';
-
-type LeanUser = User & { _id: Types.ObjectId };
 
 const USER_LIST: ListSpec = {
   sortable: { created_at: 'date', email: 'string' },
@@ -289,11 +288,7 @@ export class AdminIdentityService {
     req?: AuditRequest,
   ): Promise<Record<string, unknown>> {
     await this.assertNotLastAdmin(target);
-    const before = {
-      is_active: target.is_active,
-      disabled_at: target.disabled_at,
-      disabled_reason: target.disabled_reason,
-    };
+    const before = lockState(target);
     const now = new Date();
     await this.users.updateOne(
       { _id: target._id },
@@ -332,11 +327,7 @@ export class AdminIdentityService {
     target: LeanUser,
     req?: AuditRequest,
   ): Promise<Record<string, unknown>> {
-    const before = {
-      is_active: target.is_active,
-      disabled_at: target.disabled_at,
-      disabled_reason: target.disabled_reason,
-    };
+    const before = lockState(target);
     await this.users.updateOne(
       { _id: target._id },
       {
@@ -420,20 +411,4 @@ export class AdminIdentityService {
       })),
     };
   }
-}
-
-/** Public admin view of a user. Never exposes `password_hash`. */
-export function toAdminUserDto(u: LeanUser): Record<string, unknown> {
-  return {
-    id: u._id.toString(),
-    email: u.email,
-    display_name: u.display_name,
-    roles: u.roles,
-    is_active: u.is_active,
-    disabled_at: u.disabled_at ? u.disabled_at.toISOString() : null,
-    disabled_reason: u.disabled_reason,
-    token_version: u.token_version,
-    last_login_at: u.last_login_at ? u.last_login_at.toISOString() : null,
-    created_at: u.created_at.toISOString(),
-  };
 }

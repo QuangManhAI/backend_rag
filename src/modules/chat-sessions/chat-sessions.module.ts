@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ChatRequestsService } from './chat-requests.service';
 import { ChatSessionsController } from './chat-sessions.controller';
+import { ChatSessionsV2Controller } from './v2/chat-sessions.v2.controller';
 import { ChatSessionsService } from './chat-sessions.service';
 import { ChatMessage, ChatMessageSchema } from './schemas/chat-message.schema';
 import { ChatRequest, ChatRequestSchema } from './schemas/chat-request.schema';
@@ -16,7 +17,7 @@ import { SESSION_STORE } from './session-store.port';
       { name: ChatRequest.name, schema: ChatRequestSchema },
     ]),
   ],
-  controllers: [ChatSessionsController],
+  controllers: [ChatSessionsController, ChatSessionsV2Controller],
   providers: [
     ChatRequestsService,
     ChatSessionsService,

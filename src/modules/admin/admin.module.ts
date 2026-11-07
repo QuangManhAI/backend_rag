@@ -5,6 +5,7 @@ import { HealthModule } from '../health/health.module';
 import { LlmModule } from '../../engines/llm/llm.module';
 import { AdminAuditService } from './admin-audit.service';
 import { AdminController } from './admin.controller';
+import { AdminV2Controller } from './v2/admin.v2.controller';
 import { AdminIdentityService } from './admin-identity.service';
 import { AdminOpsService } from './admin-ops.service';
 import {
@@ -29,7 +30,7 @@ import {
     HealthModule,
     LlmModule,
   ],
-  controllers: [AdminController],
+  controllers: [AdminController, AdminV2Controller],
   providers: [AdminAuditService, AdminIdentityService, AdminOpsService],
 })
 export class AdminModule {}

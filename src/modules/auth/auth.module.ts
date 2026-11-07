@@ -3,6 +3,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthController } from './auth.controller';
 import { UsersController } from './users.controller';
+import { AuthV2Controller } from './v2/auth.v2.controller';
+import { UsersV2Controller } from './v2/users.v2.controller';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard, OptionalJwtAuthGuard } from './guards/jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
@@ -28,7 +30,12 @@ import { TokenService } from './token.service';
       { name: LoginAttempt.name, schema: LoginAttemptSchema },
     ]),
   ],
-  controllers: [AuthController, UsersController],
+  controllers: [
+    AuthController,
+    UsersController,
+    AuthV2Controller,
+    UsersV2Controller,
+  ],
   providers: [
     AuthService,
     TokenService,

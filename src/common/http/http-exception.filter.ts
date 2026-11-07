@@ -10,6 +10,7 @@ import {
 import type { Request, Response } from 'express';
 import { STATUS_CODES } from 'http';
 import { requestIdOf } from '../logging/request-context';
+import { sendProblem, toProblemDetails } from './problem-details';
 import { toXml, wantsXml } from './xml';
 
 /** Error body of every endpoint (API_DESIGN §1.2). */
@@ -78,12 +79,30 @@ export class HttpExceptionFilter implements ExceptionFilter {
       ? (this.methodsOf?.(req.path) ?? [])
       : [];
     if (allowed.length) res.setHeader('Allow', allowed.join(', '));
-    const body = toErrorBody(
-      allowed.length
-        ? new MethodNotAllowedException('method not allowed')
-        : exception,
-      requestIdOf(req),
-    );
+    const targetError = allowed.length
+      ? new MethodNotAllowedException('method not allowed')
+      : exception;
+
+    const isV2 =
+      req.originalUrl?.includes('/api/v2') ||
+      req.path?.includes('/api/v2') ||
+      req.url?.includes('/api/v2');
+
+    if (isV2) {
+      const problem = toProblemDetails(targetError, req);
+      if (problem.status >= 500) {
+        res.err =
+          exception instanceof Error ? exception : new Error(String(exception));
+      }
+      if (res.headersSent) {
+        res.end();
+        return;
+      }
+      sendProblem(res, problem);
+      return;
+    }
+
+    const body = toErrorBody(targetError, requestIdOf(req));
     if (body.statusCode >= 500) {
       res.err =
         exception instanceof Error ? exception : new Error(String(exception));

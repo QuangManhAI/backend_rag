@@ -7,6 +7,7 @@ import { MiningModule } from '../../engines/mining/mining.module';
 import { TreeRouterModule } from '../../engines/tree-router/tree-router.module';
 import { VectorStoreModule } from '../../engines/vector-store/vector-store.module';
 import { RagController } from './rag.controller';
+import { RagV2Controller } from './v2/rag.v2.controller';
 import { RagService } from './rag.service';
 
 @Module({
@@ -19,7 +20,7 @@ import { RagService } from './rag.service';
     LlmModule,
     ChatSessionsModule,
   ],
-  controllers: [RagController],
+  controllers: [RagController, RagV2Controller],
   providers: [RagService],
 })
 export class RagModule {}

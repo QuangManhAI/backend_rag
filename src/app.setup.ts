@@ -16,6 +16,7 @@ import {
   sendError,
   toErrorBody,
 } from './common/http/http-exception.filter';
+import { sendProblem, toProblemDetails } from './common/http/problem-details';
 import {
   REQUEST_ID_HEADER,
   requestIdMiddleware,
@@ -49,8 +50,13 @@ export function configureApp(app: INestApplication): void {
   );
   app.use(requestIdMiddleware);
   app.use(securityHeaders(isProduction));
-  const respondError = (req: Request, res: Response, e: unknown) =>
-    sendError(req, res, toErrorBody(e, requestIdOf(req)));
+  const respondError = (req: Request, res: Response, e: unknown) => {
+    if (req.originalUrl?.includes('/api/v2') || req.path?.includes('/api/v2')) {
+      sendProblem(res, toProblemDetails(e, req));
+    } else {
+      sendError(req, res, toErrorBody(e, requestIdOf(req)));
+    }
+  };
   app.use((req: Request, res: Response, next: () => void) => {
     if (unsupportedBody(req)) respondError(req, res, UNSUPPORTED_BODY());
     else next();
@@ -58,7 +64,9 @@ export function configureApp(app: INestApplication): void {
   app.use(textBody({ type: XML_MEDIA_TYPES, limit: '100kb' }));
   app.use(xmlBodyMiddleware(respondError));
   app.useLogger(app.get(Logger));
-  app.setGlobalPrefix(API_PREFIX);
+  app.setGlobalPrefix(API_PREFIX, {
+    exclude: ['api/v2/(.*)', 'api/v2'],
+  });
   app.enableCors({
     origin: config.corsOrigins,
     exposedHeaders: [REQUEST_ID_HEADER, 'Idempotent-Replayed', 'Retry-After'],
@@ -76,22 +84,37 @@ export function configureApp(app: INestApplication): void {
 
   // Swagger is a development aid: it exposes the full API surface, so it stays off in production.
   if (!isProduction) {
-    const doc = new DocumentBuilder()
-      .setTitle('RAG_TS API')
+    const docV1 = new DocumentBuilder()
+      .setTitle('RAG_TS API v1')
       .setDescription(
-        'Scientific RAG backend (monolith). Contract: docs/api/API_DESIGN.md',
+        'Scientific RAG backend (monolith) v1. Contract: docs/api/API_DESIGN.md',
       )
       .setVersion('1.0.0')
       .addBearerAuth()
       .build();
-    SwaggerModule.setup(
-      `${API_PREFIX}/docs`,
-      app,
-      SwaggerModule.createDocument(app, doc),
-      {
-        jsonDocumentUrl: `${API_PREFIX}/docs-json`,
-      },
+    const documentV1 = SwaggerModule.createDocument(app, docV1);
+    documentV1.paths = Object.fromEntries(
+      Object.entries(documentV1.paths).filter(([p]) => p.startsWith('/api/v1')),
     );
+    SwaggerModule.setup(`${API_PREFIX}/docs`, app, documentV1, {
+      jsonDocumentUrl: `${API_PREFIX}/docs-json`,
+    });
+
+    const docV2 = new DocumentBuilder()
+      .setTitle('RAG_TS API v2')
+      .setDescription(
+        'Scientific RAG backend (monolith) v2 - RFC 9457 Problem Details & RESTful standards.',
+      )
+      .setVersion('2.0.0')
+      .addBearerAuth()
+      .build();
+    const documentV2 = SwaggerModule.createDocument(app, docV2);
+    documentV2.paths = Object.fromEntries(
+      Object.entries(documentV2.paths).filter(([p]) => p.startsWith('/api/v2')),
+    );
+    SwaggerModule.setup('api/v2/docs', app, documentV2, {
+      jsonDocumentUrl: 'api/v2/docs-json',
+    });
   }
 }
 

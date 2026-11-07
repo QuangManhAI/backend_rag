@@ -11,7 +11,9 @@ import type { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export const API_PREFIX = 'api/v1';
+export const API_V2_PREFIX = 'api/v2';
 const BASE = `/${API_PREFIX}`;
+const BASE_V2 = `/${API_V2_PREFIX}`;
 
 export interface Link {
   href: string;
@@ -23,6 +25,12 @@ export type Links = Record<string, Link>;
 const get = (path: string): Link => ({ href: `${BASE}${path}` });
 const act = (method: Link['method'], path: string): Link => ({
   href: `${BASE}${path}`,
+  method,
+});
+
+const getV2 = (path: string): Link => ({ href: `${BASE_V2}${path}` });
+const actV2 = (method: Link['method'], path: string): Link => ({
+  href: `${BASE_V2}${path}`,
   method,
 });
 
@@ -106,6 +114,88 @@ export const rootLinks = (): Links => ({
   papers: get('/papers?ids={ids}'),
   health: get('/health'),
   admin: get('/admin/users'),
+});
+
+// ------------------------------------------------------------------ v2 link relations
+
+export const accountLinksV2 = (): Links => ({
+  self: getV2('/users/me'),
+  update: actV2('PATCH', '/users/me'),
+  password: actV2('PUT', '/users/me/password'),
+  'chat-sessions': getV2('/chat-sessions'),
+  'tokens-refresh': actV2('POST', '/auth/tokens/refresh'),
+  'tokens-revoke': actV2('POST', '/auth/tokens/revoke'),
+});
+
+export const sessionLinksV2 = (id: string): Links => ({
+  self: getV2(`/chat-sessions/${id}`),
+  messages: getV2(`/chat-sessions/${id}/messages`),
+  rename: actV2('PATCH', `/chat-sessions/${id}`),
+  delete: actV2('DELETE', `/chat-sessions/${id}`),
+  queries: actV2('POST', '/rag/queries'),
+  'queries-stream': actV2('POST', '/rag/queries/stream'),
+});
+
+export const paperLinksV2 = (id: string): Links => ({
+  self: getV2(`/papers/${encodeURIComponent(id)}`),
+});
+
+export function chatLinksV2(answer: {
+  session_id: string | null;
+  citations: string[];
+}): Links {
+  const links: Links = answer.session_id
+    ? {
+        session: getV2(`/chat-sessions/${answer.session_id}`),
+        messages: getV2(`/chat-sessions/${answer.session_id}/messages`),
+      }
+    : {};
+  if (answer.citations.length) {
+    const ids = answer.citations.map(encodeURIComponent).join(',');
+    links.papers = getV2(`/papers?ids=${ids}`);
+  }
+  return links;
+}
+
+export const healthLinksV2 = (): Links => ({
+  self: getV2('/health'),
+  live: getV2('/health/live'),
+  ready: getV2('/health/ready'),
+});
+
+export function adminUserLinksV2(user: {
+  id: string;
+  is_active: boolean;
+}): Links {
+  const path = `/admin/users/${user.id}`;
+  return {
+    self: getV2(path),
+    roles: actV2('PUT', `${path}/roles`),
+    [user.is_active ? 'lock' : 'unlock']: actV2('PUT', `${path}/status`),
+    tokens: getV2(`${path}/tokens`),
+    'revoke-tokens': actV2('DELETE', `${path}/tokens`),
+    'chat-sessions': getV2(`${path}/chat-sessions`),
+  };
+}
+
+export const adminSessionLinksV2 = (id: string): Links => ({
+  self: getV2(`/admin/chat-sessions/${id}`),
+  messages: getV2(`/admin/chat-sessions/${id}/messages`),
+});
+
+export const rootLinksV2 = (): Links => ({
+  self: getV2(''),
+  register: actV2('POST', '/users'),
+  tokens: actV2('POST', '/auth/tokens'),
+  'tokens-refresh': actV2('POST', '/auth/tokens/refresh'),
+  'tokens-revoke': actV2('POST', '/auth/tokens/revoke'),
+  me: getV2('/users/me'),
+  'chat-sessions': getV2('/chat-sessions'),
+  queries: actV2('POST', '/rag/queries'),
+  'queries-stream': actV2('POST', '/rag/queries/stream'),
+  papers: getV2('/papers?ids={ids}'),
+  health: getV2('/health'),
+  admin: getV2('/admin/users'),
 });
 
 // ------------------------------------------------------------------ route metadata

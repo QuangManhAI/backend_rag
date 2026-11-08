@@ -2,7 +2,7 @@ import type { Response } from 'express';
 import { contextOf } from '../../../common/logging/request-context';
 import type { RagStreamEvent } from '../../../types/scientific-rag';
 
-export const PING_INTERVAL_MS = 15_000;
+export const PING_INTERVAL_MS = 5_000;
 
 /** Server-Sent Events over a raw Express response (POST, so `@Sse()` cannot be used). */
 export class SseWriter {
@@ -17,7 +17,9 @@ export class SseWriter {
     this.res.setHeader('Cache-Control', 'no-cache, no-transform');
     this.res.setHeader('Connection', 'keep-alive');
     this.res.setHeader('X-Accel-Buffering', 'no');
+    this.res.socket?.setNoDelay(true);
     this.res.flushHeaders();
+    this.write(': ok\n\n');
     this.ping = setInterval(() => this.write(': ping\n\n'), PING_INTERVAL_MS);
   }
 

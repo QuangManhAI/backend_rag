@@ -1,0 +1,1251 @@
+{
+  "summary": {
+    "mode": "FULL",
+    "evaluatedAt": "2026-11-09T11:34:27.310Z",
+    "totalCases": 150,
+    "positiveCount": 100,
+    "negativeCount": 50,
+    "metrics": {
+      "baseline": {
+        "mrr": 0.8853333333333333,
+        "hit1": 0.81,
+        "hit3": 0.97,
+        "hit5": 0.97,
+        "avgTargetRelevance": 0.473716,
+        "avgLatencyMs": 2312.1624770000008,
+        "negRejectionRate05": 1,
+        "negRejectionRate03": 1,
+        "negFalseAcceptRate05": 0
+      },
+      "newModel": {
+        "mrr": 0.8939166666666665,
+        "hit1": 0.82,
+        "hit3": 0.96,
+        "hit5": 0.98,
+        "avgTargetRelevance": 0.27962500000000007,
+        "avgLatencyMs": 2643.547078999999,
+        "negRejectionRate05": 1,
+        "negRejectionRate03": 1,
+        "negFalseAcceptRate05": 0
+      }
+    }
+  },
+  "deepeval": {
+    "baseline": {
+      "answer_relevancy": 0.6290952380952382,
+      "faithfulness": 0.797,
+      "contextual_relevancy": 0.31
+    },
+    "newModel": {
+      "answer_relevancy": 0.6340714285714286,
+      "faithfulness": 0.7977380952380954,
+      "contextual_relevancy": 0.31
+    },
+    "cases": {
+      "baseline": [
+        {
+          "id": "pos-000",
+          "answer_relevancy": 0.6666666666666666,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-001",
+          "answer_relevancy": 0.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-002",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-003",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-004",
+          "answer_relevancy": 0.6,
+          "faithfulness": 0.4,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-005",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-006",
+          "answer_relevancy": 0.6666666666666666,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-007",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-008",
+          "answer_relevancy": 0.25,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-009",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-010",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-011",
+          "answer_relevancy": 0.3333333333333333,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-012",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-013",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-014",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-015",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.0,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-016",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-017",
+          "answer_relevancy": 0.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-018",
+          "answer_relevancy": 0.6,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-019",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-020",
+          "answer_relevancy": 0.2,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-021",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-022",
+          "answer_relevancy": 0.25,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-023",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-024",
+          "answer_relevancy": 0.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-025",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-026",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-027",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-028",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.3333333333333333,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-029",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-030",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-031",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-032",
+          "answer_relevancy": 0.5,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-033",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-034",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-035",
+          "answer_relevancy": 0.6666666666666666,
+          "faithfulness": 0.3333333333333333,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-036",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-037",
+          "answer_relevancy": 0.75,
+          "faithfulness": 0.75,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-038",
+          "answer_relevancy": 0.5,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-039",
+          "answer_relevancy": 0.6666666666666666,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-040",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-041",
+          "answer_relevancy": 0.5,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-042",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-043",
+          "answer_relevancy": 0.3333333333333333,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-044",
+          "answer_relevancy": 0.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-045",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-046",
+          "answer_relevancy": 0.2,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-047",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-048",
+          "answer_relevancy": 0.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-049",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-050",
+          "answer_relevancy": 0.8333333333333334,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-051",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.6666666666666666,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-052",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-053",
+          "answer_relevancy": 0.25,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-054",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-055",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-056",
+          "answer_relevancy": 0.25,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-057",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-058",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-059",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-060",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-061",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-062",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-063",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-064",
+          "answer_relevancy": 0.25,
+          "faithfulness": 0.3333333333333333,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-065",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-066",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-067",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.2,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-068",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-069",
+          "answer_relevancy": 0.5,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-070",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-071",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-072",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-073",
+          "answer_relevancy": 0.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-074",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-075",
+          "answer_relevancy": 0.2,
+          "faithfulness": 0.8,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-076",
+          "answer_relevancy": 0.3333333333333333,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-077",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.6666666666666666,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-078",
+          "answer_relevancy": 0.25,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-079",
+          "answer_relevancy": 0.5,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-080",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.3333333333333333,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-081",
+          "answer_relevancy": 0.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-082",
+          "answer_relevancy": 0.8,
+          "faithfulness": 0.8,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-083",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-084",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-085",
+          "answer_relevancy": 0.6666666666666666,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-086",
+          "answer_relevancy": 0.14285714285714285,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-087",
+          "answer_relevancy": 0.75,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-088",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-089",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-090",
+          "answer_relevancy": 0.3333333333333333,
+          "faithfulness": 0.6666666666666666,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-091",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-092",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.3333333333333333,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-093",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-094",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.3333333333333333,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-095",
+          "answer_relevancy": 0.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-096",
+          "answer_relevancy": 0.5,
+          "faithfulness": 0.75,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-097",
+          "answer_relevancy": 0.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-098",
+          "answer_relevancy": 0.6666666666666666,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-099",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        }
+      ],
+      "newModel": [
+        {
+          "id": "pos-000",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-001",
+          "answer_relevancy": 0.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-002",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-003",
+          "answer_relevancy": 0.5,
+          "faithfulness": 0.75,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-004",
+          "answer_relevancy": 0.75,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-005",
+          "answer_relevancy": 0.5,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-006",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-007",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-008",
+          "answer_relevancy": 0.25,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-009",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-010",
+          "answer_relevancy": 0.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-011",
+          "answer_relevancy": 0.3333333333333333,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-012",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-013",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-014",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-015",
+          "answer_relevancy": 0.2,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-016",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.3333333333333333,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-017",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-018",
+          "answer_relevancy": 0.5,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-019",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-020",
+          "answer_relevancy": 0.3333333333333333,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-021",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-022",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-023",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-024",
+          "answer_relevancy": 0.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-025",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-026",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-027",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-028",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.3333333333333333,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-029",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-030",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-031",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-032",
+          "answer_relevancy": 0.5,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-033",
+          "answer_relevancy": 0.3333333333333333,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-034",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-035",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-036",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-037",
+          "answer_relevancy": 0.75,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-038",
+          "answer_relevancy": 0.5,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-039",
+          "answer_relevancy": 0.6666666666666666,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-040",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-041",
+          "answer_relevancy": 0.5,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-042",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-043",
+          "answer_relevancy": 0.8571428571428571,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-044",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-045",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-046",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-047",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-048",
+          "answer_relevancy": 0.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-049",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-050",
+          "answer_relevancy": 0.6,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-051",
+          "answer_relevancy": 0.6666666666666666,
+          "faithfulness": 0.6666666666666666,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-052",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-053",
+          "answer_relevancy": 0.3333333333333333,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-054",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-055",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-056",
+          "answer_relevancy": 0.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-057",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-058",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-059",
+          "answer_relevancy": 0.2,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-060",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-061",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-062",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-063",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-064",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-065",
+          "answer_relevancy": 0.75,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-066",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-067",
+          "answer_relevancy": 0.8333333333333334,
+          "faithfulness": 0.75,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-068",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-069",
+          "answer_relevancy": 0.5,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-070",
+          "answer_relevancy": 0.5,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-071",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-072",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.4,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-073",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-074",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-075",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.75,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-076",
+          "answer_relevancy": 0.5,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-077",
+          "answer_relevancy": 0.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-078",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-079",
+          "answer_relevancy": 0.6666666666666666,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-080",
+          "answer_relevancy": 0.5,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-081",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-082",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.75,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-083",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-084",
+          "answer_relevancy": 0.75,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-085",
+          "answer_relevancy": 0.6666666666666666,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-086",
+          "answer_relevancy": 0.9,
+          "faithfulness": 0.8571428571428571,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-087",
+          "answer_relevancy": 0.3333333333333333,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-088",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-089",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-090",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-091",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-092",
+          "answer_relevancy": 1.0,
+          "faithfulness": 0.3333333333333333,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-093",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1.0,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-094",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-095",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-096",
+          "answer_relevancy": 0.4,
+          "faithfulness": 0.6,
+          "contextual_relevancy": 1.0
+        },
+        {
+          "id": "pos-097",
+          "answer_relevancy": 0.0,
+          "faithfulness": 0.5,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-098",
+          "answer_relevancy": 1.0,
+          "faithfulness": 1,
+          "contextual_relevancy": 0.0
+        },
+        {
+          "id": "pos-099",
+          "answer_relevancy": 0.8333333333333334,
+          "faithfulness": 0.25,
+          "contextual_relevancy": 0.0
+        }
+      ]
+    }
+  }
+}

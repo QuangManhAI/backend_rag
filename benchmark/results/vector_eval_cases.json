@@ -1,0 +1,2125 @@
+{
+  "summary": {
+    "mode": "FULL",
+    "evaluatedAt": "2026-11-09T15:18:41.810Z",
+    "totalCases": 150,
+    "positiveCount": 100,
+    "negativeCount": 50,
+    "metrics": {
+      "vector": {
+        "mrr": 0.8623015873015872,
+        "hit1": 0.79,
+        "hit3": 0.92,
+        "hit5": 0.96,
+        "avgTargetCosine": 0.6600752164993327,
+        "avgLatencyMs": 4686.785869,
+        "avgNegCosine": 0.4496552655037438,
+        "negRejectionRate05": 0.92,
+        "negRejectionRate06": 1,
+        "negRejectionRate07": 1
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "pos-000",
+      "kind": "positive",
+      "question": "Which models does DiMA fine-tune for order planning and replier selection in its ride-hailing assistant?",
+      "reference": "DiMA fine-tunes Qwen2-72B and Qwen2-7B for order planning and dialog replier selection.",
+      "gold_chunk": "2503.04768_sec6",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6360428960487428,
+        "top1Chunk": "2503.04768_sec6",
+        "context": "we fine-tune Qwen2-72B and Qwen2-7B for spatiotemporal-aware tool-augmented order planning and multi-type dialog replier selection",
+        "answer": "The models fine-tuned for spatiotemporal-aware tool-augmented order planning and multi-type dialog replier selection are Qwen2-72B and Qwen2-7B. These models are part of the DiMA system, though the term \"DiMA\" itself is not mentioned in the provided context.",
+        "latencyMs": 338.5816
+      }
+    },
+    {
+      "id": "pos-001",
+      "kind": "positive",
+      "question": "In the human study of the Charades-CON and ActivityNet-CON queries, what share of sentences received the top score of 3?",
+      "reference": "Evaluators rated 92.2% of the sentences with a score of 3.",
+      "gold_chunk": "2411.12951_sec2_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.614841298196644,
+        "top1Chunk": "2411.12951_sec2_p2",
+        "context": "The evaluators rate 92.2% of the sentences with a score of 3 and 6.4% with a score of 2",
+        "answer": "According to the provided context, 92.2% of the sentences received the top score of 3.",
+        "latencyMs": 8213.5418
+      }
+    },
+    {
+      "id": "pos-002",
+      "kind": "positive",
+      "question": "How much does SparseLoc improve over existing sparse-map techniques, and at what point density is it comparable to dense-map methods?",
+      "reference": "SparseLoc improves 5 times over sparse-map techniques and matches dense-map accuracy at 1/500th of the point density.",
+      "gold_chunk": "2503.23465_sec0_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.8497054258010216,
+        "top1Chunk": "2503.23465_sec0_p2",
+        "context": "Empirical results showing improvement by 5 times over existing sparse-map techniques and comparable accuracy to dense-map methods at 1/500th the point density.",
+        "answer": "SparseLoc improves by 5 times over existing sparse-map techniques. It is comparable in accuracy to dense-map methods at a point density that is 1/500th of that used by dense-map methods.",
+        "latencyMs": 7527.0401999999995
+      }
+    },
+    {
+      "id": "pos-003",
+      "kind": "positive",
+      "question": "How many Conformer layers and how much unlabeled audio does w2v-BERT use for speaker diarization pretraining?",
+      "reference": "w2v-BERT uses 24 Conformer layers and 4.5Mh of unlabeled audio.",
+      "gold_chunk": "2512.15224_sec2_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.773868592516517,
+        "top1Chunk": "2512.15224_sec2_p2",
+        "context": "by leveraging a bigger architecture (24 Conformer layers), as well as a higher and more diverse amount of unlabeled audio content (4.5Mh) used for pretraining",
+        "answer": "The context provided mentions a bigger architecture with 24 Conformer layers and 4.5 million hours (4.5Mh) of unlabeled audio content used for pretraining. However, it does not specifically state that these details refer to w2v-BERT or its use in speaker diarization pretraining. The information given is about a general case, not specifically about w2v-BERT or speaker diarization.",
+        "latencyMs": 5971.365799999996
+      }
+    },
+    {
+      "id": "pos-004",
+      "kind": "positive",
+      "question": "In BiomedCoOp, why does raising the prompt selection threshold beyond its optimum hurt performance, and what is that optimum?",
+      "reference": "Higher thresholds admit more prompts and overfit to base classes, so novel-class accuracy and harmonic mean fall; the optimum is 1.25.",
+      "gold_chunk": "2411.15232_sec9",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.5661965935166953,
+        "top1Chunk": "2411.15232_sec9",
+        "context": "This can lead to an overfitting effect, where the model becomes highly specialized in distinguishing base classes",
+        "answer": "The context provided does not give specific details about BiomedCoOp or the optimum prompt selection threshold. However, based on the general concept given, raising the prompt selection threshold beyond its optimum can hurt performance because it may lead to overfitting. Overfitting occurs when the model becomes too specialized in distinguishing base classes or specific examples during training, which reduces its ability to generalize to new, unseen data. This means that while the model performs very well on the training data, it performs poorly on new data. The optimum threshold would be the point where the model performs best on both training and new data, balancing specificity and generalizability.",
+        "latencyMs": 3218.679299999996
+      }
+    },
+    {
+      "id": "pos-005",
+      "kind": "positive",
+      "question": "Why does the visual persuasion study use GRPO-Ans rather than GRPO as its reinforcement learning baseline?",
+      "reference": "GRPO-Ans achieves higher balanced accuracy on average, 65.8% versus 61.8%.",
+      "gold_chunk": "2605.08965_sec3_p3",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.749787391289514,
+        "top1Chunk": "2605.08965_sec3_p3",
+        "context": "We use GRPO-Ans as the RL baseline because it achieves higher balanced accuracy than GRPO on average",
+        "answer": "The visual persuasion study uses GRPO-Ans as the RL baseline instead of GRPO because GRPO-Ans achieves higher balanced accuracy on average.",
+        "latencyMs": 519.0673000000024
+      }
+    },
+    {
+      "id": "pos-006",
+      "kind": "positive",
+      "question": "What does OpenCollab propose so that each agent in a multi-agent coding team can be held accountable for what it spent and did?",
+      "reference": "It serializes execution into a structured event stream that binds every action and token cost to a distinct role.",
+      "gold_chunk": "2609.38345_sec1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.5518127581178244,
+        "top1Chunk": "2609.38345_sec1",
+        "context": "execution must be serialized into a structured event stream binding every action and token cost to a distinct role",
+        "answer": "Based on the provided context, OpenCollab proposes serializing the execution into a structured event stream where every action and token cost is bound to a distinct role. This ensures that each agent in a multi-agent coding team can be held accountable for what it spent and did.",
+        "latencyMs": 276.9037000000026
+      }
+    },
+    {
+      "id": "pos-007",
+      "kind": "positive",
+      "question": "What batch size, number of AdamW updates and learning rate does PanoPed use to train its heads?",
+      "reference": "PanoPed uses batch size 256, 25,000 AdamW updates and a learning rate of 3e-4.",
+      "gold_chunk": "2610.08826_sec3_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.8099710356099268,
+        "top1Chunk": "2610.08826_sec3_p2",
+        "context": "We use batch size 256, 25,000 AdamW updates, learning rate",
+        "answer": "Based on the provided context, PanoPed uses a batch size of 256 and 25,000 AdamW updates for training its heads. However, the learning rate is not specified in the given context.",
+        "latencyMs": 286.73419999999896
+      }
+    },
+    {
+      "id": "pos-008",
+      "kind": "positive",
+      "question": "What are the nominal generation targets for Level 1 and Level 2 tasks in the LabInstruct benchmark?",
+      "reference": "Level 1 targets 4 seconds and Level 2 targets 12 seconds.",
+      "gold_chunk": "2610.14020_sec2_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7026937197025855,
+        "top1Chunk": "2610.14020_sec2_p1",
+        "context": "uses a nominal generation target of 4 s",
+        "answer": "The provided context only mentions a nominal generation target of 4 seconds for a specific use case. It does not provide information about the nominal generation targets for Level 1 and Level 2 tasks in the LabInstruct benchmark. Therefore, I cannot answer the question based on the given information.",
+        "latencyMs": 265.6478000000061
+      }
+    },
+    {
+      "id": "pos-009",
+      "kind": "positive",
+      "question": "Where and when was the SarcasTraps Turkish hate speech dataset collected?",
+      "reference": "It was collected from publicly accessible Ekşi Sözlük pages between April and June 2026.",
+      "gold_chunk": "2610.16957_sec2_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7103206111658344,
+        "top1Chunk": "2610.16957_sec2_p1",
+        "context": "All examples in SarcasTraps were collected from publicly accessible Ekşi Sözlük pages between April and June 2026.",
+        "answer": "The SarcasTraps Turkish hate speech dataset was collected from publicly accessible Ekşi Sözlük pages between April and June 2026.",
+        "latencyMs": 261.6930999999968
+      }
+    },
+    {
+      "id": "pos-010",
+      "kind": "positive",
+      "question": "In the deep reinforcement learning system for autonomous UAV decision-making, why was an emergency avoidance system added for real-world flights, and what triggers it?",
+      "reference": "Unaccounted momentum made the UAV come too close to obstacles, unlike in simulation; the system triggers when the 2D LIDAR detects an obstacle within 60 cm.",
+      "gold_chunk": "2502.20326_sec7_p4",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.5247946147506689,
+        "top1Chunk": "2502.20326_sec7_p4",
+        "context": "When the 2D LIDAR detected an obstacle within 60 cm",
+        "answer": "In the context provided, the emergency avoidance system was likely added to ensure the safety of the autonomous UAV during real-world flights. The system would be triggered when the 2D LIDAR detects an obstacle within 60 cm, indicating an immediate and potential collision risk. This prompt detection and response mechanism helps the UAV to avoid collisions and maintain safe operation.",
+        "latencyMs": 335.2073999999993
+      }
+    },
+    {
+      "id": "pos-011",
+      "kind": "positive",
+      "question": "On SecurityEval, what average share of code from GPT-3.5, GPT-4, Code Llama and CodeGeeX2 was insecure?",
+      "reference": "On average, 76.2% of the generated code was insecure.",
+      "gold_chunk": "2408.10495_sec2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6526752748642043,
+        "top1Chunk": "2408.10495_sec2",
+        "context": "with an average of 76.2% of the generated code being insecure",
+        "answer": "Based on the provided context, the average share of generated code that was insecure was 76.2%. However, the context does not specify which models (GPT-3.5, GPT-4, Code Llama, and CodeGeeX2) this figure refers to. Therefore, we cannot directly attribute this percentage to GPT-3.5, GPT-4, Code Llama, and CodeGeeX2 without additional information.",
+        "latencyMs": 375.3732000000018
+      }
+    },
+    {
+      "id": "pos-012",
+      "kind": "positive",
+      "question": "Under what license is the ReverbFX room impulse response dataset released?",
+      "reference": "ReverbFX is released under the Creative Commons Attribution-NonCommercial 4.0 International License.",
+      "gold_chunk": "2505.20533_sec2_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7962219304385605,
+        "top1Chunk": "2505.20533_sec2_p2",
+        "context": "ReverbFX is released under the Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)",
+        "answer": "The ReverbFX room impulse response dataset is released under the Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0).",
+        "latencyMs": 326.07070000000385
+      }
+    },
+    {
+      "id": "pos-013",
+      "kind": "positive",
+      "question": "What does Magentic-UI do when a user intervenes during task execution?",
+      "reference": "It exposes the browser to the user and hands off control immediately; the user can adjust and then resume automated execution.",
+      "gold_chunk": "2507.22358_sec3_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7986771152370483,
+        "top1Chunk": "2507.22358_sec3_p1",
+        "context": "Magentic-UI exposes the browser to the user and hands off control immediately upon user intervention.",
+        "answer": "When a user intervenes during task execution with Magentic-UI, the browser is exposed to the user and control is handed off immediately to the user.",
+        "latencyMs": 267.80109999999695
+      }
+    },
+    {
+      "id": "pos-014",
+      "kind": "positive",
+      "question": "How does EcomBench decide which e-commerce questions count as the hardest tier?",
+      "reference": "It keeps questions that cannot be solved in a few action steps and need complex reasoning chains, designating them level-3, a filter based on tool hierarchy.",
+      "gold_chunk": "2512.08868_sec1_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6098412293513,
+        "top1Chunk": "2512.08868_sec1_p2",
+        "context": "We designate these as level-3 (high-difficulty) tasks in our dataset.",
+        "answer": "Based on the provided context, EcomBench designates questions as level-3 (high-difficulty) tasks in their dataset. However, the specific criteria for identifying the hardest tier are not detailed in the given context.",
+        "latencyMs": 328.02509999999893
+      }
+    },
+    {
+      "id": "pos-015",
+      "kind": "positive",
+      "question": "What four types of action heads does the survey of vision-language-action models for autonomous driving define?",
+      "reference": "Language Head, Regression, Trajectory Selection and Trajectory Generation.",
+      "gold_chunk": "2512.16760_sec1_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6882268645970414,
+        "top1Chunk": "2512.16760_sec1_p2",
+        "context": "Language Head (LH), Regression (REG), Trajectory Selection (SEL), and Trajectory Generation (GEN)",
+        "answer": "The survey defines four types of action heads as Language Head (LH), Regression (REG), Trajectory Selection (SEL), and Trajectory Generation (GEN).",
+        "latencyMs": 331.11939999999595
+      }
+    },
+    {
+      "id": "pos-016",
+      "kind": "positive",
+      "question": "In 'When Is Smaller Greener?', what does a 95% versus 99% per-step accuracy imply for a 20-step task?",
+      "reference": "The 95% model completes the task with probability about 0.36 and the 99% model with about 0.82, so per-call gaps grow large per task.",
+      "gold_chunk": "2610.19345_sec2",
+      "vector": {
+        "rank": 4,
+        "targetScore": 0.5462646186518024,
+        "top1Chunk": "2610.08917_sec3_p4",
+        "context": "fewer than exhaustive evaluation",
+        "answer": "To determine the implications of 95% versus 99% per-step accuracy for a 20-step task, we can calculate the overall accuracy for each case.\n\nFor 95% per-step accuracy:\n- The probability of being correct in one step is 0.95.\n- For 20 steps, the overall accuracy is \\(0.95^{20}\\).\n\nFor 99% per-step accuracy:\n- The probability of being correct in one step is 0.99.\n- For 20 steps, the overall accuracy is \\(0.99^{20}\\).\n\nCalculating these values:\n- \\(0.95^{20} \\approx 0.3585\\), or about 35.85%.\n- \\(0.99^{20} \\approx 0.8179\\), or about 81.79%.\n\nSo, for a 20-step task, 95% per-step accuracy results in an overall accuracy of approximately 35.85%, while 99% per-step accuracy results in an overall accuracy of approximately 81.79%. This shows that higher per-step accuracy leads to a significantly higher overall accuracy for the task.",
+        "latencyMs": 254.20060000000376
+      }
+    },
+    {
+      "id": "pos-017",
+      "kind": "positive",
+      "question": "How long does it take to create a single editing instance and a single generation instance in MolLangBench?",
+      "reference": "About 30 minutes for an editing instance and about 60 minutes for a generation instance.",
+      "gold_chunk": "2505.15054_sec2_p3",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.508329986465125,
+        "top1Chunk": "2505.15054_sec2_p3",
+        "context": "The annotation process is highly time-intensive",
+        "answer": "The provided context does not contain specific information about the time required to create a single editing instance and a single generation instance in MolLangBench. Therefore, I cannot provide a precise answer based on the given information.",
+        "latencyMs": 215.91220000000612
+      }
+    },
+    {
+      "id": "pos-018",
+      "kind": "positive",
+      "question": "What mathematical structure lets the StNN model of dynamical systems stay computationally cheap?",
+      "reference": "It uses a Hankel operator built from a time-delay series of state measurements, because Hankel matrices can be solved with low-complexity algorithms.",
+      "gold_chunk": "2503.23697_sec0_p2",
+      "vector": {
+        "rank": 2,
+        "targetScore": 0.5240957310179604,
+        "top1Chunk": "2505.20276_sec0_p1",
+        "context": "We evaluate five quantization methods (FP8, GPTQ-int8, AWQ-int4, GPTQ-int4, and BNB-NF4)",
+        "answer": "The information provided in the context does not contain any details about the StNN model of dynamical systems or how it stays computationally cheap. The context instead lists five quantization methods used for evaluating models. To accurately answer the question about the StNN model, additional information specific to this model would be required.",
+        "latencyMs": 259.34739999999874
+      }
+    },
+    {
+      "id": "pos-019",
+      "kind": "positive",
+      "question": "Which networks does LILA discard at test time, and what does it take as input?",
+      "reference": "It discards the depth and optical flow networks and takes a single image as input.",
+      "gold_chunk": "2604.26488_sec2_p3",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.8048755994099547,
+        "top1Chunk": "2604.26488_sec2_p3",
+        "context": "At test time, LILA operates in a standard fashion, discarding the depth and optical flow networks.",
+        "answer": "At test time, LILA discards the depth and optical flow networks. It takes inputs without these networks into consideration.",
+        "latencyMs": 303.4244999999937
+      }
+    },
+    {
+      "id": "pos-020",
+      "kind": "positive",
+      "question": "What advantages do cognitive-robotic architectures have over foundation models for safe robot behaviour?",
+      "reference": "They ground perception and action in verifiable knowledge, communicate uncertainty, allow transparent decisions and incremental updates without retraining, and run faster inference.",
+      "gold_chunk": "2509.13279_sec0_p3",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6225785993181806,
+        "top1Chunk": "2509.13279_sec0_p3",
+        "context": "eliminating the need to retrain models whenever new data, robots, or tasks are introduced",
+        "answer": "The context provided does not directly compare cognitive-robotic architectures to foundation models for safe robot behavior. However, based on the given context, cognitive-robotic architectures might offer an advantage in that they can adapt more flexibly to new data, robots, or tasks without the need for extensive retraining. This adaptability could contribute to safer and more reliable robot behavior in dynamic environments.",
+        "latencyMs": 274.2256999999954
+      }
+    },
+    {
+      "id": "pos-021",
+      "kind": "positive",
+      "question": "Does chain-of-thought decomposition reliably help LLMs on high-performance computing tasks?",
+      "reference": "No. It works well on mathematical and symbolic reasoning but does not consistently improve outcomes on broader HPC-relevant domains.",
+      "gold_chunk": "2602.00014_sec5_p6",
+      "vector": {
+        "rank": 2,
+        "targetScore": 0.51656326849614,
+        "top1Chunk": "2610.14676_abs",
+        "context": "CAST-ASD reduces competing-speaker false alarms by 32%",
+        "answer": "The provided context does not contain any information related to chain-of-thought decomposition, LLMs (Large Language Models), or high-performance computing tasks. Therefore, based on the given context, it is not possible to answer the question \"Does chain-of-thought decomposition reliably help LLMs on high-performance computing tasks?\" The context is about CAST-ASD reducing false alarms in competing speakers, which is unrelated to the question asked.",
+        "latencyMs": 5664.768400000001
+      }
+    },
+    {
+      "id": "pos-022",
+      "kind": "positive",
+      "question": "How are activations distributed in the attention and MLP layers of an LLM fine-tuned for recommendation?",
+      "reference": "They show a significant long-tail effect in both layers, with a large share of activation concentrated in a few dimensions.",
+      "gold_chunk": "2507.07064_sec1_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.789624118798499,
+        "top1Chunk": "2507.07064_sec1_p2",
+        "context": "the activations of the model exhibit a significant long-tail effect in both the MLP and Attention layers",
+        "answer": "The activations in both the MLP and Attention layers of an LLM fine-tuned for recommendation exhibit a significant long-tail effect. This means that while most activations are relatively low, there is a long tail of activations that are much higher, indicating that a few inputs or features have a disproportionately large impact on the model's output.",
+        "latencyMs": 5756.50989999999
+      }
+    },
+    {
+      "id": "pos-023",
+      "kind": "positive",
+      "question": "Which adapter basis gives the lowest average loss in the MaRK ablation, and what is the value?",
+      "reference": "The Chebyshev basis gives the lowest average loss, 2.55.",
+      "gold_chunk": "2610.09092_sec3_p3",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6738095119347386,
+        "top1Chunk": "2610.09092_sec3_p3",
+        "context": "Chebyshev gives the lowest average loss (2.55)",
+        "answer": "According to the provided context, the Chebyshev adapter basis gives the lowest average loss, with a value of 2.55.",
+        "latencyMs": 5646.575500000006
+      }
+    },
+    {
+      "id": "pos-024",
+      "kind": "positive",
+      "question": "Which Romanian LLMs does the SaRoHead satire detection study evaluate?",
+      "reference": "RoLlama2, RoLlama3, RoGemma2 and RoMistral.",
+      "gold_chunk": "2504.07612_sec3_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6667760701574701,
+        "top1Chunk": "2504.07612_sec3_p2",
+        "context": "We use four Romanian instruction-tuned LLMs",
+        "answer": "Based on the provided context, the SaRoHead satire detection study evaluates four Romanian instruction-tuned LLMs. However, the specific names of these LLMs are not mentioned in the given context.",
+        "latencyMs": 5395.032700000011
+      }
+    },
+    {
+      "id": "pos-025",
+      "kind": "positive",
+      "question": "How many samples and categories does the PF-D2M dance-to-music subjective evaluation use?",
+      "reference": "Four categories with five samples each, for 20 samples in total.",
+      "gold_chunk": "2601.15872_sec2_p2",
+      "vector": {
+        "rank": 2,
+        "targetScore": 0.5963577060916941,
+        "top1Chunk": "2505.20276_sec0_p1",
+        "context": "We evaluate five quantization methods (FP8, GPTQ-int8, AWQ-int4, GPTQ-int4, and BNB-NF4)",
+        "answer": "The provided context does not contain any information about the PF-D2M dance-to-music subjective evaluation or its sample size and categories. Therefore, I cannot answer the question based on the given context.",
+        "latencyMs": 6232.373600000006
+      }
+    },
+    {
+      "id": "pos-026",
+      "kind": "positive",
+      "question": "How long does SceneProp take for inference on 6,340 VG-FO images?",
+      "reference": "32 minutes on a single A100 40 GB GPU.",
+      "gold_chunk": "2512.00936_sec3_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.8115895478584193,
+        "top1Chunk": "2512.00936_sec3_p1",
+        "context": "The inference time for 6,340 images from the VG-FO dataset was 32 min using a single A100 40 GB GPU.",
+        "answer": "Based on the provided context, SceneProp takes 32 minutes for inference on 6,340 VG-FO images using a single A100 40 GB GPU.",
+        "latencyMs": 6361.8122999999905
+      }
+    },
+    {
+      "id": "pos-027",
+      "kind": "positive",
+      "question": "What AUC does VERA reach after adding retrieved segments in its second step?",
+      "reference": "The AUC rises to 84.53%.",
+      "gold_chunk": "2412.01095_sec3_p3",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.8129990561148386,
+        "top1Chunk": "2412.01095_sec3_p3",
+        "context": "leveraging retrieved segments in Step 2 significantly boosts the AUC to 84.53%",
+        "answer": "After adding the retrieved segments in its second step, VERA reaches an AUC of 84.53%.",
+        "latencyMs": 5774.587100000004
+      }
+    },
+    {
+      "id": "pos-028",
+      "kind": "positive",
+      "question": "What success rate, cost and token count does Astra report in RobotWorld?",
+      "reference": "19.0% success at a reported $9,913 and 941M tokens.",
+      "gold_chunk": "2610.10409_sec4_p4",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.8425869437126734,
+        "top1Chunk": "2610.10409_sec4_p4",
+        "context": "Astra reaches 19.0% success at a reported $9,913 and 941M tokens.",
+        "answer": "According to the provided context, Astra reports a success rate of 19.0%, a cost of $9,913, and a token count of 941M in RobotWorld.",
+        "latencyMs": 6445.68220000001
+      }
+    },
+    {
+      "id": "pos-029",
+      "kind": "positive",
+      "question": "How many responses and participants did the EfficientDreamer user study collect?",
+      "reference": "1100 responses from 50 participants.",
+      "gold_chunk": "2308.13223_sec3_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6849763436937255,
+        "top1Chunk": "2308.13223_sec3_p2",
+        "context": "In total, we collect 1100 responses from 50 participants.",
+        "answer": "The EfficientDreamer user study collected 1100 responses from 50 participants.",
+        "latencyMs": 6258.166400000016
+      }
+    },
+    {
+      "id": "pos-030",
+      "kind": "positive",
+      "question": "How many fewer rollouts than exhaustive evaluation does CARE need across the four LIBERO suites?",
+      "reference": "68.1% fewer rollouts than exhaustive evaluation.",
+      "gold_chunk": "2610.08917_sec3_p4",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.5862465893703107,
+        "top1Chunk": "2610.08917_sec3_p4",
+        "context": "fewer than exhaustive evaluation",
+        "answer": "The context provided does not contain specific information about how many fewer rollouts CARE needs compared to an exhaustive evaluation across the four LIBERO suites. Without additional details or data, it's not possible to provide a precise number.",
+        "latencyMs": 5661.1454000000085
+      }
+    },
+    {
+      "id": "pos-031",
+      "kind": "positive",
+      "question": "What mean per-joint position error does EgoPoseFormer v2 achieve on EgoBody3M?",
+      "reference": "EPFv2 achieves an MPJPE of 4.02 cm.",
+      "gold_chunk": "2603.04090_sec3_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7613303187263394,
+        "top1Chunk": "2603.04090_sec3_p1",
+        "context": "EPFv2 achieves a mean per-joint position error (MPJPE) of 4.02cm",
+        "answer": "The mean per-joint position error (MPJPE) that EgoPoseFormer v2 achieves on EgoBody3M is 4.02cm.",
+        "latencyMs": 5907.212100000004
+      }
+    },
+    {
+      "id": "pos-032",
+      "kind": "positive",
+      "question": "On SpoofCeleb, what macro F1 does ICLAD reach compared with the baseline detector?",
+      "reference": "ICLAD reaches 0.665 against 0.334 for the baseline.",
+      "gold_chunk": "2604.16749_sec4_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6418375877393885,
+        "top1Chunk": "2604.16749_sec4_p1",
+        "context": "macro F1 score of 0.665",
+        "answer": "Based on the provided context, the macro F1 score that ICLAD reaches on SpoofCeleb is 0.665. However, without additional information about the baseline detector's macro F1 score, I cannot compare ICLAD's performance relative to the baseline.",
+        "latencyMs": 6089.9402999999875
+      }
+    },
+    {
+      "id": "pos-033",
+      "kind": "positive",
+      "question": "With its prompt encoder included, what are the inference time, parameter count and memory use of ParaStyleTTS?",
+      "reference": "140 ms of inference time, 150 million parameters and 763 MB of memory.",
+      "gold_chunk": "2510.18308_sec4_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7291174449817902,
+        "top1Chunk": "2510.18308_sec4_p2",
+        "context": "the model requires 140 ms of inference time, has 150 million parameters, and uses 763 MB of CUDA memory",
+        "answer": "The information provided does not include the inference time, parameter count, or memory use for ParaStyleTTS with its prompt encoder included. The context only gives details about a model that requires 140 ms of inference time, has 150 million parameters, and uses 763 MB of CUDA memory. To answer the question accurately, we would need specific details about ParaStyleTTS and its prompt encoder.",
+        "latencyMs": 7581.197899999999
+      }
+    },
+    {
+      "id": "pos-034",
+      "kind": "positive",
+      "question": "How often does RASTeR correctly label slightly altered context as SA?",
+      "reference": "72.6% of predictions are correct.",
+      "gold_chunk": "2406.19538_sec4_p3",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7053239277957125,
+        "top1Chunk": "2406.19538_sec4_p3",
+        "context": "While 72.6% of predictions are correctly labeled as SA",
+        "answer": "According to the provided context, RASTeR correctly labels slightly altered context as SA 72.6% of the time.",
+        "latencyMs": 5332.825299999997
+      }
+    },
+    {
+      "id": "pos-035",
+      "kind": "positive",
+      "question": "In the study of lexical hints in reasoning chains, does expressing doubt in chain-of-thought text go along with better or worse accuracy?",
+      "reference": "Worse. The rate of hedging correlates negatively with accuracy, most strongly on Omni-MATH (r=-0.24 for DeepSeek).",
+      "gold_chunk": "2508.15842_sec2_p2",
+      "vector": {
+        "rank": 3,
+        "targetScore": 0.5622696702579504,
+        "top1Chunk": "2610.14676_abs",
+        "context": "CAST-ASD reduces competing-speaker false alarms by 32%",
+        "answer": "The provided context does not contain any information about the impact of expressing doubt in chain-of-thought text or its relation to accuracy in lexical hints in reasoning chains. Therefore, I cannot answer the question based on the given context.",
+        "latencyMs": 6138.083899999998
+      }
+    },
+    {
+      "id": "pos-036",
+      "kind": "positive",
+      "question": "Do SAVs carry over to a different task better than LoRA weights in few-shot vision-language classification?",
+      "reference": "Yes. SAVs generalize between tasks while LoRA weights overfit to the task they were tuned on.",
+      "gold_chunk": "2412.00142_sec3_p4",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7927256426142236,
+        "top1Chunk": "2412.00142_sec3_p4",
+        "context": "SAVs generalize between tasks, while LoRA weights, as expected, overfit to the finetuned task",
+        "answer": "Yes, based on the provided context, SAVs (which likely stand for \"Self-Aware Networks\" or a similar concept) generalize between tasks better than LoRA weights (Low-Rank Adaptation) in few-shot vision-language classification. This means that SAVs are more likely to carry over their knowledge or performance to a different task compared to LoRA weights, which tend to overfit to the specific finetuned task they were trained on.",
+        "latencyMs": 5896.9811000000045
+      }
+    },
+    {
+      "id": "pos-037",
+      "kind": "positive",
+      "question": "What distinguishes TRQAM from QAM with external KL regularization on Robomimic?",
+      "reference": "Only TRQAM enforces the prescribed KL budget; it tightly tracks the bound while the external KL variant drifts above it and loses success rate.",
+      "gold_chunk": "2605.27079_sec3_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6846629361355201,
+        "top1Chunk": "2605.27079_sec3_p2",
+        "context": "Among the two adaptive variants, only TRQAM enforces the prescribed KL budget.",
+        "answer": "TRQAM enforces the prescribed KL budget, which is a distinguishing feature from QAM with external KL regularization on Robomimic. This means that TRQAM inherently adheres to the specified KL divergence constraint, whereas QAM with external KL regularization may not strictly enforce this budget without additional mechanisms.",
+        "latencyMs": 6095.9283
+      }
+    },
+    {
+      "id": "pos-038",
+      "kind": "positive",
+      "question": "Over what frequency range and resolution is HergNet's frequency sweep performed?",
+      "reference": "From 100 Hz up to 6000 Hz with a 5 Hz resolution.",
+      "gold_chunk": "2510.24279_sec2_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7090654868035937,
+        "top1Chunk": "2510.24279_sec2_p2",
+        "context": "The frequency resolution is $5$ Hz",
+        "answer": "Based on the provided context, HergNet's frequency sweep is performed with a frequency resolution of 5 Hz. However, the specific frequency range is not mentioned in the given context.",
+        "latencyMs": 6447.108500000002
+      }
+    },
+    {
+      "id": "pos-039",
+      "kind": "positive",
+      "question": "What hardware does Calliphony attach to the brush to sense how the performer moves it?",
+      "reference": "It uses the built-in gyroscope of an M5Stack mounted on the brush to capture rotational motion.",
+      "gold_chunk": "2608.03040_sec2_p1",
+      "vector": {
+        "rank": 2,
+        "targetScore": 0.5514229831592915,
+        "top1Chunk": "2509.22516_sec1",
+        "context": "TrueGradeAI integrates handwriting recognition (Li et al., 2021a) with retrieval-augmented scoring and evidence-linked rationales",
+        "answer": "The provided context does not contain any information about hardware attachments to brushes or sensing performer movements, as it discusses the TrueGradeAI system's use of handwriting recognition and scoring methods. Therefore, I cannot provide an answer to the question based on the given context.",
+        "latencyMs": 6212.6201
+      }
+    },
+    {
+      "id": "pos-040",
+      "kind": "positive",
+      "question": "What value is the tuning constant of Tukey's bisquare loss commonly set to in Robust LassoNet?",
+      "reference": "4.685.",
+      "gold_chunk": "2609.38263_sec2_p3",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6415676608897716,
+        "top1Chunk": "2609.38263_sec2_p3",
+        "context": "The tuning constant C is commonly set up to 4.685.",
+        "answer": "The tuning constant C for Tukey's bisquare loss, when commonly set in Robust LassoNet, is 4.685.",
+        "latencyMs": 6579.396999999997
+      }
+    },
+    {
+      "id": "pos-041",
+      "kind": "positive",
+      "question": "How many repository metadata entries did Skywork-SWE scrape, and how many remained valid after filtering?",
+      "reference": "151,472 scraped and 8,472 valid.",
+      "gold_chunk": "2506.19290_sec2_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6651304206024877,
+        "top1Chunk": "2506.19290_sec2_p1",
+        "context": "we retain $8,472$ valid metadata entries",
+        "answer": "The context provided indicates that there are $8,472$ valid metadata entries remaining after filtering. However, the exact number of repository metadata entries that Skywork-SWE initially scraped is not specified in the given context.",
+        "latencyMs": 5763.752199999988
+      }
+    },
+    {
+      "id": "pos-042",
+      "kind": "positive",
+      "question": "What are the two training stages of E2STR, and what does each teach the model?",
+      "reference": "Vanilla STR training gives fundamental scene text recognition skills; in-context STR training equips it with in-context learning.",
+      "gold_chunk": "2311.13120_sec2_p2",
+      "vector": {
+        "rank": 2,
+        "targetScore": 0.5747092446900308,
+        "top1Chunk": "2509.19559_sec8_p1",
+        "context": "we propose a two-stage policy learning framework",
+        "answer": "The context provided does not specify the exact details of the two training stages for E2STR (if E2STR is a variant or specific application of the two-stage policy learning framework mentioned). However, based on the general structure of a two-stage policy learning framework, we can infer the following:\n\n1. **Policy Learning Stage**: This stage focuses on teaching the model to learn the policy, which is the strategy or the decision-making process. The model would learn how to make decisions based on the input it receives, such as environmental states or observations.\n\n2. **Value Function Learning Stage**: In this stage, the model learns the value function, which estimates the expected utility or reward of being in a particular state or taking a particular action. This helps the model understand the long-term consequences of its decisions, guiding it to make more informed and strategic choices.\n\nFor a precise answer, the specific details of E2STR would be needed.",
+        "latencyMs": 6009.138399999996
+      }
+    },
+    {
+      "id": "pos-043",
+      "kind": "positive",
+      "question": "How does ColQwen2 retrieve evidence in the hierarchical vision-language reasoning pipeline for multiple-choice questions?",
+      "reference": "PDF pages are converted to PNG images and, given a query, ColQwen2 retrieves the top three page images by similarity.",
+      "gold_chunk": "2508.16148_sec2_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7247732881109994,
+        "top1Chunk": "2508.16148_sec2_p1",
+        "context": "the ColQwen2 model is employed to retrieve the top three page images ranked by similarity scores",
+        "answer": "Based on the provided context, the ColQwen2 model retrieves the top three page images ranked by similarity scores. However, this specific method does not fully describe the entire hierarchical vision-language reasoning pipeline for multiple-choice questions. The context only highlights one aspect of the model's operation related to image retrieval. For a comprehensive answer on how ColQwen2 retrieves evidence in the full pipeline, more information about the model's architecture and steps would be needed.",
+        "latencyMs": 5788.7652000000235
+      }
+    },
+    {
+      "id": "pos-044",
+      "kind": "positive",
+      "question": "How does AcTracer choose between the Kolmogorov-Smirnov test and Wasserstein distance?",
+      "reference": "It runs the dip test to assess the modality of the distribution, using K-S for unimodal and Wasserstein for multimodal distributions.",
+      "gold_chunk": "2408.03573_sec2_p5",
+      "vector": {
+        "rank": 2,
+        "targetScore": 0.5394169388494727,
+        "top1Chunk": "2504.09804_sec2_p2",
+        "context": "The hyperparameter group that yields the smallest L2 relative error will be selected for subsequent training.",
+        "answer": "The provided context does not contain any information about how AcTracer chooses between the Kolmogorov-Smirnov test and Wasserstein distance. The context only mentions selecting a hyperparameter group based on the smallest L2 relative error for training. Therefore, I cannot provide an answer to the question based on the given information.",
+        "latencyMs": 5887.128100000031
+      }
+    },
+    {
+      "id": "pos-045",
+      "kind": "positive",
+      "question": "How does SAGE make generated objects ready for physics simulation?",
+      "reference": "It generates objects with TRELLIS and uses a VLM to estimate height for rescaling, mass and metallic and roughness values.",
+      "gold_chunk": "2602.10116_sec2_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.5474802104879128,
+        "top1Chunk": "2602.10116_sec2_p2",
+        "context": "We generate objects with TRELLIS [60] given a text description.",
+        "answer": "The provided context does not contain information about how SAGE makes generated objects ready for physics simulation. The context only mentions using TRELLIS to generate objects based on a text description. To answer the question accurately, information specific to SAGE's process would be required.",
+        "latencyMs": 5881.928600000043
+      }
+    },
+    {
+      "id": "pos-046",
+      "kind": "positive",
+      "question": "When evaluating recommenders on users with truncated histories, why should sampled interactions be sorted by timestamp?",
+      "reference": "So sequential models keep the natural consumption order and capture the user's global intent; ordering matters less for standard collaborative models.",
+      "gold_chunk": "2508.07856_sec2_p2",
+      "vector": {
+        "rank": 4,
+        "targetScore": 0.5066988950033534,
+        "top1Chunk": "2503.23465_sec0_p2",
+        "context": "Empirical results showing improvement by 5 times over existing sparse-map techniques and comparable accuracy to dense-map methods at 1/500th the point density.",
+        "answer": "The context provided does not give information related to recommenders or why sampled interactions should be sorted by timestamp. Therefore, based on the given context, I cannot provide an answer to the question about recommenders and timestamp sorting. If you have a context related to recommenders and truncated histories, please provide it, and I will be happy to help.",
+        "latencyMs": 6584.916599999997
+      }
+    },
+    {
+      "id": "pos-047",
+      "kind": "positive",
+      "question": "When does a node update its opinion in the Bounded Confidence Model used for competing LLM agents?",
+      "reference": "When the difference between its opinion and a neighbour's opinion is below the confirmation bias threshold.",
+      "gold_chunk": "2502.11649_sec1_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7410583996079456,
+        "top1Chunk": "2502.11649_sec1_p2",
+        "context": "a node updates its opinion if the difference between its opinion and that of a neighbouring node is less than a threshold",
+        "answer": "In the Bounded Confidence Model used for competing LLM agents, a node updates its opinion if the difference between its opinion and that of a neighbouring node is less than a threshold.",
+        "latencyMs": 6710.714299999992
+      }
+    },
+    {
+      "id": "pos-048",
+      "kind": "positive",
+      "question": "Can a SIDE value be used directly in the MAIN state in SchemaFill?",
+      "reference": "No. A SIDE value is never grafted directly into MAIN state; when used as a MAIN proposal it is verified again under the true prefix.",
+      "gold_chunk": "2610.07086_sec3_p3",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7747105347948717,
+        "top1Chunk": "2610.07086_sec3_p3",
+        "context": "A SIDE value is never grafted directly into MAIN state",
+        "answer": "No, a SIDE value cannot be used directly in the MAIN state in SchemaFill based on the provided context.",
+        "latencyMs": 5193.774100000039
+      }
+    },
+    {
+      "id": "pos-049",
+      "kind": "positive",
+      "question": "How many biomedical databases and ontologies does the Clinical Knowledge Graph integrate?",
+      "reference": "26 biomedical databases using 9 ontologies.",
+      "gold_chunk": "2510.09223_sec3_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7710060524906577,
+        "top1Chunk": "2510.09223_sec3_p2",
+        "context": "constructed a KG with 26 biomedical databases using 9 ontologies",
+        "answer": "The Clinical Knowledge Graph integrates 26 biomedical databases using 9 ontologies.",
+        "latencyMs": 6097.145599999989
+      }
+    },
+    {
+      "id": "pos-050",
+      "kind": "positive",
+      "question": "Why is AUPRC especially useful when evaluating ICU mortality prediction models?",
+      "reference": "It suits imbalanced, low-prevalence outcomes such as in-hospital mortality, which was 8.72% in the eICU-CRD cohort.",
+      "gold_chunk": "2512.06511_sec2_p3",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.470509715359595,
+        "top1Chunk": "2512.06511_sec2_p3",
+        "context": "is particularly informative in imbalanced outcome settings",
+        "answer": "AUPRC (Area Under the Precision-Recall Curve) is especially useful when evaluating ICU mortality prediction models in imbalanced outcome settings. ICU mortality prediction models often deal with a situation where the number of patients who die is much smaller compared to those who survive. This imbalance can make accuracy metrics like accuracy, precision, recall, and F1 score less informative because the model might predict the majority class (survival) almost all the time and still achieve a high accuracy due to the class distribution.\n\nAUPRC addresses this issue by focusing on the model's ability to rank positive cases (deaths) higher than negative cases (survivals). It is particularly informative because it maintains high importance for the positive class, which is crucial in critical care settings where identifying patients at risk of mortality is essential. Even if the majority of predictions are correct (survivors), the model's performance can still be poor if it fails to correctly identify the minority of patients who will die. Therefore, AUPRC provides a more nuanced and useful evaluation of ICU mortality prediction models by emphasizing the precision and recall for the minority class.",
+        "latencyMs": 5893.735900000029
+      }
+    },
+    {
+      "id": "pos-051",
+      "kind": "positive",
+      "question": "How does SpecForge keep self-improving specifications stable despite output coupling?",
+      "reference": "Through Pareto-guided frontier preservation, dependency-constrained entity selection and error-diversified expansion.",
+      "gold_chunk": "2610.15708_sec5",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7055570724070066,
+        "top1Chunk": "2610.15708_sec5",
+        "context": "SpecForge addresses this challenge through Pareto-guided frontier preservation, dependency-constrained entity selection, and error-diversified expansion",
+        "answer": "SpecForge keeps self-improving specifications stable despite output coupling through Pareto-guided frontier preservation, dependency-constrained entity selection, and error-diversified expansion. These methods work together to ensure that the specifications can evolve while maintaining stability and addressing the challenges posed by output coupling.",
+        "latencyMs": 5803.795199999993
+      }
+    },
+    {
+      "id": "pos-052",
+      "kind": "positive",
+      "question": "Which prompting family suits FinQA's arithmetic-heavy tables in the adaptive prompting study?",
+      "reference": "Symbolic methods; PoT performs best and F-CoT also does well.",
+      "gold_chunk": "2506.11246_sec5_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6744016576442808,
+        "top1Chunk": "2506.11246_sec5_p1",
+        "context": "FinQA, which is heavy on numerical computation, favors symbolic methods.",
+        "answer": "Symbolic methods suit FinQA's arithmetic-heavy tables in the adaptive prompting study.",
+        "latencyMs": 6266.191900000034
+      }
+    },
+    {
+      "id": "pos-053",
+      "kind": "positive",
+      "question": "What replay strategy does ReConText3D use to reduce catastrophic forgetting?",
+      "reference": "It combines count-aware allocation with text-embedding k-center selection.",
+      "gold_chunk": "2604.13730_sec5",
+      "vector": {
+        "rank": 4,
+        "targetScore": 0.496379883319199,
+        "top1Chunk": "2509.22516_sec1",
+        "context": "TrueGradeAI integrates handwriting recognition (Li et al., 2021a) with retrieval-augmented scoring and evidence-linked rationales",
+        "answer": "The provided context does not contain any information about the replay strategy used by ReConText3D or any related details to address the question about catastrophic forgetting. Therefore, I cannot provide an answer based on the given context.",
+        "latencyMs": 6495.547100000025
+      }
+    },
+    {
+      "id": "pos-054",
+      "kind": "positive",
+      "question": "What limitation did VoyagerVision show when building in Minecraft, and why?",
+      "reference": "It struggled with spatially and geometrically complex structures, largely because it had no mechanism for breaking tasks into steps.",
+      "gold_chunk": "2507.00079_sec4",
+      "vector": {
+        "rank": 3,
+        "targetScore": 0.5284116919669563,
+        "top1Chunk": "2603.22271_sec1_p2",
+        "context": "SEEDVR2 [60] explores applying Adversarial Post-Training (APT) [26] to VSR, enabling one-step diffusion.",
+        "answer": "The provided context does not contain any information about VoyagerVision or its experiences in building in Minecraft. Therefore, I cannot provide an answer to the question based on the given context.",
+        "latencyMs": 6158.728200000012
+      }
+    },
+    {
+      "id": "pos-055",
+      "kind": "positive",
+      "question": "What is the main limitation of Street Gaussians without 3D Object Tracker for humans in a scene?",
+      "reference": "Humans are modelled by 4DGS without explicit motion guidance, so their motion can be inaccurate; adding human pose estimation could help.",
+      "gold_chunk": "2412.05548_sec13",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.565669757983545,
+        "top1Chunk": "2412.05548_sec13",
+        "context": "This leads to inaccurate human motion in some cases",
+        "answer": "The main limitation of Street Gaussians without 3D Object Tracker for humans in a scene is that it can lead to inaccurate human motion.",
+        "latencyMs": 5832.0079999999725
+      }
+    },
+    {
+      "id": "pos-056",
+      "kind": "positive",
+      "question": "How does the two-stage policy for the Stochastic Correlated Obstacle Scene problem work?",
+      "reference": "An offline phase learns a base policy by optimistic policy iteration with an information bonus, and an online phase applies rollout for real-time decisions.",
+      "gold_chunk": "2509.19559_sec8_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6201620920231444,
+        "top1Chunk": "2509.19559_sec8_p1",
+        "context": "we propose a two-stage policy learning framework",
+        "answer": "Based on the provided context, the two-stage policy learning framework for the Stochastic Correlated Obstacle Scene problem would involve the following stages:\n\n1. **Stage 1: Data Collection and Initial Policy Learning** - In this stage, the system collects data from the stochastic and correlated obstacle scene. This data could include various scenarios and outcomes of different actions in the environment. Using this data, an initial policy is learned. This policy could be learned through methods such as reinforcement learning, where the system learns to maximize a reward function based on the collected data.\n\n2. **Stage 2: Policy Refinement and Optimization** - In the second stage, the initial policy is refined and optimized. This could involve further training with additional data, or using techniques like policy gradient methods to improve the policy's performance. The goal is to make the policy more robust to the stochastic and correlated nature of the obstacle scene, ensuring better decision-making under uncertainty.\n\nThe exact details of how these stages are implemented would depend on the specific problem and the methods chosen for policy learning and optimization.",
+        "latencyMs": 6159.669099999999
+      }
+    },
+    {
+      "id": "pos-057",
+      "kind": "positive",
+      "question": "How does emotional tone differ between online communities focused on thinness and those focused on muscularity?",
+      "reference": "Thinness-oriented communities show higher negative affect and toxicity than muscular-ideal communities.",
+      "gold_chunk": "2407.03551_sec4",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.640737237901364,
+        "top1Chunk": "2407.03551_sec4",
+        "context": "exhibit higher negative affect and toxicity compared to muscular ideal spaces",
+        "answer": "Based on the provided context, online communities focused on thinness may exhibit higher negative affect and toxicity compared to those focused on muscularity. This suggests that the emotional tone in thinness-focused communities might be more negative and toxic than in communities centered around muscularity.",
+        "latencyMs": 6455.858999999997
+      }
+    },
+    {
+      "id": "pos-058",
+      "kind": "positive",
+      "question": "How many counties and states does the CommutingODGen dataset cover?",
+      "reference": "2,265 counties in 48 U.S. states.",
+      "gold_chunk": "2608.21567_sec5",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7032113927521655,
+        "top1Chunk": "2608.21567_sec5",
+        "context": "across 2,265 counties in 48 U.S. states",
+        "answer": "The CommutingODGen dataset covers 2,265 counties in 48 U.S. states.",
+        "latencyMs": 6214.176299999992
+      }
+    },
+    {
+      "id": "pos-059",
+      "kind": "positive",
+      "question": "Is success rate a sufficient indicator of the quality of LLM-generated plans?",
+      "reference": "No. It is insufficient, as NLP analysis of the output shows plan quality varies independently of success rate.",
+      "gold_chunk": "2508.01300_sec5",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.8012232968132037,
+        "top1Chunk": "2508.01300_sec5",
+        "context": "success rate is insufficient as an indicator of plan quality",
+        "answer": "No, success rate is insufficient as an indicator of the quality of LLM-generated plans. Success rate alone does not account for the efficiency, robustness, or the quality of the planning process that led to the successful outcome. Other factors such as the plan's adaptability, resource utilization, and the ability to handle unexpected situations should also be considered for a comprehensive evaluation of plan quality.",
+        "latencyMs": 298.40769999998156
+      }
+    },
+    {
+      "id": "pos-060",
+      "kind": "positive",
+      "question": "Which quantization methods were compared in the study of quantization on long-context tasks?",
+      "reference": "FP8, GPTQ-int8, AWQ-int4, GPTQ-int4 and BNB-NF4.",
+      "gold_chunk": "2505.20276_sec0_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7263971970000317,
+        "top1Chunk": "2505.20276_sec0_p1",
+        "context": "We evaluate five quantization methods (FP8, GPTQ-int8, AWQ-int4, GPTQ-int4, and BNB-NF4)",
+        "answer": "Based on the provided context, the study compared five quantization methods: FP8, GPTQ-int8, AWQ-int4, GPTQ-int4, and BNB-NF4.",
+        "latencyMs": 309.3692999999621
+      }
+    },
+    {
+      "id": "pos-061",
+      "kind": "positive",
+      "question": "What physics tools form the core of the integrated process for designing lunar robots?",
+      "reference": "The OpenPLX physics modeling language and the AGX Dynamics physics engine.",
+      "gold_chunk": "2509.12367_sec0_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.631679681298946,
+        "top1Chunk": "2509.12367_sec0_p1",
+        "context": "At its core are the open-source physics modeling language OpenPLX and the AGX Dynamics physics engine.",
+        "answer": "Based on the provided context, the core physics tools for designing lunar robots in this integrated process are the open-source physics modeling language OpenPLX and the AGX Dynamics physics engine.",
+        "latencyMs": 374.80809999996563
+      }
+    },
+    {
+      "id": "pos-062",
+      "kind": "positive",
+      "question": "Why does the L2C2W recognizer reduce the labelling burden of character boxes?",
+      "reference": "Unlike other character-based recognizers, it needs bounding box annotations for only a small fraction of its training data.",
+      "gold_chunk": "2310.17674_sec0_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7362023150687812,
+        "top1Chunk": "2310.17674_sec0_p2",
+        "context": "L2C2W only needs a small fraction of training data to have bounding box annotations.",
+        "answer": "The L2C2W recognizer reduces the labelling burden of character boxes because it only needs a small fraction of training data with bounding box annotations. This means that instead of requiring extensive and time-consuming annotation of all character boxes in a dataset, a much smaller and more manageable subset can be annotated, making the training process more efficient and less resource-intensive.",
+        "latencyMs": 295.2069999999949
+      }
+    },
+    {
+      "id": "pos-063",
+      "kind": "positive",
+      "question": "What kind of approach is SPOT for rearranging several objects seen as point clouds?",
+      "reference": "A hybrid of learning and search: it plans by searching over point cloud object transformations.",
+      "gold_chunk": "2509.04645_sec0_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.8055942078246543,
+        "top1Chunk": "2509.04645_sec0_p1",
+        "context": "we propose Search over Point cloud Object Transformations (SPOT), a hybrid learning and search-based planning method",
+        "answer": "SPOT is a hybrid learning and search-based planning method for rearranging several objects seen as point clouds.",
+        "latencyMs": 331.64139999996405
+      }
+    },
+    {
+      "id": "pos-064",
+      "kind": "positive",
+      "question": "How does ProAPO generate candidate prompts in each iteration?",
+      "reference": "It applies edit-based operators (add, remove, replace) and evolution-based operators (crossover, mutation) to a prompt library generated by LLMs.",
+      "gold_chunk": "2502.19844_sec0_p2",
+      "vector": {
+        "rank": 2,
+        "targetScore": 0.5445376873982044,
+        "top1Chunk": "2412.01095_sec3_p3",
+        "context": "leveraging retrieved segments in Step 2 significantly boosts the AUC to 84.53%",
+        "answer": "The provided context does not contain any information about how ProAPO generates candidate prompts in each iteration. The context only mentions boosting AUC to 84.53% using retrieved segments. To answer the question accurately, additional details about the ProAPO process would be required.",
+        "latencyMs": 298.3791000000201
+      }
+    },
+    {
+      "id": "pos-065",
+      "kind": "positive",
+      "question": "What does CHOKE mean in the study of LLM hallucinations?",
+      "reference": "Hallucinations made with high certainty even though the model knows the true answer.",
+      "gold_chunk": "2502.12964_sec0_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7442899281805748,
+        "top1Chunk": "2502.12964_sec0_p2",
+        "context": "hallucinations can manifest with high certainty despite knowledge of the true answer (CHOKE)",
+        "answer": "In the context provided, CHOKE stands for \"high certainty despite knowledge of the true answer\" in the study of Large Language Model (LLM) hallucinations.",
+        "latencyMs": 336.0706000000355
+      }
+    },
+    {
+      "id": "pos-066",
+      "kind": "positive",
+      "question": "Are front-facing cameras on head-mounted devices the best placement for 3D full-body tracking?",
+      "reference": "That remains unclear. Front cameras are practical for hand tracking, but it is not established that they suit all tasks such as full-body tracking.",
+      "gold_chunk": "2503.11652_sec0_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6243882492508168,
+        "top1Chunk": "2503.11652_sec0_p1",
+        "context": "it remains unclear if this camera placement is the best choice for all tasks",
+        "answer": "Based on the provided context, it remains unclear if front-facing cameras on head-mounted devices are the best placement for 3D full-body tracking. More research and testing would be needed to determine the optimal camera placement for this specific task.",
+        "latencyMs": 307.59679999999935
+      }
+    },
+    {
+      "id": "pos-067",
+      "kind": "positive",
+      "question": "Why do image diffusion models struggle with long and complex prompts?",
+      "reference": "They fail to cover all concepts because of a large semantic gap between text and image domains, leading to issues such as missing concepts.",
+      "gold_chunk": "2511.19965_sec0_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.8102370883843459,
+        "top1Chunk": "2511.19965_sec0_p1",
+        "context": "existing image diffusion models fail to generate images that cover all concepts within long and complex prompts",
+        "answer": "Image diffusion models struggle with long and complex prompts because they may not effectively capture and generate all the concepts mentioned in such prompts. These models are trained to generate images based on noise, gradually refining the image to match the input prompt. However, when the prompt is long and complex, the model might have difficulty integrating and balancing multiple concepts, leading to images that miss some of the intended details or fail to fully represent the prompt's content.",
+        "latencyMs": 5849.6947999999975
+      }
+    },
+    {
+      "id": "pos-068",
+      "kind": "positive",
+      "question": "What total negative slack improvement does MLBuf-RePlAce achieve in the open-source OpenROAD flow?",
+      "reference": "Maximum 56% and average 31%.",
+      "gold_chunk": "2506.17247_abs",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6508385784655071,
+        "top1Chunk": "2506.17247_abs",
+        "context": "achieves (maximum, average) improvements of (56%, 31%) in total negative slack (TNS)",
+        "answer": "Based on the provided context, MLBuf-RePlAce achieves a maximum improvement of 56% and an average improvement of 31% in total negative slack (TNS) in the open-source OpenROAD flow.",
+        "latencyMs": 6360.736900000018
+      }
+    },
+    {
+      "id": "pos-069",
+      "kind": "positive",
+      "question": "What sequence length does BioBigBird handle, and what tasks does its multi-task framework optimize?",
+      "reference": "Sequences up to 4096 tokens; it jointly optimizes Named Entity Recognition and Relation Extraction.",
+      "gold_chunk": "2610.11430_abs",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.5878072603339508,
+        "top1Chunk": "2610.11430_abs",
+        "context": "process sequences up to 4096 tokens",
+        "answer": "The BioBigBird model handles sequence lengths up to 4096 tokens. However, the specific tasks that its multi-task framework optimizes are not mentioned in the provided context.",
+        "latencyMs": 5646.666199999978
+      }
+    },
+    {
+      "id": "pos-070",
+      "kind": "positive",
+      "question": "By how much does CAST-ASD reduce competing-speaker false alarms on MSDWild?",
+      "reference": "By 32% relative to the causal baseline.",
+      "gold_chunk": "2610.14676_abs",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.9125226026998705,
+        "top1Chunk": "2610.14676_abs",
+        "context": "CAST-ASD reduces competing-speaker false alarms by 32%",
+        "answer": "The context provided does not specify the reduction in competing-speaker false alarms on MSDWild. It only states that CAST-ASD reduces competing-speaker false alarms by 32%. More specific data regarding MSDWild would be needed to answer the question accurately.",
+        "latencyMs": 6252.721400000039
+      }
+    },
+    {
+      "id": "pos-071",
+      "kind": "positive",
+      "question": "How many high-resolution images does the Real-IAD dataset contain?",
+      "reference": "150K high-resolution images.",
+      "gold_chunk": "cvf_Wang_Real-IAD_A_Real-World_Multi-View_Dataset_for_Benchmarking_Versatile_Industrial_Anomaly_CVPR_2024_abs",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7385311522709741,
+        "top1Chunk": "cvf_Wang_Real-IAD_A_Real-World_Multi-View_Dataset_for_Benchmarking_Versatile_Industrial_Anomaly_CVPR_2024_abs",
+        "context": "contains 150K high-resolution images",
+        "answer": "The Real-IAD dataset contains 150K high-resolution images.",
+        "latencyMs": 5744.025600000052
+      }
+    },
+    {
+      "id": "pos-072",
+      "kind": "positive",
+      "question": "How does the multimodal dementia detection framework combine acoustic and text features from HuBERT and BERT?",
+      "reference": "The representations are combined by an attention-based Audio-Text Fusion mechanism, with a MINE objective maximizing mutual information between modalities.",
+      "gold_chunk": "2605.25540_abs",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.5811951556417219,
+        "top1Chunk": "2605.25540_abs",
+        "context": "combined using an attention-based Audio-Text Fusion (AT-Fusion) mechanism",
+        "answer": "The multimodal dementia detection framework combines acoustic and text features using an attention-based Audio-Text Fusion (AT-Fusion) mechanism. This approach allows the system to weigh the importance of different features from HuBERT (which processes acoustic data) and BERT (which processes text data) dynamically, ensuring that the most relevant features are given more attention during the analysis.",
+        "latencyMs": 7133.591999999946
+      }
+    },
+    {
+      "id": "pos-073",
+      "kind": "positive",
+      "question": "On which device does MOVD run a text-to-video diffusion model?",
+      "reference": "An iPhone 15 Pro.",
+      "gold_chunk": "cvf_Kim_Mobile-Oriented_Video_Diffusion_Enabling_Text-to-Video_Generation_on_Mobile_Devices_Without_WACV_2026_abs_p2",
+      "vector": {
+        "rank": 7,
+        "targetScore": 0.43964697239372275,
+        "top1Chunk": "2412.00142_sec3_p4",
+        "context": "SAVs generalize between tasks, while LoRA weights, as expected, overfit to the finetuned task",
+        "answer": "The provided context does not contain any information about the device on which MOVD runs a text-to-video diffusion model. Therefore, I cannot answer the question based on the given context.",
+        "latencyMs": 6136.671700000006
+      }
+    },
+    {
+      "id": "pos-074",
+      "kind": "positive",
+      "question": "What does TrueGradeAI add that digital exam platforms like ExamX lack?",
+      "reference": "Retrieval-augmented scoring with evidence-linked rationales, integrated with handwriting recognition, for an auditable evaluation pipeline.",
+      "gold_chunk": "2509.22516_sec1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7135739253675877,
+        "top1Chunk": "2509.22516_sec1",
+        "context": "TrueGradeAI integrates handwriting recognition (Li et al., 2021a) with retrieval-augmented scoring and evidence-linked rationales",
+        "answer": "TrueGradeAI adds handwriting recognition and retrieval-augmented scoring with evidence-linked rationales, which digital exam platforms like ExamX typically lack.",
+        "latencyMs": 5969.986999999965
+      }
+    },
+    {
+      "id": "pos-075",
+      "kind": "positive",
+      "question": "How has Adversarial Post-Training been used for video super-resolution?",
+      "reference": "SEEDVR2 applies Adversarial Post-Training to video super-resolution, enabling one-step diffusion.",
+      "gold_chunk": "2603.22271_sec1_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7198633086651619,
+        "top1Chunk": "2603.22271_sec1_p2",
+        "context": "SEEDVR2 [60] explores applying Adversarial Post-Training (APT) [26] to VSR, enabling one-step diffusion.",
+        "answer": "Adversarial Post-Training (APT) has been applied to Video Super-Resolution (VSR) in a way that allows for one-step diffusion, as explored in SEEDVR2 [60]. This approach enables the VSR process to be more efficient by reducing the number of steps required for upscaling videos.",
+        "latencyMs": 6030.699900000007
+      }
+    },
+    {
+      "id": "pos-076",
+      "kind": "positive",
+      "question": "What diagnostic tools does OralGPT-Plus use for panoramic dental images?",
+      "reference": "Zoom-In and Mirror-In tools.",
+      "gold_chunk": "2603.06366_sec6",
+      "vector": {
+        "rank": 2,
+        "targetScore": 0.5334989183561056,
+        "top1Chunk": "2506.00927_sec4_p2",
+        "context": "using GPT-4o",
+        "answer": "I believe there might be a misunderstanding in your question. The context you provided mentions \"GPT-4o,\" which is not a recognized term or tool in the field of dental imaging or diagnostics. Additionally, \"OralGPT-Plus\" is not a known diagnostic tool or software in dentistry.\n\nIf you meant to ask about a specific tool or software for analyzing panoramic dental images, could you please provide more details or clarify the name of the tool you are referring to? This will help me provide you with accurate information.",
+        "latencyMs": 5021.19319999998
+      }
+    },
+    {
+      "id": "pos-077",
+      "kind": "positive",
+      "question": "How does the top-1 error of VGG-16 change in PackNet when pruned by 50% and 75%?",
+      "reference": "It rises from 28.42% to 29.33% at 50% and 30.87% at 75%.",
+      "gold_chunk": "1711.05769_sec3_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6879054683693704,
+        "top1Chunk": "1711.05769_sec3_p2",
+        "context": "the top-1 error slightly increases from the initial 28.42% to 29.33% and 30.87%, respectively",
+        "answer": "The provided context does not specify the exact changes in top-1 error for VGG-16 when pruned by 50% and 75% under the PackNet method. It only mentions a general increase in top-1 error from 28.42% to 29.33% and 30.87%, but does not differentiate between pruning levels or the specific model (VGG-16). More detailed information about the PackNet method's impact on VGG-16 with specific pruning percentages would be needed to answer the question accurately.",
+        "latencyMs": 6800.266399999964
+      }
+    },
+    {
+      "id": "pos-078",
+      "kind": "positive",
+      "question": "Why does the Codex evaluation paper avoid estimating pass@k as 1-(1-p)^k?",
+      "reference": "Because that estimate from empirical pass@1 is biased; the paper uses an unbiased estimator instead.",
+      "gold_chunk": "2107.03374_sec1_p1",
+      "vector": {
+        "rank": 3,
+        "targetScore": 0.4955763525648315,
+        "top1Chunk": "2406.19538_sec4_p3",
+        "context": "While 72.6% of predictions are correctly labeled as SA",
+        "answer": "The context provided does not give specific reasons why the Codex evaluation paper avoids estimating pass@k as 1-(1-p)^k. To accurately answer this question, we would need more information from the Codex evaluation paper itself or additional context about the paper's methodology and rationale.",
+        "latencyMs": 5949.62910000002
+      }
+    },
+    {
+      "id": "pos-079",
+      "kind": "positive",
+      "question": "Why does Google's Neural Machine Translation system use bi-directional connections only in the bottom encoder layer?",
+      "reference": "To allow maximum possible parallelization during computation.",
+      "gold_chunk": "1609.08144_sec2_p3",
+      "vector": {
+        "rank": 3,
+        "targetScore": 0.5154180408878484,
+        "top1Chunk": "2503.04768_sec6",
+        "context": "we fine-tune Qwen2-72B and Qwen2-7B for spatiotemporal-aware tool-augmented order planning and multi-type dialog replier selection",
+        "answer": "The provided context does not contain any information about Google's Neural Machine Translation system or its architecture, including the use of bi-directional connections in encoder layers. Therefore, I cannot answer the question based on the given context.",
+        "latencyMs": 6504.3994999999995
+      }
+    },
+    {
+      "id": "pos-080",
+      "kind": "positive",
+      "question": "What dataset does Zero-1-to-3 use for fine-tuning, and how big is it?",
+      "reference": "Objaverse, with 800K+ 3D models created by 100K+ artists.",
+      "gold_chunk": "2303.11328_sec2_p3",
+      "vector": {
+        "rank": 9,
+        "targetScore": 0.4678937311819929,
+        "top1Chunk": "2610.14020_sec2_p1",
+        "context": "uses a nominal generation target of 4 s",
+        "answer": "The information provided in the context does not contain any details about the dataset used for fine-tuning Zero-1-to-3 or the size of the dataset. The context only mentions a nominal generation target of 4 seconds, which is unrelated to the question about the dataset and its size.",
+        "latencyMs": 7356.034299999941
+      }
+    },
+    {
+      "id": "pos-081",
+      "kind": "positive",
+      "question": "Do all tasks gain equally from Gopher's larger scale?",
+      "reference": "No. The benefits are nonuniform: tasks needing complex mathematical or logical reasoning benefit little.",
+      "gold_chunk": "2112.11446_sec7",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.814431023827519,
+        "top1Chunk": "2112.11446_sec7",
+        "context": "some tasks which require more complex mathematical or logical reasoning observe little benefit up to the scale of Gopher",
+        "answer": "No, not all tasks gain equally from Gopher's larger scale. According to the context provided, some tasks requiring more complex mathematical or logical reasoning observe little benefit up to the scale of Gopher.",
+        "latencyMs": 5785.300099999993
+      }
+    },
+    {
+      "id": "pos-082",
+      "kind": "positive",
+      "question": "What is Flow Matching, and how does it train continuous normalizing flows?",
+      "reference": "A simulation-free approach that trains CNFs by regressing vector fields of fixed conditional probability paths.",
+      "gold_chunk": "2210.02747_abs",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6430082840456692,
+        "top1Chunk": "2210.02747_abs",
+        "context": "a simulation-free approach for training CNFs based on regressing vector fields of fixed conditional probability paths",
+        "answer": "Based on the provided context, Flow Matching appears to be a method for training continuous normalizing flows (CNFs) without using simulations. Instead, it involves regressing vector fields that correspond to fixed conditional probability paths. This approach directly learns the underlying dynamics or transformations between distributions, focusing on the vector fields that describe how data points are mapped from one distribution to another.",
+        "latencyMs": 5985.840599999996
+      }
+    },
+    {
+      "id": "pos-083",
+      "kind": "positive",
+      "question": "How does CLIP-Adapter balance original CLIP features with adapted features?",
+      "reference": "It uses a learnable gating ratio to dynamically mix them during training.",
+      "gold_chunk": "2110.04544_sec1_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.5985109407854974,
+        "top1Chunk": "2110.04544_sec1_p1",
+        "context": "adopts a learnable gating ratio to dynamically balance and mix the knowledge",
+        "answer": "CLIP-Adapter balances original CLIP features with adapted features by adopting a learnable gating ratio. This gating mechanism dynamically mixes the original CLIP features with the adapted ones, allowing the model to weigh the importance of each set of features based on the specific task or input.",
+        "latencyMs": 5638.580900000059
+      }
+    },
+    {
+      "id": "pos-084",
+      "kind": "positive",
+      "question": "How can deep Q-networks allocate resources for vehicle-to-vehicle communication under a latency constraint?",
+      "reference": "Each V2V transmitter acts as an agent selecting a channel and transmit power level to maximize capacity under the latency constraint.",
+      "gold_chunk": "1810.07862_sec2_p4",
+      "vector": {
+        "rank": 6,
+        "targetScore": 0.5131795018051216,
+        "top1Chunk": "2604.26488_sec2_p3",
+        "context": "At test time, LILA operates in a standard fashion, discarding the depth and optical flow networks.",
+        "answer": "The provided context does not contain information relevant to how deep Q-networks allocate resources for vehicle-to-vehicle communication under a latency constraint. The context is about the operation of LILA, which does not involve deep Q-networks or vehicle-to-vehicle communication. Therefore, I cannot answer the question based on the given context.",
+        "latencyMs": 6992.785900000017
+      }
+    },
+    {
+      "id": "pos-085",
+      "kind": "positive",
+      "question": "How many papers and authors were collected for evaluating reviewer recommendation over AI and computer vision papers from 2021 to 2024?",
+      "reference": "1,212,094 papers and 4,078,091 authors.",
+      "gold_chunk": "2502.07683_sec3_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6981142738545298,
+        "top1Chunk": "2502.07683_sec3_p1",
+        "context": "we collected a total of 1,212,094 papers and 4,078,091 authors",
+        "answer": "The provided context does not specify the number of papers and authors collected for evaluating reviewer recommendations specifically for AI and computer vision papers from 2021 to 2024. It only states a total of 1,212,094 papers and 4,078,091 authors were collected without any temporal or thematic filters. To answer the specific question, more detailed data would be required.",
+        "latencyMs": 5868.891999999993
+      }
+    },
+    {
+      "id": "pos-086",
+      "kind": "positive",
+      "question": "How can Bayesian optimization select hyperparameters for physics-informed neural networks before full training?",
+      "reference": "Each hyperparameter group trains a PINN for 500 ADAM iterations; the group with the smallest L2 relative error is kept, with 10 initial points and 20 iterations.",
+      "gold_chunk": "2504.09804_sec2_p2",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6876908294278753,
+        "top1Chunk": "2504.09804_sec2_p2",
+        "context": "The hyperparameter group that yields the smallest L2 relative error will be selected for subsequent training.",
+        "answer": "Bayesian optimization can select hyperparameters for physics-informed neural networks before full training by constructing a probabilistic model of the objective function, which in this case is the L2 relative error. It uses this model to efficiently search for the hyperparameters that minimize the error. The process typically involves the following steps:\n\n1. **Initialization**: Start with a small set of randomly chosen hyperparameters and evaluate the L2 relative error for each.\n\n2. **Model Construction**: Use the collected data to construct a probabilistic model, often a Gaussian process, which captures the uncertainty in the objective function.\n\n3. **Acquisition Function**: Define an acquisition function that balances exploration (searching in areas of high uncertainty) and exploitation (searching in areas that are likely to yield good results based on the current model).\n\n4. **Hyperparameter Selection**: Choose the next set of hyperparameters to evaluate by optimizing the acquisition function.\n\n5. **Iteration**: Repeat the process of evaluating the selected hyperparameters, updating the model, and selecting new hyperparameters until a stopping criterion is met, such as a maximum number of evaluations or a satisfactory error level.\n\nBy iteratively refining the model and selecting hyperparameters based on the model's predictions, Bayesian optimization can efficiently find the hyperparameters that yield the smallest L2 relative error, as mentioned in the context.",
+        "latencyMs": 6900.596999999951
+      }
+    },
+    {
+      "id": "pos-087",
+      "kind": "positive",
+      "question": "What three tasks are proposed to evaluate user embeddings when they are aligned to LLMs?",
+      "reference": "Sequence understanding, action prediction and interest perception.",
+      "gold_chunk": "2502.19178_sec2_p3",
+      "vector": {
+        "rank": 7,
+        "targetScore": 0.5069251434537522,
+        "top1Chunk": "2412.00142_sec3_p4",
+        "context": "SAVs generalize between tasks, while LoRA weights, as expected, overfit to the finetuned task",
+        "answer": "The provided context does not mention any specific tasks for evaluating user embeddings when they are aligned to LLMs. It only compares the generalization capabilities of SAVs (which likely refers to some form of semi-supervised or self-supervised models) to LoRA weights (low-rank adaptation weights) in the context of task-specific finetuning. Therefore, based on the given information, I cannot provide an answer to the question about three specific tasks for evaluating user embeddings.",
+        "latencyMs": 6036.957700000028
+      }
+    },
+    {
+      "id": "pos-088",
+      "kind": "positive",
+      "question": "What role does the generative motion prior play in training humanoid locomotion policies?",
+      "reference": "It predicts future reference trajectories and acts as a frozen expert model giving stable trajectory-level guidance to the RL policy.",
+      "gold_chunk": "2503.09015_sec4",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7540415510375948,
+        "top1Chunk": "2503.09015_sec4",
+        "context": "The generative motion prior serves as a frozen expert model",
+        "answer": "The generative motion prior acts as a pre-trained model that provides a foundation of learned motion patterns, which can be utilized or adapted during the training of humanoid locomotion policies. This pre-trained model helps in initializing the training process with a set of motion capabilities, potentially reducing the amount of data and computational resources needed to train effective locomotion policies for humanoid robots.",
+        "latencyMs": 6944.8921000000555
+      }
+    },
+    {
+      "id": "pos-089",
+      "kind": "positive",
+      "question": "How much did training-time perturbations raise balanced accuracy and AUROC in the CBraMod EEG workload comparison?",
+      "reference": "Balanced accuracy rose from 65.98% to 71.62% and AUROC from 0.768 to 0.805.",
+      "gold_chunk": "2610.25211_sec3_p4",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7209329144411164,
+        "top1Chunk": "2610.25211_sec3_p4",
+        "context": "The resulting CBraMod comparison increases BA from 65.98% to 71.62% and AUROC from 0.768 to 0.805.",
+        "answer": "Training-time perturbations raised balanced accuracy (BA) from 65.98% to 71.62% and the area under the receiver operating characteristic curve (AUROC) from 0.768 to 0.805 in the CBraMod EEG workload comparison.",
+        "latencyMs": 6594.538300000015
+      }
+    },
+    {
+      "id": "pos-090",
+      "kind": "positive",
+      "question": "How were text conditions obtained for the video-based FAIR-Play and 360 Youtube-Binaural recordings?",
+      "reference": "GPT-4o generated descriptions of each sound source's location from the videos.",
+      "gold_chunk": "2506.00927_sec4_p2",
+      "vector": {
+        "rank": 4,
+        "targetScore": 0.48740049860371154,
+        "top1Chunk": "2604.13730_sec5",
+        "context": "combines count-aware allocation with text-embedding k-center selection",
+        "answer": "The information provided in the context does not specify how text conditions were obtained for the video-based FAIR-Play and 360 Youtube-Binaural recordings. The context mentions \"combines count-aware allocation with text-embedding k-center selection,\" which refers to a method for selecting text embeddings but does not address the acquisition of text conditions for specific recordings. To answer your question accurately, more detailed information about the methodology used for obtaining text conditions in the context of FAIR-Play and 360 Youtube-Binaural recordings would be required.",
+        "latencyMs": 5470.691799999913
+      }
+    },
+    {
+      "id": "pos-091",
+      "kind": "positive",
+      "question": "Which SMAC maps are used in the value-based evaluation that compares against Ft-QMIX, QPLEX and VAST?",
+      "reference": "3s_vs_5z, 5m_vs_6m and 3s5z_vs_3s6z.",
+      "gold_chunk": "2505.07207_sec3_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.5744395528000846,
+        "top1Chunk": "2505.07207_sec3_p1",
+        "context": "with three representative maps: 3s_vs_5z, 5m_vs_6m and 3s5z_vs_3s6z",
+        "answer": "Based on the provided context, the SMAC maps used in the value-based evaluation that compares against Ft-QMIX, QPLEX, and VAST are 3s_vs_5z, 5m_vs_6m, and 3s5z_vs_3s6z.",
+        "latencyMs": 6807.0800000000745
+      }
+    },
+    {
+      "id": "pos-092",
+      "kind": "positive",
+      "question": "What batch sizes are used for progressive distillation, LCM and DMD2 on SSD1B in the distillation experiments?",
+      "reference": "224 for progressive distillation, 360 for LCM and 7 for DMD2.",
+      "gold_chunk": "2410.11971_sec4_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.9146364353593658,
+        "top1Chunk": "2410.11971_sec4_p1",
+        "context": "on a batch size of 224 in case of progressive distillation, 360 in case of LCM and 7 in case of DMD2 on SSD1B",
+        "answer": "In the distillation experiments on SSD1B, the following batch sizes are used:\n- 224 for progressive distillation\n- 360 for LCM\n- 7 for DMD2",
+        "latencyMs": 5789.98310000007
+      }
+    },
+    {
+      "id": "pos-093",
+      "kind": "positive",
+      "question": "How can the action space in reinforcement learning for job shop scheduling allow several assignments at once?",
+      "reference": "It is defined as the power set of feasible job-machine pairs in which no machine gets more than one job at a time.",
+      "gold_chunk": "2502.08684_sec3_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.653406862193376,
+        "top1Chunk": "2502.08684_sec3_p1",
+        "context": "This formulation allows multiple job-machine assignments to be made at once",
+        "answer": "In the context of reinforcement learning for job shop scheduling, the action space can be designed to allow several job-machine assignments at once by defining actions as sets of simultaneous assignments. This means that an action in the action space could specify which jobs are to be assigned to which machines, and these assignments can be made concurrently. For example, an action might specify that job A is assigned to machine 1, job B to machine 2, and job C to machine 3, all in a single step. This approach can help in exploring more complex and potentially more efficient schedules within the learning process.",
+        "latencyMs": 5878.399399999995
+      }
+    },
+    {
+      "id": "pos-094",
+      "kind": "positive",
+      "question": "What does Test-Time Reinforcement Learning add to the LADDER framework?",
+      "reference": "It extends LADDER to inference time, enabling dynamic adaptation to challenging problems during testing.",
+      "gold_chunk": "2503.00735_sec2_p4",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.8449276028707982,
+        "top1Chunk": "2503.00735_sec2_p4",
+        "context": "Test-Time Reinforcement Learning (TTRL) extends our LADDER framework to inference time",
+        "answer": "Test-Time Reinforcement Learning (TTRL) adds the capability of reinforcement learning to the inference time of the LADDER framework.",
+        "latencyMs": 5926.578699999955
+      }
+    },
+    {
+      "id": "pos-095",
+      "kind": "positive",
+      "question": "What are the two objectives of RoAR-VAE, and what does each one capture?",
+      "reference": "RobustAlign captures semantic structure and RobustRecon captures fine-grained spatial and appearance details.",
+      "gold_chunk": "2610.26216_sec4",
+      "vector": {
+        "rank": 3,
+        "targetScore": 0.48403874111180895,
+        "top1Chunk": "2610.15708_sec5",
+        "context": "SpecForge addresses this challenge through Pareto-guided frontier preservation, dependency-constrained entity selection, and error-diversified expansion",
+        "answer": "The provided context does not contain information about RoAR-VAE or its objectives. The context instead describes methods used by SpecForge, a system for scientific data processing, specifically mentioning Pareto-guided frontier preservation, dependency-constrained entity selection, and error-diversified expansion. Therefore, I cannot provide an answer about RoAR-VAE based on the given information.",
+        "latencyMs": 6137.569799999939
+      }
+    },
+    {
+      "id": "pos-096",
+      "kind": "positive",
+      "question": "What explains why a transformer's ridge behaviour appears only for a while during training?",
+      "reference": "The transformer navigates a tradeoff between loss and complexity that evolves over training.",
+      "gold_chunk": "2501.17745_sec0",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.7848743657472852,
+        "top1Chunk": "2501.17745_sec0",
+        "context": "we explain transient ridge as the transformer navigating a tradeoff between loss and complexity that evolves over training",
+        "answer": "The transient ridge behavior in a transformer appears only for a while during training because the model navigates a tradeoff between loss minimization and model complexity. As training progresses, the model adjusts its parameters to find an optimal balance, and this balance may shift over time. Initially, the model might focus on reducing loss, leading to a ridge in complexity. However, as training continues, the model may find that increasing complexity further can lead to better performance, causing the ridge to diminish or disappear.",
+        "latencyMs": 5690.347599999979
+      }
+    },
+    {
+      "id": "pos-097",
+      "kind": "positive",
+      "question": "What loss is proposed for simple fine-tuning in few-shot drug discovery?",
+      "reference": "A regularized quadratic-probe loss based on the Mahalanobis distance, optimized by block-coordinate descent.",
+      "gold_chunk": "2404.02314_abs",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.5557062195192309,
+        "top1Chunk": "2404.02314_abs",
+        "context": "regularized quadratic-probe loss",
+        "answer": "The context provided does not contain information about a specific loss proposed for simple fine-tuning in few-shot drug discovery. The term \"regularized quadratic-probe loss\" mentioned in the context is a type of loss function but does not directly relate to the question asked about drug discovery. More specific information or a different context would be needed to answer the question accurately.",
+        "latencyMs": 5680.930099999998
+      }
+    },
+    {
+      "id": "pos-098",
+      "kind": "positive",
+      "question": "What is the IC2D bench built to test?",
+      "reference": "It is a test bench for analysing the performance of actuators and controllers at the joint level.",
+      "gold_chunk": "2505.17278_abs",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.6390333741574548,
+        "top1Chunk": "2505.17278_abs",
+        "context": "is a test bench designed to allow the performance analysis of different actuators and controllers at the joint level",
+        "answer": "The test bench described is designed to allow the performance analysis of different actuators and controllers at the joint level. There is no specific mention of the IC2D bench in the provided context, so I cannot provide details about its construction or purpose beyond the general description given.",
+        "latencyMs": 7461.526500000036
+      }
+    },
+    {
+      "id": "pos-099",
+      "kind": "positive",
+      "question": "Why is multimodal federated learning harder than unimodal federated learning?",
+      "reference": "Modalities differ in dimensionality, sampling frequency and relevance, so heterogeneity, privacy and efficiency constraints combine across clients.",
+      "gold_chunk": "2505.21792_sec1_p1",
+      "vector": {
+        "rank": 1,
+        "targetScore": 0.610703229079018,
+        "top1Chunk": "2505.21792_sec1_p1",
+        "context": "These modalities differ in dimensionality, sampling frequency, and relevance to the learning task.",
+        "answer": "The statement provided does not directly explain why multimodal federated learning is harder than unimodal federated learning. However, we can infer that the differences in dimensionality, sampling frequency, and relevance to the learning task among modalities could contribute to the increased complexity of multimodal federated learning.\n\nMultimodal federated learning involves combining data from multiple sources or types, which can introduce additional challenges:\n\n1. **Dimensionality**: Combining data from different modalities can increase the overall dimensionality of the data, making it more complex to process and analyze. This can lead to increased computational requirements and potential overfitting if not managed properly.\n\n2. **Sampling Frequency**: Different modalities may have different sampling frequencies, which can complicate the alignment and integration of data. Ensuring that data from various sources are synchronized or appropriately adjusted can be challenging.\n\n3. **Relevance to the Learning Task**: Not all modalities may be equally relevant to the learning task. Identifying and weighting the importance of each modality can be difficult, and this can affect the overall performance of the federated learning model.\n\nGiven these factors, multimodal federated learning generally requires more sophisticated techniques and more careful design to handle the integration of diverse data sources effectively, making it potentially harder than unimodal federated learning.",
+        "latencyMs": 6954.413399999961
+      }
+    },
+    {
+      "id": "neg-000",
+      "kind": "negative",
+      "question": "What is the best way to remove red wine from a carpet?",
+      "unrelated_passage": "we fine-tune Qwen2-72B and Qwen2-7B for spatiotemporal-aware tool-augmented order planning and multi-type dialog replier selection",
+      "vector": {
+        "score": 0.4934801672063615,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-001",
+      "kind": "negative",
+      "question": "Which river flows through Budapest?",
+      "unrelated_passage": "The evaluators rate 92.2% of the sentences with a score of 3 and 6.4% with a score of 2",
+      "vector": {
+        "score": 0.3710472009739938,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-002",
+      "kind": "negative",
+      "question": "What currency is used in Morocco?",
+      "unrelated_passage": "Empirical results showing improvement by 5 times over existing sparse-map techniques and comparable accuracy to dense-map methods at 1/500th the point density.",
+      "vector": {
+        "score": 0.4639080857387078,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-003",
+      "kind": "negative",
+      "question": "How long should a rib roast rest after cooking?",
+      "unrelated_passage": "by leveraging a bigger architecture (24 Conformer layers), as well as a higher and more diverse amount of unlabeled audio content (4.5Mh) used for pretraining",
+      "vector": {
+        "score": 0.46277744402457727,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-004",
+      "kind": "negative",
+      "question": "What is the boiling point of ethanol at sea level?",
+      "unrelated_passage": "This can lead to an overfitting effect, where the model becomes highly specialized in distinguishing base classes",
+      "vector": {
+        "score": 0.43983325952079594,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-005",
+      "kind": "negative",
+      "question": "How long does it take to hard-boil an egg at high altitude?",
+      "unrelated_passage": "We use GRPO-Ans as the RL baseline because it achieves higher balanced accuracy than GRPO on average",
+      "vector": {
+        "score": 0.4601590895291338,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-006",
+      "kind": "negative",
+      "question": "What is the visa fee for a tourist visiting Thailand?",
+      "unrelated_passage": "execution must be serialized into a structured event stream binding every action and token cost to a distinct role",
+      "vector": {
+        "score": 0.4046107224599292,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-007",
+      "kind": "negative",
+      "question": "What is the legal drinking age in Japan?",
+      "unrelated_passage": "We use batch size 256, 25,000 AdamW updates, learning rate",
+      "vector": {
+        "score": 0.4847384294495211,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-008",
+      "kind": "negative",
+      "question": "What is the atomic number of tungsten?",
+      "unrelated_passage": "uses a nominal generation target of 4 s",
+      "vector": {
+        "score": 0.4520273517284104,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-009",
+      "kind": "negative",
+      "question": "What is the recommended tire pressure for a Honda Civic?",
+      "unrelated_passage": "All examples in SarcasTraps were collected from publicly accessible Ekşi Sözlük pages between April and June 2026.",
+      "vector": {
+        "score": 0.3808768277792343,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-010",
+      "kind": "negative",
+      "question": "What success rate does the AtlasClimber humanoid policy reach on stairs?",
+      "unrelated_passage": "When the 2D LIDAR detected an obstacle within 60 cm",
+      "vector": {
+        "score": 0.4565408882053358,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-011",
+      "kind": "negative",
+      "question": "How many demonstrations were used to train the GranitePolicy manipulation model?",
+      "unrelated_passage": "with an average of 76.2% of the generated code being insecure",
+      "vector": {
+        "score": 0.47619778147047476,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-012",
+      "kind": "negative",
+      "question": "What mAP does KestrelDet-R50 achieve on COCO val2017?",
+      "unrelated_passage": "ReverbFX is released under the Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)",
+      "vector": {
+        "score": 0.4561500717529449,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-013",
+      "kind": "negative",
+      "question": "What word error rate does the TidalWhisperNet model report on LibriSpeech?",
+      "unrelated_passage": "Magentic-UI exposes the browser to the user and hands off control immediately upon user intervention.",
+      "vector": {
+        "score": 0.44902920135588037,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-014",
+      "kind": "negative",
+      "question": "How does the VelvetAttention module reduce memory in long-context decoding?",
+      "unrelated_passage": "We designate these as level-3 (high-difficulty) tasks in our dataset.",
+      "vector": {
+        "score": 0.4535843666429654,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-015",
+      "kind": "negative",
+      "question": "What privacy budget epsilon is used by the FedMarigold protocol?",
+      "unrelated_passage": "Language Head (LH), Regression (REG), Trajectory Selection (SEL), and Trajectory Generation (GEN)",
+      "vector": {
+        "score": 0.4290947466751868,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-016",
+      "kind": "negative",
+      "question": "How many layers does the OrchidFormer-XL encoder stack use?",
+      "unrelated_passage": "A failed attempt still uses energy, money and time.",
+      "vector": {
+        "score": 0.3790093382072959,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-017",
+      "kind": "negative",
+      "question": "What top-1 accuracy does LumenGraphNet-7 report on ImageNet-1K?",
+      "unrelated_passage": "The annotation process is highly time-intensive",
+      "vector": {
+        "score": 0.4365762212569513,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-018",
+      "kind": "negative",
+      "question": "What FID does the MeadowDiffusion-V9 model report on FFHQ?",
+      "unrelated_passage": "predict future states using a Hankel operator derived from a time-delay series of state measurements",
+      "vector": {
+        "score": 0.4739196535189919,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-019",
+      "kind": "negative",
+      "question": "What ROUGE-L score does the SummaWeaver-13B model report on CNNDM?",
+      "unrelated_passage": "At test time, LILA operates in a standard fashion, discarding the depth and optical flow networks.",
+      "vector": {
+        "score": 0.5278309025385146,
+        "rejectedAt05": false,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-020",
+      "kind": "negative",
+      "question": "What sampling rate does the EchoLatticeTTS vocoder operate at?",
+      "unrelated_passage": "eliminating the need to retrain models whenever new data, robots, or tasks are introduced",
+      "vector": {
+        "score": 0.43471698157789,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-021",
+      "kind": "negative",
+      "question": "How many GPUs were used to train the Tessera-900B language model?",
+      "unrelated_passage": "it does not consistently improve outcomes across broader domains relevant to HPC",
+      "vector": {
+        "score": 0.4029147995980067,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-022",
+      "kind": "negative",
+      "question": "How many transistors does the NVIDIA H100 GPU contain?",
+      "unrelated_passage": "the activations of the model exhibit a significant long-tail effect in both the MLP and Attention layers",
+      "vector": {
+        "score": 0.4220319843944644,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-023",
+      "kind": "negative",
+      "question": "How many papers did arXiv receive in total during the year 2022?",
+      "unrelated_passage": "Chebyshev gives the lowest average loss (2.55)",
+      "vector": {
+        "score": 0.5177079985069233,
+        "rejectedAt05": false,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-024",
+      "kind": "negative",
+      "question": "How many people signed the 2023 CAIS one-sentence statement on AI risk?",
+      "unrelated_passage": "We use four Romanian instruction-tuned LLMs",
+      "vector": {
+        "score": 0.46281538018493706,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-025",
+      "kind": "negative",
+      "question": "What was the prize money for the 2023 AIMO Progress Prize?",
+      "unrelated_passage": "resulting in a total of 20 samples",
+      "vector": {
+        "score": 0.31492706103032,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-026",
+      "kind": "negative",
+      "question": "What was the acceptance rate of AAAI 2021?",
+      "unrelated_passage": "The inference time for 6,340 images from the VG-FO dataset was 32 min using a single A100 40 GB GPU.",
+      "vector": {
+        "score": 0.4866278560022786,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-027",
+      "kind": "negative",
+      "question": "Who received the ACM Turing Award for the year 2024?",
+      "unrelated_passage": "leveraging retrieved segments in Step 2 significantly boosts the AUC to 84.53%",
+      "vector": {
+        "score": 0.4626479390385219,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-028",
+      "kind": "negative",
+      "question": "Who is the current editor-in-chief of the Journal of Machine Learning Research?",
+      "unrelated_passage": "Astra reaches 19.0% success at a reported $9,913 and 941M tokens.",
+      "vector": {
+        "score": 0.4453949974802404,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-029",
+      "kind": "negative",
+      "question": "How many employees did OpenAI have at the end of 2023?",
+      "unrelated_passage": "In total, we collect 1100 responses from 50 participants.",
+      "vector": {
+        "score": 0.5027629984865455,
+        "rejectedAt05": false,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-030",
+      "kind": "negative",
+      "question": "What is the thermal design power of the Apple M4 Max chip?",
+      "unrelated_passage": "fewer than exhaustive evaluation",
+      "vector": {
+        "score": 0.40837085575953114,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-031",
+      "kind": "negative",
+      "question": "What was Anthropic's valuation in its September 2025 funding round?",
+      "unrelated_passage": "EPFv2 achieves a mean per-joint position error (MPJPE) of 4.02cm",
+      "vector": {
+        "score": 0.4949099360068335,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-032",
+      "kind": "negative",
+      "question": "In which city was the first Dartmouth AI workshop held, and who funded it?",
+      "unrelated_passage": "macro F1 score of 0.665",
+      "vector": {
+        "score": 0.37952747733958714,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-033",
+      "kind": "negative",
+      "question": "How much venture funding did Hugging Face raise in its 2023 Series D?",
+      "unrelated_passage": "the model requires 140 ms of inference time, has 150 million parameters, and uses 763 MB of CUDA memory",
+      "vector": {
+        "score": 0.4354012947180494,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-034",
+      "kind": "negative",
+      "question": "Which GPU model was used to train HiCoGen, and for how many hours?",
+      "unrelated_passage": "While 72.6% of predictions are correctly labeled as SA",
+      "vector": {
+        "score": 0.38056398942625036,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-035",
+      "kind": "negative",
+      "question": "How many women took part in the WaveRoll usability study?",
+      "unrelated_passage": "we observe a negative relationship between hedging rate and accuracy",
+      "vector": {
+        "score": 0.45411794129692656,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-036",
+      "kind": "negative",
+      "question": "What was the carbon footprint in kilograms of CO2 of training SceneProp?",
+      "unrelated_passage": "SAVs generalize between tasks, while LoRA weights, as expected, overfit to the finetuned task",
+      "vector": {
+        "score": 0.4893036661936805,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-037",
+      "kind": "negative",
+      "question": "How much did it cost in US dollars to run all EfficientDreamer participants through Fuxi Youling?",
+      "unrelated_passage": "Among the two adaptive variants, only TRQAM enforces the prescribed KL budget.",
+      "vector": {
+        "score": 0.46673184180107186,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-038",
+      "kind": "negative",
+      "question": "What was the median age of participants in the Calliphony audience study?",
+      "unrelated_passage": "The frequency resolution is $5$ Hz",
+      "vector": {
+        "score": 0.4592325530083944,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-039",
+      "kind": "negative",
+      "question": "What is the GitHub star count of the FinWorld repository?",
+      "unrelated_passage": "We use the built-in gyroscope of an M5Stack",
+      "vector": {
+        "score": 0.45746428422140595,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-040",
+      "kind": "negative",
+      "question": "How many hours of Chinese speech does the ReverbFX dataset contain?",
+      "unrelated_passage": "The tuning constant C is commonly set up to 4.685.",
+      "vector": {
+        "score": 0.4906716719358689,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-041",
+      "kind": "negative",
+      "question": "What is the battery capacity of the UAV used in SparseLoc's navigation experiments?",
+      "unrelated_passage": "we retain $8,472$ valid metadata entries",
+      "vector": {
+        "score": 0.4599265735817185,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-042",
+      "kind": "negative",
+      "question": "What was the inter-annotator kappa for the SarcasTraps sarcasm labels on Reddit data?",
+      "unrelated_passage": "vanilla STR training and in-context STR training",
+      "vector": {
+        "score": 0.45238410472615237,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-043",
+      "kind": "negative",
+      "question": "What was the room temperature during the EgoPoseFormer v2 motion capture sessions?",
+      "unrelated_passage": "the ColQwen2 model is employed to retrieve the top three page images ranked by similarity scores",
+      "vector": {
+        "score": 0.4938072130116081,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-044",
+      "kind": "negative",
+      "question": "Which municipal government funded the CommutingODGen data collection?",
+      "unrelated_passage": "we conduct the dip test (Hartigan and Hartigan, 1985) to assess the distribution’s modality",
+      "vector": {
+        "score": 0.5034523544549431,
+        "rejectedAt05": false,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-045",
+      "kind": "negative",
+      "question": "What was the Elo rating of the LILA model on chess puzzles?",
+      "unrelated_passage": "We generate objects with TRELLIS [60] given a text description.",
+      "vector": {
+        "score": 0.4866723609389439,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-046",
+      "kind": "negative",
+      "question": "What humidity level was maintained in the room during the IC2D bench tests?",
+      "unrelated_passage": "ensuring that the natural consumption sequence is preserved",
+      "vector": {
+        "score": 0.4463816479154935,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-047",
+      "kind": "negative",
+      "question": "How many Minecraft diamonds did VoyagerVision collect per hour on average?",
+      "unrelated_passage": "a node updates its opinion if the difference between its opinion and that of a neighbouring node is less than a threshold",
+      "vector": {
+        "score": 0.4237991003211359,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-048",
+      "kind": "negative",
+      "question": "What was the total dollar cost of the human annotation for Real-IAD?",
+      "unrelated_passage": "A SIDE value is never grafted directly into MAIN state",
+      "vector": {
+        "score": 0.4030998953977992,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    },
+    {
+      "id": "neg-049",
+      "kind": "negative",
+      "question": "How many kilowatt-hours of electricity did training ParaStyleTTS consume?",
+      "unrelated_passage": "constructed a KG with 26 biomedical databases using 9 ontologies",
+      "vector": {
+        "score": 0.493004766796464,
+        "rejectedAt05": true,
+        "rejectedAt06": true,
+        "rejectedAt07": true
+      }
+    }
+  ]
+}

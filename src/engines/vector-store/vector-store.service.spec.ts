@@ -126,6 +126,44 @@ describe('VectorStoreService', () => {
     ).rejects.toThrow(new ServiceUnavailableException('qdrant unavailable'));
   });
 
+  it('a stale keep-alive socket (other side closed) is retried once', async () => {
+    const f = fakeClient();
+    const closed = Object.assign(new TypeError('fetch failed'), {
+      cause: Object.assign(new Error('other side closed'), {
+        code: 'UND_ERR_SOCKET',
+      }),
+    });
+    f.query.mockRejectedValueOnce(closed);
+    const hits = await new VectorStoreService(f.client, config).search([0], {
+      limit: 5,
+    });
+    expect(f.query).toHaveBeenCalledTimes(2);
+    expect(hits).toHaveLength(1);
+  });
+
+  it('a socket that fails twice, or a refused connection, is not retried further ➔ 503', async () => {
+    const f = fakeClient();
+    const closed = Object.assign(new TypeError('fetch failed'), {
+      cause: { code: 'ECONNRESET' },
+    });
+    f.query.mockRejectedValue(closed);
+    await expect(
+      new VectorStoreService(f.client, config).search([0], { limit: 5 }),
+    ).rejects.toThrow(new ServiceUnavailableException('qdrant unavailable'));
+    expect(f.query).toHaveBeenCalledTimes(2);
+
+    const g = fakeClient();
+    g.query.mockRejectedValue(
+      Object.assign(new TypeError('fetch failed'), {
+        cause: { code: 'ECONNREFUSED' },
+      }),
+    );
+    await expect(
+      new VectorStoreService(g.client, config).search([0], { limit: 5 }),
+    ).rejects.toThrow(new ServiceUnavailableException('qdrant unavailable'));
+    expect(g.query).toHaveBeenCalledTimes(1);
+  });
+
   it('no answer within 3 s ➔ 503', async () => {
     jest.useFakeTimers();
     try {

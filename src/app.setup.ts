@@ -21,9 +21,11 @@ import {
   requestIdMiddleware,
   requestIdOf,
 } from './common/logging/request-context';
+import { PrometheusMetricsRegistry } from './common/metrics/prometheus-metrics';
 import { securityHeaders, trustProxySetting } from './common/security/security';
 import { RATE_LIMITS } from './common/security/throttler';
 import { createValidationPipe } from './common/http/validation';
+import { HealthService } from './modules/health/health.service';
 import {
   ContentNegotiationInterceptor,
   UNSUPPORTED_BODY,
@@ -49,6 +51,14 @@ export function configureApp(app: INestApplication): void {
   );
   app.use(requestIdMiddleware);
   app.use(securityHeaders(isProduction));
+  const metrics = new PrometheusMetricsRegistry(() => {
+    try {
+      return app.get(HealthService, { strict: false });
+    } catch {
+      return null;
+    }
+  });
+  app.use(metrics.middleware);
   const respondError = (req: Request, res: Response, e: unknown) =>
     sendError(req, res, toErrorBody(e, requestIdOf(req)));
   app.use((req: Request, res: Response, next: () => void) => {

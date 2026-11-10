@@ -241,7 +241,22 @@ export class VectorStoreService implements VectorStorePort, OnModuleInit {
     return chunk;
   }
 
-  /** Every Qdrant call: 3 s deadline, any failure ➔ 503 `qdrant unavailable`. */
+  /**
+   * A pooled keep-alive socket the far side (Qdrant or the proxy in front of it) already closed
+   * fails the next request with `other side closed`. Every call here is a read, so one retry on a
+   * fresh socket is safe; any other failure is reported as it is.
+   */
+  private async retryStaleSocket<T>(fn: () => Promise<T>): Promise<T> {
+    try {
+      return await fn();
+    } catch (e) {
+      if (!isStaleSocket(e)) throw e;
+      this.logger.debug({ err: e }, 'QDRANT_STALE_SOCKET_RETRY');
+      return fn();
+    }
+  }
+
+  /** Every Qdrant call: 15 s deadline, any failure ➔ 503 `qdrant unavailable`. */
   private async call<T>(fn: () => Promise<T>): Promise<T> {
     let timer: NodeJS.Timeout | undefined;
     const deadline = new Promise<never>((_, reject) => {
@@ -251,7 +266,7 @@ export class VectorStoreService implements VectorStorePort, OnModuleInit {
       );
     });
     try {
-      return await Promise.race([fn(), deadline]);
+      return await Promise.race([this.retryStaleSocket(fn), deadline]);
     } catch (e) {
       this.logger.warn({ err: e }, 'QDRANT_CALL_FAILED');
       throw new ServiceUnavailableException(QDRANT_UNAVAILABLE);
@@ -259,4 +274,21 @@ export class VectorStoreService implements VectorStorePort, OnModuleInit {
       clearTimeout(timer);
     }
   }
+}
+
+const STALE_SOCKET_CODES = new Set([
+  'UND_ERR_SOCKET',
+  'ECONNRESET',
+  'EPIPE',
+  'UND_ERR_CLOSED',
+]);
+
+/** undici wraps the socket error: `TypeError: fetch failed` with the real one in `cause`. */
+export function isStaleSocket(e: unknown): boolean {
+  for (let err = e, depth = 0; err && depth < 4; depth++) {
+    const code = (err as { code?: unknown }).code;
+    if (typeof code === 'string' && STALE_SOCKET_CODES.has(code)) return true;
+    err = (err as { cause?: unknown }).cause;
+  }
+  return false;
 }

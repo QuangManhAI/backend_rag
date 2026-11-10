@@ -253,7 +253,7 @@ export class RagService {
 
     let saved: { session_id: string; assistant_message_id: string } | null =
       null;
-    if (user && !signal.aborted) {
+    if (user && ( !signal.aborted || answer.length > 0 )) {
       timings.total_ms = since(t0);
       saved = await this.sessions.saveExchange(
         user.id,

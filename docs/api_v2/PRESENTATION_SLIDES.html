@@ -49,7 +49,7 @@
     }
     .progress-bar {
       height: 100%;
-      width: 10%;
+      width: 7.14%;
       background: var(--primary-gradient);
       transition: width 0.3s ease;
     }
@@ -62,7 +62,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px 40px 70px 40px;
+      padding: 15px 30px 65px 30px;
     }
 
     .slide {
@@ -73,15 +73,17 @@
       height: 100%;
       opacity: 0;
       visibility: hidden;
-      transform: translateY(20px);
-      transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
+      transform: translateY(16px);
+      transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 40px 80px;
-      max-width: 1300px;
+      padding: 25px 60px 40px 60px;
+      max-width: 1260px;
       margin: 0 auto;
       right: 0;
+      overflow-y: auto;
+      max-height: calc(100vh - 70px);
     }
 
     .slide.active {
@@ -96,80 +98,73 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 14px;
+      padding: 3px 12px;
       border-radius: 9999px;
-      font-size: 0.8rem;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--primary);
+      font-size: 0.78rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
-      background: rgba(56, 189, 248, 0.15);
-      color: var(--primary);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      margin-bottom: 15px;
+      margin-bottom: 8px;
       width: fit-content;
     }
 
-    h1.slide-title {
-      font-size: 2.3rem;
+    .slide-title {
+      font-size: 2.15rem;
       font-weight: 800;
-      line-height: 1.2;
-      margin-bottom: 20px;
+      line-height: 1.25;
       background: var(--primary-gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
     }
 
-    h2.slide-subtitle {
-      font-size: 1.15rem;
+    .slide-subtitle {
+      font-size: 1.02rem;
       color: var(--text-muted);
+      margin-bottom: 18px;
+      line-height: 1.45;
       font-weight: 400;
-      margin-bottom: 25px;
-      max-width: 900px;
-      line-height: 1.5;
     }
 
-    /* Layout Grids */
     .grid-2 {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      width: 100%;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
     }
 
     .grid-3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      width: 100%;
+      gap: 16px;
     }
 
     .grid-4 {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      width: 100%;
+      gap: 14px;
     }
 
-    /* Cards */
     .card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 22px;
+      border-radius: 10px;
+      padding: 16px 18px;
       backdrop-filter: blur(12px);
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-      position: relative;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
     }
 
     .card.highlight {
-      border-color: rgba(56, 189, 248, 0.5);
-      background: rgba(14, 165, 233, 0.08);
+      border-color: rgba(56, 189, 248, 0.4);
+      background: rgba(30, 41, 59, 0.85);
     }
 
     .card-title {
-      font-size: 1.15rem;
-      color: #fff;
+      font-size: 1.05rem;
       font-weight: 700;
+      color: var(--text-main);
       margin-bottom: 10px;
       display: flex;
       align-items: center;
@@ -178,64 +173,38 @@
 
     .card-title .icon {
       color: var(--primary);
-      font-size: 1.25rem;
+      font-size: 1.15rem;
     }
 
-    .card ul {
-      margin-left: 20px;
+    p {
       color: #cbd5e1;
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-
-    .card li {
-      margin-bottom: 6px;
-    }
-
-    /* Tables */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-      font-size: 0.92rem;
-    }
-
-    th, td {
-      border: 1px solid var(--card-border);
-      padding: 10px 14px;
-      text-align: left;
-    }
-
-    th {
-      background: rgba(15, 23, 42, 0.8);
-      color: var(--primary);
-      font-weight: 700;
-    }
-
-    tr:nth-child(even) {
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    .status-ok {
-      background: rgba(16, 185, 129, 0.2);
-      color: #34d399;
-      padding: 3px 8px;
-      border-radius: 4px;
-      font-weight: 700;
-      font-size: 0.8rem;
-    }
-
-    /* Code & Diagrams */
-    pre {
-      background: var(--code-bg);
-      border: 1px solid #1e293b;
-      padding: 16px;
-      border-radius: 8px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.85rem;
-      color: #e2e8f0;
-      overflow-x: auto;
+      font-size: 0.88rem;
       line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    ul li {
+      position: relative;
+      padding-left: 20px;
+      margin-bottom: 8px;
+      color: #cbd5e1;
+      font-size: 0.86rem;
+      line-height: 1.45;
+    }
+
+    ul li::before {
+      content: "•";
+      position: absolute;
+      left: 6px;
+      top: 0;
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 1.1rem;
     }
 
     code {
@@ -244,19 +213,43 @@
       background: rgba(56, 189, 248, 0.1);
       padding: 2px 6px;
       border-radius: 4px;
-      font-size: 0.9em;
+      font-size: 0.88em;
     }
 
     .flow-box {
       background: rgba(15, 23, 42, 0.9);
       border: 1px dashed var(--primary);
       border-radius: 8px;
-      padding: 15px;
+      padding: 14px;
       text-align: center;
       font-family: ui-monospace, monospace;
-      font-size: 0.88rem;
+      font-size: 0.84rem;
       color: #e2e8f0;
-      line-height: 1.7;
+      line-height: 1.6;
+    }
+
+    /* Data Table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.83rem;
+      margin-top: 6px;
+    }
+
+    .data-table th, .data-table td {
+      padding: 8px 12px;
+      text-align: left;
+      border: 1px solid var(--card-border);
+    }
+
+    .data-table th {
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .data-table tr:nth-child(even) {
+      background: rgba(30, 41, 59, 0.4);
     }
 
     /* Controls at bottom */
@@ -265,24 +258,24 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 60px;
-      background: rgba(11, 15, 25, 0.9);
+      height: 55px;
+      background: rgba(11, 15, 25, 0.95);
       border-top: 1px solid var(--card-border);
       backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 40px;
+      padding: 0 35px;
       z-index: 1000;
     }
 
     .author-info {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: var(--text-muted);
     }
 
     .slide-counter {
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
       color: var(--primary);
       letter-spacing: 1px;
@@ -290,17 +283,17 @@
 
     .nav-buttons {
       display: flex;
-      gap: 12px;
+      gap: 10px;
     }
 
     .btn {
       background: #1e293b;
       color: #fff;
       border: 1px solid var(--card-border);
-      padding: 8px 18px;
+      padding: 6px 16px;
       border-radius: 6px;
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -319,17 +312,18 @@
     }
 
     .badge-metric {
-      font-size: 1.6rem;
+      font-size: 1.55rem;
       font-weight: 800;
       color: var(--primary);
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     .metric-sub {
       color: var(--text-muted);
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
-      font-weight: 600;
+      font-weight: 700;
+      letter-spacing: 0.5px;
     }
   </style>
 </head>
@@ -345,15 +339,15 @@
     <!-- SLIDE 1: COVER -->
     <div class="slide active" data-slide="1">
       <div class="slide-tag">Thuyết Trình Kỹ Thuật • Dự Án backend_rag</div>
-      <h1 class="slide-title" style="font-size: 3rem; margin-bottom: 15px;">
+      <h1 class="slide-title" style="font-size: 2.8rem; margin-bottom: 12px;">
         Báo Cáo Kiến Trúc Hệ Thống, Database<br>& Chuẩn Hóa RESTful API v2
       </h1>
-      <h2 class="slide-subtitle" style="font-size: 1.3rem;">
-        Giải pháp toàn diện đáp ứng trọn vẹn: System Design, Yêu cầu Chức năng/Phi chức năng, Khả năng chịu tải 400 CUs, Mô hình DB Schemas & 8 Tiêu chí API Design (ByteByteGo).
+      <h2 class="slide-subtitle" style="font-size: 1.2rem; max-width: 1050px;">
+        Giải pháp toàn diện đáp ứng trọn vẹn: System Design, Yêu cầu Chức năng/Phi chức năng, Khả năng chịu tải 400 CUs, Mô hình DB Schemas & 8 Tiêu chí API Design quốc tế.
       </h2>
-      <div class="grid-3" style="margin-top: 25px;">
+      <div class="grid-3" style="margin-top: 18px;">
         <div class="card">
-          <div class="metric-sub">Kiến Trúc</div>
+          <div class="metric-sub">Kiến Trúc Tổng Thể</div>
           <div class="badge-metric">NestJS 11</div>
           <p>Monolith RAG, node-llama-cpp LLM local & Qdrant Gold DB</p>
         </div>
@@ -365,353 +359,562 @@
         <div class="card">
           <div class="metric-sub">Chuẩn RESTful</div>
           <div class="badge-metric">RFC 9457</div>
-          <p>Problem Details, 8/8 Tiêu chí ByteByteGo, Zero Breaking Change</p>
+          <p>Problem Details, 8/8 Tiêu chí RESTful, Zero Breaking Change</p>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 2: YÊU CẦU CHỨC NĂNG & PHI CHỨC NĂNG -->
+    <!-- SLIDE 2: BỐI CẢNH & MỤC TIÊU HỆ THỐNG -->
     <div class="slide" data-slide="2">
-      <div class="slide-tag">Phần I • Phân Tích Yêu Cầu</div>
-      <h1 class="slide-title">Yêu Cầu Chức Năng & Phi Chức Năng (SRS)</h1>
-      <h2 class="slide-subtitle">Định hình bài toán hệ thống: Hỏi đáp học thuật trích dẫn thời gian thực với độ trễ tối thiểu và tính sẵn sàng cao.</h2>
+      <div class="slide-tag">Phần I • Bối Cảnh & Mục Tiêu</div>
+      <h1 class="slide-title">Bối Cảnh Dự Án & Định Hướng Nâng Cấp</h1>
+      <h2 class="slide-subtitle">Chuyển dịch hệ thống RAG học thuật sang nền tảng chuẩn hóa cấp doanh nghiệp (Enterprise Grade).</h2>
       
       <div class="grid-2">
         <div class="card highlight">
-          <div class="card-title"><span class="icon">⚡</span> Yêu Cầu Chức Năng (Functional Requirements)</div>
+          <div class="card-title"><span class="icon">🎯</span> Bối Cảnh Bài Toán Nghiệp Vụ</div>
           <ul>
-            <li><strong>Scientific RAG Pipeline:</strong> Nhúng truy vấn (Nomic v1.5) &rarr; Duyệt cây tri thức World 3D &rarr; Hybrid Search Qdrant &rarr; Rerank uy tín tác giả (PageRank Co-authorship) &rarr; Qwen2.5-7B sinh câu trả lời.</li>
-            <li><strong>Server-Sent Events (SSE) Streaming:</strong> Stream thời gian thực từng token, emit sự kiện chuỗi: <code>phase</code> &rarr; <code>route</code> &rarr; <code>retrieval</code> &rarr; <code>token</code> &rarr; <code>done</code>.</li>
-            <li><strong>Quản Lý Phiên & Hội Thoại:</strong> Tự động trao đổi lưu trữ phiên chat, phân trang cursor, tìm kiếm regex an toàn, soft-delete.</li>
-            <li><strong>Bảo Mật & Phân Quyền (RBAC):</strong> Quản trị viên (Admin) và Người dùng (User). Cấp phát, xoay vòng và thu hồi JWT tokens.</li>
+            <li><strong>Scientific RAG:</strong> Hệ thống hỏi đáp tài liệu nghiên cứu khoa học chuyên sâu, hỗ trợ trích dẫn học thuật thời gian thực và điều hướng không gian tri thức 3D.</li>
+            <li><strong>Thách thức phiên bản v1:</strong> URL còn lẫn động từ (<code>/auth/login</code>, <code>/rag/chat</code>), định dạng lỗi chưa chuẩn hóa theo RFC, thiếu xử lý lũy đẳng (Idempotence) khi mạng chập chờn.</li>
+            <li><strong>Yêu cầu nâng cấp:</strong> Thiết kế phiên bản <code>/api/v2</code> đạt chuẩn quốc tế cao nhất nhưng tuyệt đối không làm gián đoạn các client đang chạy bản v1.</li>
           </ul>
         </div>
 
         <div class="card">
-          <div class="card-title"><span class="icon">🛡️</span> Yêu Cầu Phi Chức Năng (Non-Functional Requirements)</div>
+          <div class="card-title"><span class="icon">🛡️</span> Hai Nguyên Tắc Bất Biến Khi Thực Hiện</div>
           <ul>
-            <li><strong>Khả Năng Chịu Tải:</strong> Duy trì ổn định ở <strong>400 Concurrent Users</strong>, thông lượng <strong>250 RPS</strong>, không sập DRAM hoặc nghẽn Event Loop.</li>
-            <li><strong>Tính Sẵn Sàng (High Availability):</strong> MongoDB Replica Set (3-nodes) hỗ trợ ACID Transactions; Health check định kỳ tự động chuyển trạng thái <code>ok</code> / <code>degraded</code> / <code>down</code>.</li>
-            <li><strong>Bảo Mật Cấp Cao:</strong> Băm mật khẩu bằng <strong>Argon2id (64MB RAM, 4 parallelism)</strong>, chống Brute-Force, tự khóa Progressive Lockout, Anti-Enumeration 404.</li>
-            <li><strong>Chuẩn Hóa Giao Thức:</strong> Song song `/api/v1` và `/api/v2`, lỗi chuẩn RFC 9457 Problem Details.</li>
+            <li><strong>Nguyên tắc 1 — Zero Breaking Changes:</strong> Duy trì song song cả 2 bản <code>/api/v1</code> và <code>/api/v2</code> độc lập trên cùng server; toàn bộ 100% test suites cũ của v1 giữ nguyên vẹn và pass 100%.</li>
+            <li><strong>Nguyên tắc 2 — Frozen Core Boundary:</strong> Tuyệt đối không can thiệp, sửa đổi hay làm thay đổi chữ ký của Mongoose DB Models (<code>schemas/</code>) và logic nghiệp vụ (<code>*.service.ts</code>). Mọi nâng cấp đều xử lý tại tầng Controller, DTO và Http Filters thông qua Adapter Pattern.</li>
           </ul>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 3: SYSTEM DESIGN & KIẾN TRÚC TỔNG THỂ -->
+    <!-- SLIDE 3: YÊU CẦU CHỨC NĂNG -->
     <div class="slide" data-slide="3">
-      <div class="slide-tag">Phần II • System Design</div>
-      <h1 class="slide-title">Kiến Trúc Hệ Thống & Luồng Dữ Liệu RAG</h1>
-      <h2 class="slide-subtitle">Mô hình phân lớp tách biệt: HTTP Adapter &rarr; Frozen Domain Core &rarr; Vector DB & Inference Engines.</h2>
+      <div class="slide-tag">Phần II • Phân Tích Yêu Cầu</div>
+      <h1 class="slide-title">Yêu Cầu Chức Năng (Functional Requirements)</h1>
+      <h2 class="slide-subtitle">Các luồng nghiệp vụ cốt lõi đáp ứng trải nghiệm hỏi đáp học thuật và quản trị hệ thống.</h2>
+      
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><span class="icon">🔬</span> 1. Scientific RAG Pipeline Đa Tầng</div>
+          <ul>
+            <li><strong>Nhúng ngữ nghĩa:</strong> Nhúng truy vấn người dùng thành vector 768 chiều với Nomic Embed v1.5.</li>
+            <li><strong>Định tuyến không gian 3D:</strong> Duyệt cây tri thức World Tree 3D để xác định cụm chủ đề tài liệu liên quan.</li>
+            <li><strong>Hybrid Search:</strong> Truy vấn tương đồng cosine trên Qdrant (<code>scientific_papers_gold</code>).</li>
+            <li><strong>Rerank tác giả:</strong> Tăng trọng số tài liệu dựa trên thuật toán PageRank đồ thị đồng tác giả (Co-authorship Graph).</li>
+            <li><strong>Sinh phản hồi:</strong> LLM Qwen2.5-7B sinh nội dung kèm trích dẫn chính xác từng tài liệu.</li>
+          </ul>
+        </div>
 
-      <div class="flow-box" style="margin-bottom: 20px;">
-        [ Client / Frontend 3D ] &nbsp;&Longleftrightarrow;&nbsp; [ Reverse Proxy / Cloudflare TCP Tunnel ]<br>
+        <div class="card">
+          <div class="card-title"><span class="icon">📡</span> 2. Server-Sent Events (SSE) Streaming</div>
+          <ul>
+            <li><strong>Stream thời gian thực:</strong> Trả về từng token ngay khi LLM sinh ra, giảm Time-to-First-Token (TTFT) xuống dưới 400ms.</li>
+            <li><strong>Chuỗi sự kiện có cấu trúc:</strong> Phát chuỗi event rõ ràng: <code>phase</code> &rarr; <code>route</code> &rarr; <code>retrieval</code> &rarr; <code>token</code> &rarr; <code>done</code>.</li>
+            <li><strong>Đóng kết nối an toàn:</strong> Tự động giải phóng Client Slot và tài nguyên khi client hủy request hoặc stream hoàn tất.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="icon">💬</span> 3. Quản Lý Phiên Chat & Lịch Sử</div>
+          <ul>
+            <li>Tự động khởi tạo phiên chat khi gửi câu hỏi đầu tiên; cập nhật <code>last_message_at</code> theo thời gian thực.</li>
+            <li>Phân trang lịch sử tin nhắn bằng cursor UUIDv7 an toàn, hiệu năng cao.</li>
+            <li>Tìm kiếm phiên chat bằng text search với cơ chế safe regex escape chống ReDoS.</li>
+            <li>Hỗ trợ xóa mềm (Soft-delete) bảo toàn dữ liệu phục vụ nghiên cứu và thống kê.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="icon">👑</span> 4. Xác Thực & Phân Quyền (RBAC Admin)</div>
+          <ul>
+            <li>Phân quyền chặt chẽ 2 vai trò: Người dùng thông thường (<code>user</code>) và Quản trị viên (<code>admin</code>).</li>
+            <li>Xoay vòng JWT tokens (Access Token 15 phút, Refresh Token 7 ngày) kèm phát hiện hành vi tái sử dụng token.</li>
+            <li>Bảng điều khiển Admin: Quản lý danh sách người dùng, phiên hội thoại, thu hồi quyền và tra cứu nhật ký kiểm toán.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: YÊU CẦU PHI CHỨC NĂNG -->
+    <div class="slide" data-slide="4">
+      <div class="slide-tag">Phần II • Phân Tích Yêu Cầu</div>
+      <h1 class="slide-title">Yêu Cầu Phi Chức Năng (Non-Functional Requirements)</h1>
+      <h2 class="slide-subtitle">Các tiêu chuẩn kỹ thuật về hiệu năng, độ tin cậy và an toàn bảo mật cấp cao.</h2>
+      
+      <div class="grid-2">
+        <div class="card highlight">
+          <div class="card-title"><span class="icon">⚡</span> 1. Hiệu Năng & Khả Năng Chịu Tải</div>
+          <ul>
+            <li><strong>Chịu tải đồng thời:</strong> Vận hành ổn định ở mức tải đỉnh <strong>400 Concurrent Users</strong> với thông lượng tối thiểu <strong>250 RPS</strong>.</li>
+            <li><strong>Cam kết độ trễ (SLA Latency):</strong> Thời gian phản hồi phân vị 95 (P95) đạt dưới <strong>500ms</strong> trên toàn bộ các route CRUD và xác thực.</li>
+            <li><strong>Ổn định Event Loop:</strong> Tối ưu hóa I/O bất đồng bộ, không để CPU-intensive tasks làm nghẽn tiến trình Node.js chính.</li>
+          </ul>
+        </div>
+
+        <div class="card highlight">
+          <div class="card-title"><span class="icon">🔄</span> 2. Tính Sẵn Sàng & Khả Năng Phục Hồi (HA)</div>
+          <ul>
+            <li><strong>Cơ sở dữ liệu Replica Set:</strong> Cụm MongoDB 3 nodes (1 Primary, 2 Secondaries) hỗ trợ giao dịch ACID transactions và tự động failover khi có node gặp sự cố.</li>
+            <li><strong>Giám sát sức khỏe định kỳ:</strong> Bộ kiểm tra sức khỏe <code>/health</code>, <code>/health/live</code>, <code>/health/ready</code> cung cấp trạng thái <code>ok</code> / <code>degraded</code> / <code>down</code> cho k8s liveness probe.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="icon">🔒</span> 3. An Toàn & Bảo Mật Dữ Liệu</div>
+          <ul>
+            <li><strong>Mã hóa mật khẩu:</strong> Sử dụng thuật toán <strong>Argon2id</strong> (64MB memory cost, 4 iterations, 4 parallelism) đạt chuẩn OWASP.</li>
+            <li><strong>Chống tấn công Brute-Force:</strong> Khóa tài khoản tạm thời theo cơ chế lũy tiến (Progressive Lockout) khi nhập sai mật khẩu liên tiếp.</li>
+            <li><strong>Bảo vệ chống lộ định danh (Anti-Enumeration):</strong> Trả về <code>404 Not Found</code> thay vì <code>403 Forbidden</code> khi truy cập tài nguyên không sở hữu.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="icon">📋</span> 4. Chuẩn Hóa Giao Thức & Tương Thích</div>
+          <ul>
+            <li>Tuân thủ đầy đủ chuẩn thông điệp lỗi quốc tế <strong>RFC 9457 Problem Details</strong> (<code>application/problem+json</code>).</li>
+            <li>Hỗ trợ đàm phán nội dung (Content Negotiation) cả JSON lẫn XML thông qua HTTP header <code>Accept</code>.</li>
+            <li>Áp dụng đầy đủ mô hình siêu liên kết tự khám phá HATEOAS ở cả hai phiên bản API.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: SYSTEM DESIGN - KIẾN TRÚC TỔNG THỂ -->
+    <div class="slide" data-slide="5">
+      <div class="slide-tag">Phần III • System Design</div>
+      <h1 class="slide-title">Kiến Trúc Hệ Thống & Luồng Dữ Liệu RAG</h1>
+      <h2 class="slide-subtitle">Mô hình phân tầng tách biệt giữa HTTP Interface, Frozen Business Core và Các Inference Engines.</h2>
+
+      <div class="flow-box" style="margin-bottom: 16px;">
+        [ Client / Frontend 3D Explorer ] &nbsp;&Longleftrightarrow;&nbsp; [ Reverse Proxy / Cloudflare TCP Tunnel ]<br>
         &darr;<br>
-        [ <b>NestJS Monolith (Port 3000)</b>: Helmet &bull; RateLimiter &bull; ContentNegotiation &bull; ValidationPipe &bull; HttpExceptionFilter ]<br>
+        [ <b>NestJS Monolith Gateway (Port 3000)</b>: Helmet &bull; RateLimiter &bull; ContentNegotiation &bull; ValidationPipe &bull; ProblemDetailsFilter ]<br>
         &darr;<br>
-        &bull; <b>Auth & Sessions:</b> MongoDB Replica Set (rs0, <code>users</code>, <code>chat_sessions</code>, <code>tokens</code>, <code>audit_logs</code>)<br>
-        &bull; <b>Retrieval Engine:</b> Nomic Embed v1.5 (768-dim) &rarr; Qdrant (<code>scientific_papers_gold</code>)<br>
-        &bull; <b>Mining Engine:</b> Co-authorship PageRank & FP-Growth (Authority Boosting)<br>
+        &bull; <b>Auth & Storage:</b> MongoDB Replica Set (rs0, <code>users</code>, <code>chat_sessions</code>, <code>tokens</code>, <code>audit_logs</code>)<br>
+        &bull; <b>Vector Retrieval:</b> Nomic Embed v1.5 (768-dim) &rarr; Qdrant (<code>scientific_papers_gold</code>)<br>
+        &bull; <b>Data Mining:</b> Co-authorship PageRank & FP-Growth (Authority Boosting)<br>
         &bull; <b>Inference Engine:</b> node-llama-cpp &rarr; GGUF Qwen2.5-7B (Bounded Semaphore Queue)
       </div>
 
       <div class="grid-3">
         <div class="card">
-          <div class="card-title">1. Layer Adapter (API)</div>
-          <p>Controllers, DTOs, Guards, Interceptors. Tiếp nhận HTTP request, validate, áp dụng HATEOAS và bọc dữ liệu.</p>
+          <div class="card-title">1. Tầng Adapter (API Layer)</div>
+          <p>Controllers, DTOs, Guards, Interceptors tiếp nhận HTTP request, xác thực JWT, validate schema, gắn HATEOAS và bọc dữ liệu trả về.</p>
         </div>
         <div class="card">
-          <div class="card-title">2. Layer Domain (Service)</div>
-          <p>Bất biến (Frozen Core). Nắm giữ toàn bộ nghiệp vụ, quản lý transactions và cơ chế generation-versioned caching.</p>
+          <div class="card-title">2. Tầng Domain (Core Service)</div>
+          <p>Bất biến (Frozen Boundary). Quản lý toàn bộ quy tắc nghiệp vụ, điều phối giao dịch đa document và cơ chế invalidation cache.</p>
         </div>
         <div class="card">
-          <div class="card-title">3. Layer Engines</div>
-          <p>Vector Store (Qdrant), LLM Inference (node-llama-cpp), Embedding, 3D Tree Router, Graph Data Mining.</p>
+          <div class="card-title">3. Tầng Engines & Storage</div>
+          <p>Vector Store (Qdrant), LLM Inference (node-llama-cpp), Embedding engine, cây điều hướng 3D và cơ sở dữ liệu MongoDB Replica Set.</p>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 4: CHỊU TẢI, SCALABILITY & TÍNH SẴN SÀNG -->
-    <div class="slide" data-slide="4">
-      <div class="slide-tag">Phần III • Hiệu Năng & SRE</div>
-      <h1 class="slide-title">Khả Năng Chịu Tải, Mở Rộng & Tính Sẵn Sàng</h1>
-      <h2 class="slide-subtitle">SRE Benchmark: 400 Concurrent Users (250 RPS) trên đường hầm MongoDB 15-25ms RTT.</h2>
+    <!-- SLIDE 6: KHẢ NĂNG CHỊU TẢI 400 CUs -->
+    <div class="slide" data-slide="6">
+      <div class="slide-tag">Phần IV • Chịu Tải & SRE</div>
+      <h1 class="slide-title">Khả Năng Chịu Tải 400 Concurrent Users</h1>
+      <h2 class="slide-subtitle">SRE Benchmark: Vận hành ổn định ở thông lượng 250 RPS trên đường hầm MongoDB 15-25ms RTT.</h2>
 
       <div class="grid-3" style="margin-bottom: 15px;">
         <div class="card highlight">
-          <div class="metric-sub">P95 Latency SLA</div>
+          <div class="metric-sub">P95 Latency Đạt Được</div>
           <div class="badge-metric">265.54 ms</div>
-          <p>Vượt tiêu chuẩn SLA yêu cầu (&lt; 500ms) ở tải đỉnh 400 CUs.</p>
+          <p>Vượt xa chỉ tiêu SLA yêu cầu (&lt; 500ms) ngay cả trong điều kiện tải đỉnh 400 CUs.</p>
         </div>
         <div class="card highlight">
-          <div class="metric-sub">Zero DRAM Thrashing</div>
-          <div class="badge-metric">UV_THREADPOOL = 4</div>
-          <p>Ghim cố định 4 worker thread cho Argon2id tránh nghẽn băng thông RAM.</p>
+          <div class="metric-sub">Thông Lượng Xử Lý</div>
+          <div class="badge-metric">250 RPS</div>
+          <p>Xử lý trơn tru các luồng đọc/ghi đồng thời mà không nghẽn Event Loop của Node.js.</p>
         </div>
         <div class="card highlight">
-          <div class="metric-sub">LLM Semaphore Queue</div>
-          <div class="badge-metric">Concurrency=1, Max=8</div>
-          <p>Tự động shed-load trả về <code>429</code> khi hàng đợi LLM vượt ngưỡng 8 request.</p>
+          <div class="metric-sub">Tỉ Lệ Lỗi Hệ Thống</div>
+          <div class="badge-metric">0.00%</div>
+          <p>Không có request nào bị timeout hoặc sập kết nối trong suốt quá trình stress test.</p>
         </div>
       </div>
-
-      <div class="card">
-        <div class="card-title"><span class="icon">⚡</span> Bí Quyết Kiến Trúc: 2-Tier Caching & Invalidation Contract</div>
-        <ul>
-          <li><strong>Anti-Stampede với Singleflight:</strong> Khi Cache Miss ở đỉnh tải <code>t = 120s</code>, chỉ duy nhất 1 request đầu tiên được xuyên xuống MongoDB, các request đến sau cùng đợi trên một Promise.</li>
-          <li><strong>Generation-Versioned LRUCache:</strong> Mỗi user có một <code>generation</code> ID. Khi có hành động thêm/xóa/sửa, hệ thống chỉ tăng generation lên 1, lập tức vô hiệu hóa $O(1)$ toàn bộ các trang cache phân trang của user đó mà không cần duyệt quét database.</li>
-          <li><strong>Bắt buộc dùng <code>.lean()</code>:</strong> Toàn bộ truy vấn đọc MongoDB dùng <code>.lean()</code> để bỏ qua overhead hydration của Mongoose, giảm 40% memory pressure.</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- SLIDE 5: THIẾT KẾ SCHEMA & SƠ ĐỒ THỰC THỂ ERD -->
-    <div class="slide" data-slide="5">
-      <div class="slide-tag">Phần IV • Cơ Sở Dữ Liệu</div>
-      <h1 class="slide-title">Thiết Kế Database Schemas & Sơ Đồ Thực Thể</h1>
-      <h2 class="slide-subtitle">Mô hình dữ liệu MongoDB tối ưu cho High-Concurrency, Trích dẫn Khoa học & Audit Trail.</h2>
 
       <div class="grid-2">
         <div class="card">
-          <div class="card-title">Sơ Đồ Thực Thể (ERD Relationships)</div>
-          <div class="flow-box" style="text-align: left; font-size: 0.8rem; padding: 12px;">
-            <b>User</b> (1) &mdash;&mdash;&lt; (N) <b>RefreshToken</b> (family_id, token_hash)<br>
-            &nbsp;&nbsp;&DownTee;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-            &nbsp;&nbsp;&vert;&mdash;&mdash;&lt; (N) <b>ChatSession</b> (_id: UUIDv7, title, last_message_at)<br>
-            &nbsp;&nbsp;&vert;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&DownTee;<br>
-            &nbsp;&nbsp;&vert;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&vert;&mdash;&mdash;&lt; (N) <b>ChatMessage</b> (_id: UUIDv7, role, citations)<br>
-            &nbsp;&nbsp;&DownTee;<br>
-            <b>AdminAuditLog</b> (Append-Only: actor_id, action, target_id, ip, req_id)<br>
-            <b>ChatRequest</b> (Idempotency Key Store, 24h TTL)
+          <div class="card-title"><span class="icon">🧠</span> Triệt Tiêu Nghẽn RAM (DRAM Thrashing)</div>
+          <p>Argon2id đòi hỏi 64MB RAM/lần băm. Nếu để Node.js tự do spawn luồng băm mật khẩu, hệ thống sẽ cạn băng thông bộ nhớ. Giải pháp:</p>
+          <ul>
+            <li>Khóa cứng <code>UV_THREADPOOL_SIZE = 4</code> để giới hạn số tác vụ mã hóa chạy song song.</li>
+            <li>Đưa các yêu cầu vượt quá vào hàng đợi chờ xử lý tuần tự, bảo toàn 100% dung lượng RAM hệ thống.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="icon">🚦</span> LLM Semaphore Queue & Shed-Loading</div>
+          <p>Mô hình ngôn ngữ lớn Qwen2.5-7B tiêu tốn nhiều tài nguyên GPU/CPU khi sinh chuỗi phản hồi. Cơ chế điều tiết:</p>
+          <ul>
+            <li>Thiết lập hàng đợi Semaphore với <code>concurrency = 1</code> và <code>maxQueueLength = 8</code>.</li>
+            <li>Khi hàng đợi đạt ngưỡng 8, hệ thống tự động ngắt tải (Shed-Load) và trả về <code>429 Too Many Requests</code> kèm header <code>Retry-After</code>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: CƠ CHẾ CACHING & TÍNH SẴN SÀNG -->
+    <div class="slide" data-slide="7">
+      <div class="slide-tag">Phần IV • Chịu Tải & SRE</div>
+      <h1 class="slide-title">Cơ Chế Caching 2 Tầng & Tính Sẵn Sàng (HA)</h1>
+      <h2 class="slide-subtitle">Bảo vệ cơ sở dữ liệu khỏi tình trạng sập tải với Singleflight và Invalidation O(1).</h2>
+
+      <div class="grid-2">
+        <div class="card highlight">
+          <div class="card-title"><span class="icon">🛡️</span> Chống Cache Stampede Với Singleflight</div>
+          <p>Khi dữ liệu trong cache hết hạn đúng thời điểm 400 người dùng cùng truy vấn (Cache Miss đồng loạt):</p>
+          <ul>
+            <li>Thay vì để 400 request đồng loạt truy vấn xuống MongoDB, hệ thống sử dụng kỹ thuật <strong>Singleflight</strong>.</li>
+            <li>Chỉ duy nhất 1 request đầu tiên được phép truy vấn DB; 399 request còn lại cùng lắng nghe trên 1 Promise chung và nhận kết quả ngay khi request đầu tiên hoàn tất.</li>
+          </ul>
+        </div>
+
+        <div class="card highlight">
+          <div class="card-title"><span class="icon">⚡</span> Invalidation O(1) Bằng Generation Versioning</div>
+          <p>Vấn đề: Xóa cache phân trang danh sách phiên chat khi người dùng tạo phiên mới rất tốn kém nếu phải quét key.</p>
+          <ul>
+            <li>Mỗi người dùng sở hữu một chỉ số nguyên <code>generation</code> lưu kèm trong cache key: <code>user_{id}_gen_{v}</code>.</li>
+            <li>Khi có hành động ghi (thêm/sửa/xóa), hệ thống chỉ cần tăng <code>generation</code> lên 1. Toàn bộ cache phân trang cũ lập tức bị vô hiệu hóa với độ phức tạp $O(1)$ mà không cần xóa từng key.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="icon">⚡</span> Tối Ưu Truy Vấn Mongoose Bằng .lean()</div>
+          <p>Tất cả các truy vấn đọc MongoDB đều bắt buộc sử dụng <code>.lean()</code>:</p>
+          <ul>
+            <li>Bỏ qua việc tạo ra các đối tượng Mongoose Document phức tạp (hydration), chỉ trả về Plain Old JavaScript Object (POJO).</li>
+            <li>Giảm 40% áp lực cấp phát bộ nhớ (Garbage Collection) và tăng tốc độ xử lý JSON serialization lên 2.5 lần.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="icon">🔄</span> Cụm MongoDB 3-Node Replica Set</div>
+          <p>Cấu hình sẵn sàng cao (High Availability):</p>
+          <ul>
+            <li>1 Primary ghi dữ liệu và 2 Secondaries sao lưu dữ liệu theo thời gian thực (oplog).</li>
+            <li>Tự động bầu chọn Primary mới trong vòng 2-3 giây nếu node chính gặp sự cố, đảm bảo dịch vụ không bị gián đoạn.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: THIẾT KẾ SCHEMA DATABASE -->
+    <div class="slide" data-slide="8">
+      <div class="slide-tag">Phần V • Cơ Sở Dữ Liệu</div>
+      <h1 class="slide-title">Thiết Kế Database Schemas & Cấu Trúc Bảng</h1>
+      <h2 class="slide-subtitle">Mô hình dữ liệu MongoDB được thiết kế tối ưu cho High-Concurrency, Trích dẫn Khoa học & Audit Trail.</h2>
+
+      <table class="data-table" style="margin-bottom: 14px;">
+        <thead>
+          <tr>
+            <th>Collection</th>
+            <th>Khóa Chính (_id)</th>
+            <th>Trường Dữ Liệu Quan Trọng</th>
+            <th>Vai Trò Nghiệp Vụ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>users</code></td>
+            <td>MongoDB ObjectId</td>
+            <td><code>email</code>, <code>password_hash</code>, <code>roles</code>, <code>fail_count</code>, <code>locked_until</code></td>
+            <td>Tài khoản, quyền hạn RBAC và thông số phòng thủ Brute-Force</td>
+          </tr>
+          <tr>
+            <td><code>refresh_tokens</code></td>
+            <td>MongoDB ObjectId</td>
+            <td><code>user_id</code>, <code>token_hash</code>, <code>family_id</code>, <code>is_revoked</code>, <code>expires_at</code></td>
+            <td>Quản lý phiên đăng nhập dài hạn, phát hiện tấn công tái sử dụng token</td>
+          </tr>
+          <tr>
+            <td><code>chat_sessions</code></td>
+            <td>RFC 9562 UUIDv7</td>
+            <td><code>user_id</code>, <code>title</code>, <code>generation</code>, <code>last_message_at</code>, <code>deleted_at</code></td>
+            <td>Phiên hội thoại khoa học, hỗ trợ sắp xếp tự nhiên và xóa mềm</td>
+          </tr>
+          <tr>
+            <td><code>chat_messages</code></td>
+            <td>RFC 9562 UUIDv7</td>
+            <td><code>session_id</code>, <code>role</code>, <code>content</code>, <code>citations</code>, <code>created_at</code></td>
+            <td>Nội dung trao đổi chi tiết kèm trích dẫn văn bản học thuật</td>
+          </tr>
+          <tr>
+            <td><code>admin_audit_logs</code></td>
+            <td>MongoDB ObjectId</td>
+            <td><code>actor_id</code>, <code>action</code>, <code>target_id</code>, <code>ip</code>, <code>req_id</code>, <code>created_at</code></td>
+            <td>Nhật ký kiểm toán hệ thống bất biến (Append-Only), phục vụ thanh tra</td>
+          </tr>
+          <tr>
+            <td><code>chat_requests</code></td>
+            <td>String Key</td>
+            <td><code>user_id</code>, <code>response_body</code>, <code>status_code</code>, <code>expires_at</code> (TTL 24h)</td>
+            <td>Kho lưu vết Idempotency Key, tự động dọn dẹp sau 24 giờ</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Ưu Điểm Của Khóa Chính UUIDv7</div>
+          <p>Tất cả Session và Message sử dụng <strong>UUIDv7</strong> thay vì UUIDv4 thông thường. Phần đầu của UUIDv7 chứa sẵn 48-bit timestamp theo mili-giây, giúp cơ sở dữ liệu sắp xếp thứ tự thời gian tự nhiên trên cây B-Tree mà không cần tạo thêm index riêng cho trường <code>created_at</code>.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Chính Sách Xóa Mềm (Soft-Delete)</div>
+          <p>Các thực thể phiên chat không bao giờ bị xóa cứng (hard-delete) khỏi cơ sở dữ liệu. Trường <code>deleted_at</code> đóng vai trò tombstone đánh dấu. Mọi truy vấn của người dùng đều tự động lọc <code>deleted_at: null</code>, bảo vệ toàn vẹn dữ liệu thống kê và lịch sử kiểm toán.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: SƠ ĐỒ THỰC THỂ ERD TRONG DB -->
+    <div class="slide" data-slide="9">
+      <div class="slide-tag">Phần V • Cơ Sở Dữ Liệu</div>
+      <h1 class="slide-title">Sơ Đồ Thực Thể Trong Database (ERD)</h1>
+      <h2 class="slide-subtitle">Mối quan hệ giữa các thực thể, ràng buộc toàn vẹn và cơ chế cô lập dữ liệu.</h2>
+
+      <div class="grid-2">
+        <div class="card highlight">
+          <div class="card-title"><span class="icon">📊</span> Sơ Đồ Mối Quan Hệ (Entity-Relationship Diagram)</div>
+          <div class="flow-box" style="text-align: left; font-size: 0.82rem; padding: 14px; line-height: 1.7;">
+            <b>User</b> (1) &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&lt; (N) <b>RefreshToken</b> (family_id, token_hash)<br>
+            &nbsp;&nbsp;&vert;<br>
+            &nbsp;&nbsp;&vert;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&lt; (N) <b>ChatSession</b> (_id: UUIDv7, title, last_message_at)<br>
+            &nbsp;&nbsp;&vert;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&vert;<br>
+            &nbsp;&nbsp;&vert;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&vert;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&lt; (N) <b>ChatMessage</b> (_id: UUIDv7, citations)<br>
+            &nbsp;&nbsp;&vert;<br>
+            &nbsp;&nbsp;&vert;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&lt; (N) <b>AdminAuditLog</b> (Append-Only: actor_id, action, target_id)<br>
+            <br>
+            <b>ChatRequest</b> (Khóa: <code>idempotency_key + user_id</code>, TTL 24h)
           </div>
         </div>
 
         <div class="card">
-          <div class="card-title">Các Bất Biến Cốt Lõi Về Dữ Liệu</div>
+          <div class="card-title"><span class="icon">🔐</span> Các Ràng Buộc & Quy Tắc Toàn Vẹn Dữ Liệu</div>
           <ul>
-            <li><strong>RFC 9562 UUIDv7 Khóa Chính:</strong> Session và Message ID chứa sẵn timestamp ở đầu, hỗ trợ sort tự nhiên không cần index riêng trên <code>created_at</code>.</li>
-            <li><strong>Chính Sách Xóa Mềm (Soft-Delete):</strong> Không bao giờ xóa cứng dữ liệu người dùng; trường <code>deleted_at</code> làm tombstone bảo toàn tính toàn vẹn.</li>
-            <li><strong>1-RTT Atomic Token Rotation:</strong> Dùng <code>findOneAndUpdate</code> atomic trên refresh token. Nếu phát hiện token đã thu hồi bị dùng lại &rarr; lập tức revoke toàn bộ token family (chống đánh cắp phiên).</li>
-            <li><strong>Append-Only Audit Trail:</strong> <code>admin_audit_logs</code> không cung cấp hàm update/delete ở bất kỳ tầng nào.</li>
+            <li><strong>Atomic 1-RTT Token Rotation:</strong> Thao tác làm mới token sử dụng <code>findOneAndUpdate</code> nguyên tử (Atomic). Nếu phát hiện một Refresh Token đã thu hồi bị gọi lại lần 2, hệ thống lập tức thu hồi toàn bộ <code>family_id</code> của chuỗi token đó để ngăn chặn hacker.</li>
+            <li><strong>Cascade Invalidation:</strong> Khi xóa mềm một <code>ChatSession</code>, toàn bộ các <code>ChatMessage</code> thuộc session đó sẽ bị ẩn tức thời đối với người dùng mà không cần duyệt cập nhật từng dòng.</li>
+            <li><strong>Chỉ mục tối ưu (Compound Indexes):</strong>
+              <br>&bull; <code>{ user_id: 1, deleted_at: 1, last_message_at: -1 }</code> cho phân trang session.
+              <br>&bull; <code>{ session_id: 1, _id: 1 }</code> cho phân trang tin nhắn theo cursor.
+            </li>
           </ul>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 6: 8 NGUYÊN TẮC BYTEBYTEGO (PHẦN 1: #1 - #4) -->
-    <div class="slide" data-slide="6">
-      <div class="slide-tag">Phần V • RESTful Design (ByteByteGo)</div>
-      <h1 class="slide-title">Chuẩn Hóa API Theo 8 Nguyên Tắc (Phần 1)</h1>
-      <h2 class="slide-subtitle">Hiện thực hóa 4 nguyên tắc đầu tiên từ infographic chuẩn quốc tế của ByteByteGo.</h2>
+    <!-- SLIDE 10: 8 NGUYÊN TẮC - #1 & #2 -->
+    <div class="slide" data-slide="10">
+      <div class="slide-tag">Phần VI • Chuẩn Hóa RESTful API</div>
+      <h1 class="slide-title">Nguyên Tắc #1: Domain Model & #2: HTTP Methods</h1>
+      <h2 class="slide-subtitle">Thiết kế cấu trúc URI phản ánh đúng mô hình miền và tuân thủ ngữ nghĩa chuẩn của các phương thức HTTP.</h2>
+
+      <div class="grid-2">
+        <div class="card highlight">
+          <div class="card-title">1. Domain Model Driven (Max Depth &le; 2)</div>
+          <p>Tài nguyên phản ánh quan hệ miền thực thể, tuyệt đối không lồng ghép quá 2 cấp độ:</p>
+          <ul>
+            <li><strong>Hợp lệ (Cấp 2):</strong> <code>GET /chat-sessions/{id}/messages</code></li>
+            <li><strong>Hợp lệ (Cấp 2):</strong> <code>GET /admin/users/{id}/tokens</code></li>
+            <li><strong>Nguyên tắc phẳng hóa:</strong> Khi một tài nguyên con đã có định danh độc lập, đưa trực tiếp về root endpoint. Ví dụ: URL xấu <code>/departments/5/teams/12/users/89/permissions</code> được đưa về thẳng <code>/users/89/permissions</code> để tránh phụ thuộc và dễ bảo trì.</li>
+          </ul>
+        </div>
+
+        <div class="card highlight">
+          <div class="card-title">2. Choose HTTP Methods</div>
+          <p>Sử dụng chính xác phương thức HTTP đại diện cho hành động tương ứng:</p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Mục Đích Sử Dụng</th>
+                <th>Ví Dụ Trong Hệ Thống v2</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>GET</code></td>
+                <td>Đọc dữ liệu (danh sách / chi tiết)</td>
+                <td><code>GET /papers?ids=...</code></td>
+              </tr>
+              <tr>
+                <td><code>POST</code></td>
+                <td>Tạo mới tài nguyên</td>
+                <td><code>POST /auth/tokens</code>, <code>POST /rag/queries</code></td>
+              </tr>
+              <tr>
+                <td><code>PUT</code></td>
+                <td>Cập nhật/thay thế toàn bộ</td>
+                <td><code>PUT /users/me/password</code></td>
+              </tr>
+              <tr>
+                <td><code>PATCH</code></td>
+                <td>Cập nhật một phần</td>
+                <td><code>PATCH /chat-sessions/{id}</code></td>
+              </tr>
+              <tr>
+                <td><code>DELETE</code></td>
+                <td>Xóa tài nguyên</td>
+                <td><code>DELETE /chat-sessions/{id}</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 11: 8 NGUYÊN TẮC - #3 & #4 -->
+    <div class="slide" data-slide="11">
+      <div class="slide-tag">Phần VI • Chuẩn Hóa RESTful API</div>
+      <h1 class="slide-title">Nguyên Tắc #3: Idempotence & #4: Status Codes</h1>
+      <h2 class="slide-subtitle">Đảm bảo tính lũy đẳng an toàn khi retry và xóa bỏ triệt để vấn nạn "200 OK with Error Body".</h2>
 
       <div class="grid-2">
         <div class="card">
-          <div class="card-title">1. Domain Model Driven (Max Depth &le; 2)</div>
-          <p>Tài nguyên phản ánh quan hệ miền thực thể, không lồng ghép quá 2 cấp độ:</p>
-          <ul>
-            <li><code>GET /chat-sessions/{id}/messages</code> (Cấp 2)</li>
-            <li><code>GET /admin/users/{id}/tokens</code> (Cấp 2)</li>
-            <li>Tránh tuyệt đối URL lồng sâu như <code>/users/1/sessions/2/messages/3</code>.</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <div class="card-title">2. Choose HTTP Methods</div>
-          <p>Tuân thủ nghiêm ngặt ngữ nghĩa HTTP Methods:</p>
-          <ul>
-            <li><code>GET</code>: Đọc dữ liệu (danh sách & chi tiết).</li>
-            <li><code>POST</code>: Tạo mới token, tạo tài khoản, hỏi đáp RAG.</li>
-            <li><code>PUT</code>: Cập nhật toàn bộ (đổi mật khẩu, gán quyền roles).</li>
-            <li><code>PATCH</code>: Cập nhật một phần (đổi tên session, cập nhật profile).</li>
-            <li><code>DELETE</code>: Xóa mềm session, thu hồi token.</li>
-          </ul>
-        </div>
-
-        <div class="card">
           <div class="card-title">3. Implement Idempotence Properly</div>
-          <p>Xử lý tính lũy đẳng (Idempotence) an toàn:</p>
+          <p>Xử lý an toàn khi client gửi lại request nhiều lần do chập chờn mạng:</p>
           <ul>
-            <li><code>DELETE</code>: Luôn trả <strong>204 No Content</strong> dù gọi lại nhiều lần.</li>
-            <li><code>POST /rag/queries</code>: Hỗ trợ header <code>Idempotency-Key</code> lưu 24h, replay kết quả cũ kèm <code>Idempotent-Replayed: true</code>.</li>
+            <li><strong>Phương thức DELETE:</strong> Luôn trả về <strong>204 No Content</strong> dù gọi 1 lần hay gọi lặp lại 10 lần liên tiếp (tính lũy đẳng tự nhiên).</li>
+            <li><strong>Phương thức POST RAG Queries:</strong> Hỗ trợ header <code>Idempotency-Key</code> lưu trữ kết quả trong 24 giờ. Khi client retry cùng một key, server trả lại ngay câu trả lời đã tính toán trước đó kèm header <code>Idempotent-Replayed: true</code> mà không cần kích hoạt lại LLM.</li>
           </ul>
         </div>
 
         <div class="card highlight">
           <div class="card-title">4. Status Codes & RFC 9457 Problem Details</div>
-          <p>Xóa bỏ triệt để căn bệnh "200 OK with Error Body":</p>
+          <p>Sử dụng HTTP Status Code chuẩn mực để phản ánh trạng thái:</p>
           <ul>
-            <li><strong>201 Created</strong> cho tạo token; <strong>204</strong> cho xóa / thu hồi.</li>
-            <li><strong>405 Method Not Allowed</strong> kèm header <code>Allow: GET, POST...</code></li>
-            <li><strong>415 Unsupported Media Type</strong> & <strong>406 Not Acceptable</strong>.</li>
-            <li>Lỗi v2 trả về chuẩn <code>application/problem+json</code> theo RFC 9457.</li>
+            <li><strong>201 Created:</strong> Tạo token và phiên thành công; <strong>204 No Content:</strong> Xóa mềm và thu hồi thành công.</li>
+            <li><strong>405 Method Not Allowed:</strong> Trả về khi gọi sai method, kèm bắt buộc header <code>Allow: GET, POST...</code></li>
+            <li><strong>415 Unsupported Media Type</strong> & <strong>406 Not Acceptable</strong> khi sai Content-Type hoặc Accept.</li>
+            <li><strong>RFC 9457 Problem Details:</strong> Mọi lỗi ở v2 trả về định dạng <code>application/problem+json</code> chứa các trường tiêu chuẩn: <code>type</code>, <code>title</code>, <code>status</code>, <code>detail</code>, <code>instance</code>, <code>invalid_params</code>.</li>
           </ul>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 7: 8 NGUYÊN TẮC BYTEBYTEGO (PHẦN 2: #5 - #8) -->
-    <div class="slide" data-slide="7">
-      <div class="slide-tag">Phần V • RESTful Design (ByteByteGo)</div>
-      <h1 class="slide-title">Chuẩn Hóa API Theo 8 Nguyên Tắc (Phần 2)</h1>
-      <h2 class="slide-subtitle">Hiện thực hóa 4 nguyên tắc tiếp theo: Versioning, Semantic Paths, Batching & Query Language.</h2>
+    <!-- SLIDE 12: 8 NGUYÊN TẮC - #5 & #6 -->
+    <div class="slide" data-slide="12">
+      <div class="slide-tag">Phần VI • Chuẩn Hóa RESTful API</div>
+      <h1 class="slide-title">Nguyên Tắc #5: Versioning & #6: Semantic Paths</h1>
+      <h2 class="slide-subtitle">Quản lý phiên bản rõ ràng trên đường dẫn và loại bỏ 100% động từ trong định danh URI.</h2>
 
       <div class="grid-2">
         <div class="card highlight">
           <div class="card-title">5. Versioning (Path Versioning)</div>
-          <p>Áp dụng chuẩn đề xuất của ByteByteGo (URL Path):</p>
+          <p>Phân tách phiên bản rõ ràng qua tiền tố đường dẫn:</p>
           <ul>
-            <li><code>/api/v1/*</code>: Giữ nguyên vẹn 100% không làm gãy client/test cũ.</li>
-            <li><code>/api/v2/*</code>: Bộ API mới chuẩn quốc tế RFC 9457.</li>
-            <li>Chạy song song độc lập trên cùng 1 server instance.</li>
+            <li><code>/api/v1/*</code>: Giữ nguyên vẹn 100% cho các client và hệ thống cũ tiếp tục hoạt động ổn định không phát sinh lỗi.</li>
+            <li><code>/api/v2/*</code>: Phiên bản nâng cấp mới chuẩn hóa quốc tế theo RFC 9457, RFC 6749 và RFC 7009.</li>
+            <li>Cả hai phiên bản cùng chạy song song, độc lập trên một máy chủ duy nhất thông qua cơ chế route isolation của NestJS.</li>
           </ul>
         </div>
 
-        <div class="card">
-          <div class="card-title">6. Semantic Paths (Danh từ số nhiều)</div>
-          <p>Loại bỏ 100% động từ trong URL:</p>
-          <ul>
-            <li><s>/auth/login</s> &rarr; <code>POST /auth/tokens</code></li>
-            <li><s>/auth/token-rotations</s> &rarr; <code>POST /auth/tokens/refresh</code></li>
-            <li><s>/auth/token-revocations</s> &rarr; <code>POST /auth/tokens/revoke</code></li>
-            <li><s>/rag/chat</s> &rarr; <code>POST /rag/queries</code> & <code>/rag/queries/stream</code></li>
-            <li>Danh từ số nhiều, kebab-case: <code>/chat-sessions</code>, <code>/papers</code>.</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <div class="card-title">7. Batch Processing</div>
-          <p>Hỗ trợ thao tác đơn lẻ và hàng loạt:</p>
-          <ul>
-            <li><strong>Đơn lẻ:</strong> <code>GET /papers/{id}</code>, <code>DELETE /chat-sessions/{id}</code>.</li>
-            <li><strong>Hàng loạt:</strong> <code>GET /papers?ids=id1,id2,id3</code> (tối đa 20 papers).</li>
-            <li><strong>Batch Delete:</strong> <code>DELETE /chat-sessions?ids=id1,id2</code> (tối đa 50 sessions).</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <div class="card-title">8. Query Language (Pagination, Sort, Filter)</div>
-          <p>Cú pháp query chuẩn mực như mô hình ByteByteGo:</p>
-          <ul>
-            <li><strong>Phân trang:</strong> <code>?limit=10&cursor=0199f...</code> (Ép kiểu <code>@Type</code> tránh lỗi 400).</li>
-            <li><strong>Sắp xếp:</strong> <code>?sort=created_at:desc,email:asc</code>.</li>
-            <li><strong>Bộ lọc nâng cao:</strong> <code>?created_at=gte:2026-01-01,lt:2026-02-01</code>.</li>
-            <li><strong>Tìm kiếm:</strong> <code>?search=quantum</code> (hỗ trợ alias <code>?q=...</code>).</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 8: ADAPTER PATTERN & TÍNH BẤT BIẾN -->
-    <div class="slide" data-slide="8">
-      <div class="slide-tag">Phần VI • Kiến Trúc Adapter</div>
-      <h1 class="slide-title">Kỹ Thuật Adapter: Bảo Toàn 100% Service & Schema</h1>
-      <h2 class="slide-subtitle">Làm sao nâng cấp toàn diện API v2 khi có ràng buộc "Tuyệt đối không đụng vào Service và Schema"?</h2>
-
-      <div class="grid-2">
         <div class="card highlight">
-          <div class="card-title">Mô Hình Adapter Hai Chiều (Bi-directional Adapter)</div>
-          <pre><code>[ HTTP Client v2 ]
-      │ (Gửi query 'search', payload v2, Accept: application/problem+json)
-      ▼
-[ Controller v2 & DTO v2 Adapter ]
-      │ ──► Map: dto.toLegacyQuery() { q: dto.search ?? dto.q }
-      ▼
-[ Frozen Service Layer (AuthService, ChatSessionsService...) ]
-      │ (100% Code nguyên bản, không sửa 1 dòng)
-      ▼
-[ Response Serializer / RFC 9457 Filter ]
-      │ ──► Format: Chuẩn hóa envelope, gắn _links HATEOAS v2
-      ▼
-[ HTTP Response v2 ]</code></pre>
-        </div>
-
-        <div class="card">
-          <div class="card-title">Các Giá Trị Adapter Đạt Được</div>
-          <ul>
-            <li><strong>Không Xâm Lấn Domain Core:</strong> Mọi logic nghiệp vụ, transaction và cache phức tạp của Service được bảo toàn nguyên vẹn.</li>
-            <li><strong>Ép Kiểu Dữ Liệu An Toàn:</strong> Ép kiểu chuỗi URL thành number nguyên thủy thông qua <code>class-transformer</code>, xóa bỏ hoàn toàn lỗi "FE truyền limit bị 400".</li>
-            <li><strong>Bảo Mật Chống Mass Assignment:</strong> <code>ValidationPipe</code> với <code>whitelist: true</code> tự động tước bỏ mọi trường lạ người dùng cố tình gửi lên.</li>
-            <li><strong>HATEOAS v2 Tự Động:</strong> <code>LinksInterceptor</code> tự động gắn các siêu liên kết điều hướng <code>_links</code> (self, next, session, messages...) trỏ đúng vào v2.</li>
-          </ul>
+          <div class="card-title">6. Semantic Paths (Danh từ số nhiều, Kebab-case)</div>
+          <p>Quy chuẩn chuyển đổi toàn bộ endpoint sang danh từ:</p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Bản Cũ (Có Động Từ)</th>
+                <th>Bản Mới v2 (100% Danh Từ)</th>
+                <th>Phương Thức</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>/auth/login</code></td>
+                <td><code>/auth/tokens</code></td>
+                <td><code>POST</code></td>
+              </tr>
+              <tr>
+                <td><code>/auth/token-rotations</code></td>
+                <td><code>/auth/tokens/refresh</code></td>
+                <td><code>POST</code></td>
+              </tr>
+              <tr>
+                <td><code>/auth/token-revocations</code></td>
+                <td><code>/auth/tokens/revoke</code></td>
+                <td><code>POST</code></td>
+              </tr>
+              <tr>
+                <td><code>/rag/chat</code></td>
+                <td><code>/rag/queries</code> & <code>/rag/queries/stream</code></td>
+                <td><code>POST</code></td>
+              </tr>
+              <tr>
+                <td><code>/admin/sessions</code></td>
+                <td><code>/admin/chat-sessions</code></td>
+                <td><code>GET</code></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 9: TEST VERIFICATION & MINH CHỨNG -->
-    <div class="slide" data-slide="9">
-      <div class="slide-tag">Phần VII • Kiểm Thử & Nghiệm Thu</div>
-      <h1 class="slide-title">Bằng Chứng Kiểm Thử Tự Động (100% Green)</h1>
-      <h2 class="slide-subtitle">Toàn bộ 100% test suites từ Unit, Integration đến E2E đều vượt qua xuất sắc.</h2>
+    <!-- SLIDE 13: 8 NGUYÊN TẮC - #7 & #8 -->
+    <div class="slide" data-slide="13">
+      <div class="slide-tag">Phần VI • Chuẩn Hóa RESTful API</div>
+      <h1 class="slide-title">Nguyên Tắc #7: Batch Processing & #8: Query Language</h1>
+      <h2 class="slide-subtitle">Tối ưu hóa số lượng round-trip mạng với batch processing và bộ lọc truy vấn linh hoạt, an toàn.</h2>
 
       <div class="grid-2">
         <div class="card">
-          <div class="card-title">Test Suite E2E API v2 (Mới)</div>
-          <pre><code>PASS test/flow.v2.e2e-spec.ts
-  RAG_TS v2 API End-to-End Flow & RFC 9457
-    √ GET /api/v2 root discovery returns v2 links
-    √ v2 Full lifecycle: register ➔ login ➔ query
-      sync & stream ➔ sessions ➔ refresh ➔ revoke
-    √ RFC 9457: 404 Not Found returns problem+json
-    √ RFC 9457: 400 Bad Request has invalid_params
-    √ Health v2 endpoints answer correctly
-
-Tests: 5 passed, 5 total (100%)</code></pre>
+          <div class="card-title">7. Batch Processing (Thao Tác Hàng Loạt)</div>
+          <p>Hỗ trợ song song cả thao tác đơn lẻ và thao tác gom nhóm:</p>
+          <ul>
+            <li><strong>Đọc đơn lẻ:</strong> <code>GET /papers/{id}</code> &bull; <strong>Đọc hàng loạt:</strong> <code>GET /papers?ids=id1,id2,id3</code> (truy vấn tối đa 20 tài liệu trong 1 request duy nhất, giảm 95% số lần bắt tay mạng).</li>
+            <li><strong>Xóa đơn lẻ:</strong> <code>DELETE /chat-sessions/{id}</code> &bull; <strong>Xóa hàng loạt:</strong> <code>DELETE /chat-sessions?ids=id1,id2</code> (xóa tối đa 50 phiên làm việc cùng lúc).</li>
+          </ul>
         </div>
 
-        <div class="card">
-          <div class="card-title">Test Suite E2E API v1 (Zero Regression)</div>
-          <pre><code>PASS test/flow.e2e-spec.ts
-  RAG_TS end-to-end flow
-    √ register ➔ login ➔ ask ➔ sessions ➔ logout
-    √ unknown route ➔ 404 with §1.2 body
-    √ wrong method ➔ 405 with Allow; 415 on bad type
-    √ accepts and returns XML negotiated per request
-    √ responses carry hypermedia links (HATEOAS)
-    √ OpenAPI: lists exactly documented routes
-    √ OpenAPI: kebab-case nouns, no verbs
-
-Tests: 13 passed, 13 total (100%)</code></pre>
+        <div class="card highlight">
+          <div class="card-title">8. Query Language (Pagination, Sort, Filter, Search)</div>
+          <p>Cấu trúc tham số truy vấn danh sách:</p>
+          <ul>
+            <li><strong>Phân trang an toàn:</strong> <code>?limit=10&cursor=0199f...</code> (sử dụng decorator <code>@Type(() => Number)</code> ép kiểu số nguyên thủy, giải quyết triệt để lỗi "FE gửi limit bị 400").</li>
+            <li><strong>Sắp xếp đa trường:</strong> <code>?sort=created_at:desc,email:asc</code>.</li>
+            <li><strong>Bộ lọc toán tử:</strong> <code>?created_at=gte:2026-01-01,lt:2026-02-01</code>.</li>
+            <li><strong>Tìm kiếm từ khóa:</strong> <code>?search=quantum</code> (hỗ trợ alias <code>?q=...</code> để giữ tính tương thích ngược).</li>
+          </ul>
         </div>
-      </div>
-
-      <div class="card" style="margin-top: 15px;">
-        <div class="card-title">Tổng Kết Kiểm Tra Kỹ Thuật</div>
-        <p>
-          • <strong>Auth Integration:</strong> 21/21 passed &bull; 
-          • <strong>Chat Sessions Integration:</strong> 26/26 passed &bull; 
-          • <strong>Admin RBAC Integration:</strong> 30/30 passed &bull; 
-          • <strong>RFC 9457 Problem Details Spec:</strong> 3/3 passed &bull; 
-          • <strong>TypeScript Build & ESLint:</strong> 0 errors, 0 warnings.
-        </p>
       </div>
     </div>
 
-    <!-- SLIDE 10: TỔNG KẾT & KẾT LUẬN -->
-    <div class="slide" data-slide="10">
-      <div class="slide-tag">Phần VIII • Tổng Kết & Bàn Giao</div>
-      <h1 class="slide-title">Tổng Kết Giá Trị & Sẵn Sàng Bàn Giao</h1>
-      <h2 class="slide-subtitle">Dự án backend_rag đã đạt chuẩn công nghiệp cao cấp nhất sẵn sàng cho Production.</h2>
+    <!-- SLIDE 14: TỔNG KẾT ĐỐI CHIẾU TIÊU CHÍ -->
+    <div class="slide" data-slide="14">
+      <div class="slide-tag">Phần VII • Tổng Kết & Bàn Giao</div>
+      <h1 class="slide-title">Tổng Kết Giá Trị & Nghiệm Thu Sản Phẩm</h1>
+      <h2 class="slide-subtitle">Dự án backend_rag hoàn thành xuất sắc 100% các tiêu chí từ kiến trúc hệ thống đến chuẩn hóa RESTful.</h2>
 
-      <div class="grid-3" style="margin-bottom: 25px;">
+      <div class="grid-3" style="margin-bottom: 16px;">
         <div class="card highlight">
-          <div class="card-title">1. Độc Lập & An Toàn</div>
-          <p>Chạy song song v1 và v2. Không gây ảnh hưởng tới bất kỳ consumer/frontend hiện tại nào.</p>
+          <div class="metric-sub">Kiểm Thử Tự Động</div>
+          <div class="badge-metric">100% Passed</div>
+          <p>E2E v2 (5/5), E2E v1 (13/13), Integration (77/77), Lint & Build: 0 errors.</p>
         </div>
         <div class="card highlight">
-          <div class="card-title">2. Chuẩn Hóa Quốc Tế</div>
-          <p>Tuân thủ 8 nguyên tắc RESTful ByteByteGo, RFC 9457, RFC 6749, RFC 7009 & RFC 9562.</p>
+          <div class="metric-sub">Bảo Toàn Logic Cũ</div>
+          <div class="badge-metric">Frozen Core</div>
+          <p>100% Service và Schema được giữ nguyên vẹn thông qua kỹ thuật Adapter.</p>
         </div>
         <div class="card highlight">
-          <div class="card-title">3. Tài Liệu Hóa Đầy Đủ</div>
-          <p>Swagger UI v2 tại <code>/api/v2/docs</code>, tài liệu hướng dẫn và báo cáo đầy đủ trong thư mục docs.</p>
+          <div class="metric-sub">Tài Liệu Hóa Tự Động</div>
+          <div class="badge-metric">Swagger v2</div>
+          <p>OpenAPI spec đầy đủ tại <code>/api/v2/docs</code>, sẵn sàng tích hợp với Frontend.</p>
         </div>
       </div>
 
       <div class="flow-box">
-        <strong>Thông tin nhánh & mã nguồn:</strong><br>
+        <strong>Thông tin lưu trữ nhánh & mã nguồn:</strong><br>
         Nhánh Git: <code>hung/api_v2</code> &bull; Repository: <code>https://github.com/QuangManhAI/backend_rag.git</code><br>
-        Đường dẫn Pull Request: <a href="https://github.com/QuangManhAI/backend_rag/pull/new/hung/api_v2" target="_blank" style="color: var(--primary);">https://github.com/QuangManhAI/backend_rag/pull/new/hung/api_v2</a>
+        Tài liệu hướng dẫn trong dự án: <code>docs/api_v2/UPGRADE_OVERVIEW.md</code> & <code>docs/api_v2/RUN_GUIDE.md</code>
       </div>
     </div>
 
@@ -720,15 +923,15 @@ Tests: 13 passed, 13 total (100%)</code></pre>
   <!-- Bottom Navigation Bar -->
   <div class="bottom-bar">
     <div class="author-info">
-      <strong>backend_rag</strong> &bull; Nhánh <code>hung/api_v2</code> &bull; Nhấn phím &larr; / &rarr; hoặc Space để chuyển slide
+      <strong>backend_rag</strong> &bull; Nhánh <code>hung/api_v2</code> &bull; Dùng phím &larr; / &rarr; hoặc Phím Cách để chuyển slide
     </div>
     <div class="slide-counter" id="slideCounter">
-      01 / 10
+      01 / 14
     </div>
     <div class="nav-buttons">
       <button class="btn" id="prevBtn" title="Phím mũi tên trái">&larr; Trước</button>
       <button class="btn" id="nextBtn" title="Phím mũi tên phải hoặc Space">Tiếp &rarr;</button>
-      <button class="btn" id="fsBtn" title="Phím F">⛶ Fullscreen</button>
+      <button class="btn" id="fsBtn" title="Phím F">⛶ Toàn Màn Hình</button>
     </div>
   </div>
 
@@ -752,49 +955,72 @@ Tests: 13 passed, 13 total (100%)</code></pre>
       });
 
       currentSlide = index;
-      progressBar.style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
-      slideCounter.innerText = `${String(currentSlide + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
-
-      prevBtn.disabled = currentSlide === 0;
-      nextBtn.disabled = currentSlide === totalSlides - 1;
+      progressBar.style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
+      slideCounter.textContent = String(currentSlide + 1).padStart(2, '0') + ' / ' + String(totalSlides).padStart(2, '0');
     }
 
-    prevBtn.addEventListener('click', () => updateSlide(currentSlide - 1));
-    nextBtn.addEventListener('click', () => updateSlide(currentSlide + 1));
-
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
-        e.preventDefault();
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
         updateSlide(currentSlide + 1);
-      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-        e.preventDefault();
-        updateSlide(currentSlide - 1);
-      } else if (e.key === 'Home') {
-        e.preventDefault();
-        updateSlide(0);
-      } else if (e.key === 'End') {
-        e.preventDefault();
-        updateSlide(totalSlides - 1);
-      } else if (e.key.toLowerCase() === 'f') {
-        e.preventDefault();
-        toggleFullScreen();
       }
-    });
+    }
 
-    // Fullscreen toggle
-    function toggleFullScreen() {
+    function prevSlide() {
+      if (currentSlide > 0) {
+        updateSlide(currentSlide - 1);
+      }
+    }
+
+    function toggleFullscreen() {
       if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(() => {});
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn('Không thể bật toàn màn hình:', err);
+        });
       } else {
         if (document.exitFullscreen) {
           document.exitFullscreen();
         }
       }
     }
-    fsBtn.addEventListener('click', toggleFullScreen);
 
-    // Init
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+    fsBtn.addEventListener('click', toggleFullscreen);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullscreen();
+      } else if (e.key === 'Home') {
+        updateSlide(0);
+      } else if (e.key === 'End') {
+        updateSlide(totalSlides - 1);
+      }
+    });
+
+    // Touch swipe support for mobile/tablet presentation
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 50) {
+        nextSlide();
+      } else if (touchEndX - touchStartX > 50) {
+        prevSlide();
+      }
+    }, { passive: true });
+
+    // Initial setup
     updateSlide(0);
   </script>
 </body>

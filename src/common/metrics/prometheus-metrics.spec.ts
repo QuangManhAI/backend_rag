@@ -4,17 +4,20 @@ import { PrometheusMetricsRegistry } from './prometheus-metrics';
 
 describe('PrometheusMetricsRegistry', () => {
   it('records HTTP request counts, latency buckets, active users, and serves /metrics', async () => {
-    const registry = new PrometheusMetricsRegistry(() => ({
-      health: () =>
-        Promise.resolve({
-          status: 'ok',
-          version: '1.0.0',
-          uptime_s: 42,
-          world_version: 'v1',
-          components: { mongo: true, qdrant: true, llm: true, world: true },
-          llm: { model_id: 'qwen', gpu: 'metal', queue_length: 2 },
-        }),
-    }) as never);
+    const registry = new PrometheusMetricsRegistry(
+      () =>
+        ({
+          health: () =>
+            Promise.resolve({
+              status: 'ok',
+              version: '1.0.0',
+              uptime_s: 42,
+              world_version: 'v1',
+              components: { mongo: true, qdrant: true, llm: true, world: true },
+              llm: { model_id: 'qwen', gpu: 'metal', queue_length: 2 },
+            }),
+        }) as never,
+    );
 
     const emitter = new EventEmitter();
     const req = {

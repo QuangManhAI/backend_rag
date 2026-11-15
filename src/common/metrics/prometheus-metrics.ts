@@ -22,7 +22,9 @@ export class PrometheusMetricsRegistry {
   private readonly activeActors = new Map<string, number>();
   private inFlightRequests = 0;
   private activeSseStreams = 0;
-  private readonly eventLoopHistogram = monitorEventLoopDelay({ resolution: 20 });
+  private readonly eventLoopHistogram = monitorEventLoopDelay({
+    resolution: 20,
+  });
 
   constructor(private readonly getHealthService?: () => HealthService | null) {
     this.eventLoopHistogram.enable();
@@ -81,7 +83,8 @@ export class PrometheusMetricsRegistry {
     let actorKey: string;
     if (typeof auth === 'string' && auth.startsWith('Bearer ')) {
       actorKey =
-        'u:' + createHash('sha256').update(auth.slice(7)).digest('hex').slice(0, 16);
+        'u:' +
+        createHash('sha256').update(auth.slice(7)).digest('hex').slice(0, 16);
     } else {
       actorKey = 'ip:' + (req.ip || req.socket.remoteAddress || 'unknown');
     }
@@ -95,7 +98,10 @@ export class PrometheusMetricsRegistry {
     this.activeActors.set(actorKey, now);
   }
 
-  private pruneActiveActors(now: number): { active1m: number; active5m: number } {
+  private pruneActiveActors(now: number): {
+    active1m: number;
+    active5m: number;
+  } {
     let active1m = 0;
     let active5m = 0;
     for (const [key, seenAt] of this.activeActors.entries()) {

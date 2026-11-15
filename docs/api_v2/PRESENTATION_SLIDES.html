@@ -15,6 +15,7 @@
       --text-muted: #94a3b8;
       --success: #10b981;
       --warning: #f59e0b;
+      --danger: #ef4444;
       --accent: #a855f7;
       --code-bg: #030712;
     }
@@ -78,12 +79,12 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 25px 60px 40px 60px;
-      max-width: 1260px;
+      padding: 25px 55px 35px 55px;
+      max-width: 1280px;
       margin: 0 auto;
       right: 0;
       overflow-y: auto;
-      max-height: calc(100vh - 70px);
+      max-height: calc(100vh - 65px);
     }
 
     .slide.active {
@@ -162,7 +163,7 @@
     }
 
     .card-title {
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       font-weight: 700;
       color: var(--text-main);
       margin-bottom: 10px;
@@ -250,6 +251,84 @@
 
     .data-table tr:nth-child(even) {
       background: rgba(30, 41, 59, 0.4);
+    }
+
+    /* API Item List styles */
+    .api-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-top: 6px;
+    }
+
+    .api-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.35);
+    }
+
+    .api-item:last-child {
+      border-bottom: none;
+    }
+
+    .api-desc {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      margin-left: auto;
+      text-align: right;
+    }
+
+    .method-get {
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.72rem;
+      font-family: ui-monospace, monospace;
+    }
+
+    .method-post {
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.72rem;
+      font-family: ui-monospace, monospace;
+    }
+
+    .method-put {
+      color: #f59e0b;
+      background: rgba(245, 158, 11, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.72rem;
+      font-family: ui-monospace, monospace;
+    }
+
+    .method-patch {
+      color: #a855f7;
+      background: rgba(168, 85, 247, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.72rem;
+      font-family: ui-monospace, monospace;
+    }
+
+    .method-delete {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.72rem;
+      font-family: ui-monospace, monospace;
     }
 
     /* Controls at bottom */
@@ -364,35 +443,9 @@
       </div>
     </div>
 
-    <!-- SLIDE 2: BỐI CẢNH & MỤC TIÊU HỆ THỐNG -->
+    <!-- SLIDE 2: YÊU CẦU CHỨC NĂNG -->
     <div class="slide" data-slide="2">
-      <div class="slide-tag">Phần I • Bối Cảnh & Mục Tiêu</div>
-      <h1 class="slide-title">Bối Cảnh Dự Án & Định Hướng Nâng Cấp</h1>
-      <h2 class="slide-subtitle">Chuyển dịch hệ thống RAG học thuật sang nền tảng chuẩn hóa cấp doanh nghiệp (Enterprise Grade).</h2>
-      
-      <div class="grid-2">
-        <div class="card highlight">
-          <div class="card-title"><span class="icon">🎯</span> Bối Cảnh Bài Toán Nghiệp Vụ</div>
-          <ul>
-            <li><strong>Scientific RAG:</strong> Hệ thống hỏi đáp tài liệu nghiên cứu khoa học chuyên sâu, hỗ trợ trích dẫn học thuật thời gian thực và điều hướng không gian tri thức 3D.</li>
-            <li><strong>Thách thức phiên bản v1:</strong> URL còn lẫn động từ (<code>/auth/login</code>, <code>/rag/chat</code>), định dạng lỗi chưa chuẩn hóa theo RFC, thiếu xử lý lũy đẳng (Idempotence) khi mạng chập chờn.</li>
-            <li><strong>Yêu cầu nâng cấp:</strong> Thiết kế phiên bản <code>/api/v2</code> đạt chuẩn quốc tế cao nhất nhưng tuyệt đối không làm gián đoạn các client đang chạy bản v1.</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <div class="card-title"><span class="icon">🛡️</span> Hai Nguyên Tắc Bất Biến Khi Thực Hiện</div>
-          <ul>
-            <li><strong>Nguyên tắc 1 — Zero Breaking Changes:</strong> Duy trì song song cả 2 bản <code>/api/v1</code> và <code>/api/v2</code> độc lập trên cùng server; toàn bộ 100% test suites cũ của v1 giữ nguyên vẹn và pass 100%.</li>
-            <li><strong>Nguyên tắc 2 — Frozen Core Boundary:</strong> Tuyệt đối không can thiệp, sửa đổi hay làm thay đổi chữ ký của Mongoose DB Models (<code>schemas/</code>) và logic nghiệp vụ (<code>*.service.ts</code>). Mọi nâng cấp đều xử lý tại tầng Controller, DTO và Http Filters thông qua Adapter Pattern.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 3: YÊU CẦU CHỨC NĂNG -->
-    <div class="slide" data-slide="3">
-      <div class="slide-tag">Phần II • Phân Tích Yêu Cầu</div>
+      <div class="slide-tag">Phần I • Phân Tích Yêu Cầu</div>
       <h1 class="slide-title">Yêu Cầu Chức Năng (Functional Requirements)</h1>
       <h2 class="slide-subtitle">Các luồng nghiệp vụ cốt lõi đáp ứng trải nghiệm hỏi đáp học thuật và quản trị hệ thống.</h2>
       
@@ -438,9 +491,9 @@
       </div>
     </div>
 
-    <!-- SLIDE 4: YÊU CẦU PHI CHỨC NĂNG -->
-    <div class="slide" data-slide="4">
-      <div class="slide-tag">Phần II • Phân Tích Yêu Cầu</div>
+    <!-- SLIDE 3: YÊU CẦU PHI CHỨC NĂNG -->
+    <div class="slide" data-slide="3">
+      <div class="slide-tag">Phần I • Phân Tích Yêu Cầu</div>
       <h1 class="slide-title">Yêu Cầu Phi Chức Năng (Non-Functional Requirements)</h1>
       <h2 class="slide-subtitle">Các tiêu chuẩn kỹ thuật về hiệu năng, độ tin cậy và an toàn bảo mật cấp cao.</h2>
       
@@ -482,9 +535,9 @@
       </div>
     </div>
 
-    <!-- SLIDE 5: SYSTEM DESIGN - KIẾN TRÚC TỔNG THỂ -->
-    <div class="slide" data-slide="5">
-      <div class="slide-tag">Phần III • System Design</div>
+    <!-- SLIDE 4: SYSTEM DESIGN - KIẾN TRÚC TỔNG THỂ -->
+    <div class="slide" data-slide="4">
+      <div class="slide-tag">Phần II • System Design</div>
       <h1 class="slide-title">Kiến Trúc Hệ Thống & Luồng Dữ Liệu RAG</h1>
       <h2 class="slide-subtitle">Mô hình phân tầng tách biệt giữa HTTP Interface, Frozen Business Core và Các Inference Engines.</h2>
 
@@ -515,9 +568,9 @@
       </div>
     </div>
 
-    <!-- SLIDE 6: KHẢ NĂNG CHỊU TẢI 400 CUs -->
-    <div class="slide" data-slide="6">
-      <div class="slide-tag">Phần IV • Chịu Tải & SRE</div>
+    <!-- SLIDE 5: KHẢ NĂNG CHỊU TẢI 400 CUs -->
+    <div class="slide" data-slide="5">
+      <div class="slide-tag">Phần III • Chịu Tải & SRE</div>
       <h1 class="slide-title">Khả Năng Chịu Tải 400 Concurrent Users</h1>
       <h2 class="slide-subtitle">SRE Benchmark: Vận hành ổn định ở thông lượng 250 RPS trên đường hầm MongoDB 15-25ms RTT.</h2>
 
@@ -560,9 +613,9 @@
       </div>
     </div>
 
-    <!-- SLIDE 7: CƠ CHẾ CACHING & TÍNH SẴN SÀNG -->
-    <div class="slide" data-slide="7">
-      <div class="slide-tag">Phần IV • Chịu Tải & SRE</div>
+    <!-- SLIDE 6: CƠ CHẾ CACHING & TÍNH SẴN SÀNG -->
+    <div class="slide" data-slide="6">
+      <div class="slide-tag">Phần III • Chịu Tải & SRE</div>
       <h1 class="slide-title">Cơ Chế Caching 2 Tầng & Tính Sẵn Sàng (HA)</h1>
       <h2 class="slide-subtitle">Bảo vệ cơ sở dữ liệu khỏi tình trạng sập tải với Singleflight và Invalidation O(1).</h2>
 
@@ -605,9 +658,9 @@
       </div>
     </div>
 
-    <!-- SLIDE 8: THIẾT KẾ SCHEMA DATABASE -->
-    <div class="slide" data-slide="8">
-      <div class="slide-tag">Phần V • Cơ Sở Dữ Liệu</div>
+    <!-- SLIDE 7: THIẾT KẾ SCHEMA DATABASE -->
+    <div class="slide" data-slide="7">
+      <div class="slide-tag">Phần IV • Cơ Sở Dữ Liệu</div>
       <h1 class="slide-title">Thiết Kế Database Schemas & Cấu Trúc Bảng</h1>
       <h2 class="slide-subtitle">Mô hình dữ liệu MongoDB được thiết kế tối ưu cho High-Concurrency, Trích dẫn Khoa học & Audit Trail.</h2>
 
@@ -673,9 +726,9 @@
       </div>
     </div>
 
-    <!-- SLIDE 9: SƠ ĐỒ THỰC THỂ ERD TRONG DB -->
-    <div class="slide" data-slide="9">
-      <div class="slide-tag">Phần V • Cơ Sở Dữ Liệu</div>
+    <!-- SLIDE 8: SƠ ĐỒ THỰC THỂ ERD TRONG DB -->
+    <div class="slide" data-slide="8">
+      <div class="slide-tag">Phần IV • Cơ Sở Dữ Liệu</div>
       <h1 class="slide-title">Sơ Đồ Thực Thể Trong Database (ERD)</h1>
       <h2 class="slide-subtitle">Mối quan hệ giữa các thực thể, ràng buộc toàn vẹn và cơ chế cô lập dữ liệu.</h2>
 
@@ -709,8 +762,216 @@
       </div>
     </div>
 
-    <!-- SLIDE 10: 8 NGUYÊN TẮC - #1 & #2 -->
+    <!-- SLIDE 9: BẢN ĐỒ PHÂN NHÓM API V2 - PHẦN 1 -->
+    <div class="slide" data-slide="9">
+      <div class="slide-tag">Phần V • Bản Đồ API v2</div>
+      <h1 class="slide-title">Bản Đồ Phân Nhóm API v2 (Core Business)</h1>
+      <h2 class="slide-subtitle">Tổng hợp danh mục API phía người dùng và luồng nghiệp vụ cốt lõi theo 4 nhóm chức năng.</h2>
+
+      <div class="grid-2">
+        <!-- Nhóm 1: Xác Thực & Tài Khoản -->
+        <div class="card highlight">
+          <div class="card-title"><span class="icon">🔑</span> 1. Xác Thực & Quản Lý Tài Khoản (7 Endpoints)</div>
+          <div class="api-list">
+            <div class="api-item">
+              <span class="method-post">POST</span> <code>/api/v2/auth/tokens</code>
+              <span class="api-desc">Đăng nhập cấp Access & Refresh token (201)</span>
+            </div>
+            <div class="api-item">
+              <span class="method-post">POST</span> <code>/api/v2/auth/tokens/refresh</code>
+              <span class="api-desc">Xoay vòng token an toàn theo family (201)</span>
+            </div>
+            <div class="api-item">
+              <span class="method-post">POST</span> <code>/api/v2/auth/tokens/revoke</code>
+              <span class="api-desc">Đăng xuất, thu hồi Refresh token (204)</span>
+            </div>
+            <div class="api-item">
+              <span class="method-post">POST</span> <code>/api/v2/users</code>
+              <span class="api-desc">Đăng ký tài khoản người dùng mới (201)</span>
+            </div>
+            <div class="api-item">
+              <span class="method-get">GET</span> <code>/api/v2/users/me</code>
+              <span class="api-desc">Lấy thông tin tài khoản đang đăng nhập</span>
+            </div>
+            <div class="api-item">
+              <span class="method-patch">PATCH</span> <code>/api/v2/users/me</code>
+              <span class="api-desc">Cập nhật thông tin profile người dùng</span>
+            </div>
+            <div class="api-item">
+              <span class="method-put">PUT</span> <code>/api/v2/users/me/password</code>
+              <span class="api-desc">Thay đổi mật khẩu băm Argon2id (204)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nhóm 2: Scientific RAG Queries -->
+        <div class="card highlight">
+          <div class="card-title"><span class="icon">⚡</span> 2. Hỏi Đáp Khoa Học RAG (2 Endpoints)</div>
+          <div class="api-list">
+            <div class="api-item">
+              <span class="method-post">POST</span> <code>/api/v2/rag/queries</code>
+              <span class="api-desc">Truy vấn đồng bộ JSON, hỗ trợ Idempotency-Key 24h</span>
+            </div>
+            <div class="api-item">
+              <span class="method-post">POST</span> <code>/api/v2/rag/queries/stream</code>
+              <span class="api-desc">Stream token thời gian thực Server-Sent Events (SSE)</span>
+            </div>
+          </div>
+
+          <div class="card-title" style="margin-top: 14px;"><span class="icon">📚</span> 3. Tra Cứu Tài Liệu Khoa Học (2 Endpoints)</div>
+          <div class="api-list">
+            <div class="api-item">
+              <span class="method-get">GET</span> <code>/api/v2/papers?ids=...</code>
+              <span class="api-desc">Batch query hàng loạt (tối đa 20 papers/lần)</span>
+            </div>
+            <div class="api-item">
+              <span class="method-get">GET</span> <code>/api/v2/papers/:paper_id</code>
+              <span class="api-desc">Tra cứu chi tiết 1 bài báo khoa học theo ID</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nhóm 4: Phiên Chat & Lịch Sử -->
+        <div class="card" style="grid-column: span 2;">
+          <div class="card-title"><span class="icon">💬</span> 4. Quản Lý Phiên Chat & Lịch Sử Tin Nhắn (6 Endpoints)</div>
+          <div class="grid-2">
+            <div class="api-list">
+              <div class="api-item">
+                <span class="method-get">GET</span> <code>/api/v2/chat-sessions</code>
+                <span class="api-desc">Danh sách phiên chat (?limit=10&cursor=...&search=...)</span>
+              </div>
+              <div class="api-item">
+                <span class="method-get">GET</span> <code>/api/v2/chat-sessions/:id</code>
+                <span class="api-desc">Chi tiết phiên chat (Anti-enumeration 404)</span>
+              </div>
+              <div class="api-item">
+                <span class="method-get">GET</span> <code>/api/v2/chat-sessions/:id/messages</code>
+                <span class="api-desc">Lịch sử tin nhắn phân trang cursor UUIDv7</span>
+              </div>
+            </div>
+            <div class="api-list">
+              <div class="api-item">
+                <span class="method-patch">PATCH</span> <code>/api/v2/chat-sessions/:id</code>
+                <span class="api-desc">Đổi tên tiêu đề phiên hội thoại</span>
+              </div>
+              <div class="api-item">
+                <span class="method-delete">DELETE</span> <code>/api/v2/chat-sessions/:id</code>
+                <span class="api-desc">Xóa mềm 1 phiên hội thoại (Luôn trả 204)</span>
+              </div>
+              <div class="api-item">
+                <span class="method-delete">DELETE</span> <code>/api/v2/chat-sessions?ids=...</code>
+                <span class="api-desc">Batch delete tối đa 50 phiên làm việc cùng lúc (204)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: BẢN ĐỒ PHÂN NHÓM API V2 - PHẦN 2 -->
     <div class="slide" data-slide="10">
+      <div class="slide-tag">Phần V • Bản Đồ API v2</div>
+      <h1 class="slide-title">Bản Đồ Phân Nhóm API v2 (Admin & System)</h1>
+      <h2 class="slide-subtitle">Tổng hợp danh mục API quản trị hệ thống RBAC, an ninh bảo mật và giám sát hạ tầng.</h2>
+
+      <div class="grid-2">
+        <!-- Nhóm Quản Trị Người Dùng & Quyền Hạn -->
+        <div class="card highlight">
+          <div class="card-title"><span class="icon">🛡️</span> 1. Quản Trị Người Dùng & Quyền Hạn (6 Endpoints)</div>
+          <div class="api-list">
+            <div class="api-item">
+              <span class="method-get">GET</span> <code>/api/v2/admin/users</code>
+              <span class="api-desc">Danh sách người dùng phân trang & tìm kiếm</span>
+            </div>
+            <div class="api-item">
+              <span class="method-get">GET</span> <code>/api/v2/admin/users/:id</code>
+              <span class="api-desc">Xem chi tiết trạng thái tài khoản & lượt vi phạm</span>
+            </div>
+            <div class="api-item">
+              <span class="method-patch">PATCH</span> <code>/api/v2/admin/users/:id</code>
+              <span class="api-desc">Khóa / Mở khóa tài khoản người dùng</span>
+            </div>
+            <div class="api-item">
+              <span class="method-put">PUT</span> <code>/api/v2/admin/users/:id/role</code>
+              <span class="api-desc">Phân quyền vai trò (User &harr; Admin)</span>
+            </div>
+            <div class="api-item">
+              <span class="method-get">GET</span> <code>/api/v2/admin/users/:id/tokens</code>
+              <span class="api-desc">Tra cứu danh sách chuỗi token families</span>
+            </div>
+            <div class="api-item">
+              <span class="method-delete">DELETE</span> <code>/api/v2/admin/users/:id/tokens</code>
+              <span class="api-desc">Thu hồi cưỡng chế toàn bộ phiên đăng nhập</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nhóm Quản Trị Phiên & Kiểm Toán -->
+        <div class="card highlight">
+          <div class="card-title"><span class="icon">📜</span> 2. Giám Sát Phiên Hội Thoại & Kiểm Toán (7 Endpoints)</div>
+          <div class="api-list">
+            <div class="api-item">
+              <span class="method-get">GET</span> <code>/api/v2/admin/chat-sessions</code>
+              <span class="api-desc">Tra cứu mọi phiên chat trên toàn hệ thống</span>
+            </div>
+            <div class="api-item">
+              <span class="method-get">GET</span> <code>/api/v2/admin/chat-sessions/:id</code>
+              <span class="api-desc">Xem chi tiết phiên chat của bất kỳ người dùng</span>
+            </div>
+            <div class="api-item">
+              <span class="method-get">GET</span> <code>/api/v2/admin/chat-sessions/:id/messages</code>
+              <span class="api-desc">Xem nội dung tin nhắn và trích dẫn khoa học</span>
+            </div>
+            <div class="api-item">
+              <span class="method-delete">DELETE</span> <code>/api/v2/admin/chat-sessions/:id</code>
+              <span class="api-desc">Cưỡng chế xóa mềm phiên chat vi phạm (204)</span>
+            </div>
+            <div class="api-item">
+              <span class="method-get">GET</span> <code>/api/v2/admin/audit-logs</code>
+              <span class="api-desc">Tra cứu nhật ký kiểm toán Append-Only</span>
+            </div>
+            <div class="api-item">
+              <span class="method-get">GET</span> <code>/api/v2/admin/audit-logs/export</code>
+              <span class="api-desc">Xuất dữ liệu audit phục vụ thanh tra an ninh</span>
+            </div>
+            <div class="api-item">
+              <span class="method-get">GET</span> <code>/api/v2/admin/metrics</code>
+              <span class="api-desc">Thống kê hoạt động, số token tiêu thụ, latency</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nhóm Khám Phá & Health Check -->
+        <div class="card" style="grid-column: span 2;">
+          <div class="card-title"><span class="icon">🩺</span> 3. Khám Phá HATEOAS & Giám Sát Hạ Tầng (4 Endpoints)</div>
+          <div class="grid-2">
+            <div class="api-list">
+              <div class="api-item">
+                <span class="method-get">GET</span> <code>/api/v2</code>
+                <span class="api-desc">Root Discovery trả về siêu liên kết HATEOAS điều hướng toàn hệ thống</span>
+              </div>
+              <div class="api-item">
+                <span class="method-get">GET</span> <code>/api/v2/health</code>
+                <span class="api-desc">Tổng hợp tình trạng sức khỏe tổng thể (MongoDB, Qdrant, Memory)</span>
+              </div>
+            </div>
+            <div class="api-list">
+              <div class="api-item">
+                <span class="method-get">GET</span> <code>/api/v2/health/live</code>
+                <span class="api-desc">Liveness probe phục vụ Kubernetes tự khởi động lại khi treo tiến trình</span>
+              </div>
+              <div class="api-item">
+                <span class="method-get">GET</span> <code>/api/v2/health/ready</code>
+                <span class="api-desc">Readiness probe phục vụ cân bằng tải khi MongoDB & Qdrant sẵn sàng nhận tải</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 11: 8 NGUYÊN TẮC - #1 & #2 -->
+    <div class="slide" data-slide="11">
       <div class="slide-tag">Phần VI • Chuẩn Hóa RESTful API</div>
       <h1 class="slide-title">Nguyên Tắc #1: Domain Model & #2: HTTP Methods</h1>
       <h2 class="slide-subtitle">Thiết kế cấu trúc URI phản ánh đúng mô hình miền và tuân thủ ngữ nghĩa chuẩn của các phương thức HTTP.</h2>
@@ -769,8 +1030,8 @@
       </div>
     </div>
 
-    <!-- SLIDE 11: 8 NGUYÊN TẮC - #3 & #4 -->
-    <div class="slide" data-slide="11">
+    <!-- SLIDE 12: 8 NGUYÊN TẮC - #3 & #4 -->
+    <div class="slide" data-slide="12">
       <div class="slide-tag">Phần VI • Chuẩn Hóa RESTful API</div>
       <h1 class="slide-title">Nguyên Tắc #3: Idempotence & #4: Status Codes</h1>
       <h2 class="slide-subtitle">Đảm bảo tính lũy đẳng an toàn khi retry và xóa bỏ triệt để vấn nạn "200 OK with Error Body".</h2>
@@ -798,8 +1059,8 @@
       </div>
     </div>
 
-    <!-- SLIDE 12: 8 NGUYÊN TẮC - #5 & #6 -->
-    <div class="slide" data-slide="12">
+    <!-- SLIDE 13: 8 NGUYÊN TẮC - #5 & #6 -->
+    <div class="slide" data-slide="13">
       <div class="slide-tag">Phần VI • Chuẩn Hóa RESTful API</div>
       <h1 class="slide-title">Nguyên Tắc #5: Versioning & #6: Semantic Paths</h1>
       <h2 class="slide-subtitle">Quản lý phiên bản rõ ràng trên đường dẫn và loại bỏ 100% động từ trong định danh URI.</h2>
@@ -858,8 +1119,8 @@
       </div>
     </div>
 
-    <!-- SLIDE 13: 8 NGUYÊN TẮC - #7 & #8 -->
-    <div class="slide" data-slide="13">
+    <!-- SLIDE 14: 8 NGUYÊN TẮC - #7 & #8 -->
+    <div class="slide" data-slide="14">
       <div class="slide-tag">Phần VI • Chuẩn Hóa RESTful API</div>
       <h1 class="slide-title">Nguyên Tắc #7: Batch Processing & #8: Query Language</h1>
       <h2 class="slide-subtitle">Tối ưu hóa số lượng round-trip mạng với batch processing và bộ lọc truy vấn linh hoạt, an toàn.</h2>
@@ -884,37 +1145,6 @@
             <li><strong>Tìm kiếm từ khóa:</strong> <code>?search=quantum</code> (hỗ trợ alias <code>?q=...</code> để giữ tính tương thích ngược).</li>
           </ul>
         </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 14: TỔNG KẾT ĐỐI CHIẾU TIÊU CHÍ -->
-    <div class="slide" data-slide="14">
-      <div class="slide-tag">Phần VII • Tổng Kết & Bàn Giao</div>
-      <h1 class="slide-title">Tổng Kết Giá Trị & Nghiệm Thu Sản Phẩm</h1>
-      <h2 class="slide-subtitle">Dự án backend_rag hoàn thành xuất sắc 100% các tiêu chí từ kiến trúc hệ thống đến chuẩn hóa RESTful.</h2>
-
-      <div class="grid-3" style="margin-bottom: 16px;">
-        <div class="card highlight">
-          <div class="metric-sub">Kiểm Thử Tự Động</div>
-          <div class="badge-metric">100% Passed</div>
-          <p>E2E v2 (5/5), E2E v1 (13/13), Integration (77/77), Lint & Build: 0 errors.</p>
-        </div>
-        <div class="card highlight">
-          <div class="metric-sub">Bảo Toàn Logic Cũ</div>
-          <div class="badge-metric">Frozen Core</div>
-          <p>100% Service và Schema được giữ nguyên vẹn thông qua kỹ thuật Adapter.</p>
-        </div>
-        <div class="card highlight">
-          <div class="metric-sub">Tài Liệu Hóa Tự Động</div>
-          <div class="badge-metric">Swagger v2</div>
-          <p>OpenAPI spec đầy đủ tại <code>/api/v2/docs</code>, sẵn sàng tích hợp với Frontend.</p>
-        </div>
-      </div>
-
-      <div class="flow-box">
-        <strong>Thông tin lưu trữ nhánh & mã nguồn:</strong><br>
-        Nhánh Git: <code>hung/api_v2</code> &bull; Repository: <code>https://github.com/QuangManhAI/backend_rag.git</code><br>
-        Tài liệu hướng dẫn trong dự án: <code>docs/api_v2/UPGRADE_OVERVIEW.md</code> & <code>docs/api_v2/RUN_GUIDE.md</code>
       </div>
     </div>
 

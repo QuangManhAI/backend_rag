@@ -6,7 +6,7 @@
 - **Detailed Plan**: Mục 1 định nghĩa phạm vi & vai trò; Mục 2 liệt kê cấu trúc thư mục con và danh mục file/export thực tế; Mục 3 mô tả chức năng, luồng nghiệp vụ kèm sơ đồ Mermaid; Mục 4 quy định hợp đồng I/O, bất biến hệ thống và lệnh kiểm chứng.
 - **References**: [test/README.md](../../test/README.md), [app.setup.ts](../app.setup.ts), [AGENTS.md](../../AGENTS.md).
 - **Created**: 2026-11-15T12:55:00+07:00
-- **Last Updated**: 2026-11-15T12:55:00+07:00
+- **Last Updated**: 2026-11-17T17:48:00+07:00
 
 [STATUS: ACTIVE]
 
@@ -23,6 +23,7 @@ Cung cấp `createTestApp`, `startMongo` (`MongoMemoryReplSet` hỗ trợ đa-do
 
 | File | Loại / Tầng | Exports / Routes / Ký hiệu Chính | Mô tả Trách nhiệm |
 | :--- | :--- | :--- | :--- |
+| [`barrels.spec.ts`](barrels.spec.ts) | Jest Unit Spec | - | Kiểm tra toàn bộ `40` barrel exports trong `backend_rag/src` không gặp lỗi circular dependency hay export `undefined`. |
 | [`index.ts`](index.ts) | Barrel Export | Re-exports: `./test-app` | Barrel thống nhất điểm import công khai của thư mục |
 | [`test-app.ts`](test-app.ts) | TypeScript Module | `TEST_ENV`, `startMongo`, `SEED_PASSWORD`, `seedUser`, `TestApp`, `TestAppOptions`, `createTestApp` | Thành phần `TypeScript Module` thuộc `testing`. |
 

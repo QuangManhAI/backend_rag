@@ -6,7 +6,7 @@
 - **Detailed Plan**: Mục 1 định nghĩa phạm vi & vai trò; Mục 2 liệt kê cấu trúc thư mục con và danh mục file/export thực tế; Mục 3 mô tả chức năng, luồng nghiệp vụ kèm sơ đồ Mermaid; Mục 4 quy định hợp đồng I/O, bất biến hệ thống và lệnh kiểm chứng.
 - **References**: [AGENTS.md](../../../AGENTS.md).
 - **Created**: 2026-11-15T12:55:00+07:00
-- **Last Updated**: 2026-11-15T12:55:00+07:00
+- **Last Updated**: 2026-11-17T17:48:00+07:00
 
 [STATUS: ACTIVE]
 
@@ -29,6 +29,8 @@ Thực thi hợp đồng API tại `docs/api/API_DESIGN.md`: tự động gắn 
 | [`http-exception.filter.ts`](http-exception.filter.ts) | Exception Filter | `ErrorBody`, `messageOf`, `toErrorBody`, `sendError`, `HttpExceptionFilter` | Error body of every endpoint (API_DESIGN §1.2). |
 | [`index.ts`](index.ts) | Barrel Export | Re-exports: `./hateoas`, `./http-contract`, `./http-exception.filter`, `./validation`, `./xml` | Barrel thống nhất điểm import công khai của thư mục |
 | [`validation.ts`](validation.ts) | TypeScript Module | `firstValidationMessage`, `createValidationPipe` | First human-readable constraint message, searching nested errors depth-first. |
+| [`validation.spec.ts`](validation.spec.ts) | Jest Unit Spec | - | Kiểm thử rút gọn thông báo lỗi validation lồng nhau và từ chối field thừa. |
+| [`xml.spec.ts`](xml.spec.ts) | Jest Unit Spec | - | Kiểm thử parser XML, chống XXE `DOCTYPE`/`ENTITY`, HTTP `415`/`406` và `ContentNegotiationInterceptor`. |
 | [`xml.ts`](xml.ts) | TypeScript Module | `XML_MEDIA_TYPES`, `toXml`, `parseXmlBody`, `unsupportedBody`, `UNSUPPORTED_BODY`, `wantsXml`, `xmlBodyMiddleware` (+1) | Thành phần `TypeScript Module` thuộc `http`. |
 
 ---
@@ -63,5 +65,5 @@ flowchart TD
 
 ### Lệnh Kiểm chứng (Verification)
 ```powershell
-cd backend_rag && npx jest src/common/http/http-exception.filter.spec.ts --runInBand
+cd backend_rag && npx jest src/common/http --runInBand
 ```

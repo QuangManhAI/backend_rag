@@ -6,7 +6,7 @@
 - **Detailed Plan**: Mục 1 định nghĩa phạm vi & vai trò; Mục 2 liệt kê cấu trúc thư mục con và danh mục file/export thực tế; Mục 3 mô tả chức năng, luồng nghiệp vụ kèm sơ đồ Mermaid; Mục 4 quy định hợp đồng I/O, bất biến hệ thống và lệnh kiểm chứng.
 - **References**: [rag/README.md](../README.md), [AGENTS.md](../../../../AGENTS.md).
 - **Created**: 2026-11-15T12:55:00+07:00
-- **Last Updated**: 2026-11-15T12:55:00+07:00
+- **Last Updated**: 2026-11-17T17:48:00+07:00
 
 [STATUS: ACTIVE]
 
@@ -27,6 +27,7 @@ Tách biệt toàn bộ logic tính toán thuần túy không I/O của pipeline
 | [`index.ts`](index.ts) | Barrel Export | Re-exports: `./citations`, `./prompt-builder`, `./ranking`, `./request-fingerprint` | Barrel thống nhất điểm import công khai của thư mục |
 | [`prompt-builder.ts`](prompt-builder.ts) | TypeScript Module | `NO_CONTEXT_ANSWER`, `SYSTEM_PROMPT`, `REWRITE_SYSTEM_PROMPT`, `cleanRewrite`, `buildUserPrompt` | Thành phần `TypeScript Module` thuộc `pipeline`. |
 | [`ranking.ts`](ranking.ts) | TypeScript Module | `judgedPoolSize`, `GROUNDED_PASSAGES`, `RRF_K`, `topPapers`, `fuseRanks` | Candidates the judge reads: enough to reorder, few enough to keep the wait in seconds. |
+| [`request-fingerprint.spec.ts`](request-fingerprint.spec.ts) | Jest Unit Spec | - | Kiểm thử hàm băm SHA-256 `requestFingerprint` cho `Idempotency-Key`. |
 | [`request-fingerprint.ts`](request-fingerprint.ts) | TypeScript Module | `requestFingerprint` | Identifies the request body behind an `Idempotency-Key`. |
 
 ---

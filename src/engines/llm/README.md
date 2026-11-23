@@ -6,7 +6,7 @@
 - **Detailed Plan**: Mục 1 định nghĩa phạm vi & vai trò; Mục 2 liệt kê cấu trúc thư mục con và danh mục file/export thực tế; Mục 3 mô tả chức năng, luồng nghiệp vụ kèm sơ đồ Mermaid; Mục 4 quy định hợp đồng I/O, bất biến hệ thống và lệnh kiểm chứng.
 - **References**: [rag/README.md](../../modules/rag/README.md), [AGENTS.md](../../../AGENTS.md).
 - **Created**: 2026-11-15T12:55:00+07:00
-- **Last Updated**: 2026-11-15T12:55:00+07:00
+- **Last Updated**: 2026-11-17T17:48:00+07:00
 
 [STATUS: ACTIVE]
 
@@ -24,6 +24,7 @@ Quản lý vòng đời mô hình GGUF (`Qwen2.5-7B`) thông qua `NodeLlamaEngin
 | File | Loại / Tầng | Exports / Routes / Ký hiệu Chính | Mô tả Trách nhiệm |
 | :--- | :--- | :--- | :--- |
 | [`index.ts`](index.ts) | Barrel Export | Re-exports: `./llm-engine`, `./llm-queue`, `./llm.module`, `./llm.service`, `./token-channel` | Barrel thống nhất điểm import công khai của thư mục |
+| [`llm-engine.spec.ts`](llm-engine.spec.ts) | Jest Unit Spec | - | Kiểm thử `NodeLlamaEngine` (thiếu model, chưa load, stream token & dọn sequence). |
 | [`llm-engine.ts`](llm-engine.ts) | TypeScript Module | `GenerateOptions`, `LlmEngine`, `LLM_ENGINE`, `NodeLlamaOptions`, `NodeLlamaEngine` | The model runtime behind LlmService; a fake one is used in tests. |
 | [`llm-queue.ts`](llm-queue.ts) | TypeScript Module | `QueueFullError`, `AbortedError`, `Release`, `LlmQueue` | Thrown when every slot is busy and the waiting line is full. |
 | [`llm.module.ts`](llm.module.ts) | NestJS Module | `LlmModule` | Module NestJS khai báo imports, providers và exports DI. |
@@ -59,5 +60,5 @@ flowchart LR
 
 ### Lệnh Kiểm chứng (Verification)
 ```powershell
-cd backend_rag && npx jest src/engines/llm/llm.spec.ts --runInBand
+cd backend_rag && npx jest src/engines/llm --runInBand
 ```

@@ -167,4 +167,17 @@ describe('GET /papers/:paper_id', () => {
     expect(r.body.message).toBe('qdrant unavailable');
     fail = false;
   });
+
+  it('batch GET /papers?ids= returns found items + not_found and propagates Qdrant 503', async () => {
+    const r = await http()
+      .get('/api/v1/papers?ids=2106.09685,missing-paper')
+      .expect(200);
+    expect(r.body.items).toHaveLength(1);
+    expect(r.body.items[0].paper_id).toBe('2106.09685');
+    expect(r.body.not_found).toEqual(['missing-paper']);
+
+    fail = true;
+    await http().get('/api/v1/papers?ids=uncached-paper').expect(503);
+    fail = false;
+  });
 });

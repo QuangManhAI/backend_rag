@@ -6,7 +6,7 @@
 - **Detailed Plan**: Mục 1 định nghĩa phạm vi & vai trò; Mục 2 liệt kê cấu trúc thư mục con và danh mục file/export thực tế; Mục 3 mô tả chức năng, luồng nghiệp vụ kèm sơ đồ Mermaid; Mục 4 quy định hợp đồng I/O, bất biến hệ thống và lệnh kiểm chứng.
 - **References**: [AGENTS.md](../../../AGENTS.md), [vector-store/README.md](../vector-store/README.md).
 - **Created**: 2026-11-15T12:55:00+07:00
-- **Last Updated**: 2026-11-15T12:55:00+07:00
+- **Last Updated**: 2026-11-17T17:48:00+07:00
 
 [STATUS: ACTIVE]
 
@@ -24,6 +24,7 @@ Cung cấp `CorpusService` (triển khai `CorpusPort`) kết nối tới databas
 | File | Loại / Tầng | Exports / Routes / Ký hiệu Chính | Mô tả Trách nhiệm |
 | :--- | :--- | :--- | :--- |
 | [`corpus.module.ts`](corpus.module.ts) | NestJS Module | `CorpusModule` | Module NestJS khai báo imports, providers và exports DI. |
+| [`corpus.service.spec.ts`](corpus.service.spec.ts) | Jest Unit Spec | - | Kiểm thử kết nối read-only, kiểm tra quyền role, hydrate chunks/papers và ném 503 `CORPUS_UNAVAILABLE`. |
 | [`corpus.service.ts`](corpus.service.ts) | Domain Service | `CORPUS_UNAVAILABLE`, `CORPUS_DB`, `CORPUS_TIMEOUT_MS`, `ChunkContent`, `ChunkRef`, `CorpusPort`, `CORPUS_PORT` (+1) | What a Qdrant point no longer carries; MongoDB `rag_ts_corpus` is its source of truth. |
 | [`index.ts`](index.ts) | Barrel Export | Re-exports: `./corpus.module`, `./corpus.service` | Barrel thống nhất điểm import công khai của thư mục |
 
@@ -54,5 +55,5 @@ flowchart LR
 
 ### Lệnh Kiểm chứng (Verification)
 ```powershell
-cd backend_rag && npm run build
+cd backend_rag && npx jest src/engines/corpus/corpus.service.spec.ts --runInBand
 ```

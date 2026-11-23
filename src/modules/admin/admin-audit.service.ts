@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Types } from 'mongoose';
 import {
   allOf,
   FilterField,
@@ -14,8 +13,8 @@ import {
 import type { AuthUser } from '../../types/auth-user';
 import type { ListAuditLogsQueryDto } from './dto/admin.dto';
 import { assertAdmin } from './assert-admin';
+import { AdminAuditLogsRepository } from './repositories/admin-audit-logs.repository';
 import {
-  AdminAuditLog,
   AUDIT_ACTIONS,
   AuditAction,
   AuditTargetType,
@@ -51,10 +50,7 @@ export interface AuditRequest {
 export class AdminAuditService {
   private readonly logger = new Logger(AdminAuditService.name);
 
-  constructor(
-    @InjectModel(AdminAuditLog.name)
-    private readonly auditLogs: Model<AdminAuditLog>,
-  ) {}
+  constructor(private readonly auditLogs: AdminAuditLogsRepository) {}
 
   /**
    * Appends one audit record. Best-effort: a failure here must never break the admin action
@@ -70,7 +66,7 @@ export class AdminAuditService {
     req?: AuditRequest,
   ): Promise<void> {
     try {
-      await this.auditLogs.create({
+      await this.auditLogs.append({
         actor_id: new Types.ObjectId(actor.id),
         actor_email: actor.email ?? 'unknown',
         action,
@@ -105,11 +101,11 @@ export class AdminAuditService {
     if (query.cursor) {
       conditions.push(keysetFilter(query.cursor, terms, AUDIT_LIST));
     }
-    const rows = await this.auditLogs
-      .find(allOf({}, conditions))
-      .sort(mongoSort(terms))
-      .limit(query.limit + 1)
-      .lean();
+    const rows = await this.auditLogs.findPageLean(
+      allOf({}, conditions),
+      mongoSort(terms),
+      query.limit + 1,
+    );
     await this.writeAudit(
       actor,
       AUDIT_ACTIONS.AUDIT_LOG_VIEW,

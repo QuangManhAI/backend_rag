@@ -4,11 +4,11 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Types } from 'mongoose';
 import { AuthService } from '../auth/auth.service';
-import { RefreshToken } from '../auth/schemas/refresh-token.schema';
-import { LeanUser, User } from '../auth/schemas/user.schema';
+import { RefreshTokensRepository } from '../auth/repositories/refresh-tokens.repository';
+import { UsersRepository } from '../auth/repositories/users.repository';
+import { LeanUser } from '../auth/schemas/user.schema';
 import {
   allOf,
   FilterField,
@@ -61,9 +61,8 @@ const sameSet = (a: readonly string[], b: readonly string[]) =>
 @Injectable()
 export class AdminIdentityService {
   constructor(
-    @InjectModel(User.name) private readonly users: Model<User>,
-    @InjectModel(RefreshToken.name)
-    private readonly refreshTokens: Model<RefreshToken>,
+    private readonly users: UsersRepository,
+    private readonly refreshTokens: RefreshTokensRepository,
     private readonly auth: AuthService,
     private readonly audit: AdminAuditService,
   ) {}
@@ -94,7 +93,7 @@ export class AdminIdentityService {
     if (!Types.ObjectId.isValid(id)) {
       throw new NotFoundException(USER_NOT_FOUND);
     }
-    const user = await this.users.findById(id).lean();
+    const user = await this.users.findByIdLean(id);
     if (!user) throw new NotFoundException(USER_NOT_FOUND);
     return user;
   }
@@ -138,11 +137,11 @@ export class AdminIdentityService {
     if (query.cursor) {
       conditions.push(keysetFilter(query.cursor, terms, USER_LIST));
     }
-    const rows = await this.users
-      .find(allOf({}, conditions))
-      .sort(mongoSort(terms))
-      .limit(query.limit + 1)
-      .lean();
+    const rows = await this.users.findPageLean(
+      allOf({}, conditions),
+      mongoSort(terms),
+      query.limit + 1,
+    );
     await this.audit.writeAudit(
       actor,
       'USER_LIST_VIEW',
@@ -152,7 +151,7 @@ export class AdminIdentityService {
       null,
       req,
     );
-    return toCursorPage(rows as LeanUser[], query.limit, terms, toAdminUserDto);
+    return toCursorPage(rows, query.limit, terms, toAdminUserDto);
   }
 
   // ---------------------------------------------------------------- A2 · user detail
@@ -165,11 +164,10 @@ export class AdminIdentityService {
     assertAdmin(actor);
     const user = await this.resolveUser(id);
     const uid = new Types.ObjectId(user._id);
-    const activeTokenCount = await this.refreshTokens.countDocuments({
-      user_id: uid,
-      revoked_at: null,
-      expires_at: { $gt: new Date() },
-    });
+    const activeTokenCount = await this.refreshTokens.countActiveForUser(
+      uid,
+      new Date(),
+    );
     await this.audit.writeAudit(
       actor,
       'USER_VIEW',
@@ -215,10 +213,7 @@ export class AdminIdentityService {
     // Idempotent PUT: the same roles again must not kill the user's live tokens.
     if (sameSet(target.roles, unique)) return toAdminUserDto(target);
     const before = { roles: target.roles };
-    await this.users.updateOne(
-      { _id: target._id },
-      { $set: { roles: unique }, $inc: { token_version: 1 } },
-    );
+    await this.users.updateRolesAndBumpVersion(target._id, unique);
     await this.revokeAllTokens(id);
     this.invalidateAuthCaches(id, target.email);
     const updated = await this.resolveUser(id);
@@ -263,10 +258,7 @@ export class AdminIdentityService {
     if (reason === undefined || reason === target.disabled_reason) {
       return toAdminUserDto(target);
     }
-    await this.users.updateOne(
-      { _id: target._id },
-      { $set: { disabled_reason: reason } },
-    );
+    await this.users.updateDisabledReason(target._id, reason);
     this.invalidateAuthCaches(id, target.email);
     await this.audit.writeAudit(
       actor,
@@ -290,17 +282,11 @@ export class AdminIdentityService {
     await this.assertNotLastAdmin(target);
     const before = lockState(target);
     const now = new Date();
-    await this.users.updateOne(
-      { _id: target._id },
-      {
-        $set: {
-          is_active: false,
-          disabled_at: now,
-          disabled_by: new Types.ObjectId(actor.id),
-          disabled_reason: reason ?? null,
-        },
-        $inc: { token_version: 1 },
-      },
+    await this.users.disableAndBumpVersion(
+      target._id,
+      new Types.ObjectId(actor.id),
+      now,
+      reason ?? null,
     );
     await this.revokeAllTokens(id);
     this.invalidateAuthCaches(id, target.email);
@@ -328,18 +314,7 @@ export class AdminIdentityService {
     req?: AuditRequest,
   ): Promise<Record<string, unknown>> {
     const before = lockState(target);
-    await this.users.updateOne(
-      { _id: target._id },
-      {
-        $set: {
-          is_active: true,
-          disabled_at: null,
-          disabled_by: null,
-          disabled_reason: null,
-        },
-        $inc: { token_version: 1 },
-      },
-    );
+    await this.users.enableAndBumpVersion(target._id);
     this.invalidateAuthCaches(id, target.email);
     const updated = await this.resolveUser(id);
     await this.audit.writeAudit(
@@ -386,14 +361,10 @@ export class AdminIdentityService {
   ): Promise<{ items: Record<string, unknown>[] }> {
     assertAdmin(actor);
     const target = await this.resolveUser(id);
-    const rows = await this.refreshTokens
-      .find({
-        user_id: target._id,
-        revoked_at: null,
-        expires_at: { $gt: new Date() },
-      })
-      .sort({ created_at: -1 })
-      .lean();
+    const rows = await this.refreshTokens.findActiveForUserLean(
+      target._id,
+      new Date(),
+    );
     await this.audit.writeAudit(
       actor,
       'USER_TOKENS_VIEW',

@@ -8,4 +8,5 @@ export * from './users.controller';
 export * from './decorators';
 export * from './dto';
 export * from './guards';
+export * from './repositories';
 export * from './schemas';

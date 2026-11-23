@@ -3,6 +3,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ChatRequestsService } from './chat-requests.service';
 import { ChatSessionsController } from './chat-sessions.controller';
 import { ChatSessionsService } from './chat-sessions.service';
+import {
+  ChatMessagesRepository,
+  ChatRequestsRepository,
+  ChatSessionsRepository,
+} from './repositories';
 import { ChatMessage, ChatMessageSchema } from './schemas/chat-message.schema';
 import { ChatRequest, ChatRequestSchema } from './schemas/chat-request.schema';
 import { ChatSession, ChatSessionSchema } from './schemas/chat-session.schema';
@@ -18,10 +23,18 @@ import { SESSION_STORE } from './session-store.port';
   ],
   controllers: [ChatSessionsController],
   providers: [
+    ChatSessionsRepository,
+    ChatMessagesRepository,
+    ChatRequestsRepository,
     ChatRequestsService,
     ChatSessionsService,
     { provide: SESSION_STORE, useExisting: ChatSessionsService },
   ],
-  exports: [SESSION_STORE, MongooseModule],
+  exports: [
+    SESSION_STORE,
+    ChatSessionsRepository,
+    ChatMessagesRepository,
+    MongooseModule,
+  ],
 })
 export class ChatSessionsModule {}

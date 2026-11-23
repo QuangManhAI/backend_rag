@@ -6,4 +6,5 @@ export * from './chat-sessions.module';
 export * from './chat-sessions.service';
 export * from './session-store.port';
 export * from './dto';
+export * from './repositories';
 export * from './schemas';

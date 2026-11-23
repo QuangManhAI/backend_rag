@@ -5,15 +5,15 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import * as argon2 from 'argon2';
 import { createHash, randomBytes } from 'crypto';
 import { LRUCache } from 'lru-cache';
-import { isValidObjectId, Model, Types } from 'mongoose';
+import { isValidObjectId } from 'mongoose';
 import { logEvent } from '../../common/logging/request-context';
 import { isDuplicateKey } from '../../common/utils/mongo-errors';
 import type { AuthUser } from '../../types/auth-user';
 import { emailHash, normalizeEmail, toUserDto } from './auth.utils';
+import { validatePassword } from './common-passwords';
 import {
   AuthResponseDto,
   ChangePasswordDto,
@@ -21,9 +21,9 @@ import {
   RegisterDto,
   UserDto,
 } from './dto/auth.dto';
-import { validatePassword } from './common-passwords';
-import { LoginAttempt } from './schemas/login-attempt.schema';
-import { LeanUser, User, UserDocument } from './schemas/user.schema';
+import { LoginAttemptsRepository } from './repositories/login-attempts.repository';
+import { UsersRepository } from './repositories/users.repository';
+import { LeanUser, UserDocument } from './schemas/user.schema';
 import { TokenService } from './token.service';
 
 export const MAX_LOGIN_FAILURES = 5;
@@ -80,9 +80,8 @@ export class AuthService {
   private dummyHashPromise: Promise<string> | null = null;
 
   constructor(
-    @InjectModel(User.name) private readonly users: Model<User>,
-    @InjectModel(LoginAttempt.name)
-    private readonly attempts: Model<LoginAttempt>,
+    private readonly users: UsersRepository,
+    private readonly attempts: LoginAttemptsRepository,
     private readonly tokens: TokenService,
   ) {}
 
@@ -97,7 +96,7 @@ export class AuthService {
   async register(dto: RegisterDto): Promise<AuthResponseDto> {
     const email = normalizeEmail(dto.email);
     validatePassword(dto.password, email);
-    if (await this.users.exists({ email })) return this.emailTaken();
+    if (await this.users.existsByEmail(email)) return this.emailTaken();
     let user: UserDocument;
     try {
       user = await this.users.create({
@@ -127,9 +126,9 @@ export class AuthService {
     if (attemptCount === undefined || !user) {
       const [dbAttempts, dbUser] = await Promise.all([
         attemptCount === undefined
-          ? this.attempts.countDocuments({ key })
+          ? this.attempts.countByKey(key)
           : Promise.resolve(attemptCount),
-        user ? Promise.resolve(user) : this.users.findOne({ email }).lean(),
+        user ? Promise.resolve(user) : this.users.findByEmailLean(email),
       ]);
       attemptCount = dbAttempts;
       this.attemptCountCache.set(key, attemptCount);
@@ -158,7 +157,7 @@ export class AuthService {
     );
     if (!user || !ok) {
       this.attemptCountCache.set(key, attemptCount + 1);
-      await this.attempts.create({ key });
+      await this.attempts.record(key);
       logEvent('LOGIN_FAILED', { email_hash: emailHash(email) });
       throw new UnauthorizedException('invalid credentials');
     }
@@ -175,13 +174,10 @@ export class AuthService {
     if (hadFailures) {
       this.attemptCountCache.set(key, 0);
     }
-    await this.users.updateOne(
-      { _id: user._id },
-      { $set: { last_login_at: new Date() } },
-    );
+    await this.users.updateLastLogin(user._id, new Date());
     const [res] = await Promise.all([
       this.respond(user, familyId),
-      hadFailures ? this.attempts.deleteMany({ key }) : Promise.resolve(),
+      hadFailures ? this.attempts.clearByKey(key) : Promise.resolve(),
     ]);
     logEvent('LOGIN_OK', { user_id: user._id.toString() });
     return res;
@@ -198,7 +194,7 @@ export class AuthService {
     const cachedUser = this.userCache.get(r.userId);
     const user = cachedUser
       ? await this.getActiveUser(r.userId)
-      : await this.users.findById(r.userId).lean();
+      : await this.users.findByIdLean(r.userId);
     if (!user || !user.is_active) {
       await this.tokens.revokeFamily(r.familyId);
       logEvent('REFRESH_FAILED', { reason: 'user_gone' });
@@ -226,7 +222,7 @@ export class AuthService {
     const cached = this.userCache.get(me.id);
     if (cached) return cached;
     const u = isValidObjectId(me.id)
-      ? await this.users.findById(me.id).lean()
+      ? await this.users.findByIdLean(me.id)
       : null;
     if (!u) throw new UnauthorizedException('unauthorized');
     const dto = toUserDto(u);
@@ -235,13 +231,7 @@ export class AuthService {
   }
 
   async updateProfile(me: AuthUser, displayName: string): Promise<UserDto> {
-    const user = await this.users
-      .findByIdAndUpdate(
-        me.id,
-        { $set: { display_name: displayName } },
-        { new: true },
-      )
-      .lean();
+    const user = await this.users.updateDisplayNameLean(me.id, displayName);
     if (!user) throw new UnauthorizedException('unauthorized');
     logEvent('PROFILE_UPDATED');
     const dto = toUserDto(user);
@@ -251,15 +241,15 @@ export class AuthService {
   }
 
   async changePassword(me: AuthUser, dto: ChangePasswordDto): Promise<void> {
-    const user = await this.mustFind(me.id);
+    const user = await this.mustFindLean(me.id);
     validatePassword(dto.new_password, user.email);
     if (!(await argon2.verify(user.password_hash, dto.old_password))) {
       throw new UnauthorizedException('old password incorrect');
     }
-    user.password_hash = await argon2.hash(dto.new_password, {
+    const nextHash = await argon2.hash(dto.new_password, {
       ...ARGON2_OPTIONS,
     });
-    await user.save();
+    await this.users.updatePasswordHash(user._id, nextHash);
     this.userByEmailCache.delete(user.email);
     await this.revokeAllForUser(me.id);
     logEvent('PASSWORD_CHANGED');
@@ -273,7 +263,7 @@ export class AuthService {
     if (!isValidObjectId(id)) return null;
     const cached = this.tokenVersionCache.get(id);
     if (cached) return cached;
-    const user = await this.users.findById(id).lean();
+    const user = await this.users.findByIdLean(id);
     if (!user) return null;
     this.tokenVersionCache.set(id, user);
     return user;
@@ -285,10 +275,7 @@ export class AuthService {
    */
   async revokeAllForUser(userId: string): Promise<number> {
     const revoked = await this.tokens.revokeAllForUser(userId);
-    await this.users.updateOne(
-      { _id: new Types.ObjectId(userId) },
-      { $inc: { token_version: 1 } },
-    );
+    await this.users.incrementTokenVersion(userId);
     this.tokenVersionCache.delete(userId);
     return revoked;
   }
@@ -307,8 +294,8 @@ export class AuthService {
     this.tokenVersionCache.set(id, user);
   }
 
-  private async mustFind(id: string): Promise<UserDocument> {
-    const user = isValidObjectId(id) ? await this.users.findById(id) : null;
+  private async mustFindLean(id: string): Promise<LeanUser> {
+    const user = isValidObjectId(id) ? await this.users.findByIdLean(id) : null;
     if (!user) throw new UnauthorizedException('unauthorized');
     return user;
   }

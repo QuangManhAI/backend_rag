@@ -1,11 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService, TokenExpiredError } from '@nestjs/jwt';
-import { InjectModel } from '@nestjs/mongoose';
 import { createHmac, randomBytes, randomUUID } from 'crypto';
-import { Model, Types } from 'mongoose';
+import { Types } from 'mongoose';
 import { AppConfigService } from '../../config/app-config.service';
 import type { AuthUser, Role } from '../../types/auth-user';
-import { RefreshToken } from './schemas/refresh-token.schema';
+import { RefreshTokensRepository } from './repositories/refresh-tokens.repository';
 
 export const ACCESS_TTL_SECONDS = 15 * 60;
 export const REFRESH_TTL_SECONDS = 7 * 24 * 60 * 60;
@@ -37,8 +36,7 @@ export class TokenService {
   constructor(
     private readonly jwt: JwtService,
     private readonly config: AppConfigService,
-    @InjectModel(RefreshToken.name)
-    private readonly refreshTokens: Model<RefreshToken>,
+    private readonly refreshTokens: RefreshTokensRepository,
   ) {}
 
   /** HMAC-SHA256 keyed with JWT_REFRESH_SECRET: a leaked DB alone cannot be replayed. */
@@ -108,12 +106,7 @@ export class TokenService {
   async consume(raw: string): Promise<ConsumeResult> {
     const hash = this.hashRefresh(raw);
     const now = new Date();
-    const won = await this.refreshTokens
-      .findOneAndUpdate(
-        { token_hash: hash, revoked_at: null, expires_at: { $gt: now } },
-        { $set: { revoked_at: now } },
-      )
-      .lean();
+    const won = await this.refreshTokens.consumeActiveByHashLean(hash, now);
     if (won) {
       return {
         ok: true,
@@ -121,7 +114,7 @@ export class TokenService {
         familyId: won.family_id,
       };
     }
-    const rec = await this.refreshTokens.findOne({ token_hash: hash }).lean();
+    const rec = await this.refreshTokens.findByHashLean(hash);
     if (!rec) return { ok: false, reason: 'invalid' };
     if (rec.expires_at.getTime() <= now.getTime())
       return { ok: false, reason: 'expired' };
@@ -133,29 +126,19 @@ export class TokenService {
   }
 
   async revokeOne(raw: string, userId: string): Promise<void> {
-    await this.refreshTokens.updateOne(
-      {
-        token_hash: this.hashRefresh(raw),
-        user_id: new Types.ObjectId(userId),
-        revoked_at: null,
-      },
-      { $set: { revoked_at: new Date() } },
+    await this.refreshTokens.revokeOne(
+      this.hashRefresh(raw),
+      userId,
+      new Date(),
     );
   }
 
   async revokeFamily(familyId: string): Promise<void> {
-    await this.refreshTokens.updateMany(
-      { family_id: familyId, revoked_at: null },
-      { $set: { revoked_at: new Date() } },
-    );
+    await this.refreshTokens.revokeFamily(familyId, new Date());
   }
 
   /** Revokes every active refresh token of a user and returns how many were revoked. */
   async revokeAllForUser(userId: string): Promise<number> {
-    const res = await this.refreshTokens.updateMany(
-      { user_id: new Types.ObjectId(userId), revoked_at: null },
-      { $set: { revoked_at: new Date() } },
-    );
-    return res.modifiedCount;
+    return this.refreshTokens.revokeAllForUser(userId, new Date());
   }
 }

@@ -7,6 +7,7 @@ import { AdminAuditService } from './admin-audit.service';
 import { AdminController } from './admin.controller';
 import { AdminIdentityService } from './admin-identity.service';
 import { AdminOpsService } from './admin-ops.service';
+import { AdminAuditLogsRepository } from './repositories';
 import {
   AdminAuditLog,
   AdminAuditLogSchema,
@@ -30,6 +31,11 @@ import {
     LlmModule,
   ],
   controllers: [AdminController],
-  providers: [AdminAuditService, AdminIdentityService, AdminOpsService],
+  providers: [
+    AdminAuditLogsRepository,
+    AdminAuditService,
+    AdminIdentityService,
+    AdminOpsService,
+  ],
 })
 export class AdminModule {}

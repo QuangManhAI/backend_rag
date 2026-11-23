@@ -7,4 +7,5 @@ export * from './admin.module';
 export * from './assert-admin';
 export * from './decorators';
 export * from './dto';
+export * from './repositories';
 export * from './schemas';

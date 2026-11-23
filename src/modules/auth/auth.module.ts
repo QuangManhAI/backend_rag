@@ -7,6 +7,11 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard, OptionalJwtAuthGuard } from './guards/jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import {
+  LoginAttemptsRepository,
+  RefreshTokensRepository,
+  UsersRepository,
+} from './repositories';
+import {
   LoginAttempt,
   LoginAttemptSchema,
 } from './schemas/login-attempt.schema';
@@ -30,6 +35,9 @@ import { TokenService } from './token.service';
   ],
   controllers: [AuthController, UsersController],
   providers: [
+    UsersRepository,
+    RefreshTokensRepository,
+    LoginAttemptsRepository,
     AuthService,
     TokenService,
     JwtAuthGuard,
@@ -37,6 +45,9 @@ import { TokenService } from './token.service';
     RolesGuard,
   ],
   exports: [
+    UsersRepository,
+    RefreshTokensRepository,
+    LoginAttemptsRepository,
     TokenService,
     AuthService,
     JwtAuthGuard,
